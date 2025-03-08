@@ -34,7 +34,7 @@ public static class VersionChecker
 #else
         "https://raw.githubusercontent.com/XtremeWave/FinalSuspect/FinalSus/fs_info.json",
         "https://gitee.com/XtremeWave/FinalSuspect/raw/FinalSus/fs_info.json",
-        "https://api.xtreme.net.cn/FinalSuspect/fs_info.json",
+        "https://api.xtreme.net.cn/download/FinalSuspect/fs_info.json",
 #endif
     };
     private static IReadOnlyList<string> GetInfoFileUrlList()

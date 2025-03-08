@@ -2,7 +2,7 @@
 #Title:Final Suspect v1.1
 #SubTitle:★★★★До свидания★★★★
 #ShortTitle:★Update v1.1
-#Date:2025-02-16T0:00:00Z
+#Date:2025-02-16T00:00:00Z
 #-----------------------------
 # Russian
 До свидания.
