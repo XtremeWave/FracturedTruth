@@ -17,8 +17,8 @@ namespace FinalSuspect.Modules.Features.CheckingandBlocking;
 public static class BanManager
 {
     
-    private static readonly string BAN_LIST_PATH = PathManager.GetBanFilesPath("BanList.txt");
-    private static List<string> FACList = [];
+    private static readonly string BAN_LIST_PATH = GetBanFilesPath("BanList.txt");
+    public static List<string> FACList = [];
 
     [PluginModuleInitializer]
     public static void Init()
