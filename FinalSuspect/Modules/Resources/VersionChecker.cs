@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using FinalSuspect.Attributes;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Features;
+using FinalSuspect.Modules.Features.CheckingandBlocking;
 using Il2CppSystem.Diagnostics.Tracing;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
@@ -22,6 +23,7 @@ public static class VersionChecker
         {
             CustomPopup.Init();
             if (firstStart) CheckForUpdate();
+            SpamManager.Init();
             ModUpdater.SetUpdateButtonStatus();
             firstStart = false;
         }

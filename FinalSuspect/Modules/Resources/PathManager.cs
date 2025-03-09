@@ -37,7 +37,7 @@ public static class PathManager
                 remoteBase = "gitee.com/XtremeWave/FinalSuspect/raw/FinalSus/Assets/";
                 break;
             case RemoteType.XtremeApi:
-                remoteBase = "api.xtreme.net.cn/download/FinalSuspect/";
+                remoteBase = "api.xtreme.net.cn/download/FinalSuspect/Assets/";
                 break;
         }
 
@@ -70,7 +70,7 @@ public static class PathManager
     }
 
     [PluginModuleInitializer(InitializePriority.High)]
-    public static void Init()
+    private static void Init()
     {
         CheckAndCreate(GetLocalPath(LocalType.Resources), false);
         CheckAndCreate(GetLocalPath(LocalType.Resources) + "Sounds", false);
@@ -104,8 +104,10 @@ public static class PathManager
     private static IReadOnlyList<string> URLs => new List<string>
     {
 #if DEBUG
-        $"file:///{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop))}",
-        "https://raw.githubusercontent.com/XtremeWave/FinalSuspect_Dev/FS_Dev/",
+       
+       // "https://raw.githubusercontent.com/XtremeWave/FinalSuspect_Dev/FS_Dev/",
+        "https://api.xtreme.net.cn/download/FinalSuspect/",
+        //$"file:///{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop))}/",
 #else
         "https://raw.githubusercontent.com/XtremeWave/FinalSuspect/FinalSus/",
         "https://gitee.com/XtremeWave/FinalSuspect/raw/FinalSus/",

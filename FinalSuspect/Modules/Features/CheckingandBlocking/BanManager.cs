@@ -19,43 +19,6 @@ public static class BanManager
     
     private static readonly string BAN_LIST_PATH = GetBanFilesPath("BanList.txt");
     public static List<string> FACList = [];
-
-    [PluginModuleInitializer]
-    public static void Init()
-    {
-        try
-        {
-            if (!File.Exists(BAN_LIST_PATH))
-            {
-                XtremeLogger.Warn("Create New BanList.txt", "BanManager");
-                File.Create(BAN_LIST_PATH).Close();
-            }
-
-            //读取FAC名单
-            var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("FinalSuspect.Resources.Configs.FACList.txt");
-            stream.Position = 0;
-            using StreamReader sr = new(stream, Encoding.UTF8);
-            string line;
-            while ((line = sr.ReadLine()) != null)
-            {
-                if (string.IsNullOrWhiteSpace(line) || line.StartsWith("#")) continue;
-                if (Main.AllPlayerControls.Any(p => p.IsDev() && line.Contains(p.FriendCode))) continue;
-                FACList.Add(line);
-            }
-        }
-        catch (Exception ex)
-        {
-            XtremeLogger.Exception(ex, "BanManager");
-        }
-    }
-    private static string GetResourcesTxt(string path)
-    {
-        var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(path);
-        stream.Position = 0;
-        using StreamReader reader = new(stream, Encoding.UTF8);
-        return reader.ReadToEnd();
-    }
-
     public static string GetHashedPuid(this PlayerControl player)
         => player.GetClient().GetHashedPuid();
     public static string GetHashedPuid(this ClientData player)

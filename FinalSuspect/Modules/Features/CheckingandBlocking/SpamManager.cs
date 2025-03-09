@@ -18,22 +18,32 @@ public static class SpamManager
     public static readonly string DENY_NAME_LIST_PATH = GetBanFilesPath("DenyName.txt");
     public static List<string> BanWords = [];
 
-    [PluginModuleInitializer]
+    static List<string> Targets = new List<string>()
+    {
+        "DenyName.json",
+        "FACList.json",
+        $"BanWords/{GetUserLangByRegion().ToString()}.json"
+    };
+    
+    //[PluginModuleInitializer]
     public static void Init()
     {
-        foreach (var url in GetInfoFileUrlList())
-        {
-            if (!GetVersionInfo(url + "fs_info.json").GetAwaiter().GetResult()) continue;
-            break;
-        }
-
         try
         {
             CreateIfNotExists();
             BanWords = ReturnAllNewLinesInFile(BANEDWORDS_FILE_PATH);
+            foreach (var target in Targets)
+            {
+                foreach (var url in GetInfoFileUrlList())
+                {
+                    if (!GetConfigInfo(url + "Assets/Configs/" + target).GetAwaiter().GetResult()) continue;
+                    break;
+                }
+            }
         }
-        catch
+        catch (Exception ex)
         {
+            XtremeLogger.Error(ex.ToString(), "SpamManager");
         }
     }
 
@@ -106,7 +116,7 @@ public static class SpamManager
         }
     }
 
-    public static async Task<bool> GetVersionInfo(string url)
+    public static async Task<bool> GetConfigInfo(string url)
     {
         try
         {
@@ -140,8 +150,9 @@ public static class SpamManager
 
             return true;
         }
-        catch
+        catch (Exception ex)
         {
+            XtremeLogger.Error(ex.ToString(), "SpamManager");
             return false;
         }
     }
@@ -149,7 +160,7 @@ public static class SpamManager
     private static void ProcessBanWords(JObject data)
     {
         var newWords = GetTokens(data["words"])
-            .Where(word => !BanWords.Contains(word))
+            .Except(BanWords, StringComparer.OrdinalIgnoreCase)
             .ToList();
 
         UpdateBanWords(newWords);
@@ -178,20 +189,26 @@ public static class SpamManager
         BanManager.FACList.AddRange(facList);
     }
 
-    private static IEnumerable<string> GetTokens(JToken token)
+    private static List<string> GetTokens(JToken token)
     {
-        var jarray = token as JArray;
+        // 处理空值或非数组类型
+        if (token == null || token.Type != JTokenType.Array)
+        {
+            return new List<string>();
+        }
+        
+        var jarray = token.Cast<JArray>();
         var tokens = new List<string>();
-        for (int i = 0; i < jarray.Count; i++)
+        for (var i = 0; i < jarray.Count; i++)
         {
             tokens.Add(jarray[i].ToString());
         }
-
-        return tokens?
-            .Where(t => t != null) // 过滤空元素
-            .Select(t => t.ToString());
+ 
+        return tokens
+            .Select(item => item?.ToString())
+            .Where(str => !string.IsNullOrEmpty(str)).ToList();
     }
-
+   
     private static void UpdateBanWords(List<string> newWords)
     {
         if (newWords.Count == 0) return;
