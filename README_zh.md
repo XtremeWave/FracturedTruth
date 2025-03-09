@@ -2,7 +2,7 @@
 	
 ![FS-XW](Assets/LogoWithTeam.png)
 
-**Final Suspect 终极嫌疑，你最棒的Among Us原版辅助模组。**
+**Final Suspect 终极嫌疑，您最棒的Among Us原版辅助模组。**
 
 <img src="https://badgen.net/github/license/XtremeWave/FinalSuspect" alt="Licences">
 <img src="https://badgen.net/github/tag/XtremeWave/FinalSuspect" alt="LatestTag">
@@ -17,7 +17,7 @@
 </div>
 
 > [!important]
-> 由于本模组开发者学业原因，您的issue可能无法得到及时的答复，请谅解！
+> 由于开发者学业原因，您的issue可能无法得到及时的答复，请谅解！
 
 > [!note]
 > 本模组不隶属于 Among Us 或 Innersloth LLC，其包含的内容也未得到 Innersloth LLC 的认可或以其他方式赞助。\
@@ -27,7 +27,7 @@
 ## 关于
 
 FinalSuspect是一个适用于Among Us的原版优化插件。\
-插件为原版带来了10+项优化,使得原版也能获得更好的体验。\
+插件为原版带来了20+项优化以及许多功能,使得原版也能获得更好的体验。\
 有关该插件的详细使用文档(安装,更新以及完整的配置说明),请参阅[网站文档](https://www.xtreme.net.cn/docs/FS/)。
 
 ## 贡献者
