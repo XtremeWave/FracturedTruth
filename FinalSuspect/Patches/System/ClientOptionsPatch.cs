@@ -1,9 +1,11 @@
 using System;
+using System.IO;
 using BepInEx.Configuration;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.ClientOptions;
 using FinalSuspect.Modules.Core.Game;
 using FinalSuspect.Modules.SoundInterface;
+using Il2CppSystem.Collections.Generic;
 using UnityEngine;
 using Object = System.Object;
 
@@ -26,8 +28,9 @@ public static class OptionsMenuBehaviourStartPatch
     private static ClientOptionItem_Boolean ShowPlayerInfo;
     private static ClientOptionItem_Boolean UseModCursor;
     private static ClientOptionItem_Boolean FastBoot;
-    private static ClientFeatureItem UnloadMod;
+    private static ClientFeatureItem ClearAutoLogs;
     private static ClientFeatureItem DumpLog;
+    private static ClientFeatureItem UnloadMod;
     private static ClientOptionItem_Boolean VersionCheat;
     private static ClientOptionItem_Boolean GodMode;
     private static ClientOptionItem_Boolean NoGameEnd;
@@ -101,8 +104,17 @@ public static class OptionsMenuBehaviourStartPatch
             CreateOptionItem(ref NoGameEnd, "NoGameEnd", Main.NoGameEnd, __instance);
         }
 
+        CreateFeatureItem(ref DumpLog, "DumpLog", () =>
+        {
+            Utils.DumpLog();
+        }, __instance);
+        CreateFeatureItem(ref ClearAutoLogs, "ClearAutoLogs", () =>
+        {
+            Utils.ClearAutoLogs();
+            SetFeatureItemDisabled(ClearAutoLogs);
+        }, __instance);
         CreateFeatureItem(ref UnloadMod, "UnloadMod", ModUnloaderScreen.Show, __instance);
-        CreateFeatureItem(ref DumpLog, "DumpLog", () => Utils.DumpLog(), __instance);
+
         CreateFeatureItem(ref SoundBtn, "SoundOption", () =>
         {
             MyMusicPanel.CustomBackground?.gameObject?.SetActive(true);
@@ -117,10 +129,15 @@ public static class OptionsMenuBehaviourStartPatch
 
         if (!XtremeGameData.GameStates.IsNotJoined)
         {
-            SetOptionItemDisabled(ChangeOutfit);
-            SetFeatureItemDisabled(AudioManagementBtn);
+            SetOptionItemDisabled_Menu(ChangeOutfit);
+            SetFeatureItemDisabled_Menu(AudioManagementBtn);
         }
 
+        if (Directory.GetFiles(Utils.GetLogFolder(true).FullName + "/Final Suspect-logs").Length <= 0)
+        {
+            SetFeatureItemDisabled(ClearAutoLogs);
+        }
+        
         Modules.SoundInterface.SoundManager.ReloadTag();
         MyMusicPanel.Init(__instance);
         SoundManagementPanel.Init(__instance);
@@ -197,19 +214,29 @@ public static class OptionsMenuBehaviourStartPatch
         item.ToggleButton.GetComponent<PassiveButton>().enabled = false;
         item.ToggleButton.Background.color = ColorHelper.ClientOptionColor_CanNotUse;
     }
-    private static void SetOptionItemDisabled(ClientOptionItem_String item)
+    private static void SetOptionItemDisabled_Menu(ClientOptionItem_String item)
     {
         item.ToggleButton.Text.text = GetString(item.Name) + $"\n|{GetString("OnlyAvailableInMainMenu")}|";
         item.ToggleButton.GetComponent<PassiveButton>().enabled = false;
         item.ToggleButton.Background.color = ColorHelper.ClientOptionColor_CanNotUse;
     }
-    private static void SetFeatureItemDisabled(ClientFeatureItem item)
+    private static void SetFeatureItemDisabled_Menu(ClientFeatureItem item)
     {
         item.ToggleButton.Text.text += $"\n|{GetString("OnlyAvailableInMainMenu")}|";
+        SetFeatureItemDisabled(item);
+    }
+    
+    private static void SetFeatureItemDisabled(ClientFeatureItem item)
+    {
         item.ToggleButton.GetComponent<PassiveButton>().enabled = false;
         item.ToggleButton.Background.color = ColorHelper.ClientFeatureColor_CanNotUse;
     }
 
+    private static void SetFeatureItemEnable(ClientFeatureItem item)
+    {
+        item.ToggleButton.GetComponent<PassiveButton>().enabled = true;
+        item.ToggleButton.Background.color = ColorHelper.ClientFeatureColor;
+    }
     private static void UnlockFPSButtonToggle()
     {
         Application.targetFrameRate = Main.UnlockFPS.Value ? 165 : 60;

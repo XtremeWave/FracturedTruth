@@ -55,14 +55,10 @@ public class Main : BasePlugin
             var day = currentDate.Day.ToString("D2");    
             return $"{year}{month}{day}";
 #else
-            return "20240216";
+            return "20240309";
 #endif
         }
     }
-    
-
-
-        
 
     /// <summary>
     /// 测试信息；
@@ -77,7 +73,7 @@ public class Main : BasePlugin
     /// </summary>
     private const VersionTypes DisplayedVersion_TestText = VersionTypes.Alpha;
 
-    private const int DisplayedVersion_TestCreation = 1;
+    private const int DisplayedVersion_TestCreation = 7;
     
     public static readonly string DisplayedVersion = 
         $"{DisplayedVersion_Head}_{DisplayedVersion_Date}" +

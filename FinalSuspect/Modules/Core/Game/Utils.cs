@@ -102,12 +102,20 @@ public static class Utils
             else AddChatMessage(string.Format(GetString("Message.DumpfileSaved"), $"FinalSuspect - v{Main.DisplayedVersion}-{t}.log"));
         }
     }
+
+    public static void ClearAutoLogs()
+    {
+        foreach (var f in Directory.GetFiles(GetLogFolder(true).FullName + "/Final Suspect-logs"))
+            File.Delete(f);
+    }
+    
     public static void SaveNowLog()
     {
         var logs = GetLogFolder(true);
         logs.EnumerateFiles().Where(f => f.CreationTime < DateTime.Now.AddDays(-7)).ToList().ForEach(f => f.Delete());
         CopyLog(logs.FullName);
     }
+    
     public static string CopyLog(string path)
     {
         var f = $"{path}/Final Suspect-logs/";
