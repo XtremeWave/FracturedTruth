@@ -25,8 +25,8 @@ class CoSetRolePatch
         }
         catch 
         {
+            //
         }
-        
     }
 }
 

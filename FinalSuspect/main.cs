@@ -29,7 +29,7 @@ public class Main : BasePlugin
     // == 程序基本设定 / Program Config ==
     public const string ModName = "Final Suspect";
     public const string ForkId = "Final Suspect";
-    public const string PluginVersion = "1.2.0";
+    public const string PluginVersion = "1.1.1";
     public const string PluginGuid = "cn.finalsuspect.xtremewave";
     public const int PluginCreation = 0;
 
@@ -42,7 +42,7 @@ public class Main : BasePlugin
     public const string LowestSupportedVersion = "2024.10.29";
 
 
-    public const string DisplayedVersion_Head = "1.2";
+    public const string DisplayedVersion_Head = "1.1";
     private static string DisplayedVersion_Date
 
     {
@@ -126,6 +126,7 @@ public class Main : BasePlugin
     [
         "BeanMode", "HorseMode", "LongMode"
     ];
+    
     //Other Configs
     public static ConfigEntry<string> HideName { get; private set; }
     public static ConfigEntry<string> HideColor { get; private set; }
@@ -168,9 +169,10 @@ public class Main : BasePlugin
         "Snow Plum Niang", "Fried Yogurt", "Egg Tart", "Muffin", "Sago Dew", "panna cotta", "soufflé", "croissant",
         "toffee"
     ];
-    public static string Get_TName_Snacks => TranslationController.Instance.currentLanguage.languageID is SupportedLangs.SChinese or SupportedLangs.TChinese ?
-        TName_Snacks_CN[IRandom.Instance.Next(0, TName_Snacks_CN.Count)] :
-        TName_Snacks_EN[IRandom.Instance.Next(0, TName_Snacks_EN.Count)];
+
+    public static string Get_TName_Snacks => TranslationController.Instance.currentLanguage.languageID is SupportedLangs.SChinese or SupportedLangs.TChinese 
+        ? TName_Snacks_CN[IRandom.Instance.Next(0, TName_Snacks_CN.Count)] 
+        : TName_Snacks_EN[IRandom.Instance.Next(0, TName_Snacks_EN.Count)];
 
     public override void Load()
     {
@@ -212,6 +214,7 @@ public class Main : BasePlugin
         {
             XtremeLogger.Disable("Download Resources");
         }
+        
         XtremeLogger.isDetail = true;
 
         // 認証関連-初期化
@@ -282,12 +285,12 @@ public class Main : BasePlugin
 
 public enum VersionTypes
 {
-    Alpha,// 早期内测版
-    Beta,// 内测版
-    Canary,// 测试版(不稳定)
-    Dev,// 开发版
-    RC,// 发行候选版Release Candidate
-    Preview,// 预览/预发行版
-    Scrapter,// 废弃版
-    Release,// 发行版
+    Alpha, // 早期内测版
+    Beta, // 内测版
+    Canary, // 测试版(不稳定)
+    Dev, // 开发版
+    RC, // 发行候选版Release Candidate
+    Preview, // 预览/预发行版
+    Scrapter, // 废弃版
+    Release, // 发行版
 }

@@ -70,10 +70,6 @@ internal class RPCHandlerPatch
                 name = subReader.ReadString();
                 XtremeLogger.Info("RPC Set Name For Player: " + __instance.GetNameWithRole() + " => " + name, "SetName");
                 break;
-            case RpcCalls.SetRole: //SetRoleRPC
-                var role = (RoleTypes)subReader.ReadUInt16();
-                var canOverriddenRole = subReader.ReadBoolean();
-                XtremeLogger.Info("RPC Set Role For Player: " + __instance.GetRealName() + " => " + role + " CanOverrideRole: " + canOverriddenRole, "SetRole");
                 break;
             case RpcCalls.SendChat: // Free chat
                 var text = subReader.ReadString();
