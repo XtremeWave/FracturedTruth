@@ -21,10 +21,10 @@ public class ResourcesDownloader
             case FileType.Sounds:
             case FileType.ModNews:
             case FileType.Languages:
-                filePath = PathManager.GetResourceFilesPath(fileType, file);
+                filePath = GetResourceFilesPath(fileType, file);
                 break;
             case FileType.Depends:
-                filePath = PathManager.GetLocalPath(LocalType.BepInEx) +file;
+                filePath = GetLocalPath(LocalType.BepInEx) +file;
                 break;
             default:
                 return false;
@@ -47,7 +47,7 @@ public class ResourcesDownloader
 
             }
 
-        var url = PathManager.GetFile(fileType, remoteType, file);
+        var url = GetFile(fileType, remoteType, file);
 
 
         if (!IsValidUrl(url))

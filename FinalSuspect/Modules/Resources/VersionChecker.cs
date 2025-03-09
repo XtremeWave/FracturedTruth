@@ -27,23 +27,6 @@ public static class VersionChecker
         }
     }
 
-    private static IReadOnlyList<string> URLs => new List<string>
-    {
-#if DEBUG
-        $"file:///{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "fs_info.json")}",
-#else
-        "https://raw.githubusercontent.com/XtremeWave/FinalSuspect/FinalSus/fs_info.json",
-        "https://gitee.com/XtremeWave/FinalSuspect/raw/FinalSus/fs_info.json",
-        "https://api.xtreme.net.cn/download/FinalSuspect/fs_info.json",
-#endif
-    };
-    private static IReadOnlyList<string> GetInfoFileUrlList()
-    {
-        var list = URLs.ToList();
-        if (IsChineseUser) list.Reverse();
-        return list;
-    }
-
     public static bool firstStart = true;
 
     public static bool hasUpdate;
@@ -93,7 +76,7 @@ public static class VersionChecker
 
         foreach (var url in GetInfoFileUrlList())
         {
-            if (!GetVersionInfo(url).GetAwaiter().GetResult()) continue;
+            if (!GetVersionInfo(url + "fs_info.json").GetAwaiter().GetResult()) continue;
             isChecked = true;
             break;
         }
@@ -108,9 +91,9 @@ public static class VersionChecker
             XtremeLogger.Info("Creation: " + creation, "CheckRelease");
             XtremeLogger.Info("Force Update: " + forceUpdate, "CheckRelease");
             XtremeLogger.Info("File MD5: " + md5, "CheckRelease");
-            XtremeLogger.Info("Github Url: " + PathManager.downloadUrl_github, "CheckRelease");
-            XtremeLogger.Info("Gitee Url: " + PathManager.downloadUrl_gitee, "CheckRelease");
-            XtremeLogger.Info("Website Url: " + PathManager.downloadUrl_xtremeapi, "CheckRelease");
+            XtremeLogger.Info("Github Url: " + downloadUrl_github, "CheckRelease");
+            XtremeLogger.Info("Gitee Url: " + downloadUrl_gitee, "CheckRelease");
+            XtremeLogger.Info("Website Url: " + downloadUrl_xtremeapi, "CheckRelease");
 
             if (firstLaunch || isBroken)
             {
@@ -182,7 +165,7 @@ public static class VersionChecker
             var announcement = data["announcement"].Cast<JObject>();
             foreach (var langid in EnumHelper.GetAllValues<SupportedLangs>())
                 ModUpdater.announcement[langid] = announcement[langid.ToString()]?.ToString();
-            PathManager.downloadUrl_gitee = PathManager.downloadUrl_gitee.Replace("{showVer}", showVer);
+            downloadUrl_gitee = downloadUrl_gitee.Replace("{showVer}", showVer);
             hasUpdate = Main.version < latestVersion && creation > Main.PluginCreation;
             forceUpdate = Main.version < minimumVersion || creation > Main.PluginCreation;
 #if DEBUG

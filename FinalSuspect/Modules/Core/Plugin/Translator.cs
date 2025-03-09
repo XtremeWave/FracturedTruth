@@ -16,7 +16,7 @@ namespace FinalSuspect.Modules.Core.Plugin;
 public static class Translator
 {
     public static Dictionary<int, Dictionary<string, string>> TranslateMaps = new();
-    public const string LANGUAGE_FOLDER_NAME = PathManager.LocalPath_Data + "Language";
+    public const string LANGUAGE_FOLDER_NAME = LocalPath_Data + "Language";
     
     public static void Init()
     {
@@ -26,7 +26,7 @@ public static class Translator
     }
     public static void LoadLangs()
     {
-        var fileNames = Directory.GetFiles(PathManager.GetLocalPath(LocalType.Resources) + "Languages");
+        var fileNames = Directory.GetFiles(GetLocalPath(LocalType.Resources) + "Languages");
         foreach (var file in fileNames)
         {
             var fileName = Path.GetFileName(file);

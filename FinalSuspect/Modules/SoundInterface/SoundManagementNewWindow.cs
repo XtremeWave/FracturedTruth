@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
-using Object = UnityEngine.Object;
 using static FinalSuspect.Modules.SoundInterface.SoundManager;
 using static FinalSuspect.Modules.SoundInterface.XtremeMusic;
+using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Modules.SoundInterface;
 

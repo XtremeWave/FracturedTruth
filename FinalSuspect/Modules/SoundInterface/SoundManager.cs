@@ -16,7 +16,7 @@ namespace FinalSuspect.Modules.SoundInterface;
 #nullable enable
 public static class SoundManager
 {
-    public static readonly string TAGS_PATH = PathManager.GetResourceFilesPath(FileType.Sounds, "SoundsName.txt");
+    public static readonly string TAGS_PATH = GetResourceFilesPath(FileType.Sounds, "SoundsName.txt");
 
     public static List<string> CustomAudios = [];
  
@@ -242,7 +242,7 @@ public class XtremeMusic
 
         UnOfficial = music == SupportedMusics.UnOfficial;
         CurrectAudio = music;
-        Path = PathManager.GetResourceFilesPath(FileType.Sounds, FileName + ".wav");
+        Path = GetResourceFilesPath(FileType.Sounds, FileName + ".wav");
         CurrectAudioStates = LastAudioStates = ConvertExtension(ref Path) ? AudiosStates.Exist : AudiosStates.NotExist;
         
         lock (finalMusicsLock)

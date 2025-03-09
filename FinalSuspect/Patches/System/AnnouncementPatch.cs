@@ -105,7 +105,7 @@ public static bool SetModAnnouncements(PlayerAnnouncementData __instance, [Harmo
         {
             foreach (var lang in EnumHelper.GetAllValues<SupportedLangs>())
             {
-                var fileNames = Directory.GetFiles(PathManager.GetResourceFilesPath(FileType.ModNews, lang + "/"));
+                var fileNames = Directory.GetFiles(GetResourceFilesPath(FileType.ModNews, lang + "/"));
                 foreach (var file in fileNames)
                 {
                     try

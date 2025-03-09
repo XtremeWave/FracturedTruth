@@ -257,7 +257,7 @@ public static class SoundManagementPanel
     }
     static void DeleteSoundInFile(string sound)
     {
-        var path = PathManager.GetResourceFilesPath(FileType.Sounds, sound + ".wav");
+        var path = GetResourceFilesPath(FileType.Sounds, sound + ".wav");
         File.Delete(path);
     }
 }

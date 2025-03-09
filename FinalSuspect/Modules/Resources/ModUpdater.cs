@@ -31,9 +31,9 @@ public class ModUpdater
         if (url == "waitToSelect")
         {
             CustomPopup.Show(GetString("updatePopupTitle"), GetString("updateChoseSource"), [
-                (GetString("updateSource.XtremeApi"), () => StartUpdate(PathManager.downloadUrl_xtremeapi)),
-                (GetString("updateSource.Github"), () => StartUpdate(PathManager.downloadUrl_github)),
-                (GetString("updateSource.Gitee"), () => StartUpdate(PathManager.downloadUrl_gitee)),
+                (GetString("updateSource.XtremeApi"), () => StartUpdate(downloadUrl_xtremeapi)),
+                (GetString("updateSource.Github"), () => StartUpdate(downloadUrl_github)),
+                (GetString("updateSource.Gitee"), () => StartUpdate(downloadUrl_gitee)),
                 (GetString(StringNames.Cancel), SetUpdateButtonStatus)
             ]);
             return;
@@ -80,30 +80,30 @@ public class ModUpdater
     }
     public static async Task<(bool, string)> DownloadDLL(string url)
     {
-        File.Delete(PathManager.DownloadFileTempPath);
-        File.Create(PathManager.DownloadFileTempPath).Close();
+        File.Delete(DownloadFileTempPath);
+        File.Create(DownloadFileTempPath).Close();
 
         XtremeLogger.Msg("Start Downlaod From: " + url, "DownloadDLL");
-        XtremeLogger.Msg("Save To: " + PathManager.DownloadFileTempPath, "DownloadDLL");
+        XtremeLogger.Msg("Save To: " + DownloadFileTempPath, "DownloadDLL");
         try
         {
-            using var client = new HttpClientDownloadWithProgress(url, PathManager.DownloadFileTempPath);
+            using var client = new HttpClientDownloadWithProgress(url, DownloadFileTempPath);
             client.ProgressChanged += OnDownloadProgressChanged;
             await client.StartDownload();
             Thread.Sleep(100);
-            if (GetMD5HashFromFile(PathManager.DownloadFileTempPath) != md5)
+            if (GetMD5HashFromFile(DownloadFileTempPath) != md5)
             {
-                File.Delete(PathManager.DownloadFileTempPath);
+                File.Delete(DownloadFileTempPath);
                 return (false, GetString("updateFileMd5Incorrect"));
             }
             var fileName = Assembly.GetExecutingAssembly().Location;
             File.Move(fileName, fileName + ".bak");
-            File.Move(PathManager.DownloadFileTempPath, fileName);
+            File.Move(DownloadFileTempPath, fileName);
             return (true, null);
         }
         catch (Exception ex)
         {
-            File.Delete(PathManager.DownloadFileTempPath);
+            File.Delete(DownloadFileTempPath);
             XtremeLogger.Error($"更新失败\n{ex.Message}", "DownloadDLL", false);
             return (false, GetString("downloadFailed"));
         }

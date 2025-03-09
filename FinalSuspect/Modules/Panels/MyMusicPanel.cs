@@ -4,10 +4,10 @@ using System.Linq;
 using FinalSuspect.Helpers;
 using TMPro;
 using UnityEngine;
+using static FinalSuspect.Modules.SoundInterface.CustomSoundsManager;
 using static FinalSuspect.Modules.SoundInterface.SoundManager;
 using static FinalSuspect.Modules.SoundInterface.XtremeMusic;
 using Object = UnityEngine.Object;
-using static FinalSuspect.Modules.SoundInterface.CustomSoundsManager;
 
 
 namespace FinalSuspect.Modules.SoundInterface;

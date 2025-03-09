@@ -1,7 +1,7 @@
 using System;
-using UnityEngine;
 using System.IO;
 using System.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.Networking;
 
 namespace FinalSuspect.Modules.SoundInterface;
@@ -38,7 +38,7 @@ public class AudioLoader
         {
             audioData = await ReadAllBytesAsync(filePath);
         }
-        catch (System.Exception e)
+        catch (Exception e)
         {
             Debug.LogError("Failed to read file: " + filePath + "\n" + e.Message);
             return null;

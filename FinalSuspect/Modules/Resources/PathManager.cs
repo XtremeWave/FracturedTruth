@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using FinalSuspect.Attributes;
 using FinalSuspect.Helpers;
 
@@ -98,6 +101,23 @@ public static class PathManager
         return GetLocalPath(LocalType.Bypass) + $"BypassCheck_{fileType}_{bypassType}.xwr";
     }
     
+    private static IReadOnlyList<string> URLs => new List<string>
+    {
+#if DEBUG
+        $"file:///{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop))}",
+        "https://raw.githubusercontent.com/XtremeWave/FinalSuspect_Dev/FS_Dev/",
+#else
+        "https://raw.githubusercontent.com/XtremeWave/FinalSuspect/FinalSus/",
+        "https://gitee.com/XtremeWave/FinalSuspect/raw/FinalSus/",
+        "https://api.xtreme.net.cn/download/FinalSuspect/",
+#endif
+    };
+    public static IReadOnlyList<string> GetInfoFileUrlList()
+    {
+        var list = URLs.ToList();
+        if (IsChineseUser) list.Reverse();
+        return list;
+    }
 }
 
 public enum FileType

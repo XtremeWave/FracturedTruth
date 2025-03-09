@@ -179,7 +179,7 @@ public static class Utils
 
     public static Texture2D LoadTextureFromResources(string file)
     {
-        var path = PathManager.GetResourceFilesPath(FileType.Images, file);
+        var path = GetResourceFilesPath(FileType.Images, file);
 
         try
         {
