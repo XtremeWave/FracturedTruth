@@ -114,8 +114,6 @@ public class XtremePlayerData : IDisposable
     public void SetDead()
     {
         IsDead = true;
-        deadbodyrend = Object.Instantiate(rend, rend.transform.parent);
-        deadbodyrend.flipY = true;
         XtremeLogger.Info($"Set Death For {Player.GetNameWithRole()}", "Data");
     }
     

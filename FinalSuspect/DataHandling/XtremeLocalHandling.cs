@@ -462,8 +462,5 @@ public static class XtremeLocalHandling
         catch 
         {
         }
-       
     }
-    
-
 }

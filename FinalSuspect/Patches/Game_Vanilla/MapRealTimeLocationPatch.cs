@@ -29,6 +29,8 @@ public class MapRealTimeLocationPatch
             rend.transform.SetParent(mapBehaviour.HerePoint.transform.parent);
             rend.gameObject.SetActive(false);
             data.rend = rend;
+            data.deadbodyrend = Object.Instantiate(rend, rend.transform.parent);
+            data.deadbodyrend.flipY = true;
         }
     }
     [HarmonyPatch(typeof(MapBehaviour), nameof(MapBehaviour.FixedUpdate)), HarmonyPostfix]
