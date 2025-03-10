@@ -30,6 +30,8 @@ body:
         - 概率复现
         - 取决于设备环境
         - 我不知道
+    validations:
+      required: true
   - type: textarea
     attributes:
       label: "复现步骤"
