@@ -24,12 +24,12 @@ body:
       required: true
   - type: dropdown
     attributes:
-    label: 该问题的复现频率是?
-    options:
-      - 稳定复现
-      - 概率复现
-      - 取决于设备环境
-      - 我不知道
+      label: 该问题的复现频率是?
+      options:
+        - 稳定复现
+        - 概率复现
+        - 取决于设备环境
+        - 我不知道
   - type: textarea
     attributes:
       label: "复现步骤"
