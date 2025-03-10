@@ -13,8 +13,6 @@ body:
       options: 
         - label: 已经在[议题列表](https://github.com/XtremeWave/FinalSuspect/issue)中搜索了相关问题。
           required: true
-  validations:
-    required: true
   - type: markdown
     attributes:
       value: "## 详细信息"
