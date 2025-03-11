@@ -26,10 +26,20 @@ body:
       description: "For ease of management, please do not report multiple unrelated issues under the same issue."
     validations:
       required: true
+  - type: dropdown
+    attributes:
+      label: What is the frequency of recurrence for this issue?
+      options:
+        - The issue can be consistently reproduced.
+        - The issue is reproducible, but the probability is not 100%.
+        - The probability of this issue recurring depends on the user's device.
+        - I don't know.
+    validations:
+      required: true
   - type: textarea
     attributes:
       label: "Reproduce Steps"
-      description: "If it can be consistently reproduced, please provide detailed steps."
+      description: "If it can be consistently reproduced, please provide detailed steps.<br>Even if it cannot be consistently reproduced, please still provide the steps of how you discovered it."
   - type: textarea
     attributes:
       label: "Relevant log output"
