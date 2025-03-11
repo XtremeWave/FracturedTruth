@@ -35,7 +35,7 @@ body:
   - type: textarea
     attributes:
       label: "该问题的复现步骤是?"
-      description: "如果可以稳定复现，请提供详细的步骤。\即使无法稳定复现,也请提供你是如何发现的步骤。"
+      description: "如果可以稳定复现，请提供详细的步骤。<br>即使无法稳定复现,也请提供你是如何发现的步骤。"
   - type: textarea
     attributes:
       label: "相关日志输出"
