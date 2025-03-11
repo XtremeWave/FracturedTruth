@@ -19,7 +19,7 @@ body:
   - type: textarea
     attributes:
       label: "发生了什么？"
-      description: "为了方便我们管理，请不要在同一个 issue 下报告多个不相关的问题。"
+      description: "为了方便我们管理，请不要在同一个issue报告多个问题。"
     validations:
       required: true
   - type: dropdown
@@ -28,20 +28,20 @@ body:
       options:
         - 稳定复现
         - 概率复现
-        - 取决于设备环境
+        - 取决于设备/环境
         - 我不知道
     validations:
       required: true
   - type: textarea
     attributes:
-      label: "复现步骤"
-      description: "如果可以稳定复现，请提供详细的步骤。"
+      label: "该问题的复现步骤是?"
+      description: "如果可以稳定复现，请提供详细的步骤。\即使无法稳定复现,也请提供你是如何发现的步骤。"
   - type: textarea
     attributes:
       label: "相关日志输出"
-      description: "请复制并粘贴任何相关的日志输出。这将自动格式化为代码，因此无需反引号。"
+      description: "请[根据此文档](https://www.xtreme.net.cn/docs/FS/Guide/OutputLog)导出FS日志并将其粘贴至此处。"
       render: shell
   - type: textarea
     attributes:
       label: "附加信息"
-      description: "如果你还有其他需要提供的信息，可以在这里填写（可以提供截图、视频等）。"
+      description: "如果你还有其他需要提供的信息，可以在这里填写。"
