@@ -6,11 +6,7 @@
 
 <img src="https://badgen.net/github/license/XtremeWave/FinalSuspect" alt="Licences">
 <img src="https://badgen.net/github/tag/XtremeWave/FinalSuspect" alt="LatestTag">
-<img src="https://badgen.net/github/assets-dl/XtremeWave/FinalSuspect" alt="Downloads">
-<img src="https://badgen.net/github/watchers/XtremeWave/FinalSuspect" alt="Watchers">
 <img src="https://badgen.net/github/stars/XtremeWave/FinalSuspect" alt="Stars">
-<img src="https://badgen.net/github/forks/XtremeWave/FinalSuspect" alt="Forks">
-<img src="https://badgen.net/github/prs/XtremeWave/FinalSuspect" alt="PRs">
 
 [English] | [简体中文](README_zh.md)
 
@@ -29,7 +25,7 @@
 
 FinalSuspect is an original optimization plugin designed for Among Us.\
 The plugin introduces over 10 optimizations to the original game, enhancing the overall experience.\
-For detailed documentation on how to use this plugin (installation, updates, etc.), please refer to the [website's documentation](https://www.xtreme.net.cn/docs/FS/en-us/guide/).
+For detailed documentation on how to use this plugin (installation, updates, etc.), please refer to the [website's documentation](https://www.xtreme.net.cn/docs/FS/en-us/Guide/Installation).
 
 ## Contributors
 
