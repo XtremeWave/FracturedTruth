@@ -107,7 +107,7 @@ public static class PathManager
         "https://api.xtreme.net.cn/download/FinalSuspect/",
         //$"file:///{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop))}/",
 #else
-        "https://raw.githubusercontent.com/XtremeWave/FinalSuspect/FinalSus/",
+        //"https://raw.githubusercontent.com/XtremeWave/FinalSuspect/FinalSus/",
         "https://gitee.com/XtremeWave/FinalSuspect/raw/FinalSus/",
         "https://api.xtreme.net.cn/download/FinalSuspect/",
 #endif
