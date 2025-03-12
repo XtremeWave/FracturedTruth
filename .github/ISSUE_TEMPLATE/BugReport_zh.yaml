@@ -30,10 +30,10 @@ body:
     attributes:
       label: 该问题的复现频率是?
       options:
-        - 稳定复现
-        - 概率复现
-        - 取决于设备/环境
-        - 我不知道
+        - 该问题可以稳定复现。
+        - 该问题可以复现，但概率并非100%。
+        - 问题复现概率的取决于用户设备或环境。
+        - 我不知道。
     validations:
       required: true
   - type: textarea
