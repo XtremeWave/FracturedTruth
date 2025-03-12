@@ -18,7 +18,7 @@ internal class Cloud
     private static Socket EacClientSocket;
     private static long LastRepotTimeStamp;
 
-    /*[PluginModuleInitializer]
+    [PluginModuleInitializer]
     public static void Init()
     {
         try
@@ -33,7 +33,7 @@ internal class Cloud
         {
             XtremeLogger.Exception(e, "Cloud Init");
         }
-    }*/
+    }
     private static string GetResourcesTxt(string path)
     {
         var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(path);

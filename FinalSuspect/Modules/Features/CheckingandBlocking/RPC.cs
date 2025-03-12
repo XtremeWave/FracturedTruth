@@ -1,8 +1,6 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using AmongUs.GameOptions;
-using AmongUs.QuickChat;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game;
 using FinalSuspect.Patches.Game_Vanilla;
@@ -70,7 +68,6 @@ internal class RPCHandlerPatch
                 name = subReader.ReadString();
                 XtremeLogger.Info("RPC Set Name For Player: " + __instance.GetNameWithRole() + " => " + name, "SetName");
                 break;
-                break;
             case RpcCalls.SendChat: // Free chat
                 var text = subReader.ReadString();
                 XtremeLogger.Info($"{__instance.GetNameWithRole().RemoveHtmlTags()}:{text.RemoveHtmlTags()}", "ReceiveChat");
@@ -121,12 +118,10 @@ internal class RPCHandlerPatch
                             }, 5f, "Kick");
                     }*/
                 }
-                catch
-                {                }
+                catch { }
                 break;
         }
     }
-
 }
 
 internal static class RPC
@@ -147,11 +142,8 @@ internal static class RPC
             XtremeGameData.PlayerVersion.playerVersion[PlayerControl.LocalPlayer.PlayerId] = 
                 new XtremeGameData.PlayerVersion(Main.PluginVersion, $"{ThisAssembly.Git.Commit}({ThisAssembly.Git.Branch})", Main.ForkId);
         }
-        catch 
-        {
-        }
+        catch { }
     }
-
 
     public static void SendRpcLogger(uint targetNetId, byte callId, int targetClientId = -1)
     {

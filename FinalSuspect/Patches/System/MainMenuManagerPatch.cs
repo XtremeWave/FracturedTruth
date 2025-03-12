@@ -100,8 +100,6 @@ public class MainMenuManagerPatch
             return button;
         }
 
-
-
         var extraLinkName = IsChineseUser ? "QQ群" : "Discord";
         var extraLinkUrl = IsChineseUser ? Main.QQInviteUrl : Main.DiscordInviteUrl;
 

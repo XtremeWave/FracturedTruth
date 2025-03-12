@@ -34,6 +34,7 @@ internal class ControllerManagerUpdatePatch
             if (resolutionIndex >= resolutions.Length) resolutionIndex = 0;
             ResolutionManager.SetResolution(resolutions[resolutionIndex].Item1, resolutions[resolutionIndex].Item2, false);
         }
+
         //重新加载自定义翻译
         if (GetKeysDown(KeyCode.F5, KeyCode.T))
         {
@@ -73,7 +74,6 @@ internal class ControllerManagerUpdatePatch
             GameStartManager.Instance.countDownTimer = 0;
         }
 
-
         //倒计时取消
         if (Input.GetKeyDown(KeyCode.C) && XtremeGameData.GameStates.IsCountDown)
         {
@@ -92,7 +92,6 @@ internal class ControllerManagerUpdatePatch
             XtremeLogger.isAlsoInGame = !XtremeLogger.isAlsoInGame;
             XtremeLogger.SendInGame($"游戏中输出日志：{XtremeLogger.isAlsoInGame}");
         }
-
     }
 
     private static bool GetKeysDown(params KeyCode[] keys)
@@ -105,5 +104,5 @@ internal class ControllerManagerUpdatePatch
         return false;
     }
 
-    private static bool ORGetKeysDown(params KeyCode[] keys) => keys.Any(k => Input.GetKeyDown(k));
+    private static bool ORGetKeysDown(params KeyCode[] keys) => keys.Any(Input.GetKeyDown);
 }

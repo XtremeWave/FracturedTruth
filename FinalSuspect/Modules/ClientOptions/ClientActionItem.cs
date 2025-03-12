@@ -78,8 +78,6 @@ public class ClientActionItem
                 {
                     CustomBackground.gameObject.SetActive(true);
                 }));
-
-               
             }
 
             // ボタン生成

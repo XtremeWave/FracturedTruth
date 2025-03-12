@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using AmongUs.GameOptions;
 using FinalSuspect.Attributes;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game;
-using InnerNet;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -23,7 +21,6 @@ public class XtremePlayerData : IDisposable
     public int ColorId { get; private set; }
     public byte PlayerId { get; private set; }
 
-
     public bool IsImpostor { get; private set; }
     public bool IsDead { get; private set; }
     public bool DeathByDisconnected => RealDeathReason == VanillaDeathReason.Disconnect;
@@ -36,7 +33,6 @@ public class XtremePlayerData : IDisposable
     public VanillaDeathReason RealDeathReason { get; private set; }
     public XtremePlayerData RealKiller { get; private set; }
 
-        
     public int ProcessInt { get; private set; }
     public int TotalTaskCount { get; private set; }
     public int CompleteTaskCount { get; private set; }
@@ -99,7 +95,6 @@ public class XtremePlayerData : IDisposable
         {
             nullrole = GetPlayerById(id).Data.Role.Role;
         }
-            
         var role = (dead ? data.RoleAfterDeath : data.RoleWhenAlive) ?? nullrole;            
         return role;
     }
@@ -127,7 +122,6 @@ public class XtremePlayerData : IDisposable
             AllPlayerData.Remove(this);
             return;
         }
-        
         XtremeLogger.Info($"Set Disconnect For {Player.GetNameWithRole()}", "Data");
         IsDisconnected = true;
         SetDead();
@@ -146,7 +140,6 @@ public class XtremePlayerData : IDisposable
             SetDead();
             RoleAfterDeath = role;
         }
-        
         RoleAssgined = !XtremeGameData.GameStates.IsFreePlay;
         XtremeLogger.Info("Set Role For Player: " + Name + " => " + role, "SetRole");
     }

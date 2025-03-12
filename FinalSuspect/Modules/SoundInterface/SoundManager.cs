@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Features.CheckingandBlocking;
-using FinalSuspect.Modules.Random;
 using FinalSuspect.Modules.Resources;
 using UnityEngine;
 using static FinalSuspect.Modules.SoundInterface.SoundManager;
@@ -77,7 +75,6 @@ public static class SoundManager
             path = path.Replace(matchingKey, extensionsArray[nextIndex]);
             extensions.Remove(matchingKey);
         }
-
         return true;
     }
     
@@ -161,7 +158,7 @@ public class XtremeMusic
     public bool unpublished;
 
 
-    public static async void InitializeAll()
+    public static void InitializeAll()
     {
         foreach (var file in EnumHelper.GetAllValues<SupportedMusics>().ToList())
         {
@@ -185,7 +182,6 @@ public class XtremeMusic
         {
             XtremeLogger.Error("Load Audio Failed\n" + ex, "AudioManager", false);
         }
-        
         XtremeLogger.Msg($"{soundnum} Custom Sounds Loaded", "AudioManager");
     }
     

@@ -12,7 +12,6 @@ namespace FinalSuspect.Patches.System;
 [HarmonyPatch(typeof(LobbyInfoPane), nameof(LobbyInfoPane.Update))]
 class LobbyInfoPanePatch
 {
-
     static void Postfix()
     {
         var AspectSize = GameObject.Find("AspectSize");
@@ -20,7 +19,6 @@ class LobbyInfoPanePatch
         if (XtremeGameData.GameStates.MapIsActive(MapNames.Dleks))
             AspectSize.transform.FindChild("MapImage").gameObject.GetComponent<SpriteRenderer>().sprite = Utils.LoadSprite("DleksBanner-Wordart.png", 160f);
     }
-
 }
 [HarmonyPatch]
 class LobbyViewSettingsPanePatch
@@ -127,12 +125,9 @@ class LobbyViewSettingsPanePatch
                             {
                                 enableroleindex.Add(bannerindex);
                             }
-
                             bannerindex++;
                         }
-
                     }
-
                     foreach (var banner in banners)
                     {
                         if (banner.name == "AdvancedRoleViewPanel(Clone)")
@@ -146,7 +141,6 @@ class LobbyViewSettingsPanePatch
                         }
                     }
                 }
-
                 #endregion
             }
             else
@@ -176,14 +170,10 @@ class LobbyViewSettingsPanePatch
                         bannerindex++;
                     }
                 }
-
                 #endregion
             }
         }
-        catch
-        {
-            //
-        }
+        catch { }
     }
     static void SetColorForRolesBanner(GameObject obj, Color iconcolor, Color bgcolor)
     {
@@ -211,7 +201,6 @@ class LobbyViewSettingsPanePatch
 
             }
         }
-
     }
     static void SetColorForSettingsBanner(GameObject obj, Color color)
     {

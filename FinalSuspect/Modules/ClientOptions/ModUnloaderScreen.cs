@@ -58,7 +58,6 @@ public static class ModUnloaderScreen
             catch
             {
             }
-            
 
             _ = new LateTask(() =>
             {
@@ -90,9 +89,6 @@ public static class ModUnloaderScreen
     }
     public static void Hide()
     {
-        if (Popup != null)
-        {
-            Popup.gameObject.SetActive(false);
-        }
+        Popup?.gameObject.SetActive(false);
     }
 }

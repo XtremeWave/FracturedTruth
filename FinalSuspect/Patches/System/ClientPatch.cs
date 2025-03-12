@@ -17,17 +17,14 @@ internal class MakePublicPatch
 {
     public static bool Prefix(GameStartManager __instance)
     {
-
         if (VersionChecker.isBroken || (VersionChecker.hasUpdate && VersionChecker.forceUpdate) || !VersionChecker.IsSupported )
         {
-            var message = "";
-            message = GetString("PublicNotAvailableOnThisVersion");
+            string message = GetString("PublicNotAvailableOnThisVersion");
             if (VersionChecker.isBroken) message = GetString("ModBrokenMessage");
             if (VersionChecker.hasUpdate) message = GetString("CanNotJoinPublicRoomNoLatest");
             XtremeLogger.Info(message, "MakePublicPatch");
             XtremeLogger.SendInGame(message);
             return false;
-
         }
         return true;
     }
@@ -42,7 +39,7 @@ class MMOnlineManagerStartPatch
         if (obj)
         {
             obj?.SetActive(false);
-            var parentObj = obj.transform.parent.gameObject;
+            _ = obj.transform.parent.gameObject;
             var textObj = Object.Instantiate(obj.transform.FindChild("Text_TMP").GetComponent<TextMeshPro>());
             textObj.transform.position = new Vector3(0.5f, -0.4f, 0f);
             textObj.name = "CanNotJoinPublic";
@@ -63,7 +60,6 @@ class MMOnlineManagerStartPatch
             textObj.text = $"<size=2>{StringHelper.ColorString(Color.red, message)}</size>";
         }
     }
-
 }
 [HarmonyPatch(typeof(SplashManager), nameof(SplashManager.Update))]
 internal class SplashLogoAnimatorPatch

@@ -19,8 +19,6 @@ public static class InGameRoleInfoMenu
     public static GameObject RoleRoleIllustration;
     public static SpriteRenderer RoleRoleIllustrationSP => RoleRoleIllustration.GetComponent<SpriteRenderer>();
 
-
-
     public static TextMeshPro RoleInfoTMP => RoleInfo.GetComponent<TextMeshPro>();
 
     public static void Init()
@@ -54,7 +52,6 @@ public static class InGameRoleInfoMenu
         RoleRoleIllustration.transform.SetParent(Menu.transform);
         RoleRoleIllustration.AddComponent<SpriteRenderer>();
         RoleRoleIllustration.transform.localPosition = new(2.3f, 0.8f, 4f);
-
     }
 
     public static void SetRoleInfoRef(PlayerControl player)

@@ -100,7 +100,7 @@ public static class SoundManagementNewWindow
                 return;
             }
 
-            new LateTask(() =>
+            _ = new LateTask(() =>
             {
                 colorInfoTmp.text = GetString("PleaseEnterMusic");
                 colorInfoTmp.color = Color.white;
@@ -117,7 +117,6 @@ public static class SoundManagementNewWindow
     }
     private static bool SaveToFile(string name)
     {
-
         using StreamWriter sr = new(TAGS_PATH, true);
         sr.WriteLine(name);
         return true;

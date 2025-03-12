@@ -13,7 +13,6 @@ public static class AwakeFriendCodeUIPatch
 
     public static void Prefix()
     {
-
         var BarSprit = GameObject.Find("BarSprite");
         if (BarSprit)
         {
@@ -26,10 +25,8 @@ public static class AwakeFriendCodeUIPatch
             {
                 obj.transform.SetParent(CustomBarSprit.transform);
             }
-
             BarSprit.ForEachChild((Action<GameObject>)ResetParent);
             BarSprit.SetActive(false);
-
         }
 
         var newRequest = GameObject.Find("NewRequest");
@@ -93,9 +90,7 @@ public static class AwakeAccountManager
             __instance.StartCoroutine(SwitchRoleIllustration(Sprite));
             crewpet_walk0001.SetActive(false);
         }
-        catch 
-        {
-        }
+        catch { }
     }
     public static IEnumerator SwitchRoleIllustration(SpriteRenderer spriter)
     {
@@ -113,7 +108,6 @@ public static class AwakeAccountManager
                 yield return null;
             }
             currentIndex = (currentIndex + 1) % AllRoleRoleIllustration.Length;
-
 
             yield return new WaitForSeconds(1f);
             p = 1f;

@@ -1,15 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using AmongUs.GameOptions;
 using FinalSuspect.Modules.Core.Game;
 using FinalSuspect.Modules.Features.CheckingandBlocking;
 using FinalSuspect.Patches.Game_Vanilla;
 using Hazel;
 using InnerNet;
-using Unity.Services.Core.Internal;
 using static FinalSuspect.DataHandling.FinalAntiCheat.FAC;
-
 
 namespace FinalSuspect.DataHandling;
 
@@ -63,7 +60,6 @@ public static class FinalAntiCheat
                     return true;
                 }
             }
-
             return false;
         }
         public bool HandleSendQuickChat()
@@ -111,8 +107,6 @@ public static class FinalAntiCheat
         {
             if (XtremeGameData.GameStates.IsLobby)
             {
-
-
                 var posXOutOfRange = Player.GetTruePosition().x > 3.5f || Player.GetTruePosition().x < -3.5f;
                 var posYOutOfRange = Player.GetTruePosition().y > 4f || Player.GetTruePosition().y < -1f;
                 if (posXOutOfRange || posYOutOfRange)
@@ -142,7 +136,6 @@ public static class FinalAntiCheat
                 Player.GetDataName()));
             if (!AmongUsClient.Instance.AmHost)return;
             Utils.KickPlayer(Player.PlayerId, false, "Suspect Cheater");
-            
         }
         public void MarkAsCheater() => IsSuspectCheater = true;
     }
@@ -192,7 +185,6 @@ public static class FinalAntiCheat
                     return true;
                 }
 
-
                 switch (rpc)
                 {
                     case RpcCalls.SetName:
@@ -215,7 +207,6 @@ public static class FinalAntiCheat
                         if (text.Length > 100)
                             return true;
                         break;
-
                 }
 
                 if (XtremeGameData.GameStates.IsLobby)
@@ -331,12 +322,10 @@ public static class FinalAntiCheat
                 if (ReceiveInvalidRpc(player, callId)) return true;
                 if (AmongUsClient.Instance.AmHost)
                 {
-                   
                     XtremeLogger.Warn($"收到来自 {player?.Data?.PlayerName} 的不受信用的RPC，因此将其踢出。", "Kick");
                     NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.InvalidRpc"),
                         player?.Data?.PlayerName, callId));
                     return true;
-
                 }
 
                 XtremeLogger.Warn($"收到来自 {player?.Data?.PlayerName} 的不受信用的RPC", "Kick?");
@@ -344,7 +333,6 @@ public static class FinalAntiCheat
                     player?.Data?.PlayerName, callId));
                 return true;
             }
-
             return false;
         }
 
@@ -372,7 +360,6 @@ public static class FinalAntiCheat
                     HandleCheat(pc, GetString("FAC.CheatDetected.FAC"));
                     return true;
             }
-
             return false;
         }
 

@@ -5,10 +5,8 @@ using FinalSuspect.Helpers;
 using TMPro;
 using UnityEngine;
 using static FinalSuspect.Modules.SoundInterface.CustomSoundsManager;
-using static FinalSuspect.Modules.SoundInterface.SoundManager;
 using static FinalSuspect.Modules.SoundInterface.XtremeMusic;
 using Object = UnityEngine.Object;
-
 
 namespace FinalSuspect.Modules.SoundInterface;
 
@@ -99,7 +97,6 @@ public static class MyMusicPanel
         nextPagePassiveButton.OnClick = new();
         nextPagePassiveButton.OnClick.AddListener(new Action(() =>
         {
-            
             currentPage++;
 
             if (currentPage > totalPageCount)
@@ -152,10 +149,8 @@ public static class MyMusicPanel
 
             RefreshTags(optionsMenuBehaviour, audio); 
 
-            count++;
-           
+            count++; 
         }
-        
     }
     public static void RefreshTags(OptionsMenuBehaviour optionsMenuBehaviour, XtremeMusic audio)
     {
@@ -220,7 +215,6 @@ public static class MyMusicPanel
                     break;
                 }
             }
-            
 
             previewText.text = preview;
             ToggleButton.Background.color = color;
@@ -234,7 +228,6 @@ public static class MyMusicPanel
                 XtremeLogger.Info($"Try To Play {filename}:{path}", "MyMusicPanel");
                 Play(audio);
             }
-
             Items.Add(ToggleButton.gameObject);
             Items.Add(previewText.gameObject);
         }
@@ -242,7 +235,5 @@ public static class MyMusicPanel
         {
             numItems++;
         }
-
     }
-
 }

@@ -37,15 +37,11 @@ static class ExtendedPlayerControl
     public static bool IsImpostor(this PlayerControl pc)
     {
         if (XtremeGameData.GameStates.IsLobby) return false;
-        switch (pc.GetRoleType())
+        return pc.GetRoleType() switch
         {
-            case RoleTypes.Impostor:
-            case RoleTypes.Shapeshifter:
-            case RoleTypes.Phantom:
-            case RoleTypes.ImpostorGhost:
-                return true;
-        }
-        return false;
+            RoleTypes.Impostor or RoleTypes.Shapeshifter or RoleTypes.Phantom or RoleTypes.ImpostorGhost => true,
+            _ => false,
+        };
     }
     public static string GetNameWithRole(this PlayerControl player, bool forUser = false)
     {
@@ -65,9 +61,7 @@ static class ExtendedPlayerControl
         {
              trynull = player.GetXtremeData() != null ? player?.GetDataName() : null;
         }
-        catch 
-        {
-        }
+        catch { }
 
         var nullname = trynull;
         return (isMeeting ? player?.Data?.PlayerName : player?.name) ?? nullname;
@@ -83,6 +77,5 @@ static class ExtendedPlayerControl
         {
             return false;
         }
-        
     }
 }

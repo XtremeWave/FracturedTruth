@@ -21,6 +21,5 @@ public static partial class XtremeGameData
             tag = tag_str;
             this.forkId = forkId;
         }
-
     }
 }

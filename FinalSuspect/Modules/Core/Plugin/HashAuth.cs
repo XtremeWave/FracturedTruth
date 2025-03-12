@@ -3,18 +3,12 @@ using System.Text;
 
 namespace FinalSuspect.Modules.Core.Plugin;
 
-public class HashAuth
+public class HashAuth(string hashValue, string salt = null, HashAlgorithm algorithm = null)
 {
-    public readonly string HashValue;
+    public readonly string HashValue = hashValue;
 
-    private readonly string salt;
-    private HashAlgorithm algorithm;
-    public HashAuth(string hashValue, string salt = null, HashAlgorithm algorithm = null)
-    {
-        HashValue = hashValue;
-        this.salt = salt;
-        this.algorithm = algorithm ?? SHA256.Create(); // 引数のalgorithmがnullの場合のみ新しく作る
-    }
+    private readonly string salt = salt;
+    private HashAlgorithm algorithm = algorithm ?? SHA256.Create();
 
     public bool CheckString(string value)
     {
