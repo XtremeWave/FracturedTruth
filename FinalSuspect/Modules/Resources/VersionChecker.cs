@@ -119,7 +119,8 @@ public static class VersionChecker
             string result;
             if (url.StartsWith("file:///"))
             {
-                result = await File.ReadAllTextAsync(url[8..]);
+                //读取文件不应该用同步调用异步，否则会堵塞主线程
+                result = File.ReadAllText(url[8..]);
             }
             else
             {
