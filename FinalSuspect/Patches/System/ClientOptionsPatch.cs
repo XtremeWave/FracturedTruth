@@ -5,9 +5,7 @@ using FinalSuspect.Helpers;
 using FinalSuspect.Modules.ClientOptions;
 using FinalSuspect.Modules.Core.Game;
 using FinalSuspect.Modules.SoundInterface;
-using Il2CppSystem.Collections.Generic;
 using UnityEngine;
-using Object = System.Object;
 
 namespace FinalSuspect.Patches.System;
 
@@ -142,7 +140,6 @@ public static class OptionsMenuBehaviourStartPatch
         MyMusicPanel.Init(__instance);
         SoundManagementPanel.Init(__instance);
 
-        
         if (ModUnloaderScreen.Popup == null)
             ModUnloaderScreen.Init(__instance);
         recreate = false;
@@ -159,8 +156,6 @@ public static class OptionsMenuBehaviourStartPatch
         {
             item = ClientOptionItem_Boolean.Create(name, value, instance, toggleAction);
         }
-
-        
     }
 
     private static void CreateOptionItem(ref ClientOptionItem_String item, string name, ConfigEntry<string> value, OptionsMenuBehaviour instance, string[] options, Action toggleAction = null)
@@ -276,7 +271,6 @@ public static class OptionsMenuBehaviourStartPatch
         {
             Main.UseModCursor.Value = false;
         }
-       
     }
 }
 [HarmonyPatch(typeof(OptionsMenuBehaviour), nameof(OptionsMenuBehaviour.Close))]

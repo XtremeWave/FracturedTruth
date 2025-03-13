@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace FinalSuspect.Patches.Game_Vanilla;
 
-
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.MurderPlayer))]
 class MurderPlayerPatch
 {
@@ -23,10 +22,7 @@ class CoSetRolePatch
         {
             __instance.SetRole(roleTypes);
         }
-        catch 
-        {
-            //
-        }
+        catch { }
     }
 }
 

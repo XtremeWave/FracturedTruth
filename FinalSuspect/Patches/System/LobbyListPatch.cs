@@ -75,7 +75,6 @@ public static class MatchMakerGameButtonSetGamePatch
                 var halfLength = totalname.Length / 2;
                 var firstHalf = totalname.AsSpan(0, halfLength).ToString();
                 var secondHalf = totalname.AsSpan(halfLength).ToString();
-
                 RoomName = $"<color=#00B2FF>{firstHalf}</color><color=#ff0000>{secondHalf}</color>";
                 name = "<color=#00B2FF>Nintendo</color><color=#ff0000>Switch</color>";
                 break;
@@ -91,7 +90,6 @@ public static class MatchMakerGameButtonSetGamePatch
         RoomName ??= $"<color={color}>{nameList[id]}</color>";
         var platforms = $"<color={color}>{name}</color>";
 
-        
         game.HostName = $"<size=60%>{RoomName}</size>" +
                 $"<size=30%> ({Math.Max(0, 100 - game.Age / 100)}%)</size>" +
                 $"\n<size=40%><color={ColorHelper.ModColor}>{GameCode.IntToGameName(game.GameId)}</color></size>" +

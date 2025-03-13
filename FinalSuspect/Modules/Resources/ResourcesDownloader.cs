@@ -1,7 +1,5 @@
 using System;
 using System.IO;
-using System.Net;
-using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -11,7 +9,6 @@ namespace FinalSuspect.Modules.Resources;
 
 public class ResourcesDownloader
 {
-    
     public static async Task<bool> StartDownload(FileType fileType, string file)
     {
         string filePath;
@@ -49,7 +46,6 @@ public class ResourcesDownloader
 
         var url = GetFile(fileType, remoteType, file);
 
-
         if (!IsValidUrl(url))
         {
             XtremeLogger.Error($"Invalid URL: {url}", "Download Resources", false);
@@ -80,19 +76,17 @@ public class ResourcesDownloader
                 goto retry;
             return false;
         }
-
     }
-
     private static bool IsValidUrl(string url)
     {
         var pattern = @"^(https?|ftp)://[^\s/$.?#].[^\s]*$";
         return Regex.IsMatch(url, pattern);
     }
-    private static void OnDownloadProgressChanged(long? totalFileSize, long totalBytesDownloaded, double? progressPercentage)
+    /*private static void OnDownloadProgressChanged(long? totalFileSize, long totalBytesDownloaded, double? progressPercentage)
     {
         var msg = $"\n{totalFileSize / 1000}KB / {totalBytesDownloaded / 1000}KB  -  {(int)progressPercentage}%";
         XtremeLogger.Info(msg, "Download Resources");
-    }
+    }*/
     public static string GetMD5HashFromFile(string fileName)
     {
         try
@@ -108,13 +102,11 @@ public class ResourcesDownloader
             return "";
         }
     }
-    public static async Task<bool> IsUrl404Async(FileType fileType, string file)
+    /*public static async Task<bool> IsUrl404Async(FileType fileType, string file)
     {
         return false;
-            /*
             using var client = new HttpClient();
             try
-
             {
                 if (!IsChineseLanguageUser)
                 {
@@ -135,6 +127,5 @@ public class ResourcesDownloader
         {
             return false;
         }
-*/
-    }
+    }*/
 }

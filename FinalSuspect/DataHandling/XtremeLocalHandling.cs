@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game;
@@ -154,7 +153,6 @@ public static class XtremeLocalHandling
         {
             return "";
         }
-        
     }
 
     private static void GetGameText(this XtremePlayerData data, ref Color color, ref string roleText ,bool topswap)
@@ -181,8 +179,7 @@ public static class XtremeLocalHandling
         if (player.GetXtremeData().IsDisconnected)
         {
             color = Color.gray;
-        }
-            
+        }    
     }
 
     public static string CheckAndAppendText(this string toptext, string extratext)
@@ -303,13 +300,10 @@ public static class XtremeLocalHandling
                     roleTextMeeting.enabled = true;
                 }
             }
-            catch 
-            { }
-
+            catch { }
         }
     }
-    
-    
+
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Update))]
     [HarmonyPostfix]
     [HarmonyPriority(Priority.First)]
@@ -335,12 +329,9 @@ public static class XtremeLocalHandling
                     roleTextMeeting.enabled = true;
                 }
             }
-            catch 
-            { }
-
+            catch { }
         }
     }
-
 
     #endregion
 
@@ -388,10 +379,9 @@ public static class XtremeLocalHandling
                 color = Palette.DisabledGrey;
                 break;
         }
-
         map.ColorControl.SetColor(color);
-
     }
+
     public static void UpdateMap()
     {
         if (!Main.EnableFinalSuspect.Value) return;
@@ -417,7 +407,6 @@ public static class XtremeLocalHandling
             {
                 data.preMeetingPosition = null;
             }
-
             vector /= ShipStatus.Instance.MapScale;
             vector.x *= Mathf.Sign(ShipStatus.Instance.transform.localScale.x);
             vector.z = -1f;
@@ -426,7 +415,6 @@ public static class XtremeLocalHandling
         }
     }
 
-    
     public static bool GetHauntFilterText(HauntMenuMinigame __instance)
     {
         if (!Main.EnableFinalSuspect.Value) return true;
@@ -459,11 +447,6 @@ public static class XtremeLocalHandling
             if (!player.IsAlive())
                 bgcolor = new Color32(255, 0, 0, 120);
         }
-        catch 
-        {
-        }
-       
+        catch { }
     }
-    
-
 }

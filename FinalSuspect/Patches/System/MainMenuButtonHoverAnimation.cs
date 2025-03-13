@@ -49,7 +49,6 @@ public class MainMenuButtonHoverAnimation
             TitleLogoPatch.ModStamp.SetActive(Active);
         }
 
-
         if (GameObject.Find("MainUI") == null) return;
 
         foreach (var kvp in AllButtons.Where(x => x.Key != null && x.Key.active))

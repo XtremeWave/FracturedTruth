@@ -8,7 +8,6 @@ namespace FinalSuspect.Helpers;
 
 public static class ObjectHelper
 {
-
     public static IEnumerable<T> Flatten<T>(this IEnumerable<IEnumerable<T>> collection)
     {
         return collection.SelectMany(x => x);
@@ -27,7 +26,6 @@ public static class ObjectHelper
     /// 销毁对象的 <see cref="TextTranslatorTMP"/> 组件
     /// </summary>
     public static void DestroyTranslator(this MonoBehaviour obj) => obj?.gameObject?.DestroyTranslator();
-
 
     public static GameObject CreateObject(string objName, Transform parent, Vector3 localPosition, int? layer = null)
     {

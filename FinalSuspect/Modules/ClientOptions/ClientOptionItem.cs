@@ -44,7 +44,6 @@ public sealed class ClientOptionItem_Boolean : ClientActionItem
         };
         return item;
     }
-   
 
     public void UpdateToggle()
     {
@@ -130,6 +129,5 @@ public sealed class ClientOptionItem_String : ClientActionItem
         ToggleButton.Text.text = GetString(name);
         if (Config.Value == "HorseMode")
             ToggleButton.Text.text += $"({GetString("Broken")})";
-
     }
 }

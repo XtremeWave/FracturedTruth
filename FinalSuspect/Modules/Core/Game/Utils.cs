@@ -1,6 +1,3 @@
-//using SixLabors.ImageSharp.PixelFormats;
-//using System.Drawing.Imaging;
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -132,15 +129,12 @@ public static class Utils
     }
     public static string SummaryTexts(byte id)
     {
-
         var thisdata = XtremePlayerData.GetXtremeDataById(id);
 
         var builder = new StringBuilder();
         var longestNameByteCount = XtremePlayerData.GetLongestNameByteCount();
 
-
         var pos = Math.Min((float)longestNameByteCount / 2 + 1.5f, 11.5f);
-
 
         var colorId = thisdata.ColorId;
         builder.Append(StringHelper.ColorString(Palette.PlayerColors[colorId], thisdata.Name));
@@ -239,8 +233,8 @@ public static class Utils
         return casted != null;
     }
 
-    private const string ActiveSettingsSize = "70%";
-    private const string ActiveSettingsLineHeight = "55%";
+    //private const string ActiveSettingsSize = "70%";
+    //private const string ActiveSettingsLineHeight = "55%";
 
     public static bool AmDev() => IsDev(EOSManager.Instance.FriendCode);
     public static bool IsDev(this PlayerControl pc) => IsDev(pc.FriendCode);
@@ -271,13 +265,11 @@ public static class Utils
         return player;
     }
 
-
     public static string GetProgressText(PlayerControl pc = null)
     {
         pc ??= PlayerControl.LocalPlayer;
 
         var enable = CanSeeTargetRole(pc, out var bothImp) || bothImp;
-
 
         var comms = IsActive(SystemTypes.Comms);
         var text = GetProgressText(pc.PlayerId, comms);
@@ -299,7 +291,6 @@ public static class Utils
             }
             return "";
         }
-
         
         if (data.IsImpostor)
         {
@@ -337,7 +328,6 @@ public static class Utils
                 color = Palette.Purple;
                 break;
         }
-
         if (!summary) deathReason = "(" + deathReason + ")";
         
         deathReason = StringHelper.ColorString(color, deathReason) ;
@@ -404,16 +394,11 @@ public static class Utils
     }
     public static bool IsImpostor(RoleTypes role)
     {
-        switch (role)
+        return role switch
         {
-            case RoleTypes.Impostor:
-            case RoleTypes.Shapeshifter:
-            case RoleTypes.Phantom:
-            case RoleTypes.ImpostorGhost:
-                return true;
-            default:
-                return false;
-        }
+            RoleTypes.Impostor or RoleTypes.Shapeshifter or RoleTypes.Phantom or RoleTypes.ImpostorGhost => true,
+            _ => false,
+        };
     }
     public static bool CanSeeTargetRole(PlayerControl target, out bool bothImp)
     {
@@ -421,7 +406,6 @@ public static class Utils
         var IsAngel = PlayerControl.LocalPlayer.GetRoleType() is RoleTypes.GuardianAngel;
         var BothDeathCanSee = LocalDead && ((!target.IsAlive() && IsAngel) || !IsAngel);
         bothImp = PlayerControl.LocalPlayer.IsImpostor() && target.IsImpostor();
-
 
         return target.IsLocalPlayer() ||
         BothDeathCanSee ||

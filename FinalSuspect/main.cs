@@ -16,7 +16,6 @@ using FinalSuspect.Modules.Random;
 using Il2CppInterop.Runtime.Injection;
 using UnityEngine;
 
-
 [assembly: AssemblyFileVersion(Main.PluginVersion)]
 [assembly: AssemblyInformationalVersion(Main.PluginVersion)]
 [assembly: AssemblyVersion(Main.PluginVersion)]
@@ -41,10 +40,8 @@ public class Main : BasePlugin
     // == 版本相关设定 / Version Config ==
     public const string LowestSupportedVersion = "2024.10.29";
 
-
     public const string DisplayedVersion_Head = "1.1";
     private static string DisplayedVersion_Date
-
     {
         get
         {
@@ -117,7 +114,6 @@ public class Main : BasePlugin
     public static ConfigEntry<bool> GodMode { get; private set; }
     public static ConfigEntry<bool> NoGameEnd { get; private set; }
     
-
     public static readonly string[] OutfitType =
     [
         "BeanMode", "HorseMode", "LongMode"
@@ -130,7 +126,6 @@ public class Main : BasePlugin
     public static ConfigEntry<string> WebhookURL { get; private set; }
     public static ConfigEntry<bool> EnableFinalSuspect { get; private set; }
     public static ConfigEntry<string> LastStartVersion { get; private set; }
-
 
     public static Dictionary<RoleTypes, string> roleColors;
     public static List<int> clientIdList = [];

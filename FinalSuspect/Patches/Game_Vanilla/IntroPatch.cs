@@ -105,5 +105,4 @@ class IntroCutscenePatch
             __instance.BackgroundBar.material.color = LerpingColor;
         }
     }
-
 }

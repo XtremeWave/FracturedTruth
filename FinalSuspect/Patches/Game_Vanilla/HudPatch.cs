@@ -37,12 +37,10 @@ class TaskPanelBehaviourPatch
         var taskText = __instance.taskText.text;
         if (taskText == "None") return;
 
-
         var RoleWithInfo = $"{Utils.GetRoleName(role)}:\r\n";
         RoleWithInfo += role.GetRoleInfoForVanilla();
 
         var AllText = StringHelper.ColorString(player.GetRoleColor(), RoleWithInfo);
-
 
         var lines = taskText.Split("\r\n</color>\n")[0].Split("\r\n\n")[0].Split("\r\n");
         StringBuilder sb = new();
@@ -63,14 +61,12 @@ class TaskPanelBehaviourPatch
         AllText += $"\r\n\r\n</color><size=70%>{GetString("PressF1ShowRoleDescription")}</size>";
 
         __instance.taskText.text = AllText;
-
     }
 }
 
 public static class HudManagerPatch
 {
     static GameObject ModLoading;
-
 
     private static int currentIndex;
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
@@ -92,50 +88,49 @@ public static class HudManagerPatch
                 ModLoading.SetActive(false);
                 __instance.StartCoroutine(SwitchRoleIllustration(Sprite));
             }
-            //Scrapped
-            //if (WarningText == null)
-            //{
-            //    WarningText = Object.Instantiate(__instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField").FindChild("TextArea").gameObject, __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField"));
-            //    var tmp = WarningText.GetComponent<TextMeshPro>();
-            //    tmp.text = GetString("BrowsingMode");
-            //    tmp.color = Color.blue;
-            //    WarningText.SetActive(false);
+            /*Scrapped
+            if (WarningText == null)
+            {
+                WarningText = Object.Instantiate(__instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField").FindChild("TextArea").gameObject, __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField"));
+                var tmp = WarningText.GetComponent<TextMeshPro>();
+                tmp.text = GetString("BrowsingMode");
+                tmp.color = Color.blue;
+                WarningText.SetActive(false);
 
-            //}
-            //if (XtremeGameData.GameStates.IsInGame)
-            //{
-            //    if (XtremeGameData.GameStates.IsInTask)
-            //    {
-            //        if (PlayerControl.LocalPlayer.IsAlive())
-            //        {
-            //            __instance.Chat.gameObject.SetActive(true);
-            //            WarningText.SetActive(true);
-            //            __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField").FindChild("Background").gameObject.SetActive(false);
-            //            __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField").FindChild("CharCounter (TMP)").gameObject.SetActive(false);
-            //            __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField").FindChild("ChatSendButton").gameObject.SetActive(false);
-            //            __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField").FindChild("TextArea").gameObject.SetActive(false);
-            //            __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("QuickChatPreview").gameObject.SetActive(false);
-            //        }
-            //        else
-            //        {
-            //            WarningText.SetActive(false);
-            //            __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField").FindChild("Background").gameObject.SetActive(true);
-            //            __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField").FindChild("CharCounter (TMP)").gameObject.SetActive(true);
-            //            __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField").FindChild("ChatSendButton").gameObject.SetActive(true);
-            //            __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField").FindChild("TextArea").gameObject.SetActive(true);
+            }
+            if (XtremeGameData.GameStates.IsInGame)
+            {
+                if (XtremeGameData.GameStates.IsInTask)
+                {
+                    if (PlayerControl.LocalPlayer.IsAlive())
+                    {
+                        __instance.Chat.gameObject.SetActive(true);
+                        WarningText.SetActive(true);
+                        __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField").FindChild("Background").gameObject.SetActive(false);
+                        __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField").FindChild("CharCounter (TMP)").gameObject.SetActive(false);
+                        __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField").FindChild("ChatSendButton").gameObject.SetActive(false);
+                        __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField").FindChild("TextArea").gameObject.SetActive(false);
+                        __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("QuickChatPreview").gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        WarningText.SetActive(false);
+                        __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField").FindChild("Background").gameObject.SetActive(true);
+                        __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField").FindChild("CharCounter (TMP)").gameObject.SetActive(true);
+                        __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField").FindChild("ChatSendButton").gameObject.SetActive(true);
+                        __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField").FindChild("TextArea").gameObject.SetActive(true);
 
-            //        }
-            //    }
-            //    else if (!__instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField").gameObject.active && !__instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("QuickChatPreview").gameObject.active)
-            //    {
-            //        WarningText.SetActive(false);
-            //        __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField").FindChild("Background").gameObject.SetActive(true);
-            //        __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField").FindChild("CharCounter (TMP)").gameObject.SetActive(true);
-            //        __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField").FindChild("ChatSendButton").gameObject.SetActive(true);
-            //        __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField").FindChild("TextArea").gameObject.SetActive(true);
-            //    }
-            //}
-
+                    }
+                }
+                else if (!__instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField").gameObject.active && !__instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("QuickChatPreview").gameObject.active)
+                {
+                    WarningText.SetActive(false);
+                    __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField").FindChild("Background").gameObject.SetActive(true);
+                    __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField").FindChild("CharCounter (TMP)").gameObject.SetActive(true);
+                    __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField").FindChild("ChatSendButton").gameObject.SetActive(true);
+                    __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("FreeChatInputField").FindChild("TextArea").gameObject.SetActive(true);
+                }
+            }*/
         }
 
         public static void Postfix(HudManager __instance)
@@ -146,11 +141,7 @@ public static class HudManagerPatch
                 SetChatBG(__instance);
                 SetAbilityButtonColor(__instance);
             }
-            catch 
-            {
-                //
-            }
-            
+            catch { }
         }
     }
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.CoFadeFullScreen))]
@@ -161,7 +152,6 @@ public static class HudManagerPatch
             ModLoading.SetActive(showLoader);
             showLoader = false;
         }
-
     }
     public static IEnumerator SwitchRoleIllustration(SpriteRenderer spriter)
     {
@@ -179,7 +169,6 @@ public static class HudManagerPatch
                 yield return null;
             }
             currentIndex = (currentIndex + 1) % AwakeAccountManager.AllRoleRoleIllustration.Length;
-
 
             yield return new WaitForSeconds(1f);
             p = 1f;
@@ -212,7 +201,7 @@ public static class HudManagerPatch
         {
             Object.Destroy(showHideButton.Button.gameObject);
             Object.Destroy(roleSummary.gameObject);
-            Object.Destroy(backgroundRenderer.gameObject); // 销毁背景
+            Object.Destroy(backgroundRenderer.gameObject);  //销毁背景
         }
         catch { }
         showHideButton = null;
@@ -220,7 +209,6 @@ public static class HudManagerPatch
         backgroundRenderer = null;
     }
 
-    
     public static void SetChatBG(HudManager __instance)
     {
         Color color;
@@ -275,9 +263,7 @@ public static class HudManagerPatch
             return;
         var showInitially = Main.ShowResults.Value;
        
-        if (showHideButton == null)
-        {
-            showHideButton =
+        showHideButton ??=
             new SimpleButton(
                __instance.transform,
                "ShowHideResultsButton",
@@ -296,8 +282,6 @@ public static class HudManagerPatch
                 Scale = new(1.5f, 0.5f),
                 FontSize = 2f,
             };
-        }
-        
 
         StringBuilder sb = new($"{GetString("RoleSummaryText")}{LastGameResult}");
         if (XtremeGameData.GameStates.IsInGame)
@@ -319,7 +303,6 @@ public static class HudManagerPatch
             {
                 sb2.Append("\n\u3000 ").Append(Utils.SummaryTexts(data.PlayerId));
             }
-
             LastGameData = sb2.ToString();
         }
 
@@ -327,7 +310,6 @@ public static class HudManagerPatch
         LastResultText = sb.ToString();
         if (roleSummary == null)
         {
-
             roleSummary = TMPTemplate.Create(
                 "RoleSummaryText",
                 LastResultText,
@@ -379,5 +361,4 @@ public static class HudManagerPatch
             }
         }
     }
-    
 }

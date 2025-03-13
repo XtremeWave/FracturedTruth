@@ -16,6 +16,7 @@ public class ErrorText : MonoBehaviour
         }
     }
     private static ErrorText _instance;
+
     private void Awake()
     {
         if (_instance != null)
@@ -43,7 +44,6 @@ public class ErrorText : MonoBehaviour
         Text.outlineColor = Color.black;
         Text.alignment = TextAlignmentOptions.Top;
     }
-
     public TextMeshPro Text;
     public Camera Camera;
     public List<ErrorData> AllErrors = [];

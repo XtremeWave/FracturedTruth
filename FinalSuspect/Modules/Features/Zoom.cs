@@ -17,15 +17,13 @@ public static class Zoom
     {
         try
         {
-            var canZoom = XtremeGameData.GameStates.IsShip || XtremeGameData.GameStates.IsLobby ||
-                          XtremeGameData.GameStates.IsFreePlay ;
+            var canZoom = XtremeGameData.GameStates.IsShip || XtremeGameData.GameStates.IsLobby || XtremeGameData.GameStates.IsFreePlay ;
 
             if (!canZoom || !Utils.CanSeeOthersRole()|| XtremeGameData.GameStates.IsMeeting || !XtremeGameData.GameStates.IsCanMove || InGameRoleInfoMenu.Showing)
             {
                 Flag.Run(() => { SetZoomSize(reset: true); }, "Zoom");
                 return;
             }
-
 
             if (Camera.main.orthographicSize > 3.0f) ResetButtons = true;
             if (Input.mouseScrollDelta.y > 0)
@@ -44,13 +42,9 @@ public static class Zoom
                     }
                 }
             }
-
             Flag.NewFlag("Zoom");
         }
-        catch 
-        {
-        }
-        
+        catch { }
     }
 
     public static void SetZoomSize(bool times = false, bool reset = false)
@@ -98,7 +92,6 @@ public static class Flag
             OneTimeList.Remove(type);
             action();
         }
-
     }
     public static void NewFlag(string type)
     {

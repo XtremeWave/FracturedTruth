@@ -31,9 +31,7 @@ public static class MeetingHudPatch
                     }
                 }
             }
-
         }
-        
     }
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.VotingComplete))]
     [HarmonyPriority(Priority.First)]

@@ -7,7 +7,6 @@ using TMPro;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-
 namespace FinalSuspect.Patches.System;
 
 [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.Update))]
@@ -108,8 +107,6 @@ public class GameStartManagerPatch
                 __instance.HostPrivateButton.inactiveTextColor = Palette.DisabledClear;
                 __instance.HostPrivateButton.activeTextColor = Palette.DisabledClear;
             }
-
-
         }
     }
 
@@ -143,7 +140,6 @@ public class GameStartManagerPatch
                     {
                         GameStartManager.Instance.startState = GameStartManager.StartingStates.Countdown;
                         GameStartManager.Instance.countDownTimer = 10;
-
                     }
                 }
             }
@@ -175,9 +171,7 @@ public class GameStartManagerPatch
                 cancelButton.gameObject.SetActive(__instance.startState == GameStartManager.StartingStates.Countdown);
                 __instance.StartButton.gameObject.SetActive(!cancelButton.gameObject.active);
             }
-
-            /*
-                if (MatchVersions(0, true) || Main.VersionCheat.Value)
+                /*if (MatchVersions(0, true) || Main.VersionCheat.Value)
                     exitTimer = 0;
                 else
                 {
@@ -190,8 +184,7 @@ public class GameStartManagerPatch
                     }
                     if (exitTimer != 0)
                         warningMessage = StringHelper.ColorString(Color.red, string.Format(GetString("Warning.AutoExitAtMismatchedVersion"), $"<color={ColorHelper.ModColor}>{Main.ModName}</color>", Math.Round(5 - exitTimer).ToString()));
-                }
-                */
+                }*/
             var warningMessage = "";
             if (warningMessage == "")
             {
@@ -220,7 +213,6 @@ public class GameStartManagerPatch
             var countDown = $"{minutes:00}:{seconds:00}";
             if (timer <= 60) countDown = StringHelper.ColorString(Color.red, countDown);
             timerText.text = countDown;
-
         }
         private static bool MatchVersions(byte playerId, bool acceptVanilla = false)
         {

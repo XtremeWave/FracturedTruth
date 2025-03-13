@@ -1,5 +1,4 @@
-﻿using System;
-using FinalSuspect.Modules.Core.Game;
+﻿using FinalSuspect.Modules.Core.Game;
 using TMPro;
 using UnityEngine;
 using Object = UnityEngine.Object;
