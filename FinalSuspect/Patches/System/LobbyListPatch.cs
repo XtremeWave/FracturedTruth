@@ -1,6 +1,6 @@
-﻿using System;
 using FinalSuspect.Helpers;
 using InnerNet;
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -12,6 +12,7 @@ public static class FindAGameManagerUpdatePatch
     private static int buffer = 80;
     private static GameObject RefreshButton;
     private static GameObject InputDisplayGlyph;
+
     public static void Postfix(FindAGameManager __instance)
     {
         if ((RefreshButton = GameObject.Find("RefreshButton")) != null)
@@ -29,7 +30,6 @@ public static class MatchMakerGameButtonSetGamePatch
 {
     public static bool Prefix([HarmonyArgument(0)] GameListing game)
     {
-
         var nameList = TranslationController.Instance.currentLanguage.languageID is SupportedLangs.SChinese or SupportedLangs.TChinese ? Main.TName_Snacks_CN : Main.TName_Snacks_EN;
 
         if (game.Language.ToString().Length > 9) return true;
@@ -39,6 +39,10 @@ public static class MatchMakerGameButtonSetGamePatch
         var color = "#ffffff";
         string RoomName = null;
         var name = "?";
+        var LobbyTime = Math.Max(0, game.Age);
+        var lobbyTimeDisplay = "";
+        var LobbyTimeDisplayText = GetString("LobbyTimeDisplay");
+        lobbyTimeDisplay = $"{LobbyTimeDisplayText}:{LobbyTime / 60}:{(LobbyTime % 60 < 10 ? "0" : "")}{LobbyTime % 60}";
 
         switch (game.Platform)
         {
@@ -75,6 +79,7 @@ public static class MatchMakerGameButtonSetGamePatch
                 var halfLength = totalname.Length / 2;
                 var firstHalf = totalname.AsSpan(0, halfLength).ToString();
                 var secondHalf = totalname.AsSpan(halfLength).ToString();
+
                 RoomName = $"<color=#00B2FF>{firstHalf}</color><color=#ff0000>{secondHalf}</color>";
                 name = "<color=#00B2FF>Nintendo</color><color=#ff0000>Switch</color>";
                 break;
@@ -87,13 +92,16 @@ public static class MatchMakerGameButtonSetGamePatch
                 name = "PlayStation";
                 break;
         }
+        
         RoomName ??= $"<color={color}>{nameList[id]}</color>";
         var platforms = $"<color={color}>{name}</color>";
 
+
         game.HostName = $"<size=60%>{RoomName}</size>" +
-                $"<size=30%> ({Math.Max(0, 100 - game.Age / 100)}%)</size>" +
-                $"\n<size=40%><color={ColorHelper.ModColor}>{GameCode.IntToGameName(game.GameId)}</color></size>" +
-                $"<size=40%><color=#ffff00>----</color>{platforms}</size>";
+                        $"<size=30%> ({Math.Max(0, 100 - game.Age / 100)}%)</size>" +
+                        $"\n<size=40%><color={ColorHelper.ModColor}>{GameCode.IntToGameName(game.GameId)}</color></size>" +
+                        $"<size=40%><color=#ffff00>----</color>{platforms}</size>" +
+                        $"<size=30%><color=#ffff00>----</color>{lobbyTimeDisplay}</size>";
         return true;
     }
 

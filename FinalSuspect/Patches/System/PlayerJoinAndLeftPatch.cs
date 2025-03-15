@@ -4,7 +4,6 @@ using AmongUs.Data;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game;
 using FinalSuspect.Modules.Features.CheckingandBlocking;
-using FinalSuspect.Modules.Scrapped;
 using FinalSuspect.Patches.Game_Vanilla;
 using InnerNet;
 
@@ -51,7 +50,7 @@ class DisconnectInternalPatch
             ErrorText.Instance.CheatDetected = false;
             ErrorText.Instance.SBDetected = false;
             ErrorText.Instance.Clear();
-            Cloud.StopConnect();
+            //Cloud.StopConnect();
         }
         catch { }
     }

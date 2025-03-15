@@ -19,7 +19,7 @@ internal class MakePublicPatch
     {
         if (VersionChecker.isBroken || (VersionChecker.hasUpdate && VersionChecker.forceUpdate) || !VersionChecker.IsSupported )
         {
-            string message = GetString("PublicNotAvailableOnThisVersion");
+            var message = GetString("PublicNotAvailableOnThisVersion");
             if (VersionChecker.isBroken) message = GetString("ModBrokenMessage");
             if (VersionChecker.hasUpdate) message = GetString("CanNotJoinPublicRoomNoLatest");
             XtremeLogger.Info(message, "MakePublicPatch");
