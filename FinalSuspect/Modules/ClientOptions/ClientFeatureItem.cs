@@ -137,6 +137,5 @@ public class ClientFeatureItem
         {
             XtremeLogger.Exception(ex, "MoreActions");
         }
-
     }
 }

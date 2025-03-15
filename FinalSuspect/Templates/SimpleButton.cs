@@ -96,6 +96,6 @@ public class SimpleButton
         buttonCollider.offset = new(0f, 0f);
         baseButton.OnClick = new();
     }
-
+    
     public static bool IsNullOrDestroyed(SimpleButton button) => button == null || button.Button == null;
 }

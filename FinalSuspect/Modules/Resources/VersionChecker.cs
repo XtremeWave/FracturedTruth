@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FinalSuspect.Attributes;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Features;
 using FinalSuspect.Modules.Features.CheckingandBlocking;
-using Il2CppSystem.Diagnostics.Tracing;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 
@@ -38,7 +34,6 @@ public static class VersionChecker
     public static bool DebugUnused = false;
     public static string versionInfoRaw = "";
 
-    
     public static Version latestVersion;
     public static string showVer = "";
     public static Version DebugVer;
@@ -114,7 +109,6 @@ public static class VersionChecker
             else CustomPopup.Show(GetString("updateCheckPopupTitle"), GetString("updateCheckFailedRetry"),
                 [(GetString("Retry"), Retry)]);
         }
-
         ModUpdater.SetUpdateButtonStatus();
     }
     public static async Task<bool> GetVersionInfo(string url)
@@ -125,7 +119,8 @@ public static class VersionChecker
             string result;
             if (url.StartsWith("file:///"))
             {
-                result = await File.ReadAllTextAsync(url[8..]);
+                //读取文件不应该用同步调用异步，否则会堵塞主线程
+                result = File.ReadAllText(url[8..]);
             }
             else
             {
@@ -148,10 +143,7 @@ public static class VersionChecker
 
             DebugVer = new(data["DebugVer"]?.ToString());
 
-
             CanUpdate = bool.Parse(new(data["CanUpdate"]?.ToString()));
-
-
 
             verDate = new(data["verDate"]?.ToString());
             md5 = data["md5"]?.ToString();
@@ -174,7 +166,6 @@ public static class VersionChecker
             DebugUnused = Main.version < DebugVer;
             hasUpdate = forceUpdate = DebugUnused;
 #endif
-
             return true;
         }
         catch
@@ -182,5 +173,4 @@ public static class VersionChecker
             return false;
         }
     }
-
 }

@@ -46,13 +46,11 @@ public static class PathManager
 
     public static string GetLocalFilePath(FileType fileType, string file)
     {
-        switch (fileType)
+        return fileType switch
         {
-            case FileType.Depends:
-                return GetLocalPath(LocalType.BepInEx) + file;
-            default:
-                return GetResourceFilesPath(fileType, file);
-        }
+            FileType.Depends => GetLocalPath(LocalType.BepInEx) + file,
+            _ => GetResourceFilesPath(fileType, file),
+        };
     }
     public static string GetLocalPath(LocalType localType)
     {
@@ -105,7 +103,7 @@ public static class PathManager
     {
 #if DEBUG
        
-       // "https://raw.githubusercontent.com/XtremeWave/FinalSuspect_Dev/FS_Dev/",
+        //"https://raw.githubusercontent.com/XtremeWave/FinalSuspect_Dev/FS_Dev/",
         "https://api.xtreme.net.cn/download/FinalSuspect/",
         //$"file:///{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop))}/",
 #else
@@ -149,5 +147,4 @@ public enum BypassType
 {
     Once,
     Longterm,
-    
 }

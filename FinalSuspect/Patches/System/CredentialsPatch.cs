@@ -62,14 +62,11 @@ internal class PingTrackerUpdatePatch
         deltaTime += (Time.deltaTime - deltaTime) * 0.1f;
         var fps = Mathf.Ceil(1.0f / deltaTime);
 
-
         __instance.text.alignment = TextAlignmentOptions.TopGeoAligned;
         __instance.text.text = 
             $"<color={color}>{GetString("Ping")}:{ping} <size=60%>ms</size></color>" + "  " 
             + $"<color=#00a4ff>{GetString("FrameRate")}:{fps} <size=60%>FPS</size></color>" +
             $"{"    <color=#FFDCB1>◈</color>" + (XtremeGameData.GameStates.IsOnlineGame ? ServerName : GetString("Local"))}";
-
-
     }
 }
 [HarmonyPatch(typeof(VersionShower), nameof(VersionShower.Start))]
@@ -80,7 +77,6 @@ public class VersionShowerStartPatch
     public static TextMeshPro CreditTextCredential;
     public static GameObject ModLogo;
     public static GameObject TeamLogo;
-
 
     private static void Postfix(VersionShower __instance)
     {
@@ -125,7 +121,6 @@ public class VersionShowerStartPatch
 
             credentialsText += versionText;
 
-
             CreditTextCredential = Object.Instantiate(__instance.text);
             CreditTextCredential.name = "FinalSuspect CreditText";
             CreditTextCredential.alignment = TextAlignmentOptions.Right;
@@ -141,21 +136,23 @@ public class VersionShowerStartPatch
             if (ap1 != null) Object.Destroy(ap1);
             var ap2 = CreditTextCredential.GetComponent<AspectPosition>();
             if (ap2 != null) Object.Destroy(ap2);
-
-
         }
 
-        TeamLogo = new();
-        TeamLogo.layer = 5;
-        TeamLogo.name = "Team Logo";
+        TeamLogo = new()
+        {
+            layer = 5,
+            name = "Team Logo"
+        };
         TeamLogo.AddComponent<SpriteRenderer>().sprite = Utils.LoadSprite("TeamLogo.png", 400f);
         TeamLogo.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 120);
         TeamLogo.transform.SetParent(VisitText.transform.parent);
         TeamLogo.transform.localPosition = new Vector3(-4.72f, -2.5f, 0f);
         TeamLogo.SetActive(false);
-        ModLogo = new();
-        ModLogo.layer = 5;
-        ModLogo.name = "Mod Logo";
+        ModLogo = new()
+        {
+            layer = 5,
+            name = "Mod Logo"
+        };
         ModLogo.AddComponent<SpriteRenderer>().sprite = Utils.LoadSprite("FinalSuspect-Logo.png", 250f);
         ModLogo.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 120);
         ModLogo.transform.localPosition = new Vector3(3.7f, -2.6f, 0f);
@@ -220,16 +217,20 @@ internal class TitleLogoPatch
         {
             {
                 [__instance.playButton, __instance.inventoryButton, __instance.shopButton],
-                (standardActiveSprite, new(0.5216f, 1f, 0.9490f, 0.8f), shade, Color.white, Color.white) },
+                (standardActiveSprite, new(0.5216f, 1f, 0.9490f, 0.8f), shade, Color.white, Color.white)
+            },
             {
                 [__instance.newsButton, __instance.myAccountButton, __instance.settingsButton],
-                (minorActiveSprite, new( 0.5216f, 0.7765f, 1f, 0.8f), shade, Color.white, Color.white) },
+                (minorActiveSprite, new( 0.5216f, 0.7765f, 1f, 0.8f), shade, Color.white, Color.white)
+            },
             {
                 [__instance.creditsButton, __instance.quitButton],
-                (minorActiveSprite, new(0.7294f, 0.6353f, 1.0f, 0.8f), shade, Color.white, Color.white) },
+                (minorActiveSprite, new(0.7294f, 0.6353f, 1.0f, 0.8f), shade, Color.white, Color.white)
+            },
             {
                 [friendsButton],
-                (minorActiveSprite, new(0.0235f, 0f, 0.8f, 0.8f), shade, Color.white, Color.white) },
+                (minorActiveSprite, new(0.0235f, 0f, 0.8f, 0.8f), shade, Color.white, Color.white)
+            },
         };
 
         void FormatButtonColor(PassiveButton button, Sprite borderType, Color inActiveColor, Color activeColor, Color inActiveTextColor, Color activeTextColor)
@@ -241,7 +242,7 @@ internal class TitleLogoPatch
             activeRenderer.sprite = minorActiveSprite;
             inActiveRenderer.sprite = minorActiveSprite;
             activeRenderer.color = activeColor.a == 0f ?
-                new Color(inActiveColor.r, inActiveColor.g, inActiveColor.b, 1f) : activeColor;
+            new Color(inActiveColor.r, inActiveColor.g, inActiveColor.b, 1f) : activeColor;
             inActiveRenderer.color = inActiveColor;
             button.activeTextColor = activeTextColor;
             button.inactiveTextColor = inActiveTextColor;
@@ -253,14 +254,12 @@ internal class TitleLogoPatch
             {
                 FormatButtonColor(button, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, kvp.Value.Item4, kvp.Value.Item5);
             });
-        
         }
         try
         {
             mainButtons?.Keys?.Flatten()?.DoIf(x => x != null, x => x.buttonText.color = Color.white);
         }
         catch { }
-
 
         if (!(ModStamp = GameObject.Find("ModStamp"))) return;
         ModStamp.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
@@ -335,7 +334,6 @@ internal class TitleLogoPatch
 
         if (!(BottomButtonBounds = GameObject.Find("BottomButtonBounds"))) return;
         BottomButtonBounds.transform.localPosition -= new Vector3(0f, 0.1f, 0f);
-
     }
 }
 [HarmonyPatch(typeof(ModManager), nameof(ModManager.LateUpdate))]

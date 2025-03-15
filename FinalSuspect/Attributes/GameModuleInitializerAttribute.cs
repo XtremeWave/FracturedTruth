@@ -5,7 +5,4 @@
 /// 在静态方法前加上 [GameModuleInitializer]，可以在游戏开始时自动调用
 /// 通过 [GameModuleInitializer(InitializePriority.High)] 可以指定调用顺序
 /// </summary>
-public sealed class GameModuleInitializerAttribute : InitializerAttribute<GameModuleInitializerAttribute>
-{
-    public GameModuleInitializerAttribute(InitializePriority priority = InitializePriority.Normal) : base(priority) { }
-}
+public sealed class GameModuleInitializerAttribute(InitializePriority priority = InitializePriority.Normal) : InitializerAttribute<GameModuleInitializerAttribute>(priority) { }

@@ -7,10 +7,7 @@ public class EndGameManagerPatch
     public static void ShowButtons_Postfix(EndGameManager __instance)
     {
         if (!Main.AutoEndGame.Value) return;
-            new LateTask(()=>
-        {
-                __instance.Navigation.NextGame();
-        }, 2f, "Auto End Game");
+        _ = new LateTask(__instance.Navigation.NextGame, 2f, "Auto End Game");
     }
 }
 [HarmonyPatch]

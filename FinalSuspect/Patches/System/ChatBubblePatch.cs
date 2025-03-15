@@ -8,7 +8,6 @@ public static class ChatBubblePatch
 {
     private static bool IsModdedMsg(string name) => name.EndsWith('\0');
 
-
     [HarmonyPatch(nameof(ChatBubble.SetText)), HarmonyPrefix]
     public static void SetText_Prefix(ChatBubble __instance, ref string chatText)
     {
@@ -42,13 +41,9 @@ public static class ChatBubblePatch
                 ref bgcolor, 
                 ref namecolor
             );
-            
         }
-        
         __instance.NameText.color = namecolor;
         __instance.NameText.text = name ?? __instance.NameText.text;
         sr.color = bgcolor;
-
-        
     }
 }

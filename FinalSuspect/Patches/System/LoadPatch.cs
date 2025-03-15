@@ -12,7 +12,6 @@ using static FinalSuspect.Modules.Resources.ResourcesDownloader;
 
 namespace FinalSuspect.Patches.System;
 
-
 public class LoadPatch
 {
     private static List<string> preReadyRemoteImageList =
@@ -439,8 +438,6 @@ public class LoadPatch
 
                 #endregion
             }
-            
-
             __instance.sceneChanger.BeginLoadingScene();
             __instance.doneLoadingRefdata = true;
         }
@@ -514,10 +511,7 @@ public class LoadPatch
             {
                 DestroyableSingleton<TranslationController>.Instance.Initialize();
             }
-            catch
-            {
-                //
-            }
+            catch { }
         }
     }
     

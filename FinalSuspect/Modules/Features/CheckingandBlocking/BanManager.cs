@@ -2,13 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using FinalSuspect.Attributes;
 using FinalSuspect.Modules.Core.Game;
-using FinalSuspect.Modules.Resources;
 using FinalSuspect.Patches.Game_Vanilla;
 using InnerNet;
 

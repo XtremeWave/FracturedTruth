@@ -1,11 +1,9 @@
 ﻿using System.Text.RegularExpressions;
 using AmongUs.Data;
 using FinalSuspect.Helpers;
-using HarmonyLib;
 using InnerNet;
 using TMPro;
 using UnityEngine;
-using static FinalSuspect.Modules.Core.Plugin.Translator;
 
 namespace FinalSuspect.Patches.System;
 [HarmonyPatch]
@@ -46,7 +44,6 @@ public sealed class LobbyJoinBind
         textComponent.fontSize = TEXT_SIZE;
         gameObject.transform.localPosition = position;
         gameObject.SetActive(true);
-
     }
 
     [HarmonyPatch(typeof(MMOnlineManager), nameof(MMOnlineManager.Update))]

@@ -37,7 +37,7 @@ public static class RegistryManager
                 @"./TOH_DATA",
             ];
 
-        XtremeLogger.Warn("上次启动的FinalSuspect版本：" + LastVersion, "Registry Manager");
+        XtremeLogger.Info("上次启动的FinalSuspect版本：" + LastVersion, "Registry Manager");
 
         if (LastVersion < new Version(1, 0, 0))
         {
@@ -55,6 +55,5 @@ public static class RegistryManager
             XtremeLogger.Warn("Delete Useless File:" + p, "Registry Manager");
             File.Delete(p);
         });
-
     }
 }

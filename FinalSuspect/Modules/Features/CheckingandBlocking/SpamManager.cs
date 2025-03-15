@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using FinalSuspect.Attributes;
 using FinalSuspect.Modules.Core.Game;
 using Newtonsoft.Json.Linq;
 
@@ -18,11 +16,11 @@ public static class SpamManager
     public static readonly string DENY_NAME_LIST_PATH = GetBanFilesPath("DenyName.txt");
     public static List<string> BanWords = [];
 
-    static List<string> Targets = new List<string>()
+    static List<string> Targets = new()
     {
         "DenyName.json",
         "FACList.json",
-        $"BanWords/{GetUserLangByRegion().ToString()}.json"
+        $"BanWords/{GetUserLangByRegion()}.json"
     };
     
     //[PluginModuleInitializer]
@@ -111,9 +109,7 @@ public static class SpamManager
                 }
             }
         }
-        catch
-        {
-        }
+        catch { }
     }
 
     public static async Task<bool> GetConfigInfo(string url)
@@ -146,7 +142,6 @@ public static class SpamManager
             ProcessBanWords(data);
             ProcessDenyNames(data);
             ProcessFacList(data);
-
 
             return true;
         }
@@ -183,7 +178,7 @@ public static class SpamManager
     {
         var facList = GetTokens(data["Cheats"])
             .Concat(GetTokens(data["Griefer"]))
-            .Where(line => ShouldAddToFacList(line))
+            .Where(ShouldAddToFacList)
             .ToList();
 
         BanManager.FACList.AddRange(facList);
@@ -204,9 +199,9 @@ public static class SpamManager
             tokens.Add(jarray[i].ToString());
         }
  
-        return tokens
+        return [.. tokens
             .Select(item => item?.ToString())
-            .Where(str => !string.IsNullOrEmpty(str)).ToList();
+            .Where(str => !string.IsNullOrEmpty(str))];
     }
    
     private static void UpdateBanWords(List<string> newWords)

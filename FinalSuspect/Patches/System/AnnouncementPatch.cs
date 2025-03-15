@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using AmongUs.Data;
 using AmongUs.Data.Player;
 using Assets.InnerNet;
 using FinalSuspect.Helpers;
@@ -94,7 +93,6 @@ public class ModNewsHistory
         return mn;
     }
 
-
 [HarmonyPatch(typeof(PlayerAnnouncementData), nameof(PlayerAnnouncementData.SetAnnouncements)), HarmonyPrefix]
 public static bool SetModAnnouncements(PlayerAnnouncementData __instance, [HarmonyArgument(0)] ref Il2CppReferenceArray<Announcement> aRange)
 {
@@ -170,7 +168,6 @@ public static bool SetModAnnouncements(PlayerAnnouncementData __instance, [Harmo
                 aRange[i] = FinalAllNews[i];
             }
         }
-
         return true;
     }
     catch (Exception ex)
@@ -178,7 +175,8 @@ public static bool SetModAnnouncements(PlayerAnnouncementData __instance, [Harmo
         XtremeLogger.Error($"Exception in SetModAnnouncements: {ex}", "");
         return true;
     }
-}    static Sprite TeamLogoSprite = Utils.LoadSprite("TeamLogo.png", 1000f);
+}   
+    static Sprite TeamLogoSprite = Utils.LoadSprite("TeamLogo.png", 1000f);
     
     //YuEzTool
     [HarmonyPatch(typeof(AnnouncementPanel), nameof(AnnouncementPanel.SetUp)), HarmonyPostfix]
@@ -192,8 +190,5 @@ public static bool SetModAnnouncements(PlayerAnnouncementData __instance, [Harmo
         var sr = teamLogo.AddComponent<SpriteRenderer>();
         sr.sprite = TeamLogoSprite;
         sr.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
-
     }
 }
-
-

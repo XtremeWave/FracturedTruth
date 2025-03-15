@@ -113,10 +113,6 @@ class SetEverythingUpPatch
         roleSummary.SetOutlineColor(Color.black);
         roleSummary.SetOutlineThickness(0.15f);
  
-
         XtremePlayerData.DisposeAll();
-
-
     }
-    
 }

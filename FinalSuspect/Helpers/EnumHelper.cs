@@ -11,7 +11,6 @@ public static class EnumHelper
     /// <returns>T 类型的所有值</returns>
     public static T[] GetAllValues<T>() where T : Enum => Enum.GetValues(typeof(T)) as T[];
 
-
     /// <summary>
     /// 获取枚举的所有名称
     /// </summary>

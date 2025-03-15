@@ -32,9 +32,6 @@ class OnGameJoinedPatch
             GameStartManagerPatch.GameStartManagerUpdatePatch.exitTimer = -1;
             Main.NewLobby = true;
         }
-
-
-
     }
 }
 [HarmonyPatch(typeof(InnerNetClient), nameof(InnerNetClient.DisconnectInternal))]
@@ -55,7 +52,6 @@ class DisconnectInternalPatch
             ErrorText.Instance.SBDetected = false;
             ErrorText.Instance.Clear();
             Cloud.StopConnect();
-
         }
         catch { }
     }
@@ -81,7 +77,6 @@ public class OnPlayerJoinedPatch
         BanManager.CheckDenyNamePlayer(client);
 
         RPC.RpcVersionCheck();
-
     }
 }
 

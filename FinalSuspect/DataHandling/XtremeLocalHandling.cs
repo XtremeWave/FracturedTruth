@@ -459,8 +459,8 @@ public static class XtremeLocalHandling
             if (!player.IsAlive())
                 bgcolor = new Color32(255, 0, 0, 120);
         }
-        catch 
-        {
-        }
+        catch { }
     }
+    
+
 }

@@ -48,7 +48,6 @@ public abstract class InitializerAttribute<T> : Attribute
         }
         // 将找到的初始化方法按照优先级排序并转换为数组
         allInitializers = initializers.OrderBy(initializer => initializer.priority).Select(initializer => initializer.targetMethod).ToArray();
-
     }
     public static void InitializeAll()
     {
@@ -64,8 +63,7 @@ public abstract class InitializerAttribute<T> : Attribute
         }
     }
 }
-
-    public enum InitializePriority
+public enum InitializePriority
 {
     /// <summary>最高优先级，首先执行</summary>
     VeryHigh,

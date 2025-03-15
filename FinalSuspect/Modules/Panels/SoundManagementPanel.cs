@@ -81,7 +81,6 @@ public static class SoundManagementPanel
                 mask.transform.localScale = new Vector3(4.9f, 3.92f, 1f);
             }
         }
-        
         RefreshTagList();
     }
     public static void RefreshTagList()
@@ -117,7 +116,6 @@ public static class SoundManagementPanel
             previewText.transform.SetLocalX(1.9f);
             previewText.fontSize = 1f;
             previewText.name = "PreText-" + filename;
-
 
             Object.Destroy(button.GetComponent<UIScrollbarHelper>());
             Object.Destroy(button.GetComponent<NumberButton>());
@@ -169,7 +167,6 @@ public static class SoundManagementPanel
             }
             preview = audio.Name;
 
-
             var passiveButton = button.GetComponent<PassiveButton>();
             passiveButton.OnClick = new();
             passiveButton.OnClick.AddListener(new Action(() =>
@@ -185,18 +182,18 @@ public static class SoundManagementPanel
                     var task = ResourcesDownloader.StartDownload(FileType.Sounds, filename + ".wav");
                     task.ContinueWith(t => 
                     {
-                        new LateTask(() =>
+                        _ = new LateTask(() =>
                         {
                             audio.CurrectAudioStates = audio.LastAudioStates = t.Result ? AudiosStates.DownLoadSucceedNotice : AudiosStates.DownLoadFailureNotice;
                             RefreshTagList();
 
-                            new LateTask(() =>
+                            _ = new LateTask(() =>
                             {
                                 CreateMusic(music: audio.CurrectAudio);
                                 RefreshTagList();
                                 MyMusicPanel.RefreshTagList();
                             }, 3f, "Refresh Tag List");
-                        },0.01f, "Download Notice");
+                        }, 0.01f, "Download Notice");
                     });
                 }
             }));
@@ -207,11 +204,9 @@ public static class SoundManagementPanel
             previewText.text = preview;
             Items.Add(filename, button);
         }
-
         scroller.SetYBoundsMin(0f);
         scroller.SetYBoundsMax(0.6f * numItems);
     }
-
 
     public static void Delete(XtremeMusic audio)
     {

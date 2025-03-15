@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace FinalSuspect.Modules.SoundInterface;
 
@@ -55,13 +54,11 @@ public class AudioLoader
 
     private static async Task<byte[]> ReadAllBytesAsync(string filePath)
     {
-        using (var sourceStream = new FileStream(
-                   filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, true))
-        {
-            var buffer = new byte[sourceStream.Length];
-            await sourceStream.ReadAsync(buffer, 0, (int)sourceStream.Length);
-            return buffer;
-        }
+        using var sourceStream = new FileStream(
+                   filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, true);
+        var buffer = new byte[sourceStream.Length];
+        await sourceStream.ReadAsync(buffer, 0, (int)sourceStream.Length);
+        return buffer;
     }
 
     private static float[] ConvertBytesToFloats(byte[] audioBytes)
@@ -82,7 +79,6 @@ public class AudioLoader
                 }
             }
         }
-
         return floatData;
     }
 }

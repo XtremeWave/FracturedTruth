@@ -33,14 +33,12 @@ class RolesSettingsMenuPatch
     public static void Postfix()
     {
         if (!XtremeGameData.GameStates.IsNormalGame) return;
-
         try
         {
             ConfigureHeaderButtons();
             SetRoleAreaColors();
         }
-        catch
-        { }
+        catch { }
     }
 
     private static void ConfigureHeaderButtons()
@@ -60,7 +58,6 @@ class RolesSettingsMenuPatch
             SetColor(button, rolecolors[index], roleColor);
             index++;
         }
-
         ConfigureAllButtonColors();
     }
 
@@ -97,7 +94,6 @@ class RolesSettingsMenuPatch
         obj.transform.FindChild("Inactive").gameObject.GetComponent<SpriteRenderer>().color = bgcolor;
         obj.transform.FindChild("RoleIcon").gameObject.GetComponent<SpriteRenderer>().color = iconcolor;
     }
-    
 }
 [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Update))]
 internal class GameOptionsMenuPatch
@@ -118,8 +114,6 @@ internal class GameOptionsMenuPatch
     ];
     public static void Postfix()
     {
-
-
         var setArea = GameObject.Find("GAME SETTINGS TAB").transform.FindChild("Scroller").FindChild("SliderInner");
         Transform[] banners = setArea.GetComponentsInChildren<Transform>(true);
         if (XtremeGameData.GameStates.IsNormalGame)
@@ -158,7 +152,6 @@ internal class GameOptionsMenuPatch
                         color = Normalbannercolors[3];
                     SetColorForSettingsOpt_Checkbox(banner.gameObject, color);
                     boxindex++;
-
                 }
             }
         }
@@ -197,10 +190,8 @@ internal class GameOptionsMenuPatch
                         color = HnSbannercolors[2];
                     SetColorForSettingsOpt_Checkbox(banner.gameObject, color); 
                     boxindex++;
-                
                 }
             }
-
         }
     }
     internal static void SetColorForCat(GameObject obj, Color color)
@@ -224,7 +215,6 @@ internal class GameOptionsMenuPatch
 [HarmonyPatch(typeof(GameSettingMenu), nameof(GameSettingMenu.Update))]
 class GameSettingMenuPatch
 {
-    
     static GameObject GamePresetButton;
     static GameObject GameSettingsButton;
     static GameObject RoleSettingsButton;
@@ -254,7 +244,6 @@ class GameSettingMenuPatch
             var ps = GameObject.Find("PanelSprite");
             ps.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.4f);
             ps.transform.FindChild("LeftSideTint").gameObject.GetComponent<SpriteRenderer>().color = new Color(0.1176f, 0.1176f, 0.1176f, 0.8f);
-
         }
         catch { }
     }
