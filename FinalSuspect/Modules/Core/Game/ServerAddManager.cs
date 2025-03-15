@@ -2,7 +2,6 @@
 using System.Linq;
 using FinalSuspect.Attributes;
 using FinalSuspect.Helpers;
-using FinalSuspect.Modules.Scrapped;
 using FinalSuspect.Patches.System;
 using UnityEngine;
 
@@ -80,7 +79,7 @@ public static class ServerAddManager
         };
 
         var color = GetServerColor(serverName);
-        Cloud.ServerName = name;
+        //Cloud.ServerName = name;
         PingTrackerUpdatePatch.ServerName = StringHelper.ColorString(color, name);
     }
 
