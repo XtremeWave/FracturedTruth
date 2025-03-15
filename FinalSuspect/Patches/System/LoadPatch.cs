@@ -116,8 +116,8 @@ public class LoadPatch
 
             float p;
             
-            var reloadBypassPath_Once = PathManager.GetBypassFileType(FileType.Languages, BypassType.Once);
-            var reloadBypassPath_Longterm = PathManager.GetBypassFileType(FileType.Languages, BypassType.Longterm);
+            var reloadBypassPath_Once = GetBypassFileType(FileType.Languages, BypassType.Once);
+            var reloadBypassPath_Longterm = GetBypassFileType(FileType.Languages, BypassType.Longterm);
             var thisversion = $"{Main.PluginVersion}|{Main.DisplayedVersion}|{ThisAssembly.Git.Commit}-{ThisAssembly.Git.Branch}";
             var writeinVer = false;
             ReloadLanguage = thisversion != Main.LastStartVersion.Value 
@@ -339,7 +339,7 @@ public class LoadPatch
                 {
                     var file = $"{lang}/{resource}";
 
-                    var localFilePath = PathManager.GetResourceFilesPath(FileType.ModNews, file);
+                    var localFilePath = GetResourceFilesPath(FileType.ModNews, file);
                     if (File.Exists(localFilePath)) continue;
                     remoteModNewsList.Add(file);
                     XtremeLogger.Warn($"File do not exists: {localFilePath}", "Check");
@@ -448,7 +448,7 @@ public class LoadPatch
             {
                 action?.Invoke();
                 var resource = targetList[i];
-                var localFilePath = PathManager.GetLocalFilePath(fileType, resource);
+                var localFilePath = GetLocalFilePath(fileType, resource);
                 if (File.Exists(localFilePath))
                 {
                     targetList.Remove(resource);

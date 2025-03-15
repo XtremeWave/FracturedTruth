@@ -26,6 +26,7 @@ public class ModUpdater
         var buttonText = MainMenuManagerPatch.UpdateButton.transform.FindChild("FontPlacer").GetChild(0).GetComponent<TextMeshPro>();
         buttonText.text = $"{(CanUpdate ? GetString("updateButton") : GetString("updateNotice"))}\nv{showVer ?? " ???"}";
     }
+    
     public static void StartUpdate(string url = "waitToSelect")
     {
         if (url == "waitToSelect")
@@ -64,7 +65,7 @@ public class ModUpdater
     {
         try
         {
-            foreach (var path in Directory.EnumerateFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "*.*"))
+            foreach (var path in Directory.EnumerateFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty, "*.*"))
             {
                 if (path.EndsWith(Path.GetFileName(Assembly.GetExecutingAssembly().Location))) continue;
                 if (path.EndsWith("FinalSuspect.dll") || path.EndsWith("Downloader.dll")) continue;

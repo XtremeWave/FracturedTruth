@@ -68,7 +68,7 @@ public static class PathManager
     }
 
     [PluginModuleInitializer(InitializePriority.High)]
-    private static void Init()
+    public static void InitializePaths()
     {
         CheckAndCreate(GetLocalPath(LocalType.Resources), false);
         CheckAndCreate(GetLocalPath(LocalType.Resources) + "Sounds", false);
@@ -78,22 +78,27 @@ public static class PathManager
         {
             CheckAndCreate(GetLocalPath(LocalType.Resources) + $"ModNews/{lang}");
         }
+        
         CheckAndCreate(GetLocalPath(LocalType.Resources) + "Languages");
         CheckAndCreate(GetLocalPath(LocalType.Ban));
         CheckAndCreate(GetLocalPath(LocalType.Bypass), false);
     }
 
-    public static void CheckAndCreate(string path, bool hidden = true)
+    private static void CheckAndCreate(string path, bool hidden = true)
     {
+        if (path == null) return;
+        
         if (!Directory.Exists(path))
         {
             Directory.CreateDirectory(path);
         }
+        
         var attributes = File.GetAttributes(path);
         File.SetAttributes(path, hidden
             ? attributes | FileAttributes.Hidden 
             : attributes & ~FileAttributes.Hidden);
     }
+    
     public static string GetBypassFileType(FileType fileType, BypassType bypassType)
     {
         return GetLocalPath(LocalType.Bypass) + $"BypassCheck_{fileType}_{bypassType}.xwr";
@@ -102,16 +107,16 @@ public static class PathManager
     private static IReadOnlyList<string> URLs => new List<string>
     {
 #if DEBUG
-       
-        //"https://raw.githubusercontent.com/XtremeWave/FinalSuspect_Dev/FS_Dev/",
+        "https://raw.githubusercontent.com/XtremeWave/FinalSuspect_Dev/FS_Dev/",
         "https://api.xtreme.net.cn/download/FinalSuspect/",
-        //$"file:///{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop))}/",
+        $"file:///{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop))}/",
 #else
         "https://raw.githubusercontent.com/XtremeWave/FinalSuspect/FinalSus/",
         "https://gitee.com/XtremeWave/FinalSuspect/raw/FinalSus/",
         "https://api.xtreme.net.cn/download/FinalSuspect/",
 #endif
     };
+    
     public static IReadOnlyList<string> GetInfoFileUrlList()
     {
         var list = URLs.ToList();
