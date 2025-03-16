@@ -1,5 +1,5 @@
-name: 新特性建议
-description: 提交新特性建议
+name: 新功能建议
+description: 提交新功能或原功能优化建议
 title: "[Feat]:"
 labels: [Considered]
 assignees:
@@ -10,9 +10,12 @@ body:
     id: preface
     attributes:
       label: 前置条件
-      description: 你好！感谢你为 FinalSuspect 提交新特性建议。在开始之前，我们非常推荐阅读一遍[《开源软件指南》](https://opensource.guide/zh-hans/)，这会在很大程度上提高我们彼此的效率。
+      description: 你好!感谢你为FinalSuspect提交新功能建议。在开始之前.请先确认以下内容。
       options:
-        - label: 已经在 [Issues](https://github.com/XtremeWave/FinalSuspect/issue) 列表中搜索了相关问题。
+        - label: 已经在[议题](https://github.com/XtremeWave/FinalSuspect/issue)列表中搜索了相关问题。
+          required: true
+        - label: 您使用的是最新版本的FinalSuspect。
+          required: true
   - type: markdown
     id: details
     attributes:
@@ -21,11 +24,11 @@ body:
     id: description
     attributes:
       label: "描述一下此特性"
-      description: "为了方便我们管理，请不要在同一个 issue 下提交多个没有相关性的特性。"
+      description: "为了方便我们管理，请不要在同一个issue下提交多个功能。"
     validations:
       required: true
   - type: textarea
     id: additional-information
     attributes:
       label: "附加信息"
-      description: "如果你还有其他需要提供的信息，可以在这里填写（可以提供截图、视频等）。"
+      description: "如果你还有其他需要提供的信息，可以在这里填写。"
