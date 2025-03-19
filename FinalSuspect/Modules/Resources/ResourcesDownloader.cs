@@ -41,7 +41,9 @@ public class ResourcesDownloader
                 case 1:
                     remoteType = RemoteType.Gitee;
                     break;
-
+                case 2:
+                    remoteType = RemoteType.Github;
+                    break;
             }
 
         var url = GetFile(fileType, remoteType, file);
