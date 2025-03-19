@@ -25,7 +25,7 @@ class OnGameJoinedPatch
         ErrorText.Instance.Clear();
         ServerAddManager.SetServerName();
 
-        FinalAntiCheat.FAC.Init();
+        Init();
         if (AmongUsClient.Instance.AmHost) 
         {
             GameStartManagerPatch.GameStartManagerUpdatePatch.exitTimer = -1;
