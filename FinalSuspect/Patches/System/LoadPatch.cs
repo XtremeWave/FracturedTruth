@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.IO;
 using BepInEx.Unity.IL2CPP.Utils;
 using FinalSuspect.Helpers;
-using FinalSuspect.Modules.Core.Game;
 using FinalSuspect.Modules.Resources;
 using TMPro;
 using UnityEngine;
+using Object = UnityEngine.Object;
 using static FinalSuspect.Modules.Resources.ResourcesDownloader;
 
 namespace FinalSuspect.Patches.System;
@@ -104,12 +104,12 @@ public class LoadPatch
         {
             #region Resources and variables
             
-            LoadText = GameObject.Instantiate(__instance.errorPopup.InfoText, null);
+            LoadText = Object.Instantiate(__instance.errorPopup.InfoText, null);
             LoadText.transform.localPosition = new(0f, 0, -10f);
             LoadText.fontStyle = FontStyles.Bold;
             LoadText.text = null;
             
-            ProcessText = GameObject.Instantiate(__instance.errorPopup.InfoText, null);
+            ProcessText = Object.Instantiate(__instance.errorPopup.InfoText, null);
             ProcessText.transform.localPosition = new(0f, -0.7f, -10f);
             ProcessText.fontStyle = FontStyles.Bold;
             ProcessText.text = null;
@@ -168,19 +168,19 @@ public class LoadPatch
             ProcessText.SetOutlineThickness(0.15f);
             
             Teamlogo = ObjectHelper.CreateObject<SpriteRenderer>("Team_Logo", null, new Vector3(0, 0f, -5f));
-            Teamlogo.sprite = Utils.LoadSprite("TeamLogo.png", 120f);
+            Teamlogo.sprite = LoadSprite("TeamLogo.png", 120f);
             Teamlogo.color = Color.clear;
             
             Modlogo = ObjectHelper.CreateObject<SpriteRenderer>("Mod_Logo", null, new Vector3(0, 0.3f, -5f));
-            Modlogo.sprite = Utils.LoadSprite("FinalSuspect-Logo.png", 150f);
+            Modlogo.sprite = LoadSprite("FinalSuspect-Logo.png", 150f);
             Modlogo.color = Color.clear;
             
             ModlogoBlurred = ObjectHelper.CreateObject<SpriteRenderer>("Mod_Logo_Blurred", null, new Vector3(0, 0.3f, -5f));
-            ModlogoBlurred.sprite = Utils.LoadSprite("FinalSuspect-Logo-Blurred.png", 150f);
+            ModlogoBlurred.sprite = LoadSprite("FinalSuspect-Logo-Blurred.png", 150f);
             ModlogoBlurred.color = Color.clear;
             
             Glow = ObjectHelper.CreateObject<SpriteRenderer>("Glow", null, new Vector3(0, 0.3f, -5f));
-            Glow.sprite = Utils.LoadSprite("FinalSuspect-Logo.png");
+            Glow.sprite = LoadSprite("FinalSuspect-Logo.png");
             Glow.color = Color.clear;
 
             #region Fast Boot
@@ -197,7 +197,7 @@ public class LoadPatch
                     Modlogo.transform.localScale = new Vector3(1.5f, 1.5f, 1f);
                     Glow.color = Color.green;
                     if (writeinVer) Main.LastStartVersion.Value = thisversion;
-                    Init();
+                    TranslatorInit();
                     ProcessText.text = GetString("FastBoot");
                     ProcessText.color = Color.green;
                     ProcessText.transform.localPosition = new Vector3(0, -0.7f, -5f);
@@ -304,7 +304,7 @@ public class LoadPatch
                 #region After Download Depends
 
                 if (writeinVer) Main.LastStartVersion.Value = thisversion;
-                Init();
+                TranslatorInit();
                 if (TranslationController.Instance.currentLanguage.languageID is not SupportedLangs.English)
                 {
                     yield return FadeLoadText(false);
@@ -342,7 +342,7 @@ public class LoadPatch
                     var localFilePath = GetResourceFilesPath(FileType.ModNews, file);
                     if (File.Exists(localFilePath)) continue;
                     remoteModNewsList.Add(file);
-                    XtremeLogger.Warn($"File do not exists: {localFilePath}", "Check");
+                    Warn($"File do not exists: {localFilePath}", "Check");
                 }
             }
             
@@ -429,12 +429,12 @@ public class LoadPatch
                     yield return null;
                 }
 
-                GameObject.Destroy(LoadText.gameObject);
-                GameObject.Destroy(ProcessText.gameObject);
-                GameObject.Destroy(Modlogo.gameObject);
-                GameObject.Destroy(ModlogoBlurred.gameObject);
-                GameObject.Destroy(Teamlogo.gameObject);
-                GameObject.Destroy(Glow.gameObject);
+                Object.Destroy(LoadText.gameObject);
+                Object.Destroy(ProcessText.gameObject);
+                Object.Destroy(Modlogo.gameObject);
+                Object.Destroy(ModlogoBlurred.gameObject);
+                Object.Destroy(Teamlogo.gameObject);
+                Object.Destroy(Glow.gameObject);
 
                 #endregion
             }
@@ -455,7 +455,7 @@ public class LoadPatch
                 }
                 else
                 {
-                    XtremeLogger.Warn($"File do not exists: {localFilePath}", "Check");
+                    Warn($"File do not exists: {localFilePath}", "Check");
                 }
             }
         }
@@ -473,7 +473,7 @@ public class LoadPatch
 
                 if (task.IsFaulted)
                 {
-                    XtremeLogger.Error($"Download of {resource} failed: {task.Exception}", "Download Resource");
+                    Error($"Download of {resource} failed: {task.Exception}", "Download Resource");
                 }
             }
         }

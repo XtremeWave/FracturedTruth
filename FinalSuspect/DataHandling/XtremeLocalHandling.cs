@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game;
@@ -31,7 +30,7 @@ public static class XtremeLocalHandling
     {
         var data = XtremePlayerData.GetXtremeDataById(id);
         var player = data.Player;
-        var name = XtremeGameData.GameStates.IsInTask 
+        var name = IsInTask 
             ? player.GetRealName() 
             : data.Name ?? player.GetRealName();
         topcolor = Color.white;
@@ -49,7 +48,7 @@ public static class XtremeLocalHandling
 
     private static void GetLobbyText(this XtremePlayerData data, ref Color topcolor, ref Color bottomcolor, ref string toptext, ref string bottomtext)
     {
-        if (!XtremeGameData.GameStates.IsLobby) return;
+        if (!IsLobby) return;
         var player = data.Player;
 
         if (player.IsHost())
@@ -91,7 +90,6 @@ public static class XtremeLocalHandling
             bottomtext = bottomtext.CheckAndAppendText($"{player.GetPlatform()} {player.GetClient().FriendCode}");
             bottomcolor = ColorHelper.DownloadYellow;
         }
-       
     }
 
     private static string GetPlatform(this PlayerControl player)
@@ -159,19 +157,19 @@ public static class XtremeLocalHandling
 
     private static void GetGameText(this XtremePlayerData data, ref Color color, ref string roleText ,bool topswap)
     {
-        if (!XtremeGameData.GameStates.IsInGame) return;
+        if (!IsInGame) return;
         if (!Main.EnableFinalSuspect.Value) return;
         
         var roleType = XtremePlayerData.GetRoleById(data.PlayerId);
         var player = data.Player;
 
-        if (Utils.CanSeeTargetRole(player, out var bothImp))
+        if (CanSeeTargetRole(player, out var bothImp))
         {
-            color = Utils.GetRoleColor(roleType);
+            color = GetRoleColor(roleType);
             if (!topswap)
-                roleText = $"<size=80%>{GetRoleString(roleType.ToString())}</size> {Utils.GetProgressText(player)} {Utils.GetVitalText(player.PlayerId, docolor:Utils.CanSeeOthersRole())}";
+                roleText = $"<size=80%>{GetRoleString(roleType.ToString())}</size> {GetProgressText(player)} {GetVitalText(player.PlayerId, docolor:CanSeeOthersRole())}";
             else
-                roleText = $"{Utils.GetVitalText(player.PlayerId, docolor:Utils.CanSeeOthersRole())} {Utils.GetProgressText(player)} <size=80%>{GetRoleString(roleType.ToString())}</size>";
+                roleText = $"{GetVitalText(player.PlayerId, docolor:CanSeeOthersRole())} {GetProgressText(player)} <size=80%>{GetRoleString(roleType.ToString())}</size>";
         }
         else if (bothImp)
         {
@@ -196,7 +194,7 @@ public static class XtremeLocalHandling
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate)), HarmonyPostfix]
     public static void OnFixedUpdate(PlayerControl __instance)
     {
-        Main.EnableFinalSuspect.Value = !XtremeGameData.GameStates.OtherModHost;
+        Main.EnableFinalSuspect.Value = !OtherModHost;
 
         if (__instance == null) return;
 
@@ -233,7 +231,7 @@ public static class XtremeLocalHandling
         }
         catch
         {
-            var create = (__instance.GetRealName() == null && XtremeGameData.GameStates.IsFreePlay ||
+            var create = (__instance.GetRealName() == null && IsFreePlay ||
                          __instance.GetRealName() != "Player(Clone)") 
                          && XtremePlayerData.AllPlayerData.All(data => data.PlayerId != __instance.PlayerId);
             if (create)
@@ -243,7 +241,7 @@ public static class XtremeLocalHandling
 
     private static void DisconnectSync(PlayerControl pc)
     {
-        if (!XtremeGameData.GameStates.IsInTask || XtremeGameData.GameStates.IsFreePlay) return;
+        if (!IsInTask || IsFreePlay) return;
         var data = pc.GetXtremeData();
         var currectlyDisconnect = pc.Data.Disconnected && !data.IsDisconnected;
         var Task_NotAssgin = data.TotalTaskCount == 0 && !data.IsImpostor;
@@ -262,7 +260,7 @@ public static class XtremeLocalHandling
 
     private static void DeathSync(PlayerControl pc)
     {
-        if (!XtremeGameData.GameStates.IsInTask || pc.GetXtremeData().IsDead) return;
+        if (!IsInTask || pc.GetXtremeData().IsDead) return;
         if (pc.Data.IsDead) pc.SetDead();
     }
     
@@ -303,13 +301,10 @@ public static class XtremeLocalHandling
                     roleTextMeeting.enabled = true;
                 }
             }
-            catch 
-            { }
-
+            catch { }
         }
     }
-    
-    
+
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Update))]
     [HarmonyPostfix]
     [HarmonyPriority(Priority.First)]
@@ -335,12 +330,9 @@ public static class XtremeLocalHandling
                     roleTextMeeting.enabled = true;
                 }
             }
-            catch 
-            { }
-
+            catch { }
         }
     }
-
 
     #endregion
 
@@ -377,7 +369,7 @@ public static class XtremeLocalHandling
         }
         
         var roleType = PlayerControl.LocalPlayer.Data.Role.Role;
-        var color = Utils.GetRoleColor(roleType);
+        var color = GetRoleColor(roleType);
         var mode = opts.Mode;
         switch (mode)
         {
@@ -388,9 +380,7 @@ public static class XtremeLocalHandling
                 color = Palette.DisabledGrey;
                 break;
         }
-
         map.ColorControl.SetColor(color);
-
     }
     public static void UpdateMap()
     {
@@ -399,8 +389,8 @@ public static class XtremeLocalHandling
         {
             var player = data.Player;
             if (data.deadbodyrend)
-                data.deadbodyrend.gameObject.SetActive(Utils.CanSeeTargetRole(player, out _));
-            if (data.IsDisconnected || !Utils.CanSeeTargetRole(player, out _) || player.IsLocalPlayer())
+                data.deadbodyrend.gameObject.SetActive(CanSeeTargetRole(player, out _));
+            if (data.IsDisconnected || !CanSeeTargetRole(player, out _) || player.IsLocalPlayer())
             {
                 data.rend.gameObject.SetActive(false);
                 continue;
@@ -426,20 +416,18 @@ public static class XtremeLocalHandling
         }
     }
 
-    
     public static bool GetHauntFilterText(HauntMenuMinigame __instance)
     {
         if (!Main.EnableFinalSuspect.Value) return true;
         if (__instance.HauntTarget == null) return true;
         var role = __instance.HauntTarget.GetRoleType();
-        var color = Utils.GetRoleColor(role);
+        var color = GetRoleColor(role);
         __instance.NameText.color = __instance.FilterText.color = color;
-        __instance.FilterText.text = Utils.GetRoleName(role);
+        __instance.FilterText.text = GetRoleName(role);
         return false;
     }
 
-    public static void GetChatBubbleText(byte playerId, ref string name, ref Color32 bgcolor,
-        ref Color namecolor)
+    public static void GetChatBubbleText(byte playerId, ref string name, ref Color32 bgcolor, ref Color namecolor)
     {
         try
         {
@@ -448,7 +436,7 @@ public static class XtremeLocalHandling
                 namecolor = Color.white;
                 return;
             }
-            var player = Utils.GetPlayerById(playerId);
+            var player = GetPlayerById(playerId);
             name = player.CheckAndGetNameWithDetails(out namecolor, out _,  out var toptext, out _, player.IsLocalPlayer());
             toptext = toptext.Replace("\n", " ");
             if (player.IsLocalPlayer())
@@ -461,6 +449,4 @@ public static class XtremeLocalHandling
         }
         catch { }
     }
-    
-
 }

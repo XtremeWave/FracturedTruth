@@ -34,7 +34,7 @@ public static class BanManager
         if (player.IsBannedPlayer())
         {
             File.AppendAllText(BAN_LIST_PATH, $"{player.FriendCode},{player.GetHashedPuid()},{player.PlayerName}\n");
-            XtremeLogger.SendInGame(string.Format(GetString("Message.AddedPlayerToBanList"), player.PlayerName));
+            SendInGame(string.Format(GetString("Message.AddedPlayerToBanList"), player.PlayerName));
         }
     }
     public static void CheckDenyNamePlayer(ClientData player)
@@ -50,16 +50,16 @@ public static class BanManager
                 if (Main.AllPlayerControls.Any(p => p.IsDev() && line.Contains(p.FriendCode))) continue;
                 if (Regex.IsMatch(player.PlayerName, line))
                 {
-                    Utils.KickPlayer(player.Id, false, "DenyName");
+                    KickPlayer(player.Id, false, "DenyName");
                     NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.KickedByDenyName"), player.PlayerName, line));
-                    XtremeLogger.Info($"{player.PlayerName}は名前が「{line}」に一致したためキックされました。", "Kick");
+                    Info($"{player.PlayerName}は名前が「{line}」に一致したためキックされました。", "Kick");
                     return;
                 }
             }
         }
         catch (Exception ex)
         {
-            XtremeLogger.Exception(ex, "CheckDenyNamePlayer");
+            Exception(ex, "CheckDenyNamePlayer");
         }
     }
 
@@ -70,15 +70,15 @@ public static class BanManager
             if (!Main.KickPlayerInBanList.Value) return;
             if (player.IsBannedPlayer())
             {
-                Utils.KickPlayer(player.Id, true, "BanList");
+                KickPlayer(player.Id, true, "BanList");
                 NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.BanedByBanList"), player.PlayerName));
-                XtremeLogger.Info($"{player.PlayerName}は過去にBAN済みのためBANされました。", "BAN");
+                Info($"{player.PlayerName}は過去にBAN済みのためBANされました。", "BAN");
             }
             else if (player.IsFACPlayer())
             {
-                Utils.KickPlayer(player.Id, true, "FACList");
+                KickPlayer(player.Id, true, "FACList");
                 NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.BanedByFACList"), player.PlayerName));
-                XtremeLogger.Info($"{player.PlayerName}存在于FAC封禁名单", "BAN");
+                Info($"{player.PlayerName}存在于FAC封禁名单", "BAN");
             }
         }
     }
@@ -103,7 +103,7 @@ public static class BanManager
         }
         catch (Exception ex)
         {
-            XtremeLogger.Exception(ex, "CheckBanList");
+            Exception(ex, "CheckBanList");
         }
         return false;
     }

@@ -135,7 +135,7 @@ public class ClientFeatureItem
         }
         catch (Exception ex)
         {
-            XtremeLogger.Exception(ex, "MoreActions");
+            Exception(ex, "MoreActions");
         }
     }
 }

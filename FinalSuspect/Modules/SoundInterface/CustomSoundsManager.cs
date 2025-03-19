@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using FinalSuspect.Modules.Panels;
 using UnityEngine;
 using static FinalSuspect.Modules.SoundInterface.SoundManager;
 using static FinalSuspect.Modules.SoundInterface.XtremeMusic;
 using Object = UnityEngine.Object;
-
 
 namespace FinalSuspect.Modules.SoundInterface;
 
@@ -36,7 +36,7 @@ public static class CustomSoundsManager
                 MyMusicPanel.RefreshTagList();
                 SoundManagementPanel.RefreshTagList();
                 global::SoundManager.Instance.CrossFadeSound(audio.FileName, audio.Clip, 1f);
-                XtremeLogger.Msg($"播放声音：{audio.Name}", "CustomSounds");
+                Msg($"播放声音：{audio.Name}", "CustomSounds");
             }, 0.01F, "");
         }
         catch { }
@@ -76,9 +76,9 @@ public static class CustomSoundsManager
     {
         var isPlaying = musics.Any(x => x.CurrectAudioStates == AudiosStates.IsPlaying);
         if (isPlaying) return;
-        if (XtremeGameData.GameStates.IsLobby)
+        if (IsLobby)
             global::SoundManager.Instance.CrossFadeSound("MapTheme", LobbyBehaviour.Instance.MapTheme, 0.07f);
-        else if (XtremeGameData.GameStates.IsNotJoined)
+        else if (IsNotJoined)
             global::SoundManager.Instance.CrossFadeSound("MainBG", DestroyableSingleton<JoinGameButton>.Instance.IntroMusic, 1f);
     }
     /*
@@ -223,7 +223,6 @@ public class AudioManagementStopAllSoundPatch
         {
             __instance.allSources.Remove(key);
         }
-
         return false;
     }
 }

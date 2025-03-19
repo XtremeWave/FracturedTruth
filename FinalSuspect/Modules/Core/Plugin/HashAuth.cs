@@ -51,8 +51,8 @@ public class HashAuth(string hashValue, string salt = null, HashAlgorithm algori
         // 2.ハッシュ値のログ出力
         //  salt有: ハッシュ値算出結果:<value> => <hashValue> (salt: <saltValue>)
         //  salt無: ハッシュ値算出結果:<value> => <hashValue>
-        XtremeLogger.Info($"ハッシュ値算出結果: {value} => {hashValue} {(salt == null ? "" : $"(salt: {salt})")}", "HashAuth");
-        XtremeLogger.Warn("以上の値をソースコード上にペーストしてください。", "HashAuth");
+        Info($"ハッシュ値算出結果: {value} => {hashValue} {(salt == null ? "" : $"(salt: {salt})")}", "HashAuth");
+        Warn("以上の値をソースコード上にペーストしてください。", "HashAuth");
 
         // 3.HashAuthインスタンスの生成・リターン
         return new HashAuth(hashValue, salt, algorithm);

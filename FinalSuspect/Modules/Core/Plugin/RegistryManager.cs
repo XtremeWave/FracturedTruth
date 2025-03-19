@@ -16,12 +16,12 @@ public static class RegistryManager
     {
         if (Keys == null)
         {
-            XtremeLogger.Info("Create FinalSuspect Registry Key", "Registry Manager");
+            Info("Create FinalSuspect Registry Key", "Registry Manager");
             Keys = SoftwareKeys.CreateSubKey("AU-FinalSuspect", true);
         }
         if (Keys == null)
         {
-            XtremeLogger.Error("Create Registry Failed", "Registry Manager");
+            Error("Create Registry Failed", "Registry Manager");
             return;
         }
 
@@ -37,22 +37,22 @@ public static class RegistryManager
                 @"./TOH_DATA",
             ];
 
-        XtremeLogger.Info("上次启动的FinalSuspect版本：" + LastVersion, "Registry Manager");
+        Info("上次启动的FinalSuspect版本：" + LastVersion, "Registry Manager");
 
         if (LastVersion < new Version(1, 0, 0))
         {
-            XtremeLogger.Warn("v1.0 New Version Operation Needed", "Registry Manager");
+            Warn("v1.0 New Version Operation Needed", "Registry Manager");
             FoldersNFileToDel.Add(@"./BepInEx/config");
         }
 
         FoldersNFileToDel.DoIf(Directory.Exists, p =>
         {
-            XtremeLogger.Warn("Delete Useless Directory:" + p, "Registry Manager");
+            Warn("Delete Useless Directory:" + p, "Registry Manager");
             Directory.Delete(p, true);
         });
         FoldersNFileToDel.DoIf(File.Exists, p =>
         {
-            XtremeLogger.Warn("Delete Useless File:" + p, "Registry Manager");
+            Warn("Delete Useless File:" + p, "Registry Manager");
             File.Delete(p);
         });
     }

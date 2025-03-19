@@ -6,7 +6,6 @@ using FinalSuspect.Attributes;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace FinalSuspect.DataHandling;
 
@@ -87,7 +86,7 @@ public class XtremePlayerData : IDisposable
         var dead = data?.IsDead ?? false;
         RoleTypes nullrole;
 
-        if (dead && !XtremeGameData.GameStates.IsFreePlay)
+        if (dead && !IsFreePlay)
         {
             nullrole = data.IsImpostor ? RoleTypes.ImpostorGhost : RoleTypes.CrewmateGhost;
         }
@@ -109,18 +108,18 @@ public class XtremePlayerData : IDisposable
     public void SetDead()
     {
         IsDead = true;
-        XtremeLogger.Info($"Set Death For {Player.GetNameWithRole()}", "Data");
+        Info($"Set Death For {Player.GetNameWithRole()}", "Data");
     }
     
     public void SetDisconnected()
     {
-        if (XtremeGameData.GameStates.IsLobby)
+        if (IsLobby)
         {
             Dispose();
             AllPlayerData.Remove(this);
             return;
         }
-        XtremeLogger.Info($"Set Disconnect For {Player.GetNameWithRole()}", "Data");
+        Info($"Set Disconnect For {Player.GetNameWithRole()}", "Data");
         IsDisconnected = true;
         SetDead();
         SetDeathReason(VanillaDeathReason.Disconnect);
@@ -138,15 +137,15 @@ public class XtremePlayerData : IDisposable
             SetDead();
             RoleAfterDeath = role;
         }
-        RoleAssgined = !XtremeGameData.GameStates.IsFreePlay;
-        XtremeLogger.Info("Set Role For Player: " + Name + " => " + role, "SetRole");
+        RoleAssgined = !IsFreePlay;
+        Info("Set Role For Player: " + Name + " => " + role, "SetRole");
     }
     
     public void SetDeathReason(VanillaDeathReason deathReason, bool focus = false)
     {
         if (IsDead && RealDeathReason == VanillaDeathReason.None || focus)
             RealDeathReason = deathReason;
-        XtremeLogger.Info($"Set Death Reason For {Player.GetNameWithRole()}; Death Reason: {deathReason}", "Data");
+        Info($"Set Death Reason For {Player.GetNameWithRole()}; Death Reason: {deathReason}", "Data");
     }
     
     public void SetRealKiller(XtremePlayerData killer)
@@ -156,7 +155,7 @@ public class XtremePlayerData : IDisposable
         killer.KillCount++;
         RealKiller = killer;
 
-        XtremeLogger.Info($"Set Real Killer For {Player.GetNameWithRole()}, Killer: {killer.Player.GetNameWithRole()}, DeathReason:", "Data");
+        Info($"Set Real Killer For {Player.GetNameWithRole()}, Killer: {killer.Player.GetNameWithRole()}, DeathReason:", "Data");
     }
     
     public void SetTaskTotalCount(int count) => TotalTaskCount = count;
@@ -178,21 +177,18 @@ public class XtremePlayerData : IDisposable
     {
         try
         {
-            XtremeLogger.Info($"Creating XtremePlayerData For {playername}({player.GetClient().FriendCode})", "Data");
+            Info($"Creating XtremePlayerData For {playername}({player.GetClient().FriendCode})", "Data");
             var colorId = player.Data.DefaultOutfit.ColorId;
             playername ??= player.GetRealName();
            
             AllPlayerData.Add(new XtremePlayerData(player, playername, colorId));
         }
-        catch 
-        {
-            //
-        }
+        catch { }
     }
 #pragma warning disable CA1816
     public void Dispose()
     {
-        XtremeLogger.Info($"Disposing XtremePlayerData For {Name}", "Data");
+        Info($"Disposing XtremePlayerData For {Name}", "Data");
         Player = null;
         CheatData = null;
         Name = null;
@@ -212,10 +208,7 @@ public class XtremePlayerData : IDisposable
             AllPlayerData.Do(data => data.Dispose());
             AllPlayerData.Clear();
         }
-        catch
-        { 
-            //
-        }
+        catch { }
     }
 #pragma warning restore CA1816
 }
@@ -260,7 +253,7 @@ public static class XtremePlayerDataExtensions
         }
     }
 
-    public static bool IsAlive(this PlayerControl pc) => pc?.GetXtremeData()?.IsDead == false || !XtremeGameData.GameStates.IsInGame;
+    public static bool IsAlive(this PlayerControl pc) => pc?.GetXtremeData()?.IsDead == false || !IsInGame;
 
     public static string GetDataName(this PlayerControl pc)
     {

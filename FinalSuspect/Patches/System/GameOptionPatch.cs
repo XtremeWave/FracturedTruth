@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using AmongUs.GameOptions;
 using FinalSuspect.Helpers;
-using FinalSuspect.Modules.Core.Game;
 using TMPro;
 using UnityEngine;
 
@@ -11,7 +10,7 @@ class RoleOptionSettingPatch
 {
     public static void Postfix(RoleOptionSetting __instance)
     {
-        var rolecolor = Utils.GetRoleColor(__instance.Role.Role);
+        var rolecolor = GetRoleColor(__instance.Role.Role);
         __instance.labelSprite.color = rolecolor.ShadeColor(0.2f);
         __instance.titleText.color = Color.white;
     }
@@ -21,18 +20,18 @@ class RolesSettingsMenuPatch
 {
     private static readonly List<Color32> rolecolors =
     [
-        Utils.GetRoleColor(RoleTypes.Engineer),
-        Utils.GetRoleColor(RoleTypes.GuardianAngel),
-        Utils.GetRoleColor(RoleTypes.Scientist),
-        Utils.GetRoleColor(RoleTypes.Tracker),
-        Utils.GetRoleColor(RoleTypes.Noisemaker),
-        Utils.GetRoleColor(RoleTypes.Shapeshifter),
-        Utils.GetRoleColor(RoleTypes.Phantom)
+        GetRoleColor(RoleTypes.Engineer),
+        GetRoleColor(RoleTypes.GuardianAngel),
+        GetRoleColor(RoleTypes.Scientist),
+        GetRoleColor(RoleTypes.Tracker),
+        GetRoleColor(RoleTypes.Noisemaker),
+        GetRoleColor(RoleTypes.Shapeshifter),
+        GetRoleColor(RoleTypes.Phantom)
     ];
 
     public static void Postfix()
     {
-        if (!XtremeGameData.GameStates.IsNormalGame) return;
+        if (!IsNormalGame) return;
         try
         {
             ConfigureHeaderButtons();
@@ -54,7 +53,7 @@ class RolesSettingsMenuPatch
         var index = 0;
         foreach (var button in headerbuttons)
         {
-            var roleColor = index <= 4 ? Utils.GetRoleColor(RoleTypes.Crewmate) : Utils.GetRoleColor(RoleTypes.Impostor);
+            var roleColor = index <= 4 ? GetRoleColor(RoleTypes.Crewmate) : GetRoleColor(RoleTypes.Impostor);
             SetColor(button, rolecolors[index], roleColor);
             index++;
         }
@@ -100,15 +99,15 @@ internal class GameOptionsMenuPatch
 {
     private static readonly List<Color32> Normalbannercolors =
     [
-        Utils.GetRoleColor(RoleTypes.Impostor),
-        Utils.GetRoleColor(RoleTypes.Crewmate),
+        GetRoleColor(RoleTypes.Impostor),
+        GetRoleColor(RoleTypes.Crewmate),
         Color.yellow,
         Color.green
     ];
     private static readonly List<Color32> HnSbannercolors =
     [
-        Utils.GetRoleColor(RoleTypes.Crewmate),
-        Utils.GetRoleColor(RoleTypes.Impostor),
+        GetRoleColor(RoleTypes.Crewmate),
+        GetRoleColor(RoleTypes.Impostor),
         Palette.Purple,
         Color.green
     ];
@@ -116,7 +115,7 @@ internal class GameOptionsMenuPatch
     {
         var setArea = GameObject.Find("GAME SETTINGS TAB").transform.FindChild("Scroller").FindChild("SliderInner");
         Transform[] banners = setArea.GetComponentsInChildren<Transform>(true);
-        if (XtremeGameData.GameStates.IsNormalGame)
+        if (IsNormalGame)
         {
             var headerindex = 0;
             var numindex = 0;
@@ -232,7 +231,7 @@ class GameSettingMenuPatch
             {
                 GameSettingsButton = Panel.transform.FindChild("GameSettingsButton").gameObject;
             }
-            if (RoleSettingsButton == null && XtremeGameData.GameStates.IsNormalGame)
+            if (RoleSettingsButton == null && IsNormalGame)
             {
                 RoleSettingsButton = Panel.transform.FindChild("RoleSettingsButton").gameObject;
             }

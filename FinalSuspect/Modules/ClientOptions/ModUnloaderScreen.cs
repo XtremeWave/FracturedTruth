@@ -61,7 +61,7 @@ public static class ModUnloaderScreen
 
             _ = new LateTask(() =>
             {
-                XtremeLogger.Info("模组将要禁用", nameof(ModUnloaderScreen));
+                Info("模组将要禁用", nameof(ModUnloaderScreen));
                 Harmony.UnpatchAll();
                 Main.Instance.Unload();
             }, 1f);

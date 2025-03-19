@@ -11,7 +11,6 @@ using BepInEx.Unity.IL2CPP;
 using FinalSuspect;
 using FinalSuspect.Attributes;
 using FinalSuspect.Helpers;
-using FinalSuspect.Modules.Core.Game;
 using FinalSuspect.Modules.Random;
 using Il2CppInterop.Runtime.Injection;
 using UnityEngine;
@@ -197,16 +196,16 @@ public class Main : BasePlugin
         NoGameEnd = Config.Bind("Client Options", "No Game End", false);
 
         Logger = BepInEx.Logging.Logger.CreateLogSource("FinalSuspect");
-        XtremeLogger.Enable();
-        XtremeLogger.Disable("SwitchSystem");
-        XtremeLogger.Disable("ModNews");
-        XtremeLogger.Disable("CancelPet");
+        Enable();
+        Disable("SwitchSystem");
+        Disable("ModNews");
+        Disable("CancelPet");
         if (!DebugModeManager.AmDebugger)
         {
-            XtremeLogger.Disable("Download Resources");
+            Disable("Download Resources");
         }
         
-        XtremeLogger.isDetail = true;
+        isDetail = true;
 
         // 認証関連-初期化
         DebugKeyAuth = new HashAuth(DebugKeyHash, DebugKeySalt);
@@ -237,8 +236,8 @@ public class Main : BasePlugin
         }
         catch (ArgumentException ex)
         {
-            XtremeLogger.Error("错误：字典出现重复项", "LoadDictionary");
-            XtremeLogger.Exception(ex, "LoadDictionary");
+            Error("错误：字典出现重复项", "LoadDictionary");
+            Exception(ex, "LoadDictionary");
             hasArgumentException = true;
             ExceptionMessage = ex.Message;
             ExceptionMessageIsShown = false;
@@ -250,9 +249,9 @@ public class Main : BasePlugin
 
         IRandom.SetInstance(new NetRandomWrapper());
 
-        XtremeLogger.Info($"{Application.version}", "AmongUs Version");
+        Info($"{Application.version}", "AmongUs Version");
 
-        var handler = XtremeLogger.Handler("GitVersion");
+        var handler = Handler("GitVersion");
         handler.Info($"{nameof(ThisAssembly.Git.BaseTag)}: {ThisAssembly.Git.BaseTag}");
         handler.Info($"{nameof(ThisAssembly.Git.Commit)}: {ThisAssembly.Git.Commit}");
         handler.Info($"{nameof(ThisAssembly.Git.Commits)}: {ThisAssembly.Git.Commits}");
@@ -269,8 +268,8 @@ public class Main : BasePlugin
         if (DebugModeManager.AmDebugger) ConsoleManager.CreateConsole();
         else ConsoleManager.DetachConsole();
 
-        XtremeLogger.Msg("========= FinalSuspect loaded! =========", "Plugin Load");
-        Application.quitting += new Action(Utils.SaveNowLog);
+        Msg("========= FinalSuspect loaded! =========", "Plugin Load");
+        Application.quitting += new Action(SaveNowLog);
     }
 }
 

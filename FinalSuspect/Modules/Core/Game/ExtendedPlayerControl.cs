@@ -36,7 +36,7 @@ static class ExtendedPlayerControl
     }
     public static bool IsImpostor(this PlayerControl pc)
     {
-        if (XtremeGameData.GameStates.IsLobby) return false;
+        if (IsLobby) return false;
         return pc.GetRoleType() switch
         {
             RoleTypes.Impostor or RoleTypes.Shapeshifter or RoleTypes.Phantom or RoleTypes.ImpostorGhost => true,
@@ -46,8 +46,8 @@ static class ExtendedPlayerControl
     public static string GetNameWithRole(this PlayerControl player, bool forUser = false)
     {
         var ret = $"{player?.Data?.PlayerName}" + 
-            (XtremeGameData.GameStates.IsInGame? 
-            $"({Utils.GetRoleName(player.GetRoleType())})" : "");
+            (IsInGame? 
+            $"({GetRoleName(player.GetRoleType())})" : "");
         return forUser ? ret : ret.RemoveHtmlTags();
     }
     public static Color GetRoleColor(this PlayerControl player)

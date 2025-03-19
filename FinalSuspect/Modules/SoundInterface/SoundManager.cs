@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Features.CheckingandBlocking;
+using FinalSuspect.Modules.Panels;
 using FinalSuspect.Modules.Resources;
 using UnityEngine;
 using static FinalSuspect.Modules.SoundInterface.SoundManager;
@@ -35,12 +36,12 @@ public static class SoundManager
             {
                 if (string.IsNullOrWhiteSpace(line)) continue;
                 XtremeMusic.CreateMusic(line);
-                XtremeLogger.Info($"Audio Loaded: {line}", "AudioManager");
+                Info($"Audio Loaded: {line}", "AudioManager");
             }
         }
         catch (Exception ex)
         {
-            XtremeLogger.Error("Load Audios Failed\n" + ex, "AudioManager", false);
+            Error("Load Audios Failed\n" + ex, "AudioManager", false);
         }
     }
     
@@ -174,15 +175,15 @@ public class XtremeMusic
             {
                 if (string.IsNullOrWhiteSpace(line)) continue;
                 CreateMusic(line);
-                XtremeLogger.Info($"Sound Loaded: {line}", "AudioManager");
+                Info($"Sound Loaded: {line}", "AudioManager");
                 soundnum++;
             }
         }
         catch (Exception ex)
         {
-            XtremeLogger.Error("Load Audio Failed\n" + ex, "AudioManager", false);
+            Error("Load Audio Failed\n" + ex, "AudioManager", false);
         }
-        XtremeLogger.Msg($"{soundnum} Custom Sounds Loaded", "AudioManager");
+        Msg($"{soundnum} Custom Sounds Loaded", "AudioManager");
     }
     
     private static readonly object finalMusicsLock = new();
@@ -254,7 +255,7 @@ public class XtremeMusic
                 }
             }
             else if (Name != string.Empty)
-                musics.Add(this);
+            musics.Add(this);
         }
     }
 }

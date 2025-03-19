@@ -4,8 +4,10 @@ using BepInEx.Configuration;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.ClientOptions;
 using FinalSuspect.Modules.Core.Game;
+using FinalSuspect.Modules.Panels;
 using FinalSuspect.Modules.SoundInterface;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Patches.System;
 
@@ -55,15 +57,15 @@ public static class OptionsMenuBehaviourStartPatch
         if (recreate)
         {
             ClientActionItem.ModOptionsButton.gameObject.SetActive(false);
-            GameObject.Destroy(ClientActionItem.ModOptionsButton);
-            GameObject.Destroy(ClientActionItem.CustomBackground);
+            Object.Destroy(ClientActionItem.ModOptionsButton);
+            Object.Destroy(ClientActionItem.CustomBackground);
             ClientFeatureItem.ModOptionsButton.gameObject.SetActive(false);
-            GameObject.Destroy(ClientFeatureItem.ModOptionsButton);
-            GameObject.Destroy(ClientFeatureItem.CustomBackground);
+            Object.Destroy(ClientFeatureItem.ModOptionsButton);
+            Object.Destroy(ClientFeatureItem.CustomBackground);
 
-            GameObject.Destroy(ModUnloaderScreen.Popup);
-            GameObject.Destroy(MyMusicPanel.CustomBackground);
-            GameObject.Destroy(SoundManagementPanel.CustomBackground);
+            Object.Destroy(ModUnloaderScreen.Popup);
+            Object.Destroy(MyMusicPanel.CustomBackground);
+            Object.Destroy(SoundManagementPanel.CustomBackground);
             ClientActionItem.ModOptionsButton = null;
             ClientActionItem.CustomBackground = null;
 
@@ -125,13 +127,13 @@ public static class OptionsMenuBehaviourStartPatch
         SetFeatureItemTextAndColor(SoundBtn, "SoundOptions");
         SetFeatureItemTextAndColor(AudioManagementBtn, "AudioManagementOptions");
 
-        if (!XtremeGameData.GameStates.IsNotJoined)
+        if (!IsNotJoined)
         {
             SetOptionItemDisabled_Menu(ChangeOutfit);
             SetFeatureItemDisabled_Menu(AudioManagementBtn);
         }
 
-        if (Directory.GetFiles(Utils.GetLogFolder(true).FullName + "/Final Suspect-logs").Length <= 0)
+        if (Directory.GetFiles(GetLogFolder(true).FullName + "/Final Suspect-logs").Length <= 0)
         {
             SetFeatureItemDisabled(ClearAutoLogs);
         }
@@ -149,7 +151,7 @@ public static class OptionsMenuBehaviourStartPatch
     {
         if (recreate)
         {
-            GameObject.Destroy(item.ToggleButton.gameObject);
+            Object.Destroy(item.ToggleButton.gameObject);
             item = null;
         }
         if (item == null || item.ToggleButton == null)
@@ -162,7 +164,7 @@ public static class OptionsMenuBehaviourStartPatch
     {
         if (recreate)
         {
-            GameObject.Destroy(item.ToggleButton.gameObject);
+            Object.Destroy(item.ToggleButton.gameObject);
             item = null;
         }
         if (item == null || item.ToggleButton == null)
@@ -175,7 +177,7 @@ public static class OptionsMenuBehaviourStartPatch
     {
         if (recreate)
         {
-            GameObject.Destroy(item.ToggleButton.gameObject);
+            Object.Destroy(item.ToggleButton.gameObject);
             item = null;
         }
         if (item == null || item.ToggleButton == null)
@@ -188,7 +190,7 @@ public static class OptionsMenuBehaviourStartPatch
     {
         if (recreate)
         {
-            GameObject.Destroy(item.ToggleButton.gameObject);
+            Object.Destroy(item.ToggleButton.gameObject);
             item = null;
         }
         if (item == null || item.ToggleButton == null)
@@ -235,7 +237,7 @@ public static class OptionsMenuBehaviourStartPatch
     private static void UnlockFPSButtonToggle()
     {
         Application.targetFrameRate = Main.UnlockFPS.Value ? 165 : 60;
-        XtremeLogger.SendInGame(string.Format(GetString("FPSSetTo"), Application.targetFrameRate));
+        SendInGame(string.Format(GetString("FPSSetTo"), Application.targetFrameRate));
     }
 
     private static void SwitchHorseMode()
@@ -254,7 +256,7 @@ public static class OptionsMenuBehaviourStartPatch
 
     private static void AutoStartButtonToggle()
     {
-        if (Main.AutoStartGame.Value == false && XtremeGameData.GameStates.IsCountDown)
+        if (Main.AutoStartGame.Value == false && IsCountDown)
         {
             GameStartManager.Instance.ResetStartState();
         }
@@ -264,7 +266,7 @@ public static class OptionsMenuBehaviourStartPatch
     {
         try
         {
-            var sprite = Utils.LoadSprite("Cursor.png");
+            var sprite = LoadSprite("Cursor.png");
             Cursor.SetCursor(Main.UseModCursor.Value ? sprite.texture: null, Vector2.zero, CursorMode.Auto);
         }
         catch
@@ -294,7 +296,7 @@ public static class LanguageSetterSetLanguagePatch
         OptionsMenuBehaviourStartPatch.recreate = true;
         try
         {
-            GameObject.Destroy(VersionShowerStartPatch.VisitText);
+            Object.Destroy(VersionShowerStartPatch.VisitText);
         }
         catch 
         {

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using FinalSuspect.Modules.Panels;
 using TMPro;
 using UnityEngine;
 using static FinalSuspect.Modules.SoundInterface.SoundManager;

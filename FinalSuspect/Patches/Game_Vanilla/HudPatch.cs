@@ -30,14 +30,14 @@ class TaskPanelBehaviourPatch
 {
     public static void Postfix(TaskPanelBehaviour __instance)
     {
-        if (!XtremeGameData.GameStates.IsInGame) return;
+        if (!IsInGame) return;
 
         var player = PlayerControl.LocalPlayer;
         var role = player.GetRoleType();
         var taskText = __instance.taskText.text;
         if (taskText == "None") return;
 
-        var RoleWithInfo = $"{Utils.GetRoleName(role)}:\r\n";
+        var RoleWithInfo = $"{GetRoleName(role)}:\r\n";
         RoleWithInfo += role.GetRoleInfoForVanilla();
 
         var AllText = StringHelper.ColorString(player.GetRoleColor(), RoleWithInfo);
@@ -74,7 +74,7 @@ public static class HudManagerPatch
     {
         public static void Prefix(HudManager __instance)
         {
-            if (ModLoading == null && !XtremeGameData.GameStates.IsFreePlay)
+            if (ModLoading == null && !IsFreePlay)
             {
                 ModLoading = new GameObject("ModLoading") { layer = 5 };
                 ModLoading.transform.SetParent(__instance.GameLoadAnimation.transform.parent);
@@ -98,9 +98,9 @@ public static class HudManagerPatch
                 WarningText.SetActive(false);
 
             }
-            if (XtremeGameData.GameStates.IsInGame)
+            if (IsInGame)
             {
-                if (XtremeGameData.GameStates.IsInTask)
+                if (IsInTask)
                 {
                     if (PlayerControl.LocalPlayer.IsAlive())
                     {
@@ -212,7 +212,7 @@ public static class HudManagerPatch
     public static void SetChatBG(HudManager __instance)
     {
         Color color;
-        if (XtremeGameData.GameStates.IsInGame)
+        if (IsInGame)
         {
             if (PlayerControl.LocalPlayer.IsImpostor())
             {
@@ -220,7 +220,7 @@ public static class HudManagerPatch
             }
             else
             {
-                color = Utils.GetRoleColor(RoleTypes.Crewmate);
+                color = GetRoleColor(RoleTypes.Crewmate);
             }
         }
         else
@@ -233,8 +233,8 @@ public static class HudManagerPatch
     }
     public static void SetAbilityButtonColor(HudManager __instance)
     {
-        if (!XtremeGameData.GameStates.IsInGame) return;
-        var color = Utils.GetRoleColor(PlayerControl.LocalPlayer.GetRoleType());
+        if (!IsInGame) return;
+        var color = GetRoleColor(PlayerControl.LocalPlayer.GetRoleType());
         __instance.AbilityButton.buttonLabelText.SetOutlineColor(color);
         __instance.AbilityButton.cooldownTimerText.color = Color.green;
         __instance.KillButton.cooldownTimerText.color = ColorHelper. ImpostorRedPale;
@@ -259,7 +259,7 @@ public static class HudManagerPatch
     }
     public static void UpdateResult(HudManager __instance)
     {
-        if (XtremeGameData.GameStates.IsFreePlay || !XtremeGameData.GameStates.IsInGame && GetLineCount(LastResultText) < 6 )
+        if (IsFreePlay || !IsInGame && GetLineCount(LastResultText) < 6 )
             return;
         var showInitially = Main.ShowResults.Value;
        
@@ -267,7 +267,7 @@ public static class HudManagerPatch
             new SimpleButton(
                __instance.transform,
                "ShowHideResultsButton",
-               XtremeGameData.GameStates.IsInGame? new(0.2f, 2.685f, -14f) : new(-4.5f, 2.6f, -14f),  // 比 BackgroundLayer(z = -13) 更靠前
+               IsInGame? new(0.2f, 2.685f, -14f) : new(-4.5f, 2.6f, -14f),  // 比 BackgroundLayer(z = -13) 更靠前
                new(209, 190, 255, byte.MaxValue),
                new(208, 222, 255, byte.MaxValue),
                () =>
@@ -284,10 +284,10 @@ public static class HudManagerPatch
             };
 
         StringBuilder sb = new($"{GetString("RoleSummaryText")}{LastGameResult}");
-        if (XtremeGameData.GameStates.IsInGame)
+        if (IsInGame)
         {
             LastRoomCode = GameCode.IntToGameName(AmongUsClient.Instance.GameId);
-            LastServer = XtremeGameData.GameStates.IsOnlineGame
+            LastServer = IsOnlineGame
                 ? PingTrackerUpdatePatch.ServerName
                 : GetString("Local");
         }
@@ -296,12 +296,12 @@ public static class HudManagerPatch
             ColorHelper.ModColor32, 
             DataManager.Settings.Gameplay.StreamerMode?  new string('*', LastRoomCode.Length): LastRoomCode);
         sb.Append("\n"+ LastServer +"  "+gamecode);
-        if (XtremeGameData.GameStates.IsInGame)
+        if (IsInGame)
         {
             StringBuilder sb2 = new();
             foreach (var data in XtremePlayerData.AllPlayerData)
             {
-                sb2.Append("\n\u3000 ").Append(Utils.SummaryTexts(data.PlayerId));
+                sb2.Append("\n\u3000 ").Append(SummaryTexts(data.PlayerId));
             }
             LastGameData = sb2.ToString();
         }
@@ -327,16 +327,16 @@ public static class HudManagerPatch
             var backgroundObject = new GameObject("RoleSummaryBackground");
             backgroundObject.transform.SetParent(roleSummary.transform); 
             backgroundRenderer = backgroundObject.AddComponent<SpriteRenderer>();
-            backgroundRenderer.sprite = Utils.LoadSprite("LastResult-BG.png",200f);
+            backgroundRenderer.sprite = LoadSprite("LastResult-BG.png",200f);
             backgroundRenderer.color = new(0.5f,0.5f,0.5f,1f); 
         }
         
         showHideButton.Button.transform.localPosition =
-            XtremeGameData.GameStates.IsInGame ? new(0.2f, 2.685f, -14f) : new(-4.5f, 2.6f, -1f);
-        if (XtremeGameData.GameStates.IsInGame)
+            IsInGame ? new(0.2f, 2.685f, -14f) : new(-4.5f, 2.6f, -1f);
+        if (IsInGame)
             showHideButton.Button.gameObject.SetActive
             (PlayerControl.LocalPlayer.GetRoleType() is RoleTypes.CrewmateGhost or RoleTypes.ImpostorGhost &&
-             !XtremeGameData.GameStates.IsMeeting);
+             !IsMeeting);
         else
             showHideButton.Button.gameObject.SetActive(true);
 

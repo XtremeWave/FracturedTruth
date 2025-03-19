@@ -3,7 +3,6 @@ using System.Linq;
 using System.Text;
 using AmongUs.Data;
 using FinalSuspect.Helpers;
-using FinalSuspect.Modules.Core.Game;
 using FinalSuspect.Templates;
 using TMPro;
 using UnityEngine;
@@ -19,7 +18,7 @@ class AmongUsClientEndGamePatch
     {
         SummaryText = new();
         foreach (var data in XtremePlayerData.AllPlayerData)
-            SummaryText[data.PlayerId] = Utils.SummaryTexts(data.PlayerId);
+            SummaryText[data.PlayerId] = SummaryTexts(data.PlayerId);
     }
 }
 [HarmonyPatch(typeof(EndGameManager), nameof(EndGameManager.SetEverythingUp))]

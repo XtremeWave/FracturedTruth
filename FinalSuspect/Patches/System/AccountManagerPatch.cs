@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using BepInEx.Unity.IL2CPP.Utils;
-using FinalSuspect.Modules.Core.Game;
 using Il2CppSystem;
 using UnityEngine;
 
@@ -49,19 +48,19 @@ public static class AwakeAccountManager
 {
     public static Sprite[] AllRoleRoleIllustration =
     [
-        Utils.LoadSprite("CI_Crewmate.png", 450f),
-        Utils.LoadSprite("CI_HnSEngineer.png", 450f),
-        Utils.LoadSprite("CI_Engineer.png", 450f),
-        Utils.LoadSprite("CI_GuardianAngel.png", 450f),
-        Utils.LoadSprite("CI_Scientist.png", 450f),
-        Utils.LoadSprite("CI_Tracker.png", 450f),
-        Utils.LoadSprite("CI_Noisemaker.png", 450f),
-        Utils.LoadSprite("CI_CrewmateGhost.png", 450f),
-        Utils.LoadSprite("CI_Impostor.png", 450f),
-        Utils.LoadSprite("CI_HnSImpostor.png", 450f),
-        Utils.LoadSprite("CI_Shapeshifter.png", 450f),
-        Utils.LoadSprite("CI_Phantom.png", 450f),
-        Utils.LoadSprite("CI_ImpostorGhost.png", 450f)
+        LoadSprite("CI_Crewmate.png", 450f),
+        LoadSprite("CI_HnSEngineer.png", 450f),
+        LoadSprite("CI_Engineer.png", 450f),
+        LoadSprite("CI_GuardianAngel.png", 450f),
+        LoadSprite("CI_Scientist.png", 450f),
+        LoadSprite("CI_Tracker.png", 450f),
+        LoadSprite("CI_Noisemaker.png", 450f),
+        LoadSprite("CI_CrewmateGhost.png", 450f),
+        LoadSprite("CI_Impostor.png", 450f),
+        LoadSprite("CI_HnSImpostor.png", 450f),
+        LoadSprite("CI_Shapeshifter.png", 450f),
+        LoadSprite("CI_Phantom.png", 450f),
+        LoadSprite("CI_ImpostorGhost.png", 450f)
 
 
     ]; 

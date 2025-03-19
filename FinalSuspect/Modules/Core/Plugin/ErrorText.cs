@@ -73,7 +73,7 @@ public class ErrorText : MonoBehaviour
     {
         var error = new ErrorData(code);
         if (0 < error.ErrorLevel)
-            XtremeLogger.Error($"エラー発生: {error}: {error.Message}", "ErrorText");
+            Error($"エラー発生: {error}: {error.Message}", "ErrorText");
 
         if (!AllErrors.Any(e => e.Code == code))
         {
@@ -102,7 +102,7 @@ public class ErrorText : MonoBehaviour
                 text = SBDetected ? GetString("FAC.CheatDetected.HighLevel") : GetString("FAC.CheatDetected.LowLevel");
             Text.enabled = true;
         }
-        if (XtremeGameData.GameStates.IsInGame && maxLevel != 3 && !CheatDetected)
+        if (IsInGame && maxLevel != 3 && !CheatDetected)
             text += $"\n{GetString("TerminateCommand")}: Shift+L+Enter";
         Text.text = text;
     }
