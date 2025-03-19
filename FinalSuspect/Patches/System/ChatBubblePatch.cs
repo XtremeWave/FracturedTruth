@@ -1,7 +1,7 @@
 using FinalSuspect.Helpers;
 using UnityEngine;
 
-namespace FinalSuspect.Patches.Game_Vanilla;
+namespace FinalSuspect.Patches.System;
 
 [HarmonyPatch(typeof(ChatBubble))]
 public static class ChatBubblePatch
