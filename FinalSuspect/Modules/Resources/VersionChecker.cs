@@ -158,7 +158,7 @@ public static class VersionChecker
 
             var announcement = data["announcement"].Cast<JObject>();
             foreach (var langid in EnumHelper.GetAllValues<SupportedLangs>())
-                ModUpdater.announcement[langid] = announcement[langid.ToString()]?.ToString();
+            ModUpdater.announcement[langid] = announcement[langid.ToString()]?.ToString();
             downloadUrl_gitee = downloadUrl_gitee.Replace("{showVer}", showVer);
             hasUpdate = Main.version < latestVersion && creation > Main.PluginCreation;
             forceUpdate = Main.version < minimumVersion || creation > Main.PluginCreation;
