@@ -4,13 +4,14 @@ using System.IO;
 using System.Linq;
 using FinalSuspect.Modules.Features;
 using FinalSuspect.Modules.Resources;
+using FinalSuspect.Modules.SoundInterface;
 using TMPro;
 using UnityEngine;
 using static FinalSuspect.Modules.SoundInterface.SoundManager;
 using static FinalSuspect.Modules.SoundInterface.XtremeMusic;
 using Object = UnityEngine.Object;
 
-namespace FinalSuspect.Modules.SoundInterface;
+namespace FinalSuspect.Modules.Panels;
 
 public static class SoundManagementPanel
 {
@@ -27,7 +28,7 @@ public static class SoundManagementPanel
     public static void Init(OptionsMenuBehaviour optionsMenuBehaviour)
     {
         var mouseMoveToggle = optionsMenuBehaviour.DisableMouseMovement;
-        if (!XtremeGameData.GameStates.IsNotJoined) return;
+        if (!IsNotJoined) return;
 
         if (CustomBackground == null)
         {
@@ -85,7 +86,7 @@ public static class SoundManagementPanel
     }
     public static void RefreshTagList()
     {
-        if (!XtremeGameData.GameStates.IsNotJoined) return;
+        if (!IsNotJoined) return;
         numItems = 0;
         var scroller = Slider.GetComponent<Scroller>();
         scroller.Inner.gameObject.ForEachChild((Action<GameObject>)DestroyObj);
