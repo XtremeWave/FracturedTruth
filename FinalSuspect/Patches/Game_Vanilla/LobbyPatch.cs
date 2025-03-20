@@ -1,5 +1,4 @@
-﻿using FinalSuspect.Modules.Core.Game;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -16,7 +15,7 @@ public class LobbyStartPatch
         Paint.name = "FinalSuspect Lobby Paint";
         Paint.transform.localPosition = new Vector3(0.042f, -2.59f, -10.5f);
         var renderer = Paint.GetComponent<SpriteRenderer>();
-        renderer.sprite = Utils.LoadSprite("TeamLogo.png", 290f);
+        renderer.sprite = LoadSprite("TeamLogo.png", 290f);
     }
 }
 

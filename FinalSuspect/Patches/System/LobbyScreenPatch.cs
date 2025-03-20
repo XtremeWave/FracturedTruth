@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 
 namespace FinalSuspect.Patches.System;
+
 [HarmonyPatch]
 public sealed class LobbyJoinBind
 {

@@ -78,19 +78,19 @@ public static class VersionChecker
             break;
         }
 
-        XtremeLogger.Msg("Check For Update: " + isChecked, "CheckRelease");
+        Msg("Check For Update: " + isChecked, "CheckRelease");
         isBroken = !isChecked;
         if (isChecked)
         {
-            XtremeLogger.Info("Has Update: " + hasUpdate, "CheckRelease");
-            XtremeLogger.Info("Latest Version: " + latestVersion, "CheckRelease");
-            XtremeLogger.Info("Minimum Version: " + minimumVersion, "CheckRelease");
-            XtremeLogger.Info("Creation: " + creation, "CheckRelease");
-            XtremeLogger.Info("Force Update: " + forceUpdate, "CheckRelease");
-            XtremeLogger.Info("File MD5: " + md5, "CheckRelease");
-            XtremeLogger.Info("Github Url: " + downloadUrl_github, "CheckRelease");
-            XtremeLogger.Info("Gitee Url: " + downloadUrl_gitee, "CheckRelease");
-            XtremeLogger.Info("Website Url: " + downloadUrl_xtremeapi, "CheckRelease");
+            Info("Has Update: " + hasUpdate, "CheckRelease");
+            Info("Latest Version: " + latestVersion, "CheckRelease");
+            Info("Minimum Version: " + minimumVersion, "CheckRelease");
+            Info("Creation: " + creation, "CheckRelease");
+            Info("Force Update: " + forceUpdate, "CheckRelease");
+            Info("File MD5: " + md5, "CheckRelease");
+            Info("Github Url: " + downloadUrl_github, "CheckRelease");
+            Info("Gitee Url: " + downloadUrl_gitee, "CheckRelease");
+            Info("Website Url: " + downloadUrl_xtremeapi, "CheckRelease");
 
             if (firstLaunch || isBroken)
             {
@@ -113,7 +113,7 @@ public static class VersionChecker
     }
     public static async Task<bool> GetVersionInfo(string url)
     {
-        XtremeLogger.Msg(url, "CheckRelease");
+        Msg(url, "CheckRelease");
         try
         {
             string result;
@@ -131,7 +131,7 @@ public static class VersionChecker
                 using var response = await client.GetAsync(new Uri(url), HttpCompletionOption.ResponseContentRead);
                 if (!response.IsSuccessStatusCode)
                 {
-                    XtremeLogger.Error($"Failed: {response.StatusCode}", "CheckRelease");
+                    Error($"Failed: {response.StatusCode}", "CheckRelease");
                     return false;
                 }
                 
@@ -160,7 +160,7 @@ public static class VersionChecker
 
             var announcement = data["announcement"].Cast<JObject>();
             foreach (var langid in EnumHelper.GetAllValues<SupportedLangs>())
-                ModUpdater.announcement[langid] = announcement[langid.ToString()]?.ToString();
+            ModUpdater.announcement[langid] = announcement[langid.ToString()]?.ToString();
             downloadUrl_gitee = downloadUrl_gitee.Replace("{showVer}", showVer);
             hasUpdate = Main.version < latestVersion && creation > Main.PluginCreation;
             forceUpdate = Main.version < minimumVersion || creation > Main.PluginCreation;

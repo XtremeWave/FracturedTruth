@@ -23,14 +23,14 @@ internal class RPCHandlerPatch
 {
     public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)] ref byte callId, [HarmonyArgument(1)] MessageReader reader)
     {
-        XtremeLogger.Info($"{__instance?.Data?.PlayerId}" +
-                          $"({__instance?.Data?.PlayerName})" +
-                          $"{(__instance.IsHost() ? "Host" : "")}" +
-                          $":{callId}({RPC.GetRpcName(callId)})",
-            "ReceiveRPC");
+        Info($"{__instance?.Data?.PlayerId}" +
+             $"({__instance?.Data?.PlayerName})" +
+             $"{(__instance.IsHost() ? "Host" : "")}" +
+             $":{callId}({RPC.GetRpcName(callId)})",
+        "ReceiveRPC");
 
         if (XtremePlayerData.AllPlayerData.Any(data => data.PlayerId == __instance?.Data?.PlayerId))
-            if (FinalAntiCheat.FAC.ReceiveRpc(__instance, callId, reader, out var notify, out var reason, out var ban))
+            if (ReceiveRpc(__instance, callId, reader, out var notify, out var reason, out var ban))
             {
                 if (!__instance.IsLocalPlayer())
                 {
@@ -38,8 +38,8 @@ internal class RPCHandlerPatch
                 }
                 if (AmongUsClient.Instance.AmHost)
                 {
-                    Utils.KickPlayer(__instance.PlayerId, ban, reason);
-                    FinalAntiCheat.FAC.WarnHost();
+                    KickPlayer(__instance.PlayerId, ban, reason);
+                    WarnHost();
                     if (notify)
                         NotificationPopperPatch.NotificationPop
                             (string.Format(GetString("Warning.InvalidSlothRPC"), __instance.GetRealName(), $"{callId}({RPC.GetRpcName(callId)})"));
@@ -57,7 +57,7 @@ internal class RPCHandlerPatch
         {
             case RpcCalls.CheckName://CheckNameRPC
                 var name = subReader.ReadString();
-                XtremeLogger.Info("RPC Check Name For Player: " + name, "CheckName");
+                Info("RPC Check Name For Player: " + name, "CheckName");
                 if (__instance.IsHost())
                     Main.HostNickName = name;
                 if (XtremePlayerData.AllPlayerData.All(data => data.PlayerId != __instance.PlayerId))
@@ -66,18 +66,18 @@ internal class RPCHandlerPatch
             case RpcCalls.SetName: //SetNameRPC
                 subReader.ReadUInt32();
                 name = subReader.ReadString();
-                XtremeLogger.Info("RPC Set Name For Player: " + __instance.GetNameWithRole() + " => " + name, "SetName");
+                Info("RPC Set Name For Player: " + __instance.GetNameWithRole() + " => " + name, "SetName");
                 break;
             case RpcCalls.SendChat: // Free chat
                 var text = subReader.ReadString();
-                XtremeLogger.Info($"{__instance.GetNameWithRole().RemoveHtmlTags()}:{text.RemoveHtmlTags()}", "ReceiveChat");
+                Info($"{__instance.GetNameWithRole().RemoveHtmlTags()}:{text.RemoveHtmlTags()}", "ReceiveChat");
                 break;
             case RpcCalls.SendQuickChat:
-                XtremeLogger.Info($"{__instance.GetNameWithRole().RemoveHtmlTags()}:Some message from quick chat", "ReceiveChat");
+                Info($"{__instance.GetNameWithRole().RemoveHtmlTags()}:Some message from quick chat", "ReceiveChat");
                 break;
             case RpcCalls.StartMeeting:
-                var p = Utils.GetPlayerById(subReader.ReadByte());
-                XtremeLogger.Info($"{__instance.GetNameWithRole()} => {p?.GetNameWithRole() ?? "null"}", "StartMeeting");
+                var p = GetPlayerById(subReader.ReadByte());
+                Info($"{__instance.GetNameWithRole()} => {p?.GetNameWithRole() ?? "null"}", "StartMeeting");
                 break;
         }
         return true;
@@ -111,9 +111,9 @@ internal class RPCHandlerPatch
                                 if (__instance?.Data?.Disconnected is not null and not true)
                                 {
                                     var msg = string.Format(GetString("KickBecauseDiffrentVersionOrMod"), __instance?.Data?.PlayerName);
-                                    XtremeLogger.Warn(msg, "Version Kick");
+                                    Warn(msg, "Version Kick");
                                     NotificationPopperPatch.NotificationPop(msg);
-                                    Utils.KickPlayer(__instance.GetClientId(), false, "ModVersionIncorrect");
+                                    KickPlayer(__instance.GetClientId(), false, "ModVersionIncorrect");
                                 }
                             }, 5f, "Kick");
                     }*/
@@ -157,7 +157,7 @@ internal static class RPC
             from = Main.AllPlayerControls.Where(c => c.NetId == targetNetId).FirstOrDefault()?.Data?.PlayerName;
         }
         catch { }
-        XtremeLogger.Info($"FromNetID:{targetNetId}({from}) TargetClientID:{targetClientId}({target}) CallID:{callId}({rpcName})", "SendRPC");
+        Info($"FromNetID:{targetNetId}({from}) TargetClientID:{targetClientId}({target}) CallID:{callId}({rpcName})", "SendRPC");
     }
     public static string GetRpcName(byte callId)
     {

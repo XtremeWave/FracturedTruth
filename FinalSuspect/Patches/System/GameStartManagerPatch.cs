@@ -19,10 +19,10 @@ public static class GameStartManagerUpdatePatch
         //Scrapped
         //if (CreateOptionsPickerPatch.SetDleks && AmongUsClient.Instance.AmHost)
         //{
-        //    if (XtremeGameData.GameStates.IsNormalGame)
+        //    if (IsNormalGame)
         //        Main.NormalOptions.MapId = 3;
 
-        //    else if (XtremeGameData.GameStates.IsHideNSeek)
+        //    else if (IsHideNSeek)
         //        Main.HideNSeekOptions.MapId = 3;
         //}
     }
@@ -78,7 +78,7 @@ public class GameStartManagerPatch
             timerText.hideFlags = HideFlags.None;
             timerText.transform.localPosition += new Vector3(-0.55f,  -0.4f, 0f);
             timerText.transform.localScale = new(0.7f, 0.7f, 1f);
-            timerText.gameObject.SetActive(AmongUsClient.Instance.NetworkMode == NetworkModes.OnlineGame && XtremeGameData.GameStates.IsVanillaServer);
+            timerText.gameObject.SetActive(AmongUsClient.Instance.NetworkMode == NetworkModes.OnlineGame && IsVanillaServer);
 
             cancelButton = Object.Instantiate(__instance.StartButton, __instance.transform);
             var cancelLabel = cancelButton.GetComponentInChildren<TextMeshPro>();
@@ -121,7 +121,7 @@ public class GameStartManagerPatch
             if (DataManager.Settings.Gameplay.StreamerMode)
             {
                 __instance.GameRoomNameCode.color = new(__instance.GameRoomNameCode.color.r, __instance.GameRoomNameCode.color.g, __instance.GameRoomNameCode.color.b, 0); ;
-                HideName.enabled = !XtremeGameData.GameStates.IsLocalGame;
+                HideName.enabled = !IsLocalGame;
             }
             else
             {
@@ -136,7 +136,7 @@ public class GameStartManagerPatch
                 {
                     updateTimer = 0;
                     var maxPlayers = GameManager.Instance.LogicOptions.MaxPlayers;
-                    if (GameData.Instance.PlayerCount >= maxPlayers - 1 && !XtremeGameData.GameStates.IsCountDown)
+                    if (GameData.Instance.PlayerCount >= maxPlayers - 1 && !IsCountDown)
                     {
                         GameStartManager.Instance.startState = GameStartManager.StartingStates.Countdown;
                         GameStartManager.Instance.countDownTimer = 10;
@@ -205,7 +205,7 @@ public class GameStartManagerPatch
             }
             timerText.text = "";
             // Lobby timer
-            if (!GameData.Instance || AmongUsClient.Instance.NetworkMode == NetworkModes.LocalGame || !XtremeGameData.GameStates.IsVanillaServer || !AmongUsClient.Instance.AmHost) return;
+            if (!GameData.Instance || AmongUsClient.Instance.NetworkMode == NetworkModes.LocalGame || !IsVanillaServer || !AmongUsClient.Instance.AmHost) return;
 
             timer = Mathf.Max(0f, timer -= Time.deltaTime);
             var minutes = (int)timer / 60;
@@ -237,7 +237,7 @@ class ResetStartStatePatch
 {
     public static void Prefix(GameStartManager __instance)
     {
-        if (XtremeGameData.GameStates.IsCountDown)
+        if (IsCountDown)
         {
             SoundManager.Instance.StopSound(__instance.gameStartSound);
         }

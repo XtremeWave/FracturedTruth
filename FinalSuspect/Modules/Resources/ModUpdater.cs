@@ -70,13 +70,13 @@ public class ModUpdater
                 if (path.EndsWith(Path.GetFileName(Assembly.GetExecutingAssembly().Location))) continue;
                 if (path.EndsWith("FinalSuspect.dll") || path.EndsWith("Downloader.dll")) continue;
 
-                XtremeLogger.Info($"{Path.GetFileName(path)} Deleted", "DeleteOldFiles");
+                Info($"{Path.GetFileName(path)} Deleted", "DeleteOldFiles");
                 File.Delete(path);
             }
         }
         catch (Exception e)
         {
-            XtremeLogger.Error($"清除更新残留失败\n{e}", "DeleteOldFiles");
+            Error($"清除更新残留失败\n{e}", "DeleteOldFiles");
         }
     }
     public static async Task<(bool, string)> DownloadDLL(string url)
@@ -84,8 +84,8 @@ public class ModUpdater
         File.Delete(DownloadFileTempPath);
         File.Create(DownloadFileTempPath).Close();
 
-        XtremeLogger.Msg("Start Downlaod From: " + url, "DownloadDLL");
-        XtremeLogger.Msg("Save To: " + DownloadFileTempPath, "DownloadDLL");
+        Msg("Start Downlaod From: " + url, "DownloadDLL");
+        Msg("Save To: " + DownloadFileTempPath, "DownloadDLL");
         try
         {
             using var client = new HttpClientDownloadWithProgress(url, DownloadFileTempPath);
@@ -105,14 +105,14 @@ public class ModUpdater
         catch (Exception ex)
         {
             File.Delete(DownloadFileTempPath);
-            XtremeLogger.Error($"更新失败\n{ex.Message}", "DownloadDLL", false);
+            Error($"更新失败\n{ex.Message}", "DownloadDLL", false);
             return (false, GetString("downloadFailed"));
         }
     }
     private static void OnDownloadProgressChanged(long? totalFileSize, long totalBytesDownloaded, double? progressPercentage)
     {
         var msg = $"{GetString("updateInProgress")}\n{totalFileSize / 1000}KB / {totalBytesDownloaded / 1000}KB  -  {(int)progressPercentage}%";
-        XtremeLogger.Info(msg, "DownloadDLL");
+        Info(msg, "DownloadDLL");
         CustomPopup.UpdateTextLater(msg);
     }
     public static string GetMD5HashFromFile(string fileName)
@@ -126,7 +126,7 @@ public class ModUpdater
         }
         catch (Exception ex)
         {
-            XtremeLogger.Exception(ex, "GetMD5HashFromFile");
+            Exception(ex, "GetMD5HashFromFile");
             return "";
         }
     }

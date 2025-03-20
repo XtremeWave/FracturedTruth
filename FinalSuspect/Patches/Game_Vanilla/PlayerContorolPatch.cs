@@ -65,10 +65,10 @@ class PlayerControlCompleteTaskPatch
     public static void Postfix(PlayerControl __instance)
     {
         var pc = __instance;
-        XtremeLogger.Info($"TaskComplete:{pc.GetNameWithRole()}", "CompleteTask");
+        Info($"TaskComplete:{pc.GetNameWithRole()}", "CompleteTask");
         pc.OnCompleteTask();
 
         GameData.Instance.RecomputeTaskCounts();
-        XtremeLogger.Info($"TotalTaskCounts = {GameData.Instance.CompletedTasks}/{GameData.Instance.TotalTasks}", "TaskState.Update");
+        Info($"TotalTaskCounts = {GameData.Instance.CompletedTasks}/{GameData.Instance.TotalTasks}", "TaskState.Update");
     }
 }

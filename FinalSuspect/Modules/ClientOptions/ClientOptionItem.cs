@@ -98,7 +98,7 @@ public sealed class ClientOptionItem_String : ClientActionItem
             
             if (currentIndex == -1)
             {
-                XtremeLogger.Error("wrong index", "ClientOptionItem_String");
+                Error("wrong index", "ClientOptionItem_String");
                 return;
             }
             

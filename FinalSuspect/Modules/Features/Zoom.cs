@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using FinalSuspect.Attributes;
-using FinalSuspect.Modules.Core.Game;
 using UnityEngine;
 
 namespace FinalSuspect.Modules.Features;
@@ -17,9 +16,9 @@ public static class Zoom
     {
         try
         {
-            var canZoom = XtremeGameData.GameStates.IsShip || XtremeGameData.GameStates.IsLobby || XtremeGameData.GameStates.IsFreePlay ;
+            var canZoom = IsShip || IsLobby || IsFreePlay ;
 
-            if (!canZoom || !Utils.CanSeeOthersRole()|| XtremeGameData.GameStates.IsMeeting || !XtremeGameData.GameStates.IsCanMove || InGameRoleInfoMenu.Showing)
+            if (!canZoom || !CanSeeOthersRole()|| IsMeeting || !IsCanMove || InGameRoleInfoMenu.Showing)
             {
                 Flag.Run(() => { SetZoomSize(reset: true); }, "Zoom");
                 return;
@@ -33,8 +32,8 @@ public static class Zoom
 
             if (Input.mouseScrollDelta.y < 0)
             {
-                if (XtremeGameData.GameStates.IsDead || XtremeGameData.GameStates.IsFreePlay ||
-                    DebugModeManager.AmDebugger || XtremeGameData.GameStates.IsLobby || Main.GodMode.Value)
+                if (IsDead || IsFreePlay ||
+                    DebugModeManager.AmDebugger || IsLobby || Main.GodMode.Value)
                 {
                     if (Camera.main.orthographicSize < 18.0f)
                     {
@@ -56,7 +55,7 @@ public static class Zoom
             Camera.main.orthographicSize = 3.0f;
             HudManager.Instance.UICamera.orthographicSize = 3.0f;
             HudManager.Instance.Chat.transform.localScale = Vector3.one;
-            if (XtremeGameData.GameStates.IsMeeting) MeetingHud.Instance.transform.localScale = Vector3.one;
+            if (IsMeeting) MeetingHud.Instance.transform.localScale = Vector3.one;
         }
         else
         {

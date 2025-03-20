@@ -62,16 +62,16 @@ public static class InGameRoleInfoMenu
         builder.AppendFormat("<size={0}>\n", BlankLineSize);
         // 职业名
         var role = player.Data.Role.Role;
-        builder.AppendFormat("<size={0}>{1}", FirstHeaderSize, Utils.GetRoleName(role).Color(Utils.GetRoleColor(role)));
+        builder.AppendFormat("<size={0}>{1}", FirstHeaderSize, GetRoleName(role).Color(GetRoleColor(role)));
         // 职业阵营 / 原版职业
         var roleTeam = player.IsImpostor()? "Impostor":"Crewmate";
         builder.AppendFormat("<size={0}> ({1})\n", BodySize, GetString($"Type{roleTeam}"));
         builder.AppendFormat("<size={0}>{1}\n", BodySize, player?.GetRoleType().GetRoleInfoForVanilla(true) ?? "");
         RoleInfoTMP.text = builder.ToString();
         var HnSPrefix = "";
-        if (!XtremeGameData.GameStates.IsNormalGame && player.IsAlive())
+        if (!IsNormalGame && player.IsAlive())
             HnSPrefix = "HnS";
-        RoleRoleIllustrationSP.sprite = Utils.LoadSprite($"CI_{HnSPrefix + role}.png", 320f);
+        RoleRoleIllustrationSP.sprite = LoadSprite($"CI_{HnSPrefix + role}.png", 320f);
     }
 
     public static void Show()

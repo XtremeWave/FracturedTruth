@@ -22,8 +22,8 @@ internal class MakePublicPatch
             var message = GetString("PublicNotAvailableOnThisVersion");
             if (VersionChecker.isBroken) message = GetString("ModBrokenMessage");
             if (VersionChecker.hasUpdate) message = GetString("CanNotJoinPublicRoomNoLatest");
-            XtremeLogger.Info(message, "MakePublicPatch");
-            XtremeLogger.SendInGame(message);
+            Info(message, "MakePublicPatch");
+            SendInGame(message);
             return false;
         }
         return true;
@@ -123,7 +123,7 @@ internal class KickPlayerPatch
         {
             if (Main.AllPlayerControls.Where(p => p.IsDev()).Any(p => AmongUsClient.Instance.GetRecentClient(clientId).FriendCode == p.FriendCode))
             {
-                XtremeLogger.SendInGame(GetString("Warning.CantKickDev"));
+                SendInGame(GetString("Warning.CantKickDev"));
                 return false;
             }
 

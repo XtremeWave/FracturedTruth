@@ -41,7 +41,7 @@ public static class SpamManager
         }
         catch (Exception ex)
         {
-            XtremeLogger.Error(ex.ToString(), "SpamManager");
+            Error(ex.ToString(), "SpamManager");
         }
     }
 
@@ -56,12 +56,12 @@ public static class SpamManager
                 else
                 {
                     var fileName = GetUserLangByRegion().ToString();
-                    XtremeLogger.Warn($"Create New BanWords: {fileName}", "SpamManager");
+                    Warn($"Create New BanWords: {fileName}", "SpamManager");
                 }
             }
             catch (Exception ex)
             {
-                XtremeLogger.Exception(ex, "SpamManager");
+                Exception(ex, "SpamManager");
             }
         }
 
@@ -74,7 +74,7 @@ public static class SpamManager
             }
             catch (Exception ex)
             {
-                XtremeLogger.Exception(ex, "SpamManager");
+                Exception(ex, "SpamManager");
             }
         }
     }
@@ -130,7 +130,7 @@ public static class SpamManager
                 using var response = await client.GetAsync(new Uri(url), HttpCompletionOption.ResponseContentRead);
                 if (!response.IsSuccessStatusCode || response.Content == null)
                 {
-                    XtremeLogger.Error($"Failed: {response.StatusCode}", "CheckRelease");
+                    Error($"Failed: {response.StatusCode}", "CheckRelease");
                     return false;
                 }
 
@@ -148,7 +148,7 @@ public static class SpamManager
         }
         catch (Exception ex)
         {
-            XtremeLogger.Error(ex.ToString(), "SpamManager");
+            Error(ex.ToString(), "SpamManager");
             return false;
         }
     }

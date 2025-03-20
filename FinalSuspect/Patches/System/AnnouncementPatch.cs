@@ -7,7 +7,6 @@ using System.Text.RegularExpressions;
 using AmongUs.Data.Player;
 using Assets.InnerNet;
 using FinalSuspect.Helpers;
-using FinalSuspect.Modules.Core.Game;
 using FinalSuspect.Modules.Resources;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using UnityEngine;
@@ -85,11 +84,11 @@ public class ModNewsHistory
 
         mn.Lang = langId;
         mn.Text = text;
-        XtremeLogger.Info($"Number:{mn.Number}", "ModNews");
-        XtremeLogger.Info($"Title:{mn.Title}", "ModNews");
-        XtremeLogger.Info($"SubTitle:{mn.SubTitle}", "ModNews");
-        XtremeLogger.Info($"ShortTitle:{mn.ShortTitle}", "ModNews");
-        XtremeLogger.Info($"Date:{mn.Date}", "ModNews");
+        Info($"Number:{mn.Number}", "ModNews");
+        Info($"Title:{mn.Title}", "ModNews");
+        Info($"SubTitle:{mn.SubTitle}", "ModNews");
+        Info($"ShortTitle:{mn.ShortTitle}", "ModNews");
+        Info($"Date:{mn.Date}", "ModNews");
         return mn;
     }
 
@@ -116,7 +115,7 @@ public static bool SetModAnnouncements(PlayerAnnouncementData __instance, [Harmo
                     }
                     catch (Exception ex)
                     {
-                        XtremeLogger.Error($"Failed to load mod news from file {file}: {ex}","");
+                        Error($"Failed to load mod news from file {file}: {ex}","");
                     }
                 }
             }
@@ -172,11 +171,11 @@ public static bool SetModAnnouncements(PlayerAnnouncementData __instance, [Harmo
     }
     catch (Exception ex)
     {
-        XtremeLogger.Error($"Exception in SetModAnnouncements: {ex}", "");
+        Error($"Exception in SetModAnnouncements: {ex}", "");
         return true;
     }
 }   
-    static Sprite TeamLogoSprite = Utils.LoadSprite("TeamLogo.png", 1000f);
+    static Sprite TeamLogoSprite = LoadSprite("TeamLogo.png", 1000f);
     
     //YuEzTool
     [HarmonyPatch(typeof(AnnouncementPanel), nameof(AnnouncementPanel.SetUp)), HarmonyPostfix]

@@ -7,19 +7,15 @@ using FinalSuspect.Modules.LogHandler;
 namespace FinalSuspect.Attributes;
 
 [AttributeUsage(AttributeTargets.Method)]
-public abstract class InitializerAttribute<T> : Attribute
+public abstract class InitializerAttribute<T>(InitializePriority priority) : Attribute
 {
     /// <summary>所有初始化方法</summary>
     private static MethodInfo[] allInitializers;
-    private static LogHandler logger = XtremeLogger.Handler(nameof(InitializerAttribute<T>));
+    private static LogHandler logger = Handler(nameof(InitializerAttribute<T>));
 
     public InitializerAttribute() : this(InitializePriority.Normal) { }
-    public InitializerAttribute(InitializePriority priority)
-    {
-        this.priority = priority;
-    }
 
-    private readonly InitializePriority priority = InitializePriority.Normal;
+    private readonly InitializePriority priority = priority;
     /// <summary>在初始化时调用的方法</summary>
     private MethodInfo targetMethod;
 

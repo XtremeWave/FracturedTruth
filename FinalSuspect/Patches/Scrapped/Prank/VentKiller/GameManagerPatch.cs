@@ -1,4 +1,4 @@
-namespace FinalSuspect.Patches.Prank.VentKiller;
+//namespace FinalSuspect.Patches.Prank.VentKiller;
 
 // SpecialImpostor
 /*[HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]

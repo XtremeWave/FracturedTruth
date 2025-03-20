@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
 using FinalSuspect.Helpers;
-using FinalSuspect.Modules.Core.Game;
 using FinalSuspect.Modules.Resources;
 using FinalSuspect.Patches.Game_Vanilla;
 using FinalSuspect.Templates;
@@ -47,7 +46,7 @@ internal class PingTrackerUpdatePatch
         CreditTextCredential.text = sb.ToString();
         if (
             (GameSettingMenu.Instance?.gameObject?.active ?? false) 
-            || XtremeGameData.GameStates.IsMeeting 
+            || IsMeeting 
             || (FriendsListUI.Instance?.gameObject?.active ?? false)
             || (HudManagerPatch.showHideButton?.Button?.gameObject?.active ?? false) && Main.ShowResults.Value)
             CreditTextCredential.text = "";
@@ -66,7 +65,7 @@ internal class PingTrackerUpdatePatch
         __instance.text.text = 
             $"<color={color}>{GetString("Ping")}:{ping} <size=60%>ms</size></color>" + "  " 
             + $"<color=#00a4ff>{GetString("FrameRate")}:{fps} <size=60%>FPS</size></color>" +
-            $"{"    <color=#FFDCB1>◈</color>" + (XtremeGameData.GameStates.IsOnlineGame ? ServerName : GetString("Local"))}";
+            $"{"    <color=#FFDCB1>◈</color>" + (IsOnlineGame ? ServerName : GetString("Local"))}";
     }
 }
 [HarmonyPatch(typeof(VersionShower), nameof(VersionShower.Start))]
@@ -143,7 +142,7 @@ public class VersionShowerStartPatch
             layer = 5,
             name = "Team Logo"
         };
-        TeamLogo.AddComponent<SpriteRenderer>().sprite = Utils.LoadSprite("TeamLogo.png", 400f);
+        TeamLogo.AddComponent<SpriteRenderer>().sprite = LoadSprite("TeamLogo.png", 400f);
         TeamLogo.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 120);
         TeamLogo.transform.SetParent(VisitText.transform.parent);
         TeamLogo.transform.localPosition = new Vector3(-4.72f, -2.5f, 0f);
@@ -153,7 +152,7 @@ public class VersionShowerStartPatch
             layer = 5,
             name = "Mod Logo"
         };
-        ModLogo.AddComponent<SpriteRenderer>().sprite = Utils.LoadSprite("FinalSuspect-Logo.png", 250f);
+        ModLogo.AddComponent<SpriteRenderer>().sprite = LoadSprite("FinalSuspect-Logo.png", 250f);
         ModLogo.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 120);
         ModLogo.transform.localPosition = new Vector3(3.7f, -2.6f, 0f);
         ModLogo.SetActive(false);
@@ -263,12 +262,12 @@ internal class TitleLogoPatch
 
         if (!(ModStamp = GameObject.Find("ModStamp"))) return;
         ModStamp.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
-        ModStamp.GetComponent<SpriteRenderer>().sprite = Utils.LoadSprite("ModStamp.png", 100f);
+        ModStamp.GetComponent<SpriteRenderer>().sprite = LoadSprite("ModStamp.png", 100f);
 
         FinalSuspect_Background = new GameObject("FinalSuspect Background");
         FinalSuspect_Background.transform.position = new Vector3(0, 0, 520f);
         var bgRenderer = FinalSuspect_Background.AddComponent<SpriteRenderer>();
-        bgRenderer.sprite = Utils.LoadSprite("FinalSuspect-BG-MiraHQ.jpg", 179f);
+        bgRenderer.sprite = LoadSprite("FinalSuspect-BG-MiraHQ.jpg", 179f);
 
         if (!(Ambience = GameObject.Find("Ambience"))) return;
         if (!(Starfield = Ambience.transform.FindChild("starfield").gameObject)) return;
@@ -298,7 +297,7 @@ internal class TitleLogoPatch
         CloseRightButton.transform.localScale = new(1f, 1f, 1f);
         CloseRightButton.AddComponent<BoxCollider2D>().size = new(0.6f, 1.5f);
         var closeRightSpriteRenderer = CloseRightButton.AddComponent<SpriteRenderer>();
-        closeRightSpriteRenderer.sprite = Utils.LoadSprite("RightPanelCloseButton.png", 100f);
+        closeRightSpriteRenderer.sprite = LoadSprite("RightPanelCloseButton.png", 100f);
         closeRightSpriteRenderer.color = new(1f, 0.78f, 0.9f, 1f);
         var closeRightPassiveButton = CloseRightButton.AddComponent<PassiveButton>();
         closeRightPassiveButton.OnClick = new();
@@ -330,7 +329,7 @@ internal class TitleLogoPatch
         AULogo.transform.localScale = new Vector3(0.66f, 0.67f, 1f);
         AULogo.transform.position += new Vector3(0f, 0.1f, 0f);
         var logoRenderer = AULogo.GetComponent<SpriteRenderer>();
-        logoRenderer.sprite = Utils.LoadSprite("FinalSuspect-Logo.png");
+        logoRenderer.sprite = LoadSprite("FinalSuspect-Logo.png");
 
         if (!(BottomButtonBounds = GameObject.Find("BottomButtonBounds"))) return;
         BottomButtonBounds.transform.localPosition -= new Vector3(0f, 0.1f, 0f);
@@ -346,7 +345,7 @@ internal class ModManagerLateUpdatePatch
         if (!firstRun)
         {
             OptionsMenuBehaviourStartPatch.SetCursor();
-            __instance.ModStamp.sprite = Utils.LoadSprite("ModStamp.png", 100f);
+            __instance.ModStamp.sprite = LoadSprite("ModStamp.png", 100f);
             firstRun = true;
         }
         LateTask.Update(Time.deltaTime);

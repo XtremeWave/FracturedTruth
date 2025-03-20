@@ -41,35 +41,37 @@ public class ResourcesDownloader
                 case 1:
                     remoteType = RemoteType.Gitee;
                     break;
-
+                case 2:
+                    remoteType = RemoteType.Github;
+                    break;
             }
 
         var url = GetFile(fileType, remoteType, file);
 
         if (!IsValidUrl(url))
         {
-            XtremeLogger.Error($"Invalid URL: {url}", "Download Resources", false);
+            Error($"Invalid URL: {url}", "Download Resources", false);
             return false;
         }
 
         File.Create(DownloadFileTempPath).Close();
         
-        XtremeLogger.Msg("Start Downloading from: " + url, "Download Resources");
-        XtremeLogger.Msg("Saving file to: " + filePath, "Download Resources");
+        Msg("Start Downloading from: " + url, "Download Resources");
+        Msg("Saving file to: " + filePath, "Download Resources");
 
         try
         {
             using var client = new HttpClientDownloadWithProgress(url, DownloadFileTempPath);
             await client.StartDownload();
             Thread.Sleep(100);
-            XtremeLogger.Info($"Succeed in {url}", "Download Resources");
+            Info($"Succeed in {url}", "Download Resources");
             File.Delete(filePath);
             File.Move(DownloadFileTempPath, filePath);
             return true;
         }
         catch (Exception ex)
         {
-            XtremeLogger.Error($"Failed to download\n{ex.Message}", "Download Resources", false);
+            Error($"Failed to download\n{ex.Message}", "Download Resources", false);
             File.Delete(DownloadFileTempPath);
             retrytimes++;
             if (retrytimes < 2) 
@@ -85,7 +87,7 @@ public class ResourcesDownloader
     /*private static void OnDownloadProgressChanged(long? totalFileSize, long totalBytesDownloaded, double? progressPercentage)
     {
         var msg = $"\n{totalFileSize / 1000}KB / {totalBytesDownloaded / 1000}KB  -  {(int)progressPercentage}%";
-        XtremeLogger.Info(msg, "Download Resources");
+        Info(msg, "Download Resources");
     }*/
     public static string GetMD5HashFromFile(string fileName)
     {
@@ -98,7 +100,7 @@ public class ResourcesDownloader
         }
         catch (Exception ex)
         {
-            XtremeLogger.Exception(ex, "GetMD5HashFromFile");
+            Exception(ex, "GetMD5HashFromFile");
             return "";
         }
     }

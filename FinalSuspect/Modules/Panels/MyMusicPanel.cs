@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using FinalSuspect.Helpers;
+using FinalSuspect.Modules.SoundInterface;
 using TMPro;
 using UnityEngine;
 using static FinalSuspect.Modules.SoundInterface.CustomSoundsManager;
 using static FinalSuspect.Modules.SoundInterface.XtremeMusic;
 using Object = UnityEngine.Object;
 
-namespace FinalSuspect.Modules.SoundInterface;
+namespace FinalSuspect.Modules.Panels;
 
 public static class MyMusicPanel
 {
@@ -225,7 +226,7 @@ public static class MyMusicPanel
             passiveButton.OnClick.AddListener(new Action(OnClick));
             void OnClick()
             {
-                XtremeLogger.Info($"Try To Play {filename}:{path}", "MyMusicPanel");
+                Info($"Try To Play {filename}:{path}", "MyMusicPanel");
                 Play(audio);
             }
             Items.Add(ToggleButton.gameObject);
