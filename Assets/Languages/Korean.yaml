@@ -93,6 +93,7 @@ CannotUnloadDuringGame: "게임 중에는 원래 버전으로 전환할 수 없�
 Cancel: "취소"
 Unload: "アン로ード"
 DumpLog: "로그 출력"
+ClearAutoLogs: "清空自动日志"
 SoundOptions: "내 음악"
 AudioManagementOptions: "오디오 관리"
 OnlyAvailableInMainMenu: "메인 메뉴에서만 사용 가능"

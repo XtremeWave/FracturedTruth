@@ -93,6 +93,7 @@ CannotUnloadDuringGame: "Não é possível alternar para a versão original dura
 Cancel: "Cancelar"
 Unload: "Desativar"
 DumpLog: "Gerar Log"
+ClearAutoLogs: "清空自动日志"
 SoundOptions: "Minhas Músicas"
 AudioManagementOptions: "Gerenciamento de Áudio"
 OnlyAvailableInMainMenu: "Somente Disponível no Menu Principal"

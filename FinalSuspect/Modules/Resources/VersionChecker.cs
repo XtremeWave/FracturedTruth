@@ -120,6 +120,7 @@ public static class VersionChecker
             if (url.StartsWith("file:///"))
             {
                 //读取文件不应该用同步调用异步，否则会堵塞主线程
+                //可这是针对Debug的
                 result = File.ReadAllText(url[8..]);
             }
             else
@@ -128,11 +129,12 @@ public static class VersionChecker
                 client.DefaultRequestHeaders.Add("User-Agent", "FinalSuspect Updater");
                 client.DefaultRequestHeaders.Add("Referer", "api.xtreme.net.cn");
                 using var response = await client.GetAsync(new Uri(url), HttpCompletionOption.ResponseContentRead);
-                if (!response.IsSuccessStatusCode || response.Content == null)
+                if (!response.IsSuccessStatusCode)
                 {
                     XtremeLogger.Error($"Failed: {response.StatusCode}", "CheckRelease");
                     return false;
                 }
+                
                 result = await response.Content.ReadAsStringAsync();
                 result = result.Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
             }

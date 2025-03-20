@@ -93,6 +93,7 @@ CannotUnloadDuringGame: "Ní féidir athrú go dtí an leagan bunaidh le linn an
 Cancel: "Cealaigh"
 Unload: "Dílódáil"
 DumpLog: "Aschur Log"
+ClearAutoLogs: "清空自动日志"
 SoundOptions: "Mo Cheol"
 AudioManagementOptions: "Bainistíocht Fuaime"
 OnlyAvailableInMainMenu: "Ar fáil ach amháin sa Phríomh-Roghchlár"

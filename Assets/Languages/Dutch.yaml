@@ -93,6 +93,7 @@ CannotUnloadDuringGame: "Kan niet overschakelen naar oorspronkelijke versie tijd
 Cancel: "Annuleren"
 Unload: "Ontladen"
 DumpLog: "Log wegschrijven"
+ClearAutoLogs: "清空自动日志"
 SoundOptions: "Mijn Muziek"
 AudioManagementOptions: "Geluidbeheer"
 OnlyAvailableInMainMenu: "Alleen beschikbaar in hoofdmenu"

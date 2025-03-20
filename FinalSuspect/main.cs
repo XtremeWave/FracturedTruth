@@ -28,7 +28,7 @@ public class Main : BasePlugin
     // == 程序基本设定 / Program Config ==
     public const string ModName = "Final Suspect";
     public const string ForkId = "Final Suspect";
-    public const string PluginVersion = "1.1.1";
+    public const string PluginVersion = "1.1.2";
     public const string PluginGuid = "cn.finalsuspect.xtremewave";
     public const int PluginCreation = 0;
 
@@ -52,7 +52,7 @@ public class Main : BasePlugin
             var day = currentDate.Day.ToString("D2");    
             return $"{year}{month}{day}";
 #else
-            return "20240309";
+            return "20250317";
 #endif
         }
     }
@@ -68,7 +68,7 @@ public class Main : BasePlugin
     /// Preview: 预览/预发行版
     /// Scrapter: 废弃版
     /// </summary>
-    private const VersionTypes DisplayedVersion_TestText = VersionTypes.Alpha;
+    private const VersionTypes DisplayedVersion_TestText = VersionTypes.Release;
 
     private const int DisplayedVersion_TestCreation = 7;
     

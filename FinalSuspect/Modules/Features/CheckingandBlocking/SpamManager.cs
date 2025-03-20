@@ -12,8 +12,8 @@ namespace FinalSuspect.Modules.Features.CheckingandBlocking;
 
 public static class SpamManager
 {
-    private static readonly string BANEDWORDS_FILE_PATH = LocalPath_Data + "BanWords.txt";
-    public static readonly string DENY_NAME_LIST_PATH = GetBanFilesPath("DenyName.txt");
+    private static readonly string BANEDWORDS_FILE_PATH = LocalPath_Data + "BanWords.json";
+    public static readonly string DENY_NAME_LIST_PATH = GetBanFilesPath("DenyName.json");
     public static List<string> BanWords = [];
 
     static List<string> Targets = new()
@@ -51,7 +51,8 @@ public static class SpamManager
         {
             try
             {
-                if (File.Exists(@"./BanWords.txt")) File.Move(@"./BanWords.txt", BANEDWORDS_FILE_PATH);
+                if (File.Exists(@"./BanWords.json")) 
+                    File.Move(@"./BanWords.json", BANEDWORDS_FILE_PATH);
                 else
                 {
                     var fileName = GetUserLangByRegion().ToString();
@@ -68,8 +69,8 @@ public static class SpamManager
         {
             try
             {
-                if (!Directory.Exists(@"Final Suspect_Data")) Directory.CreateDirectory(@"Final Suspect_Data");
-                if (File.Exists(@"./DenyName.txt")) File.Move(@"./DenyName.txt", BANEDWORDS_FILE_PATH);
+                if (File.Exists(@"./DenyName.json")) 
+                    File.Move(@"./DenyName.json", DENY_NAME_LIST_PATH);
             }
             catch (Exception ex)
             {

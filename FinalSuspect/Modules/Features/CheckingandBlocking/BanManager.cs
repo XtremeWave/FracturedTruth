@@ -14,7 +14,7 @@ namespace FinalSuspect.Modules.Features.CheckingandBlocking;
 public static class BanManager
 {
     
-    private static readonly string BAN_LIST_PATH = GetBanFilesPath("BanList.txt");
+    private static readonly string BAN_LIST_PATH = GetBanFilesPath("BanList.json");
     public static List<string> FACList = [];
     public static string GetHashedPuid(this PlayerControl player)
         => player.GetClient().GetHashedPuid();

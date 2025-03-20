@@ -93,6 +93,7 @@ CannotUnloadDuringGame: "Impossible de basculer en version d'origine pendant le 
 Cancel: "Annuler"
 Unload: "Décharger"
 DumpLog: "Générer un journal"
+ClearAutoLogs: "清空自动日志"
 SoundOptions: "Mes musiques"
 AudioManagementOptions: "Gestion audio"
 OnlyAvailableInMainMenu: "Disponible uniquement dans le menu principal"

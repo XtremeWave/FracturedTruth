@@ -93,6 +93,7 @@ CannotUnloadDuringGame: "Non è possibile passare alla versione originale durant
 Cancel: "Annulla"
 Unload: "Disattiva"
 DumpLog: "Esporta Log"
+ClearAutoLogs: "清空自动日志"
 SoundOptions: "La mia musica"
 AudioManagementOptions: "Gestione audio"
 OnlyAvailableInMainMenu: "Disponibile solo nel menu principale"
