@@ -8,7 +8,7 @@
 <img src="https://badgen.net/github/tag/XtremeWave/FinalSuspect" alt="LatestTag">
 <img src="https://badgen.net/github/stars/XtremeWave/FinalSuspect/" alt="Stars">
 
-[英文](README.md) | [简体中文]
+[English](README.md) | [简体中文]
 
 </div>
 
