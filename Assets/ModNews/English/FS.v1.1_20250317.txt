@@ -1,0 +1,47 @@
+#Number:100004
+#Title:Final Suspect v1.1
+#SubTitle:★★★★ Emergency Fix ★★★★
+#ShortTitle:★ Emergency Fix v1.1
+#Date:2025-03-17T00:00:00Z
+#-----------------------------
+# English
+Still new version
+
+## Base
+- Based on Among Us v2024.3.25
+- Based on BepInEx v6.0.0-be.733
+
+## Summary of Updates
+- Fixes: 3
+- Optimizations: 1
+- Changes: 0
+- Additions: 2
+- Rebuilds: 0
+- Deletions: 0
+
+## Team Contributors
+- [Slok]("https://github.com/Slok7565/")
+
+## Contributors
+- [Nonalus]("https://github.com/Reborn5537/")
+(PR#24)
+- [LezaiYa]("https://github.com/NewLezaiYa")
+(PR#34), etc.
+
+## Fixes
+- Fixed issue where update logs for v1.1_20250216 couldn't be downloaded/loaded properly
+  Fixed by: Slok
+  Reported by: QingFeng
+- Fixed issue where Simplified Chinese players couldn't retrieve remote resources
+  Fixed by: Slok
+  Reported by: Qingfeng
+
+## Optimizations
+- Moved banword storage to remote server
+  Implemented by: Slok
+
+## Additions
+- Online Search Room Timer
+  Implemented by: Nonalus
+- Clear Auto Logs
+  Implemented by: Slok
