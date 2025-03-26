@@ -70,7 +70,7 @@ public class LoadPatch
         "Dutch.yaml",
         "English.yaml",
         "Filipino.yaml",
-        "Franch.yaml",
+        "French.yaml",
         "German.yaml",
         "Irish.yaml",
         "Italian.yaml",
