@@ -17,9 +17,9 @@ public static class MyMusicPanel
     public static List<GameObject> Items { get; private set; }
     public static OptionsMenuBehaviour OptionsMenuBehaviourNow { get; private set; }
 
-    public static int currentPage { get; private set; } = 1;
-    public static int itemsPerPage => 7;
-    public static int totalPageCount => (musics.Count + itemsPerPage - 1) / itemsPerPage;
+    public static int CurrentPage { get; private set; } = 1;
+    public static int ItemsPerPage => 7;
+    public static int TotalPageCount => (musics.Count + ItemsPerPage - 1) / ItemsPerPage;
 
     private static int numItems;
     public static int PlayMode;
@@ -35,7 +35,7 @@ public static class MyMusicPanel
             OptionsMenuBehaviourNow = optionsMenuBehaviour;
         if (CustomBackground == null)
         {
-            currentPage = 1;
+            CurrentPage = 1;
             numItems = 0;
             PlayMode = 0;
             CustomBackground = Object.Instantiate(optionsMenuBehaviour.Background, optionsMenuBehaviour.transform);
@@ -98,11 +98,11 @@ public static class MyMusicPanel
         nextPagePassiveButton.OnClick = new();
         nextPagePassiveButton.OnClick.AddListener(new Action(() =>
         {
-            currentPage++;
+            CurrentPage++;
 
-            if (currentPage > totalPageCount)
+            if (CurrentPage > TotalPageCount)
             {
-                currentPage = 1;
+                CurrentPage = 1;
             }
             
             RefreshTagList() ;
@@ -138,12 +138,12 @@ public static class MyMusicPanel
         Items = [];
         numItems = 0;
         var optionsMenuBehaviour = OptionsMenuBehaviourNow;
-        var startIndex = (currentPage - 1) * itemsPerPage;
+        var startIndex = (CurrentPage - 1) * ItemsPerPage;
 
         var count = 0;
         foreach (var audio in musics.Skip(startIndex))
         {
-            if (count >= itemsPerPage)
+            if (count >= ItemsPerPage)
             {
                 break; 
             }
