@@ -59,7 +59,7 @@ public static class MatchMakerGameButtonSetGamePatch
                 break;
             case Platforms.StandaloneWin10:
                 color = "#FFF88D";
-                name = "Win-10";
+                name = GetString("MicrosoftStore");
                 break;
             case Platforms.StandaloneItch:
                 color = "#E35F5F";
