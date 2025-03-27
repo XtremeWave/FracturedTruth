@@ -1,75 +1,92 @@
-using System.Collections.Generic;
+using System;
+using System.Linq;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace FinalSuspect.Patches.Game_Vanilla;
-//From: https://github.com/EnhancedNetwork/TownofHost-Enhanced/blob/main/Patches/RegionMenuPatch.cs
 
 [HarmonyPatch]
-public static class ServerDropDownPatch
+internal class ServerDropdownPatch
 {
-    [HarmonyPatch(typeof(ServerDropdown), nameof(ServerDropdown.FillServerOptions))]
-    [HarmonyPostfix]
-    public static void AdjustButtonPositions(ServerDropdown __instance)
+    [HarmonyPatch(typeof(ServerDropdown))]
+    [HarmonyPatch(nameof(ServerDropdown.FillServerOptions))]
+    [HarmonyPrefix]
+    internal static bool FillServerOptions_Prefix(ServerDropdown __instance)
     {
-        List<ServerListButton> allButtons = [.. __instance.GetComponentsInChildren<ServerListButton>()];
+        // 调整背景板
+        __instance.background.size = new Vector2(5, 1);
 
-        if (allButtons.Count == 0)
-            return;
+        int num = 0;
+        int column = 0;
+        
+        const int maxPerColumn = 6;     // 每列最大按钮数
+        const float columnWidth = 2.8f; // 列宽度
+        const float buttonSpacing = 0.5f; // 按钮间距
 
-        // 按钮间的垂直间距，可根据实际需求调整
-        float buttonSpacing = 0.6f;
-        // 列之间的水平间距，可根据实际需求调整
-        float columnSpacing = 4.25f;
+        // 获取可用服务器
+        var regions = DestroyableSingleton<ServerManager>.Instance.AvailableRegions
+            .OrderBy(ServerManager.DefaultRegions.Contains)
+            .ToList();
 
-        if (SceneManager.GetActiveScene().name == "FindAGame")
+        int totalColumns = Mathf.Max(1, Mathf.CeilToInt(regions.Count / (float)maxPerColumn));
+        int rowsInLastColumn = regions.Count % maxPerColumn;
+        int maxRows = (regions.Count > maxPerColumn) ? maxPerColumn : regions.Count;
+
+        foreach (IRegionInfo regionInfo in regions)
         {
-            const int buttonsPerColumn = 7;
-            _ = (allButtons.Count + buttonsPerColumn - 1) / buttonsPerColumn;
-
-            Vector3 startPosition = new(0, -buttonSpacing, 0);
-
-            for (int i = 0; i < allButtons.Count; i++)
+            if (DestroyableSingleton<ServerManager>.Instance.CurrentRegion.Name == regionInfo.Name)
             {
-                int col = i / buttonsPerColumn;
-                int row = i % buttonsPerColumn;
-                allButtons[i].transform.localPosition = startPosition + new Vector3(col * columnSpacing, -row * buttonSpacing, 0f);
+                __instance.defaultButtonSelected = __instance.firstOption;
+                __instance.firstOption.ChangeButtonText(DestroyableSingleton<TranslationController>.Instance.GetStringWithDefault(
+                    regionInfo.TranslateName,
+                    regionInfo.Name,
+                    new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
+                continue;
+            }
+
+            IRegionInfo region = regionInfo;
+            ServerListButton serverListButton = __instance.ButtonPool.Get<ServerListButton>();
+
+            float xPos = (column - (totalColumns - 1) / 2f) * columnWidth;
+            float yPos = __instance.y_posButton - buttonSpacing * (num % maxPerColumn);
+
+            // 设置按钮位置
+            serverListButton.transform.localPosition = new Vector3(xPos, yPos, -1f);
+            serverListButton.transform.localScale = Vector3.one;
+
+            // 设置按钮文本
+            serverListButton.Text.text = DestroyableSingleton<TranslationController>.Instance.GetStringWithDefault(
+                regionInfo.TranslateName,
+                regionInfo.Name,
+                new Il2CppReferenceArray<Il2CppSystem.Object>(0));
+
+            serverListButton.Text.ForceMeshUpdate(false, false);
+
+            serverListButton.Button.OnClick.RemoveAllListeners();
+            serverListButton.Button.OnClick.AddListener((Action)(() => __instance.ChooseOption(region))); // 点击时选择对应区域
+
+            __instance.controllerSelectable.Add(serverListButton.Button);
+
+            num++;
+            if (num % maxPerColumn == 0)
+            {
+                column++;
             }
         }
-        else
-        {
-            const int buttonsInFirstColumn = 5;
 
-            int buttonsInSecondColumn = allButtons.Count - buttonsInFirstColumn;
+        // 背景板最终大小
+        float backgroundHeight = 1.2f + buttonSpacing * (maxRows - 1);
+        float backgroundWidth = (totalColumns > 1) ?
+        (columnWidth * (totalColumns - 1) + __instance.background.size.x) :
+        __instance.background.size.x;
 
-            if (buttonsInFirstColumn <= 0 || buttonsInSecondColumn <= 0)
-            {
-                for (int i = 0; i < allButtons.Count; i++)
-                {
-                    allButtons[i].transform.localPosition = new Vector3(0, -i * buttonSpacing, 0);
-                }
-                return;
-            }
+        // 居中背景板
+        __instance.background.transform.localPosition = new Vector3(
+            0f,
+        __instance.initialYPos - (backgroundHeight - 1.2f) / 2f,
+            0f);
+        __instance.background.size = new Vector2(backgroundWidth, backgroundHeight);
 
-            Vector3 startPosition = new(0, -buttonSpacing, 0);
-
-            for (int i = 0; i < buttonsInFirstColumn; i++)
-            {
-                allButtons[i].transform.localPosition = startPosition + new Vector3(0, -i * buttonSpacing, 0);
-            }
-
-            float secondColumnStartY = 0;
-            if (buttonsInSecondColumn > 1)
-            {
-                // Last button in second column should be at the same height as the last button in the first column
-                secondColumnStartY = -(buttonsInFirstColumn - buttonsInSecondColumn) * buttonSpacing;
-            }
-
-            for (int i = 0; i < buttonsInSecondColumn; i++)
-            {
-                int buttonIndex = buttonsInFirstColumn + i;
-                allButtons[buttonIndex].transform.localPosition = startPosition + new Vector3(columnSpacing, secondColumnStartY - i * buttonSpacing, 0);
-            }
-        }
+        return false;
     }
 }
