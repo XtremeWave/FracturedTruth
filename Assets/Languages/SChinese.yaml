@@ -287,7 +287,6 @@ LobbyTimeDisplayText: "存在时间"
 # 客户端平台 / Platform
 IPhone: "苹果"
 Android: "安卓"
-MicrosoftStore: "微软"
 
 # 延迟显示 / Ping Tracker
 Ping: "延迟"
