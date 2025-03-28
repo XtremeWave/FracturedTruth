@@ -58,8 +58,8 @@ public class LoadPatch
         "FS.v1.0_20250129.txt",
         "FeaturesIntroduction.v1.0.txt",
         "FS.v1.1_20250216.txt",
-        "FS.v1.1_20250317.txt",
-        "FeaturesIntroduction.v1.1.txt",
+        //"FS.v1.1_20250317.txt",
+        //"FeaturesIntroduction.v1.1.txt",
     ];
 
     private static List<string> remoteLanguageList =
@@ -525,6 +525,17 @@ public class LoadPatch
             if (!SkipLoadAnima) return;
             __instance.sceneChanger.AllowFinishLoadingScene();
             __instance.startedSceneLoad = true;
+        }
+    }
+    
+    [HarmonyPatch(typeof(LoadingBarManager), nameof(LoadingBarManager.ToggleLoadingBar))]
+    internal class LoadingBarManagerPatch
+    {
+        public static void Prefix(LoadingBarManager __instance, ref bool on)
+        {
+            on = false;
+            
+            //以后有用，暂时这样处理
         }
     }
 }
