@@ -61,18 +61,7 @@ class MMOnlineManagerStartPatch
         }
     }
 }
-[HarmonyPatch(typeof(SplashManager), nameof(SplashManager.Update))]
-internal class SplashLogoAnimatorPatch
-{
-    public static void Prefix(SplashManager __instance)
-    {
-        if (DebugModeManager.AmDebugger)
-        {
-            __instance.sceneChanger.AllowFinishLoadingScene();
-            __instance.startedSceneLoad = true;
-        }
-    }
-}
+
 [HarmonyPatch(typeof(EOSManager), nameof(EOSManager.IsAllowedOnline))]
 internal class RunLoginPatch
 {
