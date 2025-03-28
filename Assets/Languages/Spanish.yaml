@@ -93,7 +93,7 @@ CannotUnloadDuringGame: "No se puede cambiar a la versión original durante el j
 Cancel: "Cancelar"
 Unload: "Desactivar"
 DumpLog: "Exportar Log"
-ClearAutoLogs: "清空自动日志"
+ClearAutoLogs: "Borrar registro automático"
 SoundOptions: "Mi Música"
 AudioManagementOptions: "Gestión de Audio"
 OnlyAvailableInMainMenu: "Sólo disponible en el menú principal"

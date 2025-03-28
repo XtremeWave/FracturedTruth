@@ -1,0 +1,48 @@
+#Nummer:100004
+#Titel:Final Suspect v1.1
+#Subtitel:★★★★ Noodcorrectie ★★★★
+#KortTitel:★ Noodcorrectie v1.1
+#Datum:2025-03-17T00:00:00Z
+#-----------------------------
+# Dutch
+Nog steeds de nieuwe versie
+
+## Basis
+• Gebaseerd op Among Us v2025.3.25
+• Gebaseerd op BepInEx v6.0.0-be.733
+
+## Samenvatting van updates
+• Correcties: 3
+• Optimalisaties: 1
+• Wijzigingen: 0
+• Nieuwe functies: 2
+• Heropbouw: 0
+• Verwijderingen: 0
+
+## Hoofdteam
+• [Slok]("https://github.com/Slok7565/")
+
+## Bijdragers
+• [Nonalus]("https://github.com/Reborn5537/")
+(PR#24)
+• [LezaiYa]("https://github.com/NewLezaiYa")
+(PR#34), enz.
+
+## Correcties
+• Gecorrigeerd probleem met downloaden en laden van update-log v1.1_20250216
+• Gecorrigeerde fout bij ophalen van update-controle-inhoud voor Chinese vereenvoudigde spelers
+Opgelost door: LezaiYa
+Feedback: QingFeng
+• Gecorrigeerd probleem met externe resource-toegang voor Chinese vereenvoudigde spelers
+Opgelost door: Slok
+Feedback: QingFeng
+
+## Optimalisaties
+• Opslag van verboden woorden op afstand
+Gemaakt door: Slok
+
+## Nieuwe functies
+• Timer voor online kamerzoekopdrachten
+Gemaakt door: Nonalus
+• Automatische log-schoonmaak
+Gemaakt door: Slok

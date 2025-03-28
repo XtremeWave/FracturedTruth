@@ -93,7 +93,7 @@ CannotUnloadDuringGame: "ゲーム中は元のバージョンに切り替える�
 Cancel: "キャンセル"
 Unload: "アンロード"
 DumpLog: "ログを出力する"
-ClearAutoLogs: "清空自动日志"
+ClearAutoLogs: "自動ログをクリア"
 SoundOptions: "マイミュージック"
 AudioManagementOptions: "オーディオ管理"
 OnlyAvailableInMainMenu: "メインメニューでのみ使用可能です"

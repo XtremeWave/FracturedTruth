@@ -93,7 +93,7 @@ CannotUnloadDuringGame: "Нельзя переключиться на ориги
 Cancel: "Отмена"
 Unload: "Выгрузить"
 DumpLog: "Выгрузить лог"
-ClearAutoLogs: "清空自动日志"
+ClearAutoLogs: "Очистить автоматический лог"
 SoundOptions: "Моя музыка"
 AudioManagementOptions: "Управление аудио"
 OnlyAvailableInMainMenu: "Доступно только в главном меню"
