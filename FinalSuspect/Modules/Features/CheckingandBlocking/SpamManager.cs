@@ -16,12 +16,12 @@ public static class SpamManager
     public static readonly string DENY_NAME_LIST_PATH = GetBanFilesPath("DenyName.json");
     public static List<string> BanWords = [];
 
-    static List<string> Targets = new()
-    {
+    private static readonly List<string> Targets =
+    [
         "DenyName.json",
         "FACList.json",
         $"BanWords/{GetUserLangByRegion()}.json"
-    };
+    ];
     
     //[PluginModuleInitializer]
     public static void Init()
@@ -34,7 +34,7 @@ public static class SpamManager
             {
                 foreach (var url in GetInfoFileUrlList())
                 {
-                    if (!GetConfigInfo(url + "Assets/Configs/" + target).GetAwaiter().GetResult()) continue;
+                    if (!GetConfigInfo(url + "Assets/Configs/" + target, target).GetAwaiter().GetResult()) continue;
                     break;
                 }
             }
@@ -113,7 +113,7 @@ public static class SpamManager
         catch { }
     }
 
-    public static async Task<bool> GetConfigInfo(string url)
+    public static async Task<bool> GetConfigInfo(string url, string name)
     {
         try
         {
@@ -125,7 +125,7 @@ public static class SpamManager
             else
             {
                 using HttpClient client = new();
-                client.DefaultRequestHeaders.Add("User-Agent", "FinalSuspect Updater");
+                client.DefaultRequestHeaders.Add("User-Agent", "FinalSuspect" + name);
                 client.DefaultRequestHeaders.Add("Referer", "api.xtreme.net.cn");
                 using var response = await client.GetAsync(new Uri(url), HttpCompletionOption.ResponseContentRead);
                 if (!response.IsSuccessStatusCode || response.Content == null)
@@ -136,6 +136,8 @@ public static class SpamManager
 
                 result = await response.Content.ReadAsStringAsync();
                 result = result.Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
+                
+                client.Dispose();
             }
 
             var data = JObject.Parse(result);
@@ -144,6 +146,8 @@ public static class SpamManager
             ProcessDenyNames(data);
             ProcessFacList(data);
 
+            
+            await Task.Delay(100);
             return true;
         }
         catch (Exception ex)
@@ -190,7 +194,7 @@ public static class SpamManager
         // 处理空值或非数组类型
         if (token == null || token.Type != JTokenType.Array)
         {
-            return new List<string>();
+            return [];
         }
         
         var jarray = token.Cast<JArray>();

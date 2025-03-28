@@ -40,6 +40,7 @@ public static class PathManager
                 remoteBase = "api.xtreme.net.cn/download/FinalSuspect/Assets/";
                 break;
         }
+    
         return remoteBase;
     }
 
@@ -51,16 +52,19 @@ public static class PathManager
             _ => GetResourceFilesPath(fileType, file),
         };
     }
+    
     public static string GetLocalPath(LocalType localType)
     {
         if (localType == LocalType.BepInEx)
             return DependsSavePath;
         return  LocalPath_Data + localType + "/";
     }
+    
     public static string GetResourceFilesPath(FileType fileType, string file)
     {
         return GetLocalPath(LocalType.Resources) + fileType + "/" + file;
     }
+    
     public static string GetBanFilesPath(string file)
     {
         return GetLocalPath(LocalType.Ban) + file;
@@ -77,6 +81,7 @@ public static class PathManager
         {
             CheckAndCreate(GetLocalPath(LocalType.Resources) + $"ModNews/{lang}");
         }
+        
         CheckAndCreate(GetLocalPath(LocalType.Resources) + "Languages");
         CheckAndCreate(GetLocalPath(LocalType.Ban));
         CheckAndCreate(GetLocalPath(LocalType.Bypass), false);
@@ -115,9 +120,10 @@ public static class PathManager
 #endif
     };
     
-    public static IReadOnlyList<string> GetInfoFileUrlList()
+    public static IReadOnlyList<string> GetInfoFileUrlList(bool allowDesktop = false)
     {
         var list = URLs.ToList();
+        if (!allowDesktop && DebugModeManager.AmDebugger) list.RemoveAt(2);
         if (IsChineseUser) list.Reverse();
         return list;
     }

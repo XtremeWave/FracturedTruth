@@ -18,8 +18,12 @@ public static class VersionChecker
         public static void Postfix()
         {
             CustomPopup.Init();
-            if (firstStart) CheckForUpdate();
-            SpamManager.Init();
+            if (firstStart)
+            {
+                CheckForUpdate();
+                SpamManager.Init();
+            }
+            
             ModUpdater.SetUpdateButtonStatus();
             firstStart = false;
         }
@@ -59,19 +63,20 @@ public static class VersionChecker
         }
     }
 
-    public static void Retry()
+    private static void Retry()
     {
         retried++;
         CustomPopup.Show(GetString("updateCheckPopupTitle"), GetString("PleaseWait"), null);
         _ = new LateTask(CheckForUpdate, 0.3f, "Retry Check Update");
     }
-    public static void CheckForUpdate()
+
+    private static void CheckForUpdate()
     {
         ResolutionManager.SetResolution(1920, 1080, Screen.fullScreen);
         isChecked = false;
         ModUpdater.DeleteOldFiles();
 
-        foreach (var url in GetInfoFileUrlList())
+        foreach (var url in GetInfoFileUrlList(true))
         {
             if (!GetVersionInfo(url + "fs_info.json").GetAwaiter().GetResult()) continue;
             isChecked = true;
@@ -111,7 +116,8 @@ public static class VersionChecker
         }
         ModUpdater.SetUpdateButtonStatus();
     }
-    public static async Task<bool> GetVersionInfo(string url)
+
+    private static async Task<bool> GetVersionInfo(string url)
     {
         Msg(url, "CheckRelease");
         try
@@ -119,9 +125,7 @@ public static class VersionChecker
             string result;
             if (url.StartsWith("file:///"))
             {
-                //读取文件不应该用同步调用异步，否则会堵塞主线程
-                //可这是针对Debug的
-                result = File.ReadAllText(url[8..]);
+                result = await File.ReadAllTextAsync(url[8..]);
             }
             else
             {
