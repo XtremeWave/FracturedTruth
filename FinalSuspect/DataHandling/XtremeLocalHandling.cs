@@ -7,6 +7,7 @@ using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace FinalSuspect.DataHandling;
+
 [HarmonyPatch]
 public static class XtremeLocalHandling
 {
@@ -115,7 +116,7 @@ public static class XtremeLocalHandling
                     break;
                 case Platforms.StandaloneWin10:
                     color = "#FFF88D";
-                    name = "Win-10";
+                    name = GetString("MicrosoftStore");
                     break;
                 case Platforms.StandaloneItch:
                     color = "#E35F5F";
@@ -152,7 +153,6 @@ public static class XtremeLocalHandling
         {
             return "";
         }
-        
     }
 
     private static void GetGameText(this XtremePlayerData data, ref Color color, ref string roleText ,bool topswap)
@@ -179,8 +179,7 @@ public static class XtremeLocalHandling
         if (player.GetXtremeData().IsDisconnected)
         {
             color = Color.gray;
-        }
-            
+        } 
     }
 
     public static string CheckAndAppendText(this string toptext, string extratext)

@@ -9,7 +9,7 @@ namespace FinalSuspect.Patches.System;
 [HarmonyPatch(typeof(FindAGameManager), nameof(FindAGameManager.Update))]
 public static class FindAGameManagerUpdatePatch
 {
-    private static int buffer = 80;
+    private static int buffer = 600;
     private static GameObject RefreshButton;
     private static GameObject InputDisplayGlyph;
 
@@ -20,7 +20,7 @@ public static class FindAGameManagerUpdatePatch
         if ((InputDisplayGlyph = GameObject.Find("InputDisplayGlyph")) != null)
             InputDisplayGlyph.transform.localPosition = new Vector3(100f, 100f, 100f);
 
-        buffer--; if (buffer > 0) return; buffer = 80;
+        buffer--; if (buffer > 0) return; buffer = 600;
         __instance.RefreshList();
     }
 }
@@ -59,7 +59,7 @@ public static class MatchMakerGameButtonSetGamePatch
                 break;
             case Platforms.StandaloneWin10:
                 color = "#FFF88D";
-                name = "Win-10";
+                name = GetString("MicrosoftStore");
                 break;
             case Platforms.StandaloneItch:
                 color = "#E35F5F";
@@ -78,7 +78,6 @@ public static class MatchMakerGameButtonSetGamePatch
                 var halfLength = totalname.Length / 2;
                 var firstHalf = totalname.AsSpan(0, halfLength).ToString();
                 var secondHalf = totalname.AsSpan(halfLength).ToString();
-
                 RoomName = $"<color=#00B2FF>{firstHalf}</color><color=#ff0000>{secondHalf}</color>";
                 name = "<color=#00B2FF>Nintendo</color><color=#ff0000>Switch</color>";
                 break;
@@ -91,10 +90,9 @@ public static class MatchMakerGameButtonSetGamePatch
                 name = "PlayStation";
                 break;
         }
-        
+
         RoomName ??= $"<color={color}>{nameList[id]}</color>";
         var platforms = $"<color={color}>{name}</color>";
-
 
         game.HostName = $"<size=60%>{RoomName}</size>" +
                         $"<size=30%> ({Math.Max(0, 100 - game.Age / 100)}%)</size>" +

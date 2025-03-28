@@ -19,6 +19,7 @@ class LobbyInfoPanePatch
             AspectSize.transform.FindChild("MapImage").gameObject.GetComponent<SpriteRenderer>().sprite = LoadSprite("DleksBanner-Wordart.png", 160f);
     }
 }
+
 [HarmonyPatch]
 class LobbyViewSettingsPanePatch
 {

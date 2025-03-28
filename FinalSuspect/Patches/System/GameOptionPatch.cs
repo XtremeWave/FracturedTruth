@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 
 namespace FinalSuspect.Patches.System;
+
 [HarmonyPatch(typeof(RoleOptionSetting), nameof(RoleOptionSetting.UpdateValuesAndText))]
 class RoleOptionSettingPatch
 {

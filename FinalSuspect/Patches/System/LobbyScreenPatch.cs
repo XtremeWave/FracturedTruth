@@ -34,7 +34,6 @@ public sealed class LobbyJoinBind
     {
         InitializeTextObject(ref LastRoomText, ref lastRoomTextComponent, LAST_ROOM_TEXT_NAME, new Vector3(9.8f, -3.6f, 0));
         InitializeTextObject(ref CopiedRoomText, ref copiedRoomTextComponent, COPIED_ROOM_TEXT_NAME, new Vector3(9.8f, -3.8f, 0));
-        
     }
 
     private static void InitializeTextObject(ref GameObject gameObject, ref TextMeshPro textComponent, string name, Vector3 position)

@@ -35,7 +35,7 @@ class IntroCutscenePatch
         Info("Game Start", "IntroCutscene");
     }
     [HarmonyPatch(nameof(IntroCutscene.BeginImpostor)), HarmonyPostfix]
-    public static void BeginImpostor_Postfix(IntroCutscene __instance, ref List<PlayerControl> yourTeam)
+    public static void BeginImpostor_Postfix(IntroCutscene __instance)
     {
         if (OtherModHost) return;
 
@@ -64,7 +64,7 @@ class IntroCutscenePatch
     }
 
     [HarmonyPatch(nameof(IntroCutscene.BeginCrewmate)), HarmonyPostfix]
-    public static void BeginCrewmate_Postfix(IntroCutscene __instance, ref List<PlayerControl> teamToDisplay)
+    public static void BeginCrewmate_Postfix(IntroCutscene __instance)
     {
         if (OtherModHost) return;
 

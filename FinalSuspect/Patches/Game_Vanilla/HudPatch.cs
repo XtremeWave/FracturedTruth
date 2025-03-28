@@ -25,6 +25,7 @@ class SetVentOutlinePatch
         XtremeLocalHandling.SetVentOutlineColor(__instance, ref mainTarget);
     }
 }
+
 [HarmonyPatch(typeof(TaskPanelBehaviour), nameof(TaskPanelBehaviour.SetTaskText))]
 class TaskPanelBehaviourPatch
 {

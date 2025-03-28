@@ -19,6 +19,7 @@ class ButtonRolloverHandlerPatch
             color = ColorHelper.ClientOptionColor;
     }
 }
+
 [HarmonyPatch(typeof(Palette))]
 class PalettePath
 {

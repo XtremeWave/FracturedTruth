@@ -42,7 +42,7 @@ class XtremeLogger
         else sendToGameList.Remove(tag);
     }
     public static void Disable(string tag) { if (!disableList.Contains(tag)) disableList.Add(tag); }
-    public static void SendInGame(string text, bool isAlways = false)
+    public static void SendInGame(string text)
     {
         if (!isEnable) return;
         NotificationPopperPatch.NotificationPop(text);

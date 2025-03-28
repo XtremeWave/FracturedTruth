@@ -251,7 +251,7 @@ public static class FinalAntiCheat
                         case RpcCalls.SetName:
                         case RpcCalls.CheckName:
                         case RpcCalls.SetLevel:
-                        case RpcCalls.SetHat:
+                        case RpcCalls.SetHatStr:
                             return true;
                         case RpcCalls.SendChat:
                         case RpcCalls.SendQuickChat:

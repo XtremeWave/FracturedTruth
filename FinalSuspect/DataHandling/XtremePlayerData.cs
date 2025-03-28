@@ -177,7 +177,7 @@ public class XtremePlayerData : IDisposable
     {
         try
         {
-            Info($"Creating XtremePlayerData For {playername}({player.GetClient().FriendCode})", "Data");
+            Info($"Creating XtremePlayerData For {player.GetClient().PlayerName}({player.GetClient().FriendCode})", "Data");
             var colorId = player.Data.DefaultOutfit.ColorId;
             playername ??= player.GetRealName();
            

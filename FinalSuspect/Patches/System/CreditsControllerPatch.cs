@@ -11,20 +11,17 @@ public class CreditsControllerPatch
     {
         var devList = new List<string>
         {
-                $"<size=120%><color={ColorHelper.ModColor}>{Main.ModName}</color></size>",
-                $"<color=#fffcbe>By</color> <color={ColorHelper.TeamColor}>XtremeWave</color>",
-                " ",
-                "   ",
-                //Others
-                $"<size=120%>{GetString("Contributors")}</size>",
-                "- KARPED1EM",
-                "- Niko233",
-                "- Amongus(水木年华)",
-                "- Yu(Night_瓜)",
-                "- 天寸梦初",
-                "<color=#cdfffd>- QingFeng</color>"
-
-            };
+            $"<size=120%><color={ColorHelper.ModColor}>{Main.ModName}</color></size>",
+            $"<color=#fffcbe>By</color> <color={ColorHelper.TeamColor}>XtremeWave</color>",
+            //Others
+            $"<size=120%>{GetString("Contributors")}</size>",
+            "- KARPED1EM",
+            "- Niko233",
+            "- Amongus(水木年华)",
+            "- Yu(Night_瓜)",
+            "- 天寸梦初",
+            "<color=#cdfffd>- QingFeng</color>"
+        };
 
         var credits = new List<CreditsController.CreditStruct>();
 
