@@ -199,7 +199,7 @@ public static class MyMusicPanel
                     break;
                 case AudiosStates.IsLoading:
                     color = ColorHelper.ClientOptionColor;
-                    preview = GetString("LoadingMus");
+                    preview = GetString("Parsing");
                     break;
                 case AudiosStates.DownLoadSucceedNotice:
                 case AudiosStates.Exist:

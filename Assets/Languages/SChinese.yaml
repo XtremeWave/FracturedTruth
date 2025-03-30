@@ -59,124 +59,118 @@ DeathReason:
   Disconnect: "断连"
 
 # 客户端选项 / Client Options
-ClientOptions:
-  FinalSuspectOptions: "Final Suspect 选项"
-  Back: "返回"
-  Yes: "是"
-  No: "否"
-  UnlockFPS: "解锁帧数限制"
-  ChangeOutfit: "切换形象"
-  BeanMode: "经典豆子模式"
-  HorseMode: "愚人节牧马模式"
-  LongMode: "愚人节长颈豆模式"
-  KickPlayerFriendCodeNotExist: "踢出没有登录的玩家"
-  KickPlayerWithDenyName: "踢出使用违规昵称的玩家"
-  KickPlayerInBanList: "踢出被封禁的玩家"
-  SpamDenyWord: "屏蔽违禁词"
-  AutoStartGame: "人满自动开始游戏"
-  AutoEndGame: "结束时自动返回大厅"
-  SwitchVanilla: "切换为原版"
-  DisableVanillaSound: "禁用原版游戏音乐"
-  DisableFAC: "禁用反作弊"
-  ShowPlayerInfo: "展示玩家平台与客户端信息"
-  UseModCursor: "使用模组鼠标光标"
-  FastBoot: "快速启动模式"
-  PrunkMode: "恶搞模式"
-  VersionCheat: "绕过版本同步检查"
-  GodMode: "上帝模式"
-  NoGameEnd: "测试模式"
-  EnableFinalSuspect: "启用「终极嫌疑」"
+FinalSuspectOptions: "Final Suspect 选项"
+Back: "返回"
+Yes: "是"
+No: "否"
+UnlockFPS: "解锁帧数限制"
+ChangeOutfit: "切换形象"
+BeanMode: "经典豆子模式"
+HorseMode: "愚人节牧马模式"
+LongMode: "愚人节长颈豆模式"
+KickPlayerFriendCodeNotExist: "踢出没有登录的玩家"
+KickPlayerWithDenyName: "踢出使用违规昵称的玩家"
+KickPlayerInBanList: "踢出被封禁的玩家"
+SpamDenyWord: "屏蔽违禁词"
+AutoStartGame: "人满自动开始游戏"
+AutoEndGame: "结束时自动返回大厅"
+SwitchVanilla: "切换为原版"
+DisableVanillaSound: "禁用原版游戏音乐"
+DisableFAC: "禁用反作弊"
+ShowPlayerInfo: "展示玩家平台与客户端信息"
+UseModCursor: "使用模组鼠标光标"
+FastBoot: "快速启动模式"
+PrunkMode: "恶搞模式"
+VersionCheat: "绕过版本同步检查"
+GodMode: "上帝模式"
+NoGameEnd: "测试模式"
+EnableFinalSuspect: "启用「终极嫌疑」"
 
 # 客户端功能 / Client Features
-ClientFeatures:
-  FinalSuspectFeatures: "Final Suspect 功能"
-  UnloadMod: "切换原版"
-  UnloadWarning: "<color=#ffff00><size=200%>警告</size></color>\n如果您想要回到模组，您必须重启游戏\n您确定要切换为原版吗？"
-  CannotUnloadDuringGame: "游戏中不能切换为原版"
-  Cancel: "取消"
-  Unload: "切换"
-  DumpLog: "输出日志"
-  ClearAutoLogs: "清空自动日志"
-  SoundOptions: "我的音乐"
-  AudioManagementOptions: "音频管理"
-  OnlyAvailableInMainMenu: "仅在主页使用"
+FinalSuspectFeatures: "Final Suspect 功能"
+UnloadMod: "切换原版"
+UnloadWarning: "<color=#ffff00><size=200%>警告</size></color>\n如果您想要回到模组，您必须重启游戏\n您确定要切换为原版吗？"
+CannotUnloadDuringGame: "游戏中不能切换为原版"
+Cancel: "取消"
+Unload: "切换"
+DumpLog: "输出日志"
+ClearAutoLogs: "清空自动日志"
+SoundOptions: "我的音乐"
+AudioManagementOptions: "音频管理"
+OnlyAvailableInMainMenu: "仅在主页使用"
 
 # 提示 / Tips
-Tips:
-  updatePleaseWait: "请稍候……"
-  updateInProgress: "更新中……"
-  downloadInProgress: "下载中……"
-  Playing: "播放中……"
-  LoadingMus: "解析中……"
-  DownLoadSucceedNotice: "下载成功！"
-  DownLoadFailureNotice: "下载失败=("
-  PleaseWait: "请稍候……"
+updatePleaseWait: "请稍候……"
+updateInProgress: "更新中……"
+DownloadingAudios: "下载中……"
+Playing: "播放中……"
+Parsing: "解析中……"
+DownLoadSucceedNotice: "下载成功！"
+DownLoadFailureNotice: "下载失败=("
+PleaseWait: "请稍候……"
+LanguageFilesLoadingComplete: "语言文件加载完成"
+CheckingForFiles: "校验资源文件完整性……"
+DownloadingResources: "下载资源文件……"
+Loading: "加载中……"
+LoadingComplete: "加载完成！"
 
 # 更新检查 / Update Checker
-UpdateChecker:
-  Retry: "重试"
-  updateCheckPopupTitle: "更新检查"
-  updateCheckFailedRetry: "检查更新失败 :(\n要重试吗？\n或者试试关掉你的加速器？"
-  updateCheckFailedExit: "检查更新失败 :(\n请检查您的网络强度后重试\n或者试试关掉你的加速器！"
+Retry: "重试"
+updateCheckPopupTitle: "更新检查"
+updateCheckFailedRetry: "检查更新失败 :(\n要重试吗？\n或者试试关掉你的加速器？"
+updateCheckFailedExit: "检查更新失败 :(\n请检查您的网络强度后重试\n或者试试关掉你的加速器！"
 
 # 更新提醒 / Update Reminder
-UpdateReminder:
-  UpdateBySelfTitle: "更新提示"
-  updateButton: "一键更新"
-  updatePopupTitle: "一键更新"
-  updatePopupTitleFialed: "更新失败"
-  updatePopupTitleDone: "更新完成"
-  updateNotice: "更新提醒"
-  UpdateBySelfText: "该版本不支持一键更新，请您手动更新"
+updateBySelfTitle: "更新提示"
+updateButton: "一键更新"
+updatePopupTitle: "一键更新"
+updatePopupTitleFailed: "更新失败"
+updatePopupTitleDone: "更新完成"
+updateNotice: "更新提醒"
+UpdateBySelfText: "该版本不支持一键更新，请您手动更新"
 
 # 选择更新渠道 / Update Chose Source
-UpdateChoseSource:
-  updateChoseSource: "请选择更新渠道\n如果您不知道选什么，请选择【Gitee】或者【Api（境内首选）】"
-  updateSource:
-    Github: "Github（境外首选）"
-    Gitee: "Gitee"
-    XtremeApi: "Api（境内首选）"
+updateChoseSource: "请选择更新渠道\n如果您不知道选什么，请选择【Gitee】或者【Api（境内首选）】"
+updateSource:
+  Github: "Github（境外首选）"
+  Gitee: "Gitee"
+  XtremeApi: "Api（境内首选）"
 
 # 更新结束提示 / Update completion prompts
-UpdateCompletionPrompts:
-  updateRestart: "重启游戏后生效 :)"
-  updatePingFialed: "原因：{0}\n该渠道可能暂时停用，请更换下载渠道重试"
-  updateFileMd5Incorrect: "原因：文件校验错误\n该渠道的文件版本并不是最新的，请切换下载渠道重试"
-  downloadFailed: "原因：下载更新文件超时或中断\n请更换网络后重试或手动更新"
+updateRestart: "重启游戏后生效 :)"
+updatePingFialed: "原因：{0}\n该渠道可能暂时停用，请更换下载渠道重试"
+updateFileMd5Incorrect: "原因：文件校验错误\n该渠道的文件版本并不是最新的，请切换下载渠道重试"
+downloadFailed: "原因：下载更新文件超时或中断\n请更换网络后重试或手动更新"
 
 # 无法加入公开游戏原因 / Unable to join public game reasons
-UnableToJoinPublicGameReasons:
-  onSetPublicNoLatest: "我们有一个重要的更新，请更新本模组\n否则您无法公开房间"
-  CanNotJoinPublicRoomNoLatest: "我们有一个重要的更新，请更新本模组\n否则您无法加入公开房间"
-  ModBrokenMessage: "模组文件损坏，请重启游戏或重装本模组"
-  UnsupportedVersion: "您的 AmongUs 版本与 FinalSuspect 不兼容\n请更新游戏"
+onSetPublicNoLatest: "我们有一个重要的更新，请更新本模组\n否则您无法公开房间"
+CanNotJoinPublicRoomNoLatest: "我们有一个重要的更新，请更新本模组\n否则您无法加入公开房间"
+ModBrokenMessage: "模组文件损坏，请重启游戏或重装本模组"
+UnsupportedVersion: "您的 AmongUs 版本与 FinalSuspect 不兼容\n请更新游戏"
 
 # 音频播放 / Audio Playback
-AudioPlayback:
-  PlayMode:
-    0: "单次播放"
-    1: "单曲循环"
-    2: "列表随机"
-    3: "顺序播放"
-  Stop: "停止播放"
-  CanPlay: "←点击播放"
-  NoFound: "【文件丢失】"
-  NextPage: "下一页"
-  PreviousPage: "上一页"
+PlayMode:
+  0: "单次播放"
+  1: "单曲循环"
+  2: "列表随机"
+  3: "顺序播放"
+Stop: "停止播放"
+CanPlay: "←点击播放"
+NoFound: "【文件丢失】"
+NextPage: "下一页"
+PreviousPage: "上一页"
 
 # 音频添加 / Audio Addition
-AudioAddition:
-  download: "下载"
-  delete: "删除"
-  NewSound: "新增音乐"
-  PleaseEnterMusic: "请输入音乐名"
-  AudioManagementAlreadyExists: "该音乐名已存在"
-  NotAllowedMusic: "音乐名称格式不合规"
+download: "下载"
+delete: "删除"
+NewSound: "新增音乐"
+PleaseEnterMusic: "请输入音乐名"
+AudioManagementAlreadyExists: "该音乐名已存在"
+NotAllowedMusic: "音乐名称格式不合规"
 
 # 界面提示 / Interface Tips
-InterfaceTips:
-  CustomAudioManagementHelp: "您可以在「音频管理」中下载XtremeWave支持的音乐或添加自己的音乐。当您添加自己的音乐时，请您在「音频管理」中添加音乐名并在路径“Among Us/Final Suspect_Data/Resources/Sounds”文件夹内添加同名音频文件（支持格式：.wav）。音乐可在「我的音乐」中播放。"
-  CustomSoundHelp: "您可以在「音频管理」中下载XtremeWave支持的音乐或添加自己的音乐，如果音乐本地资源路径不存在则会显示「【文件丢失】」"
+CustomAudioManagementHelp: "您可以在「音频管理」中下载XtremeWave支持的音乐或添加自己的音乐。当您添加自己的音乐时，请您在「音频管理」中添加音乐名并在路径“Among Us/Final Suspect_Data/Resources/Sounds”文件夹内添加同名音频文件（支持格式：.wav）。音乐可在「我的音乐」中播放。"
+CustomSoundHelp: "您可以在「音频管理」中下载XtremeWave支持的音乐或添加自己的音乐，如果音乐本地资源路径不存在则会显示「【文件丢失】」"
 
 # 主界面音乐提醒 / Main Menu Music Reminder
 MainMenuMusicReminder:
@@ -184,7 +178,7 @@ MainMenuMusicReminder:
   AudioNYPro: "如果您希望提高您的游戏体验，请在「主页-设置-更多功能-音频管理」下载我们的音频"
 
 # 官方音乐 / Musics
-Musics:
+Mus:
   GongXiFaCai: "恭喜发财"
   NeverGonnaGiveYouUp: "Never Gonna Give You Up"
   CountingStars: "Counting Stars"
@@ -220,8 +214,7 @@ Notifications:
   KickBecauseDiffrentVersionOrMod: "【{0}】因安装了不同版本的模组被请离房间"
 
 # 警告 / Warnings
-Warnings:
-  Warning: "警告"
+Warning:
   MismatchedVersion: "{0}\n安装了其它版本的 {1}"
   AutoExitAtMismatchedVersion: "您的 {0} 版本与房主不同\n您将在 {1} 秒内被踢出"
   InvalidRpc: "{0} 因为发送了无效的数据被踢出<color=#ffff00>(无效的Rpc:{1})</color>"
@@ -256,60 +249,56 @@ ModInfos:
   Acknowledgement: "特别致谢"
 
 # 断连提示 / Disconect Reasons
-DisconnectReasons:
-  DCNotify:
-    Hacking: "您被树懒的反作弊系统踢出房间"
-    Banned: "您被该房间封禁"
-    Kicked: "您被该房间踢出"
-    DCFromServer: "您与服务器的连接已中断\n这可能是因为您的网络不稳定\n也可能是因为服务器不稳定或拒绝了您的访问"
-    GameNotFound: "未找到指定房间，可能是房间已解散\n或检查您是否选择了与房间不同的服务器"
-    GameStarted: "该房间正在游戏中，请等待游戏结束后加入"
-    GameFull: "该房间已满人，请稍后重试"
-    IncorrectVersion: "您的Among Us版本与该房间不同"
-    Description: "您被踢出房间\n理由：{0}"
-    DenyName: "您的昵称含有违规字符"
-    BanList: "您存在于该房间的黑名单"
-    FACList: "您已被 FAC 封禁"
-    CheatDetected: "您被 FAC 检测到疑似作弊行为"
-    InvalidRPC: "您可能安装了与房主不同的模组或您的模组被恶意修改"
-    ModVersionIncorrect: "您模组的版本与房主不同"
-    LowLevel: "您的等级未达到该房间的等级要求"
-    NotLogin: "该房间不允许未登录的玩家加入"
+
+DCNotify:
+  Hacking: "您被树懒的反作弊系统踢出房间"
+  Banned: "您被该房间封禁"
+  Kicked: "您被该房间踢出"
+  DCFromServer: "您与服务器的连接已中断\n这可能是因为您的网络不稳定\n也可能是因为服务器不稳定或拒绝了您的访问"
+  GameNotFound: "未找到指定房间，可能是房间已解散\n或检查您是否选择了与房间不同的服务器"
+  GameStarted: "该房间正在游戏中，请等待游戏结束后加入"
+  GameFull: "该房间已满人，请稍后重试"
+  IncorrectVersion: "您的Among Us版本与该房间不同"
+  Description: "您被踢出房间\n理由：{0}"
+  DenyName: "您的昵称含有违规字符"
+  BanList: "您存在于该房间的黑名单"
+  FACList: "您已被 FAC 封禁"
+  CheatDetected: "您被 FAC 检测到疑似作弊行为"
+  InvalidRPC: "您可能安装了与房主不同的模组或您的模组被恶意修改"
+  ModVersionIncorrect: "您模组的版本与房主不同"
+  LowLevel: "您的等级未达到该房间的等级要求"
+  NotLogin: "该房间不允许未登录的玩家加入"
 
 # 任务与栏相关 / Task Panel
-TaskPanel:
-  PressF1ShowRoleDescription: "按F1查看您的职业介绍"
-  FakeTask: "假任务："
-  KillCount: "击杀"
+PressF1ShowRoleDescription: "按F1查看您的职业介绍"
+FakeTask: "假任务："
+KillCount: "击杀"
 
 # 复盘信息 / Last Results
-LastResults:
-  RoleSummaryText: "复盘信息:"
-  ShowResults: "显示复盘信息"
-  HideResults: "隐藏复盘信息"
-  NoInfoExists: "没有存在有效的复盘信息"
-  CrewsWin: "<color=#8cffff>船员阵营胜利</color>"
-  CrewmatesWin: "船员胜利"
-  CrewmatesWinBlurb: "真理的光芒在希望中闪耀！"
-  ImpsWin: "<color=#ff1919>伪装者阵营胜利</color>"
-  ImpostorsWin: "伪装者胜利"
-  ImpostorsWinBlurb: "邪恶将真理化为灰烬"
-  HideSummaryTextToShowWinText: "<color=#ffff00>隐藏复盘信息查看胜利文本</color>"
+RoleSummaryText: "复盘信息:"
+ShowResults: "显示复盘信息"
+HideResults: "隐藏复盘信息"
+NoInfoExists: "没有存在有效的复盘信息"
+CrewsWin: "<color=#8cffff>船员阵营胜利</color>"
+CrewmatesWin: "船员胜利"
+CrewmatesWinBlurb: "真理的光芒在希望中闪耀！"
+ImpsWin: "<color=#ff1919>伪装者阵营胜利</color>"
+ImpostorsWin: "伪装者胜利"
+ImpostorsWinBlurb: "邪恶将真理化为灰烬"
+HideSummaryTextToShowWinText: "<color=#ffff00>隐藏复盘信息查看胜利文本</color>"
 
 # 禁用公开 / Disable Public
-DisablePublic:
-  DisabledByProgram: "公开房间的操作已被程序禁用"
-  PublicNotAvailableOnThisVersion: "该版本的 FinalSuspect 暂不支持公开"
+DisabledByProgram: "公开房间的操作已被程序禁用"
+PublicNotAvailableOnThisVersion: "该版本的 FinalSuspect 暂不支持公开"
 
 # 主页 / Main UI
-MainUI:
-  FinalSuspectWelcomeText: "祝愿您拥有一场愉快的<color={0}>游戏体验</color>！"
-  ConnectToFinalSuspectServerFailed: "无法连接至FinalSuspect服务器"
-  Website: "模组官网"
-  MainMenuCredential: "{0} © 2025"
-  LShift: "按LShift返回上一个房间"
-  RShift: "按RShift进入剪贴板房间"
-  LobbyTimeDisplayText: "存在时间"
+FinalSuspectWelcomeText: "祝愿您拥有一场愉快的<color={0}>游戏体验</color>！"
+ConnectToFinalSuspectServerFailed: "无法连接至FinalSuspect服务器"
+Website: "模组官网"
+MainMenuCredential: "{0} © 2025"
+LShift: "按LShift返回上一个房间"
+RShift: "按RShift进入剪贴板房间"
+LobbyTimeDisplayText: "存在时间"
 
 # 客户端平台 / Platform
 Platforms:
@@ -318,26 +307,16 @@ Platforms:
   MicrosoftStore: "微软"
 
 # 延迟显示 / Ping Tracker
-PingTracker:
-  Ping: "延迟"
-  FrameRate: "帧率"
-  Server: "服务器"
-  Local: "<color=#D1FA87>本地</color>"
+Ping: "延迟"
+FrameRate: "帧率"
+Server: "服务器"
+Local: "<color=#D1FA87>本地</color>"
 
 # 其他 / Other
-Other:
-  HongKong: "香港"
-  FPSSetTo: "帧数上限设置为: {0}"
-  BrowsingMode: "浏览模式"
-  Broken: "损坏"
-
-# 加载 / Loading
-Loading:
-  LanguageFilesLoadingComplete: "翻译文本加载完成！"
-  CheckingForFiles: "校验资源文件完整性..."
-  DownloadingResources: "下载资源文件..."
-  Loading: "加载中..."
-  LoadingComplete: "加载完成！"
+HongKong: "香港"
+FPSSetTo: "帧数上限设置为: {0}"
+BrowsingMode: "浏览模式"
+Broken: "损坏"
 
 # 身份 / Identity
 Identity:

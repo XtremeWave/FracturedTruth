@@ -43,7 +43,7 @@ public class ModUpdater
         var r = new Regex(@"^(http|https|ftp)\://([a-zA-Z0-9\.\-]+(\:[a-zA-Z0-9\.&%\$\-]+)*@)?((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\.[a-zA-Z]{2,4})(\:[0-9]+)?(/[^/][a-zA-Z0-9\.\,\?\'\\/\+&%\$#\=~_\-@]*)*$");
         if (!r.IsMatch(url))
         {
-            CustomPopup.ShowLater(GetString("updatePopupTitleFialed"), string.Format(GetString("updatePingFialed"), "404 Not Found"),
+            CustomPopup.ShowLater(GetString("updatePopupTitleFailed"), string.Format(GetString("updatePingFialed"), "404 Not Found"),
                 [(GetString(StringNames.Okay), SetUpdateButtonStatus)]);
             return;
         }
@@ -54,7 +54,7 @@ public class ModUpdater
         task.ContinueWith(t =>
         {
             var (done, reason) = t.Result;
-            var title = done ? GetString("updatePopupTitleDone") : GetString("updatePopupTitleFialed");
+            var title = done ? GetString("updatePopupTitleDone") : GetString("updatePopupTitleFailed");
             var desc = done ? GetString("updateRestart") : reason;
             CustomPopup.ShowLater(title, desc,
                 [(GetString(done ? StringNames.ExitGame : StringNames.Okay), done ? Application.Quit : null)]);

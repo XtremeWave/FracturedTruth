@@ -101,9 +101,9 @@ OnlyAvailableInMainMenu: "Доступно только в главном мен
 # 提示 / Tips
 updatePleaseWait: "Пожалуйста, подождите..."
 updateInProgress: "Обновление в процессе..."
-downloadInProgress: "Загрузка в процессе..."
+DownloadingAudios: "Загрузка в процессе..."
 Playing: "Играем..."
-LoadingMus: "Анализ..."
+Parsing: "Анализ..."
 DownLoadSucceedNotice: "Загрузка успешна!"
 DownLoadFailureNotice: "Загрузка не удалась =("
 PleaseWait: "Пожалуйста, подождите..."
@@ -120,7 +120,7 @@ updateNotice: "Напоминание об обновлении"
 UpdateBySelfText: "Эта версия не поддерживает автоматические обновления. Обновите вручную."
 updateButton: "Обновить сейчас"
 updatePopupTitle: "Обновить сейчас"
-updatePopupTitleFialed: "Обновление неудачно"
+updatePopupTitleFailed: "Обновление неудачно"
 updatePopupTitleDone: "Обновление завершено"
 
 # 选择更新渠道 / Update Chose Source

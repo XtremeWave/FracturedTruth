@@ -131,7 +131,7 @@ public static class SoundManagementPanel
             
             if (audio.CurrectAudioStates == AudiosStates.IsDownLoading)
             {
-                buttontext = GetString("downloadInProgress");
+                buttontext = GetString("DownloadingAudios");
                 buttonColor = Color.yellow;
                 enable = false;
             }
