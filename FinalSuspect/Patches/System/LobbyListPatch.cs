@@ -59,7 +59,7 @@ public static class MatchMakerGameButtonSetGamePatch
                 break;
             case Platforms.StandaloneWin10:
                 color = "#0078d4";
-                name = GetString("Platforms.MicrosoftStore");
+                name = GetString("MicrosoftStore");
                 break;
             case Platforms.StandaloneItch:
                 color = "#E35F5F";
@@ -67,11 +67,11 @@ public static class MatchMakerGameButtonSetGamePatch
                 break;
             case Platforms.IPhone:
                 color = "#e3e3e3";
-                name = GetString("Platforms.IPhone");
+                name = GetString("IPhone");
                 break;
             case Platforms.Android:
                 color = "#1EA21A";
-                name = GetString("Platforms.Android");
+                name = GetString("Android");
                 break;
             case Platforms.Switch:
                 var totalname = nameList[id];
