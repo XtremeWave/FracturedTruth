@@ -91,6 +91,10 @@ public class VersionShowerStartPatch
         Main.CredentialsText += $"\r\n<color={ColorHelper.ModColor}>{ThisAssembly.Git.Branch}</color> - {ThisAssembly.Git.Commit}";
 #endif
 
+#if Canary
+        Main.CredentialsText += $"\r\n<color={ColorHelper.ModColor}>{ThisAssembly.Git.Branch}</color> - {ThisAssembly.Git.Commit}";
+#endif
+
 #if RELEASE
         var additionalCredentials = GetString("TextBelowVersionText");
         if (additionalCredentials != null && additionalCredentials != "*" && additionalCredentials != "")

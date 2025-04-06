@@ -51,7 +51,7 @@ public class Main : BasePlugin
             var day = currentDate.Day.ToString("D2");    
             return $"{year}{month}{day}";
 #else
-            return "20250317";
+            return "20250406";
 #endif
         }
     }
@@ -67,13 +67,13 @@ public class Main : BasePlugin
     /// Preview: 预览/预发行版
     /// Scrapter: 废弃版
     /// </summary>
-    private const VersionTypes DisplayedVersion_TestText = VersionTypes.Release;
+    private const VersionTypes DisplayedVersion_TestText = VersionTypes.Canary;
 
     private const int DisplayedVersion_TestCreation = 7;
     
     public static readonly string DisplayedVersion = 
         $"{DisplayedVersion_Head}_{DisplayedVersion_Date}" +
-        $"{(DisplayedVersion_TestText != VersionTypes.Release ? 
+        $"{(DisplayedVersion_TestText != VersionTypes.Canary ? 
         $"_{DisplayedVersion_TestText}_{DisplayedVersion_TestCreation}" : "")}";
 
     // == 链接相关设定 / Link Config ==
