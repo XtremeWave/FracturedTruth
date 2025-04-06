@@ -18,6 +18,9 @@
 	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
 	  <NoWarn>MSB3246, CA2211, IDE0044, IDE0028, IDE0300</NoWarn>
 	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Canary' ">
+	  <NoWarn>MSB3246, CA2211, IDE0044, IDE0028, IDE0300</NoWarn>
+	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
 	  <NoWarn>MSB3246, CA2211, IDE0044, IDE0028, IDE0300</NoWarn>
 	</PropertyGroup>

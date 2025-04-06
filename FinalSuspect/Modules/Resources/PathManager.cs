@@ -113,7 +113,13 @@ public static class PathManager
         "https://raw.githubusercontent.com/XtremeWave/FinalSuspect_Dev/FS_Dev/",
         "https://api.xtreme.net.cn/download/FinalSuspect/",
         $"file:///{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop))}/",
-#else
+#endif
+
+#if CANARY
+        "https://raw.githubusercontent.com/XtremeWave/FinalSuspect_Dev/FS_Dev/",
+        "https://api.xtreme.net.cn/download/FinalSuspect/",
+        $"file:///{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop))}/",
+#else        
         "https://raw.githubusercontent.com/XtremeWave/FinalSuspect/FinalSus/",
         "https://gitee.com/LezaiYa/FinalSuspect/raw/FinalSus/",
         "https://api.xtreme.net.cn/download/FinalSuspect/",

@@ -91,7 +91,7 @@ public class VersionShowerStartPatch
         Main.CredentialsText += $"\r\n<color={ColorHelper.ModColor}>{ThisAssembly.Git.Branch}</color> - {ThisAssembly.Git.Commit}";
 #endif
 
-#if Canary
+#if CANARY
         Main.CredentialsText += $"\r\n<color={ColorHelper.ModColor}>{ThisAssembly.Git.Branch}</color> - {ThisAssembly.Git.Commit}";
 #endif
 
@@ -119,6 +119,10 @@ public class VersionShowerStartPatch
             var versionText = $"<color={ColorHelper.ModColor}>FS</color> - <color=#C8FF78>v{Main.DisplayedVersion}</color>";
 
 #if DEBUG
+        versionText = $"<color={ColorHelper.ModColor}>{ThisAssembly.Git.Branch}</color> - {ThisAssembly.Git.Commit}";
+#endif
+
+#if CANARY
         versionText = $"<color={ColorHelper.ModColor}>{ThisAssembly.Git.Branch}</color> - {ThisAssembly.Git.Commit}";
 #endif
 
