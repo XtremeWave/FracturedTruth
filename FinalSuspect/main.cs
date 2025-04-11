@@ -51,7 +51,7 @@ public class Main : BasePlugin
             var day = currentDate.Day.ToString("D2");    
             return $"{year}{month}{day}";
 #else
-            return "20250413";
+            return "20250412";
 #endif
         }
     }
