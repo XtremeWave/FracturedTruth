@@ -39,7 +39,7 @@ public class Main : BasePlugin
     // == 版本相关设定 / Version Config ==
     public const string LowestSupportedVersion = "2025.3.31"; // 16.0.2 also 2025.3.25
 
-    public const string DisplayedVersion_Head = "1.1";
+    public const string DisplayedVersion_Head = "1.1.2";
     private static string DisplayedVersion_Date
     {
         get
@@ -67,13 +67,13 @@ public class Main : BasePlugin
     /// Preview: 预览/预发行版
     /// Scrapter: 废弃版
     /// </summary>
-    private const VersionTypes DisplayedVersion_TestText = VersionTypes.Canary;
+    private const VersionTypes DisplayedVersion_TestText = VersionTypes.Dev;
 
     private const int DisplayedVersion_TestCreation = 7;
     
     public static readonly string DisplayedVersion = 
         $"{DisplayedVersion_Head}_{DisplayedVersion_Date}" +
-        $"{(DisplayedVersion_TestText != VersionTypes.Canary ? 
+        $"{(DisplayedVersion_TestText != VersionTypes.Dev ? 
         $"_{DisplayedVersion_TestText}_{DisplayedVersion_TestCreation}" : "")}";
 
     // == 链接相关设定 / Link Config ==
