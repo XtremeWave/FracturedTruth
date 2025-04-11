@@ -45,17 +45,13 @@ public static class FinalAntiCheat
                 Warn($"{name}({FriendCode})({Puid})多次设置名称", "FAC");
                 if (AmongUsClient.Instance.AmHost)
                 {
-                    NotificationPopperPatch.NotificationPop(
-                        string.Format(GetString("Warning.SetName"),
-                            name));
+                    NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.SetName"), name));
                     WarnHost();
                     return true;
                 }
                 if (!OtherModHost)
                 {
-                    NotificationPopperPatch.NotificationPop(
-                        string.Format(GetString("Warning.SetName_NotHost"),
-                            name));
+                    NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.SetName_NotHost"), name));
                     return true;
                 }
             }
@@ -72,18 +68,14 @@ public static class FinalAntiCheat
                     Warn($"{name}({FriendCode})({Puid})一秒内多次发送快捷消息", "FAC");
                     if (AmongUsClient.Instance.AmHost)
                     {
-                        NotificationPopperPatch.NotificationPop(
-                            string.Format(GetString("Warning.SendQuickChat"),
-                                name));
+                        NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.SendQuickChat"), name));
                         WarnHost();
                         return true;
                     }
 
                     if (!OtherModHost)
                     {
-                        NotificationPopperPatch.NotificationPop(
-                            string.Format(GetString("Warning.SendQuickChat_NotHost"),
-                                name));
+                        NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.SendQuickChat_NotHost"), name));
                         return true;
                     }
                 }
@@ -111,8 +103,8 @@ public static class FinalAntiCheat
                 if (posXOutOfRange || posYOutOfRange)
                     MarkAsCheater();
             }
-            else
-            {
+            //else
+            //{
                 /*List<PlainShipRoom> rooms = [];
                 foreach (var room in ShipStatus.Instance.FastRooms)
                 {
@@ -125,14 +117,13 @@ public static class FinalAntiCheat
                     || rooms.Any(room => room.roomArea.IsTouching(Player.Collider)) 
                     || !Player.IsAlive()) return;
                 MarkAsCheater();*/
-            }
+            //}
         }
         public void HandleSuspectCheater()
         {
             if (Main.DisableFAC.Value || !IsSuspectCheater || _lastHandleCheater != -1 && _lastHandleCheater + 1 >= GetTimeStamp()) return;
             _lastHandleCheater = GetTimeStamp();
-            NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.SetName_NotHost"),
-                Player.GetDataName()));
+            NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.SetName_NotHost"), Player.GetDataName()));
             if (!AmongUsClient.Instance.AmHost)return;
             KickPlayer(Player.PlayerId, false, "Suspect Cheater");
         }
@@ -160,7 +151,7 @@ public static class FinalAntiCheat
                 ErrorText.Instance.SBDetected = DeNum > 10;
                 if (ErrorText.Instance.CheatDetected)
                     ErrorText.Instance.AddError(
-                        ErrorText.Instance.SBDetected ? ErrorCode.SBDetected : ErrorCode.CheatDetected);
+                    ErrorText.Instance.SBDetected ? ErrorCode.SBDetected : ErrorCode.CheatDetected);
                 else
                     ErrorText.Instance.Clear();
             }
@@ -311,8 +302,7 @@ public static class FinalAntiCheat
         //}
         private static bool CheckForInvalidRpc(PlayerControl player, byte callId)
         {
-            if (player.PlayerId != 0 && !Enum.IsDefined(typeof(RpcCalls), callId) &&
-                !OtherModHost)
+            if (player.PlayerId != 0 && !Enum.IsDefined(typeof(RpcCalls), callId) && !OtherModHost)
             {
                 Warn($"{player?.Data?.PlayerName}:{callId}({RPC.GetRpcName(callId)}) 已取消，因为它是由主机以外的其他人发送的。", "FAC");
                 if (ReceiveInvalidRpc(player, callId)) return true;

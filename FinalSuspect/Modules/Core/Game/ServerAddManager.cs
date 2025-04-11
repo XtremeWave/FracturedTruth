@@ -61,7 +61,6 @@ public static class ServerAddManager
             "Niko233(EU)" => "Niko[EU]",
             "Niko233(CN)" => "Niko[CN]",
             "XtremeWave[HongKong]" => "XW[HK]",
-
             _ => serverName,
         };
 

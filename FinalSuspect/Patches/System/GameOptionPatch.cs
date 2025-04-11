@@ -65,9 +65,9 @@ class RolesSettingsMenuPatch
     {
         var AllButton = GameObject.Find("HeaderButtons").transform.FindChild("AllButton").gameObject;
         AllButton.transform.FindChild("Highlight").gameObject.GetComponent<SpriteRenderer>().color =
-            AllButton.transform.FindChild("Inactive").gameObject.GetComponent<SpriteRenderer>().color =
-                AllButton.transform.FindChild("Selected").gameObject.GetComponent<SpriteRenderer>().color =
-                    ColorHelper.ModColor32;
+        AllButton.transform.FindChild("Inactive").gameObject.GetComponent<SpriteRenderer>().color =
+        AllButton.transform.FindChild("Selected").gameObject.GetComponent<SpriteRenderer>().color =
+        ColorHelper.ModColor32;
 
         var text = AllButton.transform.FindChild("Text").gameObject.GetComponent<TextMeshPro>();
         if (text.color == Color.white || text.color == ColorHelper.ModColor32)
@@ -123,7 +123,6 @@ internal class GameOptionsMenuPatch
             var boxindex = 0;
             foreach (var banner in banners)
             {
-
                 if (banner.name == "CategoryHeaderMasked(Clone)")
                 {
                     SetColorForCat(banner.gameObject, Normalbannercolors[headerindex]);

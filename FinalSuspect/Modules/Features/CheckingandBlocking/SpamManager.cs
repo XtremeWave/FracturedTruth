@@ -86,8 +86,8 @@ public static class SpamManager
         string text;
         List<string> sendList = [];
         while ((text = sr.ReadLine()) != null)
-            if (text.Length >= 1 && text != "")
-                sendList.Add(text.Replace("\\n", "\n").ToLower());
+        if (text.Length >= 1 && text != "")
+        sendList.Add(text.Replace("\\n", "\n").ToLower());
         return sendList;
     }
 
@@ -146,7 +146,6 @@ public static class SpamManager
             ProcessDenyNames(data);
             ProcessFacList(data);
 
-            
             await Task.Delay(100);
             return true;
         }

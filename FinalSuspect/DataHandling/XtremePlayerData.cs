@@ -57,9 +57,9 @@ public class XtremePlayerData : IDisposable
     }
 
         
-    public SpriteRenderer rend { get; set; }
-    public SpriteRenderer deadbodyrend { get; set; }
-    public Vector3? preMeetingPosition { get; set; }
+    public SpriteRenderer Rend { get; set; }
+    public SpriteRenderer Deadbodyrend { get; set; }
+    public Vector3? PreMeetingPosition { get; set; }
  
     #endregion
  
@@ -197,8 +197,8 @@ public class XtremePlayerData : IDisposable
         CompleteTaskCount = KillCount = TotalTaskCount = 0;
         RealDeathReason = VanillaDeathReason.None;
         RealKiller = null;
-        deadbodyrend = rend = null;
-        preMeetingPosition = null;
+        Deadbodyrend = Rend = null;
+        PreMeetingPosition = null;
     }
 
     public static void DisposeAll()
@@ -210,8 +210,8 @@ public class XtremePlayerData : IDisposable
         }
         catch { }
     }
-#pragma warning restore CA1816
 }
+#pragma warning restore CA1816
 
 public static class XtremePlayerDataExtensions
 {

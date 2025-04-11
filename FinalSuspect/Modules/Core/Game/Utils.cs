@@ -239,7 +239,9 @@ public static class Utils
     public static bool AmDev() => IsDev(EOSManager.Instance.FriendCode);
     public static bool IsDev(this PlayerControl pc) => IsDev(pc.FriendCode);
     public static bool IsDev(string friendCode) => friendCode
-        is "teamelder#5856"; //Slok
+
+    is "teamelder#5856" //Slok
+    or "cloakhazy#9133"; //LezaiYa
 
     public static void AddChatMessage(string text, string title = "")
     {
@@ -378,15 +380,15 @@ public static class Utils
                 return HudOverrideSystemType != null && HudOverrideSystemType.IsActive;
             }
             case SystemTypes.HeliSabotage:
-                {
-                    var HeliSabotageSystem = ShipStatus.Instance.Systems[type].Cast<HeliSabotageSystem>();
-                    return HeliSabotageSystem != null && HeliSabotageSystem.IsActive;
-                }
+            {
+                var HeliSabotageSystem = ShipStatus.Instance.Systems[type].Cast<HeliSabotageSystem>();
+                return HeliSabotageSystem != null && HeliSabotageSystem.IsActive;
+            }
             case SystemTypes.MushroomMixupSabotage:
-                {
-                    var mushroomMixupSabotageSystem = ShipStatus.Instance.Systems[type].TryCast<MushroomMixupSabotageSystem>();
-                    return mushroomMixupSabotageSystem != null && mushroomMixupSabotageSystem.IsActive;
-                }
+            {
+                var mushroomMixupSabotageSystem = ShipStatus.Instance.Systems[type].TryCast<MushroomMixupSabotageSystem>();
+                return mushroomMixupSabotageSystem != null && mushroomMixupSabotageSystem.IsActive;
+            }
             default:
                 return false;
         }
@@ -428,8 +430,7 @@ public static class Utils
         }
         catch (Exception ex)
         {
-            if (Log)
-                Error(ex.ToString(), "Execute With Try Catch");
+            if (Log) Error(ex.ToString(), "Execute With Try Catch");
         }
     }
 }

@@ -63,7 +63,6 @@ public static class ModUnloaderScreen
                 Harmony.UnpatchAll();
                 Main.Instance.Unload();
             }, 1f);
-
         }));
     }
 

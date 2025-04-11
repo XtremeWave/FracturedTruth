@@ -363,20 +363,16 @@ public class LoadPatch
                     yield return FadeProcessText(false);
 
                     ProcessText.color = ColorHelper.DownloadYellow;
-                    ProcessText.text = GetString("DownloadingResources") +
-                                       $"({process}/{remoteImageList.Count + remoteModNewsList.Count})";
+                    ProcessText.text = GetString("DownloadingResources") + $"({process}/{remoteImageList.Count + remoteModNewsList.Count})";
                     yield return FadeProcessText(true);
                 }
             }
 
-            Action downloadAction = fastboot
-                ? null
-                : () => 
-                {
-                    process++;
-                    ProcessText.text = GetString("DownloadingResources") +
-                                       $"({process}/{remoteImageList.Count + remoteModNewsList.Count})";
-                };
+            Action downloadAction = fastboot? null: () => 
+            {
+                process++;
+                ProcessText.text = GetString("DownloadingResources") + $"({process}/{remoteImageList.Count + remoteModNewsList.Count})";
+            };
                 
             yield return DownloadListResources(remoteImageList, FileType.Images, downloadAction);
             yield return DownloadListResources(remoteModNewsList, FileType.ModNews, downloadAction);

@@ -198,7 +198,6 @@ class LobbyViewSettingsPanePatch
             {
                 obj.transform.FindChild("Value").FindChild("Sprite").gameObject.GetComponent<SpriteRenderer>().color = iconcolor;
                 obj.transform.FindChild("LabelBackground").gameObject.GetComponent<SpriteRenderer>().color = bgcolor.ShadeColor(0.38f);
-
             }
         }
     }

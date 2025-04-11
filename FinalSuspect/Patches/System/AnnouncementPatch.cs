@@ -81,7 +81,6 @@ public class ModNewsHistory
                 text += $"{line}\n";
             }
         }
-
         mn.Lang = langId;
         mn.Text = text;
         Info($"Number:{mn.Number}", "ModNews");

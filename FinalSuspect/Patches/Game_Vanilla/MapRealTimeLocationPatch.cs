@@ -28,9 +28,9 @@ public class MapRealTimeLocationPatch
             var rend = Object.Instantiate(mapBehaviour.HerePoint);
             rend.transform.SetParent(mapBehaviour.HerePoint.transform.parent);
             rend.gameObject.SetActive(false);
-            data.rend = rend;
-            data.deadbodyrend = Object.Instantiate(rend, rend.transform.parent);
-            data.deadbodyrend.flipY = true;
+            data.Rend = rend;
+            data.Deadbodyrend = Object.Instantiate(rend, rend.transform.parent);
+            data.Deadbodyrend.flipY = true;
         }
     }
     [HarmonyPatch(typeof(MapBehaviour), nameof(MapBehaviour.FixedUpdate)), HarmonyPostfix]
@@ -45,7 +45,7 @@ public class MapRealTimeLocationPatch
         foreach (var data in XtremePlayerData.AllPlayerData)
         {
             if (data.IsDisconnected)continue;
-            data.preMeetingPosition = data.Player.GetTruePosition();
+            data.PreMeetingPosition = data.Player.GetTruePosition();
         }
     }
     [HarmonyPatch(typeof(MapBehaviour), nameof(MapBehaviour.GenericShow)), HarmonyPostfix]
@@ -54,7 +54,7 @@ public class MapRealTimeLocationPatch
         foreach (var data in XtremePlayerData.AllPlayerData)
         {
             if (data.IsDisconnected)continue;
-            data.rend.material.SetInt(PlayerMaterial.MaskLayer, 255);
+            data.Rend.material.SetInt(PlayerMaterial.MaskLayer, 255);
         }
     }
     [HarmonyPatch(typeof(MapBehaviour), nameof(MapBehaviour.Close)), HarmonyPostfix]
@@ -62,7 +62,7 @@ public class MapRealTimeLocationPatch
     {
         foreach (var data in XtremePlayerData.AllPlayerData)
         {
-            data.rend.enabled = true;
+            data.Rend.enabled = true;
         }
     }
 }

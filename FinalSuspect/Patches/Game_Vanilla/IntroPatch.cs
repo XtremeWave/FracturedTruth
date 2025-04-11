@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game;
-using Il2CppSystem.Collections.Generic;
 using TMPro;
 using UnityEngine;
 

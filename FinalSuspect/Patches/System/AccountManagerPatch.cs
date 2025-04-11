@@ -61,8 +61,6 @@ public static class AwakeAccountManager
         LoadSprite("CI_Shapeshifter.png", 450f),
         LoadSprite("CI_Phantom.png", 450f),
         LoadSprite("CI_ImpostorGhost.png", 450f)
-
-
     ]; 
     private static int currentIndex;
 

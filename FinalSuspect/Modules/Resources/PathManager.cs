@@ -40,7 +40,6 @@ public static class PathManager
                 remoteBase = "api.xtreme.net.cn/download/FinalSuspect/Assets/";
                 break;
         }
-    
         return remoteBase;
     }
 
@@ -81,7 +80,6 @@ public static class PathManager
         {
             CheckAndCreate(GetLocalPath(LocalType.Resources) + $"ModNews/{lang}");
         }
-        
         CheckAndCreate(GetLocalPath(LocalType.Resources) + "Languages");
         CheckAndCreate(GetLocalPath(LocalType.Ban));
         CheckAndCreate(GetLocalPath(LocalType.Bypass), false);

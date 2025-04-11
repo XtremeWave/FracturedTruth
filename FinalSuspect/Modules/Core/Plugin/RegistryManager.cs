@@ -32,10 +32,7 @@ public static class RegistryManager
         Keys.SetValue("Last launched version", Main.version.ToString());
         Keys.SetValue("Path", Path.GetFullPath("./"));
 
-        List<string> FoldersNFileToDel =
-            [
-                @"./TOH_DATA",
-            ];
+        List<string> FoldersNFileToDel =[@"./TOH_DATA",];
 
         Info("上次启动的FinalSuspect版本：" + LastVersion, "Registry Manager");
 

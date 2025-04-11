@@ -28,7 +28,6 @@ public static class SoundManager
             Init();
             return;
         }
-
         try
         {
             using StreamReader sr = new(TAGS_PATH);
@@ -50,7 +49,6 @@ public static class SoundManager
         if (!File.Exists(TAGS_PATH)) File.Create(TAGS_PATH).Close();
         var attributes = File.GetAttributes(TAGS_PATH);
         File.SetAttributes(TAGS_PATH, attributes | FileAttributes.Hidden);
-
         XtremeMusic.InitializeAll();
     }
     
@@ -58,7 +56,6 @@ public static class SoundManager
     {
         if (path == null) return false;
         List<string> extensions = [".wav", ".flac", ".aiff", ".mp3", ".aac", ".ogg", ".m4a"];
-
 
         while (!File.Exists(path))
         {

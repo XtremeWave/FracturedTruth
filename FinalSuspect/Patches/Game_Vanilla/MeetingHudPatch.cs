@@ -46,10 +46,10 @@ public static class MeetingHudPatch
         {
             foreach (var data in XtremePlayerData.AllPlayerData)
             {
-                if (data?.deadbodyrend != null)
+                if (data?.Deadbodyrend != null)
                 {
-                    Object.Destroy(data.deadbodyrend);
-                    data.deadbodyrend = null;
+                    Object.Destroy(data.Deadbodyrend);
+                    data.Deadbodyrend = null;
                 }
             }
             if (tie || exiled == null) return;

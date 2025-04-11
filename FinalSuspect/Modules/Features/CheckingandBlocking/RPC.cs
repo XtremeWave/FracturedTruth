@@ -119,7 +119,7 @@ internal class RPCHandlerPatch
                     }*/
                 }
                 catch { }
-                break;
+            break;
         }
     }
 }
@@ -163,7 +163,7 @@ internal static class RPC
     {
         string rpcName;
         if ((rpcName = Enum.GetName(typeof(RpcCalls), callId)) == null)
-            rpcName = callId + "INVALID";
+            rpcName = callId + " 无效";
         return rpcName;
     }
 }

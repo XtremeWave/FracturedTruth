@@ -97,7 +97,7 @@ public class ErrorText : MonoBehaviour
         }
         else
         {
-                text += $"{GetString($"ErrorLevel{maxLevel}")}";
+            text += $"{GetString($"ErrorLevel{maxLevel}")}";
             if (CheatDetected)
                 text = SBDetected ? GetString("FAC.CheatDetected.HighLevel") : GetString("FAC.CheatDetected.LowLevel");
             Text.enabled = true;

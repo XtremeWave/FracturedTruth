@@ -14,9 +14,7 @@ public class ClientFeatureItem
     public static ToggleButtonBehaviour ModOptionsButton { get; set; }
     private static int numItems;
 
-    protected ClientFeatureItem(
-        string name,
-        OptionsMenuBehaviour optionsMenuBehaviour)
+    protected ClientFeatureItem(string name, OptionsMenuBehaviour optionsMenuBehaviour)
     {
         try
         {

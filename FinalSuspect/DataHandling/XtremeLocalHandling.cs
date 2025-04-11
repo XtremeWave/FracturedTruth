@@ -52,8 +52,7 @@ public static class XtremeLocalHandling
         if (!IsLobby) return;
         var player = data.Player;
 
-        if (player.IsHost())
-            toptext = toptext.CheckAndAppendText(GetString("Host"));
+        if (player.IsHost()) toptext = toptext.CheckAndAppendText(GetString("Host"));
         if (XtremeGameData.PlayerVersion.playerVersion.TryGetValue(player.PlayerId, out var ver) && ver != null)
         {
             if (Main.ForkId != ver.forkId)
@@ -61,10 +60,8 @@ public static class XtremeLocalHandling
                 toptext = toptext.CheckAndAppendText($"<size=1.5>{ver.forkId}</size>");
                 topcolor = ColorHelper.UnmatchedColor;
             }
-            else if (Main.version.CompareTo(ver.version) == 0 &&
-                     ver.tag == $"{ThisAssembly.Git.Commit}({ThisAssembly.Git.Branch})")
+            else if (Main.version.CompareTo(ver.version) == 0 && ver.tag == $"{ThisAssembly.Git.Commit}({ThisAssembly.Git.Branch})")
             {
-
                 topcolor = ColorHelper.ModColor32;
             }
             else if (Main.version.CompareTo(ver.version) == 0 &&
@@ -233,8 +230,7 @@ public static class XtremeLocalHandling
             var create = (__instance.GetRealName() == null && IsFreePlay ||
                          __instance.GetRealName() != "Player(Clone)") 
                          && XtremePlayerData.AllPlayerData.All(data => data.PlayerId != __instance.PlayerId);
-            if (create)
-                XtremePlayerData.CreateDataFor(__instance);
+            if (create) XtremePlayerData.CreateDataFor(__instance);
         }
     }
 
@@ -353,15 +349,15 @@ public static class XtremeLocalHandling
         foreach (var data in XtremePlayerData.AllPlayerData)
         {
             if (data.IsDisconnected)
-                data.rend.gameObject.SetActive(false);
+                data.Rend.gameObject.SetActive(false);
             else
             {
                 if (opts.Mode == MapOptions.Modes.CountOverlay)
-                    data.rend.enabled = opts.ShowLivePlayerPosition;
+                    data.Rend.enabled = opts.ShowLivePlayerPosition;
                 else
                 {
-                    data.Player.SetPlayerMaterialColors(data.rend);
-                    data.rend.gameObject.SetActive(true);
+                    data.Player.SetPlayerMaterialColors(data.Rend);
+                    data.Rend.gameObject.SetActive(true);
                     UpdateMap();
                 }
             }
@@ -387,31 +383,31 @@ public static class XtremeLocalHandling
         foreach (var data in XtremePlayerData.AllPlayerData)
         {
             var player = data.Player;
-            if (data.deadbodyrend)
-                data.deadbodyrend.gameObject.SetActive(CanSeeTargetRole(player, out _));
+            if (data.Deadbodyrend)
+                data.Deadbodyrend.gameObject.SetActive(CanSeeTargetRole(player, out _));
             if (data.IsDisconnected || !CanSeeTargetRole(player, out _) || player.IsLocalPlayer())
             {
-                data.rend.gameObject.SetActive(false);
+                data.Rend.gameObject.SetActive(false);
                 continue;
             }
             if (data.IsDead)
-                data.rend.color = Color.white.AlphaMultiplied(0.6f);
+                data.Rend.color = Color.white.AlphaMultiplied(0.6f);
            
             var vector = player.transform.position;
-            if (MeetingHud.Instance && data.preMeetingPosition != null)
+            if (MeetingHud.Instance && data.PreMeetingPosition != null)
             {
-                vector = data.preMeetingPosition.Value;
+                vector = data.PreMeetingPosition.Value;
             }
-            else if (data.preMeetingPosition != null)
+            else if (data.PreMeetingPosition != null)
             {
-                data.preMeetingPosition = null;
+                data.PreMeetingPosition = null;
             }
 
             vector /= ShipStatus.Instance.MapScale;
             vector.x *= Mathf.Sign(ShipStatus.Instance.transform.localScale.x);
             vector.z = -1f;
-            data.rend.transform.localPosition = vector;
-            data.rend.gameObject.SetActive(true);
+            data.Rend.transform.localPosition = vector;
+            data.Rend.gameObject.SetActive(true);
         }
     }
 

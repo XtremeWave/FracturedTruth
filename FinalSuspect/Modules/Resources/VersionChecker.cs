@@ -23,7 +23,6 @@ public static class VersionChecker
                 CheckForUpdate();
                 SpamManager.Init();
             }
-            
             ModUpdater.SetUpdateButtonStatus();
             firstStart = false;
         }

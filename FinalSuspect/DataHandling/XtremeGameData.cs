@@ -51,11 +51,9 @@ public static partial class XtremeGameData
         public static bool IsCanMove => PlayerControl.LocalPlayer?.CanMove is true;
         public static bool IsDead => PlayerControl.LocalPlayer?.Data?.IsDead is true && !IsLobby;
 
-        public static bool IsNormalGame =>
-            GameOptionsManager.Instance.CurrentGameOptions.GameMode is GameModes.Normal or GameModes.NormalFools;
+        public static bool IsNormalGame => GameOptionsManager.Instance.CurrentGameOptions.GameMode is GameModes.Normal or GameModes.NormalFools;
 
-        public static bool IsHideNSeek =>
-            GameOptionsManager.Instance.CurrentGameOptions.GameMode is GameModes.HideNSeek or GameModes.SeekFools;
+        public static bool IsHideNSeek => GameOptionsManager.Instance.CurrentGameOptions.GameMode is GameModes.HideNSeek or GameModes.SeekFools;
 
         public static bool MapIsActive(MapNames name)
         {
@@ -84,9 +82,7 @@ public static partial class XtremeGameData
     
     public static bool IsFinalSuspect(this PlayerControl pc)  => IsFinalSuspect(pc.PlayerId);
 
-    public static bool IsFinalSuspect(byte id) =>
-        PlayerVersion.playerVersion.TryGetValue(id, out var ver) && Main.ForkId == ver.forkId;
-
+    public static bool IsFinalSuspect(byte id) => PlayerVersion.playerVersion.TryGetValue(id, out var ver) && Main.ForkId == ver.forkId;
 }
 
 public enum VanillaDeathReason

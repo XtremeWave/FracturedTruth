@@ -36,8 +36,7 @@ internal class PingTrackerUpdatePatch
         {
             CreditTextCredentialAspectPos.DistanceFromEdge = 
                 DestroyableSingleton<HudManager>.InstanceExists && DestroyableSingleton<HudManager>.Instance.Chat.chatButton.gameObject.active 
-                ? new(2.5f, 0f, -800f)
-                        : new(1.8f, 0f, -800f);
+                ? new(2.5f, 0f, -800f) : new(1.8f, 0f, -800f);
         }
         StringBuilder sb = new();
         
@@ -125,7 +124,6 @@ public class VersionShowerStartPatch
 #if CANARY
         versionText = $"<color={ColorHelper.ModColor}>{ThisAssembly.Git.Branch}</color> - {ThisAssembly.Git.Commit}";
 #endif
-
             credentialsText += versionText;
 
             CreditTextCredential = Object.Instantiate(__instance.text);
@@ -144,7 +142,6 @@ public class VersionShowerStartPatch
             var ap2 = CreditTextCredential.GetComponent<AspectPosition>();
             if (ap2 != null) Object.Destroy(ap2);
         }
-
         TeamLogo = new()
         {
             layer = 5,

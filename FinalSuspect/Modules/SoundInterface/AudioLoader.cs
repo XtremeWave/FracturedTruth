@@ -54,8 +54,7 @@ public class AudioLoader
 
     private static async Task<byte[]> ReadAllBytesAsync(string filePath)
     {
-        using var sourceStream = new FileStream(
-                   filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, true);
+        using var sourceStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, true);
         var buffer = new byte[sourceStream.Length];
         await sourceStream.ReadAsync(buffer, 0, (int)sourceStream.Length);
         return buffer;

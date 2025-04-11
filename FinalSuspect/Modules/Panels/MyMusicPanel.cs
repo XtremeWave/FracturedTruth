@@ -149,7 +149,6 @@ public static class MyMusicPanel
             }
 
             RefreshTags(optionsMenuBehaviour, audio); 
-
             count++; 
         }
     }
