@@ -11,22 +11,28 @@ public static class MeetingHudPatch
     {
         public static void Postfix(MeetingHud __instance)
         {
-            if (AmongUsClient.Instance.AmHost) return;
-            for (var i = 0; i < __instance.playerStates.Length; i++)
+            if (__instance == null) return; // 空值检查
+            if (AmongUsClient.Instance?.AmHost == true) return; // 确保 Instance 和 AmHost 不为空
+
+            for (var i = 0; i < __instance.playerStates?.Length; i++) // 确保数组不为空
             {
                 var playerVoteArea = __instance.playerStates[i];
-                var playerById = GameData.Instance.GetPlayerById(playerVoteArea.TargetPlayerId);
+                if (playerVoteArea == null) continue; // 跳过空值
+
+                var playerById = GameData.Instance?.GetPlayerById(playerVoteArea.TargetPlayerId);
                 if (playerById == null)
                 {
-                    playerVoteArea.SetDisabled();
+                    playerVoteArea?.SetDisabled();
                 }
                 else
                 {
                     var flag = playerById.Disconnected || playerById.IsDead;
                     if (flag != playerVoteArea.AmDead)
                     {
-                        playerVoteArea.SetDead(__instance.reporterId == playerById.PlayerId, flag, playerById.Role.Role == RoleTypes.GuardianAngel);
-                        __instance.SetDirtyBit(1U);
+                        bool isReporter = __instance.reporterId == playerById.PlayerId; 
+                        playerVoteArea.SetDead(isReporter, flag, 
+                            playerById.Role?.Role == RoleTypes.GuardianAngel);
+                        __instance?.SetDirtyBit(1U);
                     }
                 }
             }
@@ -36,15 +42,15 @@ public static class MeetingHudPatch
     [HarmonyPriority(Priority.First)]
     class VotingCompletePatch
     {
-        public static void Postfix(
-            [HarmonyArgument(1)]NetworkedPlayerInfo exiled, 
-            [HarmonyArgument(2)]bool tie )
+        public static void Postfix([HarmonyArgument(1)]NetworkedPlayerInfo exiled, [HarmonyArgument(2)]bool tie )
         {
             foreach (var data in XtremePlayerData.AllPlayerData)
             {
-                if (data.deadbodyrend)
+                if (data?.deadbodyrend != null)
+                {
                     Object.Destroy(data.deadbodyrend);
-                data.deadbodyrend = null;
+                    data.deadbodyrend = null;
+                }
             }
             if (tie || exiled == null) return;
             var player = GetPlayerById(exiled.PlayerId);
