@@ -336,7 +336,7 @@ public static class FinalAntiCheat
         {
             switch (callId)
             {
-                case unchecked((byte)42069):
+                case unchecked((byte)42069): //AUM RPC 85
                 case 101:
                     //Report(pc, "AUM");
                     HandleCheat(pc, GetString("FAC.CheatDetected.FAC"));
@@ -345,13 +345,12 @@ public static class FinalAntiCheat
                     //Report(pc, "YM");
                     HandleCheat(pc, GetString("FAC.CheatDetected.FAC"));
                     return true;
-                case 168:
-                case unchecked((byte)420):
+                case unchecked((byte)420): //SM RPC 164
                     //Report(pc, "SM");
                     HandleCheat(pc, GetString("FAC.CheatDetected.FAC"));
                     return true;
                 case 119:
-                case unchecked(250):
+                case 250:
                     //Report(pc, "KN");
                     HandleCheat(pc, GetString("FAC.CheatDetected.FAC"));
                     return true;
