@@ -218,6 +218,7 @@ public static class FinalAntiCheat
                         case RpcCalls.VotingComplete: 
                         case RpcCalls.ClimbLadder:
                         case RpcCalls.UpdateSystem:
+                        //case RpcCalls.SetStartCounter:
                             if (AmongUsClient.Instance.AmHost) return true;
                             NotificationPopperPatch.NotificationPop(GetString("Warning.RoomBroken"));
                             notify = false;
