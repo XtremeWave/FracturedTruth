@@ -286,6 +286,7 @@ RShift: "Presiona RShift para entrar en la habitación del portapapeles"
 # 客户端平台 / Platform
 IPhone: "IPhone"
 Android: "Android"
+MicrosoftStore: "Microsoft"
 
 # 延迟显示 / Ping Tracker
 Ping: "Ping"

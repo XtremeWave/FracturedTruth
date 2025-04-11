@@ -107,6 +107,11 @@ Parsing: "解析中……"
 DownLoadSucceedNotice: "下載成功！"
 DownLoadFailureNotice: "下載失敗=("
 PleaseWait: "請稍候……"
+LanguageFilesLoadingComplete: "翻譯文本加載完成！"
+CheckingForFiles: "驗證資源文件完整性中..."
+DownloadingResources: "下載資源文件中..."
+Loading: "加載中..."
+LoadingComplete: "加載完成！"
 
 # 更新检查
 Retry: "重試"
@@ -287,6 +292,7 @@ LobbyTimeDisplayText: "生存期間"
 # 客户端平台 / Platform
 IPhone: "蘋果"
 Android: "安卓"
+MicrosoftStore: "Microsoft"
 
 # 延迟显示 / Ping Tracker
 Ping: "延遲"
@@ -299,13 +305,6 @@ HongKong: "香港"
 FPSSetTo: "幀數上限設置為: {0}"
 BrowsingMode: "瀏覽模式"
 Broken: "損壞"
-
-# 加载 / Loading
-LanguageFilesLoadingComplete: "翻譯文本加載完成！"
-CheckingForFiles: "驗證資源文件完整性中..."
-DownloadingResources: "下載資源文件中..."
-Loading: "加載中..."
-LoadingComplete: "加載完成！"
 
 # 身份 / Identity
 Host: "房主"

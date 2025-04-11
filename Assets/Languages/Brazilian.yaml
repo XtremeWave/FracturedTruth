@@ -107,6 +107,11 @@ Parsing: "Analisando..."
 DownLoadSucceedNotice: "Download bem-sucedido!"
 DownLoadFailureNotice: "Download falhou =("
 PleaseWait: "Por favor, aguarde..."
+LanguageFilesLoadingComplete: "Carregamento de Traduções Completo!"
+CheckingForFiles: "Verificando Integridade dos Arquivos de Recursos..."
+DownloadingResources: "Baixando Arquivos de Recursos..."
+Loading: "Carregando..."
+LoadingComplete: "Carregamento Completo!"
 
 # 更新检查 / Update Checker
 Retry: "Tentar Novamente"
@@ -287,6 +292,7 @@ LobbyTimeDisplayText: "Tempo decorrido de existência"
 # 客户端平台 / Platform
 IPhone: "IPhone"
 Android: "Android"
+MicrosoftStore: "Microsoft"
 
 # 延迟显示 / Ping Tracker
 Ping: "Ping"
@@ -299,13 +305,6 @@ HongKong: "HongKong"
 FPSSetTo: "Taxa de quadros limitada definida para: {0}"
 BrowsingMode: "Modo de Navegação"
 Broken: "Quebrado"
-
-# 加载 / Loading
-LanguageFilesLoadingComplete: "Carregamento de Traduções Completo!"
-CheckingForFiles: "Verificando Integridade dos Arquivos de Recursos..."
-DownloadingResources: "Baixando Arquivos de Recursos..."
-Loading: "Carregando..."
-LoadingComplete: "Carregamento Completo!"
 
 # 身份 / Identity
 Host: "Anfitrião"
