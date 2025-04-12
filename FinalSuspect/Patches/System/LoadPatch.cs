@@ -89,12 +89,12 @@ public class LoadPatch
     private static SpriteRenderer ModlogoBlurred = null!;
     private static SpriteRenderer Glow = null!;
     private static bool ReloadLanguage;
-    private static bool SkipLoadAnima = false;
+    private static bool SkipLoadAnima;
 
     [HarmonyPatch(typeof(SplashManager), nameof(SplashManager.Start))]
-    private class Start
+    public class Start
     {
-        private static bool Prefix(SplashManager __instance)
+        public static bool Prefix(SplashManager __instance)
         {
             ResolutionManager.SetResolution(1920, 1080, Screen.fullScreen);
             __instance.startTime = Time.time;
@@ -509,12 +509,15 @@ public class LoadPatch
             {
                 DestroyableSingleton<TranslationController>.Instance.Initialize();
             }
-            catch { }
+            catch
+            {
+                // ignored
+            }
         }
     }
     
     [HarmonyPatch(typeof(SplashManager), nameof(SplashManager.Update))]
-    internal class SplashLogoAnimatorPatch
+    public class SplashLogoAnimatorPatch
     {
         public static void Prefix(SplashManager __instance)
         {
@@ -525,7 +528,7 @@ public class LoadPatch
     }
     
     [HarmonyPatch(typeof(LoadingBarManager), nameof(LoadingBarManager.ToggleLoadingBar))]
-    internal class LoadingBarManagerPatch
+    public class LoadingBarManagerPatch
     {
         public static void Prefix(LoadingBarManager __instance, ref bool on)
         {

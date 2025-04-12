@@ -38,7 +38,7 @@ class MMOnlineManagerStartPatch
         var obj = GameObject.Find("FindGameButton");
         if (obj)
         {
-            obj?.SetActive(false);
+            obj.SetActive(false);
             _ = obj.transform.parent.gameObject;
             var textObj = Object.Instantiate(obj.transform.FindChild("Text_TMP").GetComponent<TextMeshPro>());
             textObj.transform.position = new Vector3(0.5f, -0.4f, 0f);
@@ -134,7 +134,11 @@ internal class KickPlayerPatch
                 }
             }
         }
-        catch { }
+        catch
+        {
+            // ignored
+        }
+
         return true;
     }
 }

@@ -146,19 +146,19 @@ public static class VersionChecker
 
             verHead = new(data["verHead"]?.ToString());
 
-            DebugVer = new(data["DebugVer"]?.ToString());
+            DebugVer = new(data["DebugVer"]?.ToString() ?? string.Empty);
 
             CanUpdate = bool.Parse(new(data["CanUpdate"]?.ToString()));
 
             verDate = new(data["verDate"]?.ToString());
             md5 = data["md5"]?.ToString();
-            latestVersion = new(data["version"]?.ToString());
+            latestVersion = new(data["version"]?.ToString() ?? string.Empty);
 
             showVer = $"{verHead}_{verDate}";
 
             var minVer = data["minVer"]?.ToString();
-            minimumVersion = minVer.ToLower() == "latest" ? latestVersion : new(minVer);
-            creation = int.Parse(data["creation"]?.ToString());
+            if (minVer != null) minimumVersion = minVer?.ToLower() == "latest" ? latestVersion : new(minVer);
+            creation = int.Parse(data["creation"]?.ToString() ?? string.Empty);
             isBroken = data["allowStart"]?.ToString().ToLower() != "true";
 
             var announcement = data["announcement"].Cast<JObject>();

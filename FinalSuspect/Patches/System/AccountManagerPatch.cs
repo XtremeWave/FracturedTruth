@@ -87,7 +87,10 @@ public static class AwakeAccountManager
             __instance.StartCoroutine(SwitchRoleIllustration(Sprite));
             crewpet_walk0001.SetActive(false);
         }
-        catch { }
+        catch
+        {
+            // ignored
+        }
     }
     public static IEnumerator SwitchRoleIllustration(SpriteRenderer spriter)
     {

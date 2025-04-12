@@ -11,6 +11,9 @@ namespace FinalSuspect.DataHandling;
 [HarmonyPatch]
 public static class XtremeLocalHandling
 {
+    private static readonly int OutlineColor = Shader.PropertyToID("_OutlineColor");
+    private static readonly int AddColor = Shader.PropertyToID("_AddColor");
+
     public static string CheckAndGetNameWithDetails(
         this PlayerControl player, 
         out Color topcolor, 
@@ -228,7 +231,7 @@ public static class XtremeLocalHandling
         catch
         {
             var create = (__instance.GetRealName() == null && IsFreePlay ||
-                         __instance.GetRealName() != "Player(Clone)") 
+                          __instance.GetRealName() != "Player(Clone)") 
                          && XtremePlayerData.AllPlayerData.All(data => data.PlayerId != __instance.PlayerId);
             if (create) XtremePlayerData.CreateDataFor(__instance);
         }
@@ -277,10 +280,9 @@ public static class XtremeLocalHandling
 
                 var name = CheckAndGetNameWithDetails(pva.TargetPlayerId, out var color, out _, out var toptext, out _);
 
-                var roleTextMeeting = Object.Instantiate(pva.NameText);
+                var roleTextMeeting = Object.Instantiate(pva.NameText, pva.NameText.transform, true);
                 roleTextMeeting.text = "";
                 roleTextMeeting.enabled = false;
-                roleTextMeeting.transform.SetParent(pva.NameText.transform);
                 roleTextMeeting.transform.localPosition = new Vector3(0f, -0.18f, 0f);
                 roleTextMeeting.fontSize = 1.5f;
                 roleTextMeeting.gameObject.name = "RoleTextMeeting";
@@ -296,7 +298,10 @@ public static class XtremeLocalHandling
                     roleTextMeeting.enabled = true;
                 }
             }
-            catch { }
+            catch
+            {
+                // ignored
+            }
         }
     }
 
@@ -325,7 +330,10 @@ public static class XtremeLocalHandling
                     roleTextMeeting.enabled = true;
                 }
             }
-            catch { }
+            catch
+            {
+                // ignored
+            }
         }
     }
 
@@ -337,8 +345,8 @@ public static class XtremeLocalHandling
     {
         if (!Main.EnableFinalSuspect.Value) return;
         var color = PlayerControl.LocalPlayer.GetRoleColor();
-        __instance.myRend.material.SetColor("_OutlineColor", color);
-        __instance.myRend.material.SetColor("_AddColor", mainTarget ? color : Color.clear);
+        __instance.myRend.material.SetColor(OutlineColor, color);
+        __instance.myRend.material.SetColor(AddColor, mainTarget ? color : Color.clear);
     }
 
     #endregion
@@ -442,6 +450,9 @@ public static class XtremeLocalHandling
             if (!player.IsAlive())
                 bgcolor = new Color32(255, 0, 0, 120);
         }
-        catch { }
+        catch
+        {
+            // ignored
+        }
     }
 }

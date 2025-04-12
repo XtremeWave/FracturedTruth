@@ -17,7 +17,7 @@ public static class ChatBubblePatch
         Color namecolor= ColorHelper.FaultColor;
         string name = null;
         var modded = IsModdedMsg(__instance.playerInfo.PlayerName);
-        if (__instance?.playerInfo?.PlayerId == null)
+        if (__instance.playerInfo?.PlayerId == null)
         {
             bgcolor = ColorHelper.HalfYellow;
         }

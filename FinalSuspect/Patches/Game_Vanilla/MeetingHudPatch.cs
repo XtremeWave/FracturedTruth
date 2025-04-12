@@ -22,17 +22,17 @@ public static class MeetingHudPatch
                 var playerById = GameData.Instance?.GetPlayerById(playerVoteArea.TargetPlayerId);
                 if (playerById == null)
                 {
-                    playerVoteArea?.SetDisabled();
+                    playerVoteArea.SetDisabled();
                 }
                 else
                 {
                     var flag = playerById.Disconnected || playerById.IsDead;
                     if (flag != playerVoteArea.AmDead)
                     {
-                        bool isReporter = __instance.reporterId == playerById.PlayerId; 
+                        var isReporter = __instance.reporterId == playerById.PlayerId; 
                         playerVoteArea.SetDead(isReporter, flag, 
                             playerById.Role?.Role == RoleTypes.GuardianAngel);
-                        __instance?.SetDirtyBit(1U);
+                        __instance.SetDirtyBit(1U);
                     }
                 }
             }

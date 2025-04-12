@@ -17,7 +17,7 @@ public class ControllerNavMenuPatch
     public static void Start_Postfix(ControllerNavMenu __instance)
     {
         if (!Main.AutoEndGame.Value) return;
-            __instance.gameObject.SetActive(false);  
+        __instance.gameObject.SetActive(false);  
     }
 }
 [HarmonyPatch(typeof(LogicGameFlowNormal), nameof(LogicGameFlowNormal.CheckEndCriteria))]

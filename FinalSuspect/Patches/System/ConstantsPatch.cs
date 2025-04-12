@@ -3,7 +3,7 @@
 [HarmonyPatch(typeof(Constants), nameof(Constants.GetBroadcastVersion))]
 public class ConstantsPatch
 {
-    static void Postfix(ref int __result)
+    public static void Postfix(ref int __result)
     {
         if (IsLocalGame)
         {

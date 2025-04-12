@@ -23,16 +23,16 @@ public static class MyMusicPanel
 
     private static int numItems;
     public static int PlayMode;
-    public static ToggleButtonBehaviour ChangePlayMode { get; private set; }
+    //public static ToggleButtonBehaviour ChangePlayMode { get; private set; }
     public static void Hide()
     {
         if (CustomBackground != null)
-            CustomBackground?.gameObject?.SetActive(false);
+            CustomBackground?.gameObject.SetActive(false);
     }
     public static void Init(OptionsMenuBehaviour optionsMenuBehaviour)
     {
-        var mouseMoveToggle = optionsMenuBehaviour.DisableMouseMovement;
-            OptionsMenuBehaviourNow = optionsMenuBehaviour;
+        var mouseMoveToggle = optionsMenuBehaviour.DisableMouseMovement; 
+        OptionsMenuBehaviourNow = optionsMenuBehaviour;
         if (CustomBackground == null)
         {
             CurrentPage = 1;
@@ -79,7 +79,7 @@ public static class MyMusicPanel
             helpTextTMP.text = GetString("CustomSoundHelp");
             helpText.gameObject.GetComponent<RectTransform>().sizeDelta = new(2.45f, 1f);
 
-            AddChangePlayModeButton(optionsMenuBehaviour);
+            //AddChangePlayModeButton(optionsMenuBehaviour);
         }
         RefreshTagList();
     }
@@ -108,7 +108,7 @@ public static class MyMusicPanel
             RefreshTagList() ;
         }));
     }
-    static void AddChangePlayModeButton(OptionsMenuBehaviour optionsMenuBehaviour)
+    /*static void AddChangePlayModeButton(OptionsMenuBehaviour optionsMenuBehaviour)
     {
         //var mouseMoveToggle = optionsMenuBehaviour.DisableMouseMovement;
         //ChangePlayMode = Object.Instantiate(mouseMoveToggle, CustomBackground.transform);
@@ -131,7 +131,7 @@ public static class MyMusicPanel
         //    Object.Destroy(ChangePlayMode.gameObject);
         //    AddChangePlayModeButton(OptionsMenuBehaviourNow);
         //}));
-    }
+    }*/
     public static void RefreshTagList()
     {
         Items?.Do(Object.Destroy);

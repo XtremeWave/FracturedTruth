@@ -56,7 +56,7 @@ public class ModNewsHistory
         while (!reader.EndOfStream)
         {
             var line = reader.ReadLine();
-            if (line.StartsWith("#Number:")) mn.Number = int.Parse(line.Replace("#Number:", string.Empty));
+            if (line!.StartsWith("#Number:")) mn.Number = int.Parse(line.Replace("#Number:", string.Empty));
             else if (line.StartsWith("#LangId:")) langId = uint.Parse(line.Replace("#LangId:", string.Empty));
             else if (line.StartsWith("#Title:")) mn.Title = line.Replace("#Title:", string.Empty);
             else if (line.StartsWith("#SubTitle:")) mn.SubTitle = line.Replace("#SubTitle:", string.Empty);
@@ -91,36 +91,61 @@ public class ModNewsHistory
         return mn;
     }
 
-[HarmonyPatch(typeof(PlayerAnnouncementData), nameof(PlayerAnnouncementData.SetAnnouncements)), HarmonyPrefix]
-public static bool SetModAnnouncements([HarmonyArgument(0)] ref Il2CppReferenceArray<Announcement> aRange)
-{
-    try
+    [HarmonyPatch(typeof(PlayerAnnouncementData), nameof(PlayerAnnouncementData.SetAnnouncements)), HarmonyPrefix]
+    public static bool SetModAnnouncements([HarmonyArgument(0)] ref Il2CppReferenceArray<Announcement> aRange)
     {
-        // 如果 AllModNews 为空，加载所有语言的 ModNews
-        if (AllModNews.Count < 1)
+        try
         {
-            foreach (var lang in EnumHelper.GetAllValues<SupportedLangs>())
+            // 如果 AllModNews 为空，加载所有语言的 ModNews
+            if (AllModNews.Count < 1)
             {
-                var fileNames = Directory.GetFiles(GetResourceFilesPath(FileType.ModNews, lang + "/"));
-                foreach (var file in fileNames)
+                foreach (var lang in EnumHelper.GetAllValues<SupportedLangs>())
                 {
-                    try
+                    var fileNames = Directory.GetFiles(GetResourceFilesPath(FileType.ModNews, lang + "/"));
+                    foreach (var file in fileNames)
                     {
-                        var content = GetContentFromRes(file, lang);
-                        if (content != null && !string.IsNullOrEmpty(content.Date))
+                        try
                         {
-                            AllModNews.Add(content);
+                            var content = GetContentFromRes(file, lang);
+                            if (content != null && !string.IsNullOrEmpty(content.Date))
+                            {
+                                AllModNews.Add(content);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Error($"Failed to load mod news from file {file}: {ex}","");
                         }
                     }
-                    catch (Exception ex)
+                }
+
+                // 对 AllModNews 进行排序，处理可能的空值
+                AllModNews.Sort((a1, a2) =>
+                {
+                    if (string.IsNullOrEmpty(a1.Date) || string.IsNullOrEmpty(a2.Date))
                     {
-                        Error($"Failed to load mod news from file {file}: {ex}","");
+                        return string.IsNullOrEmpty(a1.Date) ? 1 : -1;
                     }
+                    return DateTime.Parse(a2.Date).CompareTo(DateTime.Parse(a1.Date));
+                });
+            }
+        
+            var FinalAllNews = new List<Announcement>();
+            AllModNews.ForEach(n =>
+            {
+                if (n.Lang == (uint)TranslationController.Instance.currentLanguage.languageID)
+                    FinalAllNews.Add(n.ToAnnouncement());
+            });
+
+            foreach (var news in aRange)
+            {
+                if (!AllModNews.Any(x => x.Number == news.Number))
+                {
+                    FinalAllNews.Add(news);
                 }
             }
-
-            // 对 AllModNews 进行排序，处理可能的空值
-            AllModNews.Sort((a1, a2) =>
+        
+            FinalAllNews.Sort((a1, a2) =>
             {
                 if (string.IsNullOrEmpty(a1.Date) || string.IsNullOrEmpty(a2.Date))
                 {
@@ -128,52 +153,27 @@ public static bool SetModAnnouncements([HarmonyArgument(0)] ref Il2CppReferenceA
                 }
                 return DateTime.Parse(a2.Date).CompareTo(DateTime.Parse(a1.Date));
             });
-        }
-        
-        var FinalAllNews = new List<Announcement>();
-        AllModNews.ForEach(n =>
-        {
-            if (n.Lang == (uint)TranslationController.Instance.currentLanguage.languageID)
-                FinalAllNews.Add(n.ToAnnouncement());
-        });
 
-        foreach (var news in aRange)
-        {
-            if (!AllModNews.Any(x => x.Number == news.Number))
+            if (FinalAllNews.Count == 0)
             {
-                FinalAllNews.Add(news);
+                aRange = new Il2CppReferenceArray<Announcement>(0); 
             }
-        }
-        
-        FinalAllNews.Sort((a1, a2) =>
-        {
-            if (string.IsNullOrEmpty(a1.Date) || string.IsNullOrEmpty(a2.Date))
+            else
             {
-                return string.IsNullOrEmpty(a1.Date) ? 1 : -1;
+                aRange = new Il2CppReferenceArray<Announcement>(FinalAllNews.Count);
+                for (var i = 0; i < FinalAllNews.Count; i++)
+                {
+                    aRange[i] = FinalAllNews[i];
+                }
             }
-            return DateTime.Parse(a2.Date).CompareTo(DateTime.Parse(a1.Date));
-        });
-
-        if (FinalAllNews.Count == 0)
-        {
-            aRange = new Il2CppReferenceArray<Announcement>(0); 
+            return true;
         }
-        else
+        catch (Exception ex)
         {
-            aRange = new Il2CppReferenceArray<Announcement>(FinalAllNews.Count);
-            for (var i = 0; i < FinalAllNews.Count; i++)
-            {
-                aRange[i] = FinalAllNews[i];
-            }
+            Error($"Exception in SetModAnnouncements: {ex}", "");
+            return true;
         }
-        return true;
-    }
-    catch (Exception ex)
-    {
-        Error($"Exception in SetModAnnouncements: {ex}", "");
-        return true;
-    }
-}   
+    }   
     static Sprite TeamLogoSprite = LoadSprite("TeamLogo.png", 1000f);
     
     //YuEzTool

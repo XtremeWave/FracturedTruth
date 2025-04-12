@@ -142,7 +142,10 @@ public static class HudManagerPatch
                 SetChatBG(__instance);
                 SetAbilityButtonColor(__instance);
             }
-            catch { }
+            catch
+            {
+                // ignored
+            }
         }
     }
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.CoFadeFullScreen))]
@@ -185,7 +188,7 @@ public static class HudManagerPatch
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.HideGameLoader))]
     public static class HideGameLoader
     {
-        static void Prefix()
+        public static void Prefix()
         {
             ModLoading.SetActive(false);
         }
@@ -204,7 +207,11 @@ public static class HudManagerPatch
             Object.Destroy(roleSummary.gameObject);
             Object.Destroy(backgroundRenderer.gameObject);  //销毁背景
         }
-        catch { }
+        catch
+        {
+            // ignored
+        }
+
         showHideButton = null;
         roleSummary = null;
         backgroundRenderer = null;
@@ -266,19 +273,19 @@ public static class HudManagerPatch
        
         showHideButton ??=
             new SimpleButton(
-               __instance.transform,
-               "ShowHideResultsButton",
-               IsInGame? new(0.2f, 2.685f, -14f) : new(-4.5f, 2.6f, -14f),  // 比 BackgroundLayer(z = -13) 更靠前
-               new(209, 190, 255, byte.MaxValue),
-               new(208, 222, 255, byte.MaxValue),
-               () =>
-               {
-                   var setToActive = !roleSummary.gameObject.activeSelf;
-                   roleSummary.gameObject.SetActive(setToActive);
-                   Main.ShowResults.Value = setToActive;
-                   showHideButton.Label.text = GetString(setToActive ? "HideResults" : "ShowResults");
-               },
-               GetString(showInitially ? "HideResults" : "ShowResults"))
+                __instance.transform,
+                "ShowHideResultsButton",
+                IsInGame? new(0.2f, 2.685f, -14f) : new(-4.5f, 2.6f, -14f),  // 比 BackgroundLayer(z = -13) 更靠前
+                new(209, 190, 255, byte.MaxValue),
+                new(208, 222, 255, byte.MaxValue),
+                () =>
+                {
+                    var setToActive = !roleSummary.gameObject.activeSelf;
+                    roleSummary.gameObject.SetActive(setToActive);
+                    Main.ShowResults.Value = setToActive;
+                    showHideButton.Label.text = GetString(setToActive ? "HideResults" : "ShowResults");
+                },
+                GetString(showInitially ? "HideResults" : "ShowResults"))
             {
                 Scale = new(1.5f, 0.5f),
                 FontSize = 2f,

@@ -29,9 +29,8 @@ public class ResourcesDownloader
         var DownloadFileTempPath = filePath + ".xwr";
 
         var retrytimes = 0;
-        var remoteType = RemoteType.Github;
-        
-    retry:
+        var remoteType = RemoteType.Github; 
+        retry:
         if (IsChineseLanguageUser)
             switch (retrytimes)
             {
@@ -74,7 +73,7 @@ public class ResourcesDownloader
             Error($"Failed to download\n{ex.Message}", "Download Resources", false);
             File.Delete(DownloadFileTempPath);
             retrytimes++;
-            if (retrytimes < 2) 
+            if (retrytimes < 3) 
                 goto retry;
             return false;
         }

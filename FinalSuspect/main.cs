@@ -18,6 +18,7 @@ using UnityEngine;
 [assembly: AssemblyFileVersion(Main.PluginVersion)]
 [assembly: AssemblyInformationalVersion(Main.PluginVersion)]
 [assembly: AssemblyVersion(Main.PluginVersion)]
+
 namespace FinalSuspect;
 
 [BepInPlugin(PluginGuid, "FinalSuspect", PluginVersion)]
@@ -67,24 +68,24 @@ public class Main : BasePlugin
     /// Preview: 预览/预发行版
     /// Scrapter: 废弃版
     /// </summary>
-    private const VersionTypes DisplayedVersion_TestText = VersionTypes.Release;
+    private const VersionTypes DisplayedVersion_Type = VersionTypes.Release;
 
-    private const int DisplayedVersion_TestCreation = 7;
+    private const int DisplayedVersion_TestCreation = 0;
     
     public static readonly string DisplayedVersion = 
         $"{DisplayedVersion_Head}_{DisplayedVersion_Date}" +
-        $"{(DisplayedVersion_TestText != VersionTypes.Release ? 
-        $"_{DisplayedVersion_TestText}_{DisplayedVersion_TestCreation}" : "")}";
+        $"{(DisplayedVersion_Type != VersionTypes.Release ? 
+            $"_{DisplayedVersion_Type}_{DisplayedVersion_TestCreation}" : "")}";
 
     // == 链接相关设定 / Link Config ==
     //public static readonly string WebsiteUrl = IsChineseLanguageUser ? "https://www.xtreme.net.cn/project/FS/" : "https://www.xtreme.net.cn/en/project/FS/";
-    public static readonly string QQInviteUrl = "https://qm.qq.com/q/GNbm9UjfCa";
-    public static readonly string DiscordInviteUrl = "https://discord.gg/kz787Zg7h8/";
-    public static readonly string GithubRepoUrl = "https://github.com/XtremeWave/FinalSuspect/";
+    public const string QQInviteUrl = "https://qm.qq.com/q/GNbm9UjfCa";
+    public const string DiscordInviteUrl = "https://discord.gg/kz787Zg7h8/";
+    public const string GithubRepoUrl = "https://github.com/XtremeWave/FinalSuspect/";
 
     // ==========
     public Harmony Harmony { get; } = new (PluginGuid);
-    public static Version version = Version.Parse(PluginVersion);
+    public static readonly Version version = Version.Parse(PluginVersion);
     public static ManualLogSource Logger;
     public static bool hasArgumentException;
     public static string ExceptionMessage;
@@ -142,13 +143,14 @@ public class Main : BasePlugin
 
     public static bool NewLobby = false;
 
-    public static List<string> TName_Snacks_CN =
+    public static readonly List<string> TName_Snacks_CN =
     [
         "冰激凌", "奶茶", "巧克力", "蛋糕", "甜甜圈", "可乐", "柠檬水", "冰糖葫芦", "果冻", "糖果", "牛奶",
         "抹茶", "烧仙草", "菠萝包", "布丁", "椰子冻", "曲奇", "红豆土司", "三彩团子", "艾草团子", "泡芙", "可丽饼",
         "桃酥", "麻薯", "鸡蛋仔", "马卡龙", "雪梅娘", "炒酸奶", "蛋挞", "松饼", "西米露", "奶冻", "奶酥", "可颂", "奶糖"
     ];
-    public static List<string> TName_Snacks_EN =
+
+    public static readonly List<string> TName_Snacks_EN =
     [
         "Ice cream", "Milk tea", "Chocolate", "Cake", "Donut", "Coke", "Lemonade", "Candied haws", "Jelly", "Candy",
         "Milk",

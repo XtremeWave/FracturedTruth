@@ -65,7 +65,7 @@ public class ClientFeatureItem
                 var generalTab = mouseMoveToggle.transform.parent.parent.parent;
 
                 ModOptionsButton = Object.Instantiate(mouseMoveToggle, generalTab);
-                var pos = leaveButton?.transform?.localPosition;
+                var pos = leaveButton?.transform.localPosition;
                 ModOptionsButton.transform.localPosition = pos != null ? pos.Value - new Vector3(1.3f, 0f, 0f) : new(-1.3f, -2.4f, 1f);
                 ModOptionsButton.name = "FinalSuspectFeatures Options";
                 ModOptionsButton.Text.text = GetString("FinalSuspectFeatures");

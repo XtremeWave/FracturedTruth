@@ -56,26 +56,26 @@ class SetEverythingUpPatch
 
         //ShowResult:
         showHideButton = 
-        new SimpleButton(
-           __instance.transform,
-           "ShowHideResultsButton",
-           new(-4.5f, 2.6f, -14f),  // 比 BackgroundLayer(z = -13) 更靠前
-           new(209, 190, 0, byte.MaxValue),
-           new(byte.MaxValue, byte.MaxValue, 0, byte.MaxValue),
-           () =>
-           {
-               var setToActive = !roleSummary.gameObject.activeSelf;
-               roleSummary.gameObject.SetActive(setToActive);
-               Main.ShowResults.Value = setToActive;
-               __instance.WinText.gameObject.SetActive(!setToActive);
-               WinnerTextObject.SetActive(!setToActive);
-               showHideButton.Label.text = GetString(setToActive ? "HideResults" : "ShowResults");
-           },
-           GetString(showInitially ? "HideResults" : "ShowResults"))
-        {
-            Scale = new(1.5f, 0.5f),
-            FontSize = 2f,
-        };
+            new SimpleButton(
+                __instance.transform,
+                "ShowHideResultsButton",
+                new(-4.5f, 2.6f, -14f),  // 比 BackgroundLayer(z = -13) 更靠前
+                new(209, 190, 0, byte.MaxValue),
+                new(byte.MaxValue, byte.MaxValue, 0, byte.MaxValue),
+                () =>
+                {
+                    var setToActive = !roleSummary.gameObject.activeSelf;
+                    roleSummary.gameObject.SetActive(setToActive);
+                    Main.ShowResults.Value = setToActive;
+                    __instance.WinText.gameObject.SetActive(!setToActive);
+                    WinnerTextObject.SetActive(!setToActive);
+                    showHideButton.Label.text = GetString(setToActive ? "HideResults" : "ShowResults");
+                },
+                GetString(showInitially ? "HideResults" : "ShowResults"))
+            {
+                Scale = new(1.5f, 0.5f),
+                FontSize = 2f,
+            };
         var lastgameresult = DidHumansWin ? GetString("CrewsWin") : GetString("ImpsWin");
         LastGameResult = lastgameresult;
         StringBuilder sb = new($"{GetString("RoleSummaryText")}{lastgameresult}");

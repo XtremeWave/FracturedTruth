@@ -120,7 +120,7 @@ public class GameStartManagerPatch
             // Lobby code
             if (DataManager.Settings.Gameplay.StreamerMode)
             {
-                __instance.GameRoomNameCode.color = new(__instance.GameRoomNameCode.color.r, __instance.GameRoomNameCode.color.g, __instance.GameRoomNameCode.color.b, 0); ;
+                __instance.GameRoomNameCode.color = new(__instance.GameRoomNameCode.color.r, __instance.GameRoomNameCode.color.g, __instance.GameRoomNameCode.color.b, 0); 
                 HideName.enabled = !IsLocalGame;
             }
             else
@@ -218,8 +218,8 @@ public class GameStartManagerPatch
         {
             if (!XtremeGameData.PlayerVersion.playerVersion.TryGetValue(playerId, out var version)) return acceptVanilla;
             return Main.ForkId == version.forkId
-                && Main.version.CompareTo(version.version) == 0
-                && version.tag == $"{ThisAssembly.Git.Commit}({ThisAssembly.Git.Branch})";
+                   && Main.version.CompareTo(version.version) == 0
+                   && version.tag == $"{ThisAssembly.Git.Commit}({ThisAssembly.Git.Branch})";
         }
     }
 }
@@ -227,7 +227,7 @@ public class GameStartManagerPatch
 [HarmonyPatch(typeof(TextBoxTMP), nameof(TextBoxTMP.SetText))]
 public static class HiddenTextPatch
 {
-    private static void Postfix(TextBoxTMP __instance)
+    public static void Postfix(TextBoxTMP __instance)
     {
         if (__instance.name == "GameIdText") __instance.outputText.text = new string('*', __instance.text.Length);
     }

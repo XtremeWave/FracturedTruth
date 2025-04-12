@@ -52,7 +52,10 @@ class DisconnectInternalPatch
             ErrorText.Instance.Clear();
             //Cloud.StopConnect();
         }
-        catch { }
+        catch
+        {
+            // ignored
+        }
     }
 }
 [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerJoined))]
@@ -65,12 +68,12 @@ public class OnPlayerJoinedPatch
         {
             KickPlayer(client.Id, false, "NotLogin");
             NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.KickedByNoFriendCode"), client.PlayerName));
-            Info($"没有好友代码的玩家 {client?.PlayerName} 已被踢出。", "Kick");
+            Info($"没有好友代码的玩家 {client.PlayerName} 已被踢出。", "Kick");
         }
         if (DestroyableSingleton<FriendsListManager>.Instance.IsPlayerBlockedUsername(client.FriendCode) && AmongUsClient.Instance.AmHost && Main.KickPlayerInBanList.Value)
         {
             KickPlayer(client.Id, true, "BanList");
-            Info($"已封锁的玩家 {client?.PlayerName} ({client.FriendCode}) 已被封禁。", "BAN");
+            Info($"已封锁的玩家 {client.PlayerName} ({client.FriendCode}) 已被封禁。", "BAN");
         }
         BanManager.CheckBanPlayer(client);
         BanManager.CheckDenyNamePlayer(client);
@@ -98,13 +101,13 @@ class OnPlayerLeftPatch
                 return;
             }
 
-            data?.Character?.SetDisconnected();
+            data.Character?.SetDisconnected();
 
-            Info($"{data?.PlayerName}(ClientID:{data?.Id}/FriendCode:{data?.FriendCode})断开连接(理由:{reason}，Ping:{AmongUsClient.Instance.Ping})", "Session");
-            var id = data?.Character?.Data?.DefaultOutfit?.ColorId ?? XtremePlayerData.AllPlayerData
+            Info($"{data.PlayerName}(ClientID:{data.Id}/FriendCode:{data.FriendCode})断开连接(理由:{reason}，Ping:{AmongUsClient.Instance.Ping})", "Session");
+            var id = data.Character?.Data?.DefaultOutfit?.ColorId ?? XtremePlayerData.AllPlayerData
                 .Where(playerData => playerData.CheatData.ClientData.Id == data.Id).FirstOrDefault()!.ColorId;
             var color = Palette.PlayerColors[id];
-            var name = StringHelper.ColorString(color, data?.PlayerName);
+            var name = StringHelper.ColorString(color, data.PlayerName);
             // 附加描述掉线原因
             switch (reason)
             {
@@ -124,14 +127,17 @@ class OnPlayerLeftPatch
                     NotificationPopperPatch.NotificationPop(string.Format(GetString("PlayerLeftCuzTimeout"), name));
                     break;
                 default:
-                    if (!ClientsProcessed.Contains(data?.Id ?? 0))
+                    if (!ClientsProcessed.Contains(data.Id))
                         NotificationPopperPatch.NotificationPop(string.Format(GetString("PlayerLeft"), name));
                     break;
             }
-            XtremeGameData.PlayerVersion.playerVersion.Remove(data?.Character?.PlayerId ?? 255);
-            ClientsProcessed.Remove(data?.Id ?? 0);
-            XtremePlayerData.AllPlayerData.Do(data => data.AdjustPlayerId());
+            XtremeGameData.PlayerVersion.playerVersion.Remove(data.Character?.PlayerId ?? 255);
+            ClientsProcessed.Remove(data.Id);
+            XtremePlayerData.AllPlayerData.Do(_data => _data.AdjustPlayerId());
         }
-        catch { }
+        catch
+        {
+            // ignored
+        }
     }
 }

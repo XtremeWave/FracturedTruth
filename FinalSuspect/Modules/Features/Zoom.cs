@@ -24,10 +24,10 @@ public static class Zoom
                 return;
             }
 
-            if (Camera.main.orthographicSize > 3.0f) ResetButtons = true;
+            if (Camera.main?.orthographicSize > 3.0f) ResetButtons = true;
             if (Input.mouseScrollDelta.y > 0)
             {
-                if (Camera.main.orthographicSize > 3.0f) SetZoomSize(times: false);
+                if (Camera.main?.orthographicSize > 3.0f) SetZoomSize(times: false);
             }
 
             if (Input.mouseScrollDelta.y < 0)
@@ -35,7 +35,7 @@ public static class Zoom
                 if (IsDead || IsFreePlay ||
                     DebugModeManager.AmDebugger || IsLobby || Main.GodMode.Value)
                 {
-                    if (Camera.main.orthographicSize < 18.0f)
+                    if (Camera.main?.orthographicSize < 18.0f)
                     {
                         SetZoomSize(times: true);
                     }
@@ -43,11 +43,15 @@ public static class Zoom
             }
             Flag.NewFlag("Zoom");
         }
-        catch { }
+        catch
+        {
+            // ignored
+        }
     }
 
     public static void SetZoomSize(bool times = false, bool reset = false)
     {
+        if (Camera.main == null) return;
         var size = 1.5f;
         if (!times) size = 1 / size;
         if (reset)
@@ -62,7 +66,7 @@ public static class Zoom
             Camera.main.orthographicSize *= size;
             HudManager.Instance.UICamera.orthographicSize *= size;
         }
-        DestroyableSingleton<HudManager>.Instance?.ShadowQuad?.gameObject?.SetActive((reset || Camera.main.orthographicSize == 3.0f) && PlayerControl.LocalPlayer.IsAlive());
+        DestroyableSingleton<HudManager>.Instance?.ShadowQuad?.gameObject.SetActive((reset || Mathf.Approximately(Camera.main.orthographicSize, 3.0f)) && PlayerControl.LocalPlayer.IsAlive());
         if (ResetButtons)
         {
             ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height, Screen.width, Screen.height, Screen.fullScreen);
@@ -76,7 +80,7 @@ public static class Zoom
         SetZoomSize(reset: true);
     }
     public static void OnFixedUpdate()
-        => DestroyableSingleton<HudManager>.Instance?.ShadowQuad?.gameObject?.SetActive(Camera.main.orthographicSize == 3.0f && PlayerControl.LocalPlayer.IsAlive());
+        => DestroyableSingleton<HudManager>.Instance?.ShadowQuad?.gameObject.SetActive(Mathf.Approximately(Camera.main!.orthographicSize, 3.0f) && PlayerControl.LocalPlayer.IsAlive());
 }
 
 public static class Flag

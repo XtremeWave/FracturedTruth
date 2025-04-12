@@ -13,9 +13,9 @@ public sealed class ClientOptionItem_Boolean : ClientActionItem
         string name,
         ConfigEntry<bool> config,
         OptionsMenuBehaviour optionsMenuBehaviour)
-    : base(
-        name,
-        optionsMenuBehaviour)
+        : base(
+            name,
+            optionsMenuBehaviour)
     {
         Config = config;
         UpdateToggle();
@@ -64,9 +64,9 @@ public sealed class ClientOptionItem_String : ClientActionItem
         ConfigEntry<string> config,
         string[] selections,
         OptionsMenuBehaviour optionsMenuBehaviour)
-    : base(
-        showingName,
-        optionsMenuBehaviour)
+        : base(
+            showingName,
+            optionsMenuBehaviour)
     {
         Name = name;
         Config = config;
@@ -104,7 +104,7 @@ public sealed class ClientOptionItem_String : ClientActionItem
             
             var nextIndex = (currentIndex + 1) % selections.Length;
             showingName = 
-            config.Value = selections[nextIndex];
+                config.Value = selections[nextIndex];
             item.UpdateToggle(selections);
             item.UpdateName(showingName);
             additionalOnClickAction?.Invoke();

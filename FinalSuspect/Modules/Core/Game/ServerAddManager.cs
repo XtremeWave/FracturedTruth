@@ -75,7 +75,7 @@ public static class ServerAddManager
                 "XW[HK]" => "XW[香港]",
                 _ => name,
             };
-        };
+        }
 
         var color = GetServerColor(serverName);
         //Cloud.ServerName = name;

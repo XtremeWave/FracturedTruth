@@ -38,7 +38,10 @@ class RolesSettingsMenuPatch
             ConfigureHeaderButtons();
             SetRoleAreaColors();
         }
-        catch { }
+        catch
+        {
+            // ignored
+        }
     }
 
     private static void ConfigureHeaderButtons()
@@ -65,9 +68,9 @@ class RolesSettingsMenuPatch
     {
         var AllButton = GameObject.Find("HeaderButtons").transform.FindChild("AllButton").gameObject;
         AllButton.transform.FindChild("Highlight").gameObject.GetComponent<SpriteRenderer>().color =
-        AllButton.transform.FindChild("Inactive").gameObject.GetComponent<SpriteRenderer>().color =
-        AllButton.transform.FindChild("Selected").gameObject.GetComponent<SpriteRenderer>().color =
-        ColorHelper.ModColor32;
+            AllButton.transform.FindChild("Inactive").gameObject.GetComponent<SpriteRenderer>().color =
+                AllButton.transform.FindChild("Selected").gameObject.GetComponent<SpriteRenderer>().color =
+                    ColorHelper.ModColor32;
 
         var text = AllButton.transform.FindChild("Text").gameObject.GetComponent<TextMeshPro>();
         if (text.color == Color.white || text.color == ColorHelper.ModColor32)
@@ -244,7 +247,10 @@ class GameSettingMenuPatch
             ps.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.4f);
             ps.transform.FindChild("LeftSideTint").gameObject.GetComponent<SpriteRenderer>().color = new Color(0.1176f, 0.1176f, 0.1176f, 0.8f);
         }
-        catch { }
+        catch
+        {
+            // ignored
+        }
     }
     static void SetColor(GameObject obj, Color bgcolor)
     {

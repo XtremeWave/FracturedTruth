@@ -55,7 +55,10 @@ public static class ModUnloaderScreen
             {
                 MainMenuManagerPatch.ShowRightPanelImmediately();
             }
-            catch { }
+            catch
+            {
+                // ignored
+            }
 
             _ = new LateTask(() =>
             {

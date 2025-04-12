@@ -25,8 +25,7 @@ public class MapRealTimeLocationPatch
         while (XtremePlayerData.AllPlayerData.Count < Main.AllPlayerControls.Count()) yield return null;
         foreach (var data in XtremePlayerData.AllPlayerData)
         {
-            var rend = Object.Instantiate(mapBehaviour.HerePoint);
-            rend.transform.SetParent(mapBehaviour.HerePoint.transform.parent);
+            var rend = Object.Instantiate(mapBehaviour.HerePoint, mapBehaviour.HerePoint.transform.parent, true);
             rend.gameObject.SetActive(false);
             data.Rend = rend;
             data.Deadbodyrend = Object.Instantiate(rend, rend.transform.parent);

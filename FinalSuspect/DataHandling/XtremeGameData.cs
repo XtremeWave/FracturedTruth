@@ -10,7 +10,7 @@ public static partial class XtremeGameData
 {
     public static class GameStates
     {
-        public static bool InGame { private get; set; } = false;
+        public static bool InGame { private get; set; }
 
         public static bool OtherModHost
         {

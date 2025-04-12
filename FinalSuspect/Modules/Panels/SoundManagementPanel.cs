@@ -23,7 +23,7 @@ public static class SoundManagementPanel
     public static void Hide()
     {
         if (CustomBackground != null)
-            CustomBackground?.gameObject?.SetActive(false);
+            CustomBackground?.gameObject.SetActive(false);
     }
     public static void Init(OptionsMenuBehaviour optionsMenuBehaviour)
     {
@@ -60,7 +60,7 @@ public static class SoundManagementPanel
             newPassiveButton.OnClick = new();
             newPassiveButton.OnClick.AddListener(new Action(SoundManagementNewWindow.Open));
 
-            var helpText = Object.Instantiate(CustomPopup.InfoTMP.gameObject, CustomBackground.transform);
+            var helpText = Object.Instantiate(CustomPopup.InfoTMP?.gameObject, CustomBackground.transform);
             helpText.name = "Help Text";
             helpText.transform.localPosition = new(-1.25f, -2.15f, -15f);
             helpText.transform.localScale = new(1f, 1f, 1f);
@@ -98,7 +98,7 @@ public static class SoundManagementPanel
         var numberSetter = AccountManager.Instance.transform.FindChild("DOBEnterScreen/EnterAgePage/MonthMenu/Months").GetComponent<NumberSetter>();
         var buttonPrefab = numberSetter.ButtonPrefab.gameObject;
 
-        Items?.Values?.Do(Object.Destroy);
+        Items?.Values.Do(Object.Destroy);
         Items = new();
         foreach (var audio in musics)
         {
@@ -124,7 +124,6 @@ public static class SoundManagementPanel
             string buttontext;
             Color buttonColor;
             var enable = true;
-            var preview = "???";
 
             var audioExist = audio.CurrectAudioStates is not AudiosStates.NotExist || CustomAudios.Contains(filename);
             var unpublished = audio.unpublished;
@@ -166,7 +165,8 @@ public static class SoundManagementPanel
                 buttonColor = Palette.DisabledGrey;
                 enable = false;
             }
-            preview = audio.Name;
+
+            var preview = audio.Name;
 
             var passiveButton = button.GetComponent<PassiveButton>();
             passiveButton.OnClick = new();
@@ -224,12 +224,11 @@ public static class SoundManagementPanel
     {
         using StreamReader sr = new(TAGS_PATH);
 
-        string line;
         List<string> update = [];
-        while ((line = sr.ReadLine()) != null)
+        while (sr.ReadLine() is { } line)
         {
             if (string.IsNullOrWhiteSpace(line)) continue;
-            if (line != null && line != name)
+            if (line != name)
             {
                 update.Add(line);
             }
@@ -246,7 +245,7 @@ public static class SoundManagementPanel
 
         foreach (var updateline in update)
         {
-            sw.WriteLine(line);
+            sw.WriteLine(updateline);
         }
         var item = musics.Where(x => x.Name == name).FirstOrDefault();
         musics.Remove(item);

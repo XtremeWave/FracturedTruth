@@ -111,9 +111,12 @@ public class ModUpdater
     }
     private static void OnDownloadProgressChanged(long? totalFileSize, long totalBytesDownloaded, double? progressPercentage)
     {
-        var msg = $"{GetString("updateInProgress")}\n{totalFileSize / 1000}KB / {totalBytesDownloaded / 1000}KB  -  {(int)progressPercentage}%";
-        Info(msg, "DownloadDLL");
-        CustomPopup.UpdateTextLater(msg);
+        if (progressPercentage != null)
+        {
+            var msg = $"{GetString("updateInProgress")}\n{totalFileSize / 1000}KB / {totalBytesDownloaded / 1000}KB  -  {(int)progressPercentage}%";
+            Info(msg, "DownloadDLL");
+            CustomPopup.UpdateTextLater(msg);
+        }
     }
     public static string GetMD5HashFromFile(string fileName)
     {

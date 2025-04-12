@@ -22,7 +22,10 @@ class CoSetRolePatch
         {
             __instance.SetRole(roleTypes);
         }
-        catch { }
+        catch
+        {
+            // ignored
+        }
     }
 }
 
@@ -31,16 +34,14 @@ class PlayerStartPatch
 {
     public static void Postfix(PlayerControl __instance)
     {
-        var topText = Object.Instantiate(__instance.cosmetics.nameText);
-        topText.transform.SetParent(__instance.cosmetics.nameText.transform);
+        var topText = Object.Instantiate(__instance.cosmetics.nameText, __instance.cosmetics.nameText.transform, true);
         topText.transform.localPosition = new Vector3(0f, 0.2f, 0f);
         topText.transform.localScale = new(1f, 1f, 1f);
         topText.fontSize = Main.RoleTextSize;
         topText.text = "TopText";
         topText.gameObject.name = "TopText";
         topText.enabled = false;
-        var bottomText = Object.Instantiate(__instance.cosmetics.nameText);
-        bottomText.transform.SetParent(__instance.cosmetics.nameText.transform);
+        var bottomText = Object.Instantiate(__instance.cosmetics.nameText, __instance.cosmetics.nameText.transform, true);
         bottomText.transform.localPosition = new Vector3(0f, 0.2f, 0f);
         bottomText.transform.localScale = new(1f, 1f, 1f);
         bottomText.fontSize = Main.RoleTextSize;

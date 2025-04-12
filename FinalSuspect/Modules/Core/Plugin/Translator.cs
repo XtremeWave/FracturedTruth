@@ -43,7 +43,7 @@ public static class Translator
 
                 if (key == "LangID")
                 {
-                    langId = int.Parse(value);
+                    langId = int.Parse(value ?? string.Empty);
                     continue;
                 }
 
@@ -106,8 +106,9 @@ public static class Translator
             else
             {
                 var stringNames = EnumHelper.GetAllValues<StringNames>().Where(x => x.ToString() == str);
-                if (stringNames != null && stringNames.Any())
-                    res = GetString(stringNames.FirstOrDefault());
+                var stringNamesEnumerable = stringNames.ToList();
+                if (stringNamesEnumerable.Any())
+                    res = GetString(stringNamesEnumerable.FirstOrDefault());
             }
         }
         catch (Exception Ex)
@@ -158,10 +159,9 @@ public static class Translator
             Info($"加载自定义翻译文件：{filename}", "LoadCustomTranslation");
             using StreamReader sr = new(path, Encoding.GetEncoding("UTF-8"));
             string text;
-            string[] tmp = [];
             while ((text = sr.ReadLine()) != null)
             {
-                tmp = text.Split(":");
+                var tmp = text.Split(":");
                 if (tmp.Length > 1 && tmp[1] != "")
                 {
                     try

@@ -110,7 +110,10 @@ public static class SpamManager
                 }
             }
         }
-        catch { }
+        catch
+        {
+            // ignored
+        }
     }
 
     public static async Task<bool> GetConfigInfo(string url, string name)
@@ -128,7 +131,7 @@ public static class SpamManager
                 client.DefaultRequestHeaders.Add("User-Agent", "FinalSuspect" + name);
                 client.DefaultRequestHeaders.Add("Referer", "api.xtreme.net.cn");
                 using var response = await client.GetAsync(new Uri(url), HttpCompletionOption.ResponseContentRead);
-                if (!response.IsSuccessStatusCode || response.Content == null)
+                if (!response.IsSuccessStatusCode)
                 {
                     Error($"Failed: {response.StatusCode}", "CheckRelease");
                     return false;
@@ -136,8 +139,6 @@ public static class SpamManager
 
                 result = await response.Content.ReadAsStringAsync();
                 result = result.Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
-                
-                client.Dispose();
             }
 
             var data = JObject.Parse(result);

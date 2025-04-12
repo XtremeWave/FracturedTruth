@@ -52,10 +52,12 @@ public abstract class InitializerAttribute<T>(InitializePriority priority) : Att
         {
             FindInitializers();
         }
+
+        if (allInitializers == null) return;
         foreach (var initializer in allInitializers)
         {
-            logger.Info($"初始化: {initializer.DeclaringType.Name}.{initializer.Name}");
-            initializer.Invoke(null, null);
+            logger.Info($"初始化: {initializer?.DeclaringType?.Name}.{initializer?.Name}");
+            initializer?.Invoke(null, null);
         }
     }
 }

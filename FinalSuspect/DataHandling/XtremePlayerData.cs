@@ -32,7 +32,7 @@ public class XtremePlayerData : IDisposable
     public VanillaDeathReason RealDeathReason { get; private set; }
     public XtremePlayerData RealKiller { get; private set; }
 
-    public int ProcessInt { get; private set; }
+    //public int ProcessInt { get; private set; }
     public int TotalTaskCount { get; private set; }
     public int CompleteTaskCount { get; private set; }
     public bool TaskCompleted => TotalTaskCount == CompleteTaskCount;
@@ -94,7 +94,7 @@ public class XtremePlayerData : IDisposable
         {
             nullrole = GetPlayerById(id).Data.Role.Role;
         }
-        var role = (dead ? data.RoleAfterDeath : data.RoleWhenAlive) ?? nullrole;            
+        var role = (dead ? data.RoleAfterDeath : data?.RoleWhenAlive) ?? nullrole;            
         return role;
     }
 
@@ -183,7 +183,10 @@ public class XtremePlayerData : IDisposable
            
             AllPlayerData.Add(new XtremePlayerData(player, playername, colorId));
         }
-        catch { }
+        catch
+        {
+            // ignored
+        }
     }
 #pragma warning disable CA1816
     public void Dispose()
@@ -208,7 +211,10 @@ public class XtremePlayerData : IDisposable
             AllPlayerData.Do(data => data.Dispose());
             AllPlayerData.Clear();
         }
-        catch { }
+        catch
+        {
+            // ignored
+        }
     }
 }
 #pragma warning restore CA1816

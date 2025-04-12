@@ -56,7 +56,8 @@ public class AudioLoader
     {
         using var sourceStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, true);
         var buffer = new byte[sourceStream.Length];
-        await sourceStream.ReadAsync(buffer, 0, (int)sourceStream.Length);
+        // ReSharper disable once MustUseReturnValue
+        await sourceStream.ReadAsync(buffer.AsMemory(0, (int)sourceStream.Length)).ConfigureAwait(false);
         return buffer;
     }
 

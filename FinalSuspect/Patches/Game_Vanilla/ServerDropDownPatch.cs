@@ -19,18 +19,18 @@ public static class ServerDropDownPatch
         // 调整背景大小
         __instance.background.size = new Vector2(5, 1);
 
-        int num = 0;
-        int column = 0;
+        var num = 0;
+        var column = 0;
         const int maxPerColumn = 6;       // 每列最大按钮数
         const float columnWidth = 4.15f;  // 列宽度
         const float buttonSpacing = 0.5f; // 按钮间距
 
         var regions = DestroyableSingleton<ServerManager>.Instance.AvailableRegions.OrderBy(ServerManager.DefaultRegions.Contains).ToList();
-        int totalColumns = Mathf.Max(1, Mathf.CeilToInt(regions.Count / (float)maxPerColumn));
-        int rowsInLastColumn = regions.Count % maxPerColumn;
-        int maxRows = (regions.Count > maxPerColumn) ? maxPerColumn : regions.Count;
+        var totalColumns = Mathf.Max(1, Mathf.CeilToInt(regions.Count / (float)maxPerColumn));
+        //int rowsInLastColumn = regions.Count % maxPerColumn;
+        var maxRows = (regions.Count > maxPerColumn) ? maxPerColumn : regions.Count;
 
-        foreach (IRegionInfo regionInfo in regions)
+        foreach (var regionInfo in regions)
         {
             if (DestroyableSingleton<ServerManager>.Instance.CurrentRegion.Name == regionInfo.Name)
             {
@@ -40,12 +40,12 @@ public static class ServerDropDownPatch
             }
 
             // 创建服务器按钮
-            IRegionInfo region = regionInfo;
-            ServerListButton serverListButton = __instance.ButtonPool.Get<ServerListButton>();
+            var region = regionInfo;
+            var serverListButton = __instance.ButtonPool.Get<ServerListButton>();
 
             // 按钮位置
-            float xPos = (column - (totalColumns - 1) / 2f) * columnWidth;
-            float yPos = __instance.y_posButton - buttonSpacing * (num % maxPerColumn);
+            var xPos = (column - (totalColumns - 1) / 2f) * columnWidth;
+            var yPos = __instance.y_posButton - buttonSpacing * (num % maxPerColumn);
 
             // 按钮位置和缩放
             serverListButton.transform.localPosition = new Vector3(xPos, yPos, -1f);
@@ -56,7 +56,7 @@ public static class ServerDropDownPatch
                 regionInfo.TranslateName,
                 regionInfo.Name,
                 new Il2CppReferenceArray<Il2CppSystem.Object>(0));
-            serverListButton.Text.ForceMeshUpdate(false, false);
+            serverListButton.Text.ForceMeshUpdate();
             serverListButton.Button.OnClick.RemoveAllListeners();
             serverListButton.Button.OnClick.AddListener((Action)(() => __instance.ChooseOption(region)));
             __instance.controllerSelectable.Add(serverListButton.Button);
@@ -69,8 +69,8 @@ public static class ServerDropDownPatch
         }
 
         // 调整背景大小和位置
-        float backgroundHeight = 1.2f + buttonSpacing * (maxRows - 1);
-        float backgroundWidth = (totalColumns > 1) ?
+        var backgroundHeight = 1.2f + buttonSpacing * (maxRows - 1);
+        var backgroundWidth = (totalColumns > 1) ?
             (columnWidth * (totalColumns - 1) + __instance.background.size.x) :
             __instance.background.size.x;
 
@@ -90,8 +90,8 @@ public static class ServerDropDownPatch
         // 仅在搜索界面生效
         if (SceneManager.GetActiveScene().name != "FindAGame") return;
 
-        float buttonSpacing = 0.6f;
-        float columnSpacing = 5.75f;
+        var buttonSpacing = 0.6f;
+        var columnSpacing = 5.75f;
 
         // 按钮按Y轴排序
         List<ServerListButton> allButtons = [.. __instance.GetComponentsInChildren<ServerListButton>().OrderByDescending(b => b.transform.localPosition.y)];
@@ -99,23 +99,23 @@ public static class ServerDropDownPatch
             return;
 
         const int buttonsPerColumn = 7;
-        int columnCount = (allButtons.Count + buttonsPerColumn - 1) / buttonsPerColumn;
+        var columnCount = (allButtons.Count + buttonsPerColumn - 1) / buttonsPerColumn;
         Vector3 startPosition = new(0, -buttonSpacing, 0);
 
-        for (int i = 0; i < allButtons.Count; i++)
+        for (var i = 0; i < allButtons.Count; i++)
         {
-            int col = i / buttonsPerColumn;
-            int row = i % buttonsPerColumn;
+            var col = i / buttonsPerColumn;
+            var row = i % buttonsPerColumn;
             allButtons[i].transform.localPosition = startPosition + new Vector3(col * columnSpacing, -row * buttonSpacing, 0f);
         }
 
         // 计算背景大小和位置
-        int maxRows  = Math.Min(buttonsPerColumn, allButtons.Count);
-        float backgroundHeight = 1.2f + buttonSpacing * (maxRows - 1);
-        float backgroundWidth = (columnCount > 1) ?
+        var maxRows  = Math.Min(buttonsPerColumn, allButtons.Count);
+        var backgroundHeight = 1.2f + buttonSpacing * (maxRows - 1);
+        var backgroundWidth = (columnCount > 1) ?
             (columnSpacing * (columnCount - 1) + 5) : 5;
 
-            __instance.background.transform.localPosition = new Vector3(
+        __instance.background.transform.localPosition = new Vector3(
             0f,
             __instance.initialYPos - (backgroundHeight - 1.2f) / 2f,
             0f);

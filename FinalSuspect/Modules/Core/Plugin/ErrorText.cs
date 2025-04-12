@@ -52,9 +52,10 @@ public class ErrorText : MonoBehaviour
     {
         AllErrors.ForEach(err => err.IncreaseTimer());
         var ToRemove = AllErrors.Where(err => err.ErrorLevel <= 1 && 30f < err.Timer);
-        if (ToRemove.Any())
+        var errorDatas = ToRemove.ToList();
+        if (errorDatas.Any())
         {
-            AllErrors.RemoveAll(err => ToRemove.Contains(err));
+            AllErrors.RemoveAll(err => errorDatas.Contains(err));
             UpdateText();
         }
     }

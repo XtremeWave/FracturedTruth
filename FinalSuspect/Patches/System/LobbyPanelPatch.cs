@@ -11,7 +11,7 @@ namespace FinalSuspect.Patches.System;
 [HarmonyPatch(typeof(LobbyInfoPane), nameof(LobbyInfoPane.Update))]
 class LobbyInfoPanePatch
 {
-    static void Postfix()
+    public static void Postfix()
     {
         var AspectSize = GameObject.Find("AspectSize");
         AspectSize.transform.FindChild("Background").gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.4f);
@@ -173,7 +173,10 @@ class LobbyViewSettingsPanePatch
                 #endregion
             }
         }
-        catch { }
+        catch
+        {
+            // ignored
+        }
     }
     static void SetColorForRolesBanner(GameObject obj, Color iconcolor, Color bgcolor)
     {
@@ -192,12 +195,13 @@ class LobbyViewSettingsPanePatch
         cat.FindChild("HeaderText").gameObject.GetComponent<TextMeshPro>().color = Color.white;
         cat.FindChild("Icon").gameObject.GetComponent<SpriteRenderer>().color = iconcolor;
         obj.ForEachChild((Action<GameObject>)SetColor);
-        void SetColor(GameObject obj)
+
+        void SetColor(GameObject _obj)
         {
-            if (obj.name == "ViewSettingsInfoPanel(Clone)")
+            if (_obj.name == "ViewSettingsInfoPanel(Clone)")
             {
-                obj.transform.FindChild("Value").FindChild("Sprite").gameObject.GetComponent<SpriteRenderer>().color = iconcolor;
-                obj.transform.FindChild("LabelBackground").gameObject.GetComponent<SpriteRenderer>().color = bgcolor.ShadeColor(0.38f);
+                _obj.transform.FindChild("Value").FindChild("Sprite").gameObject.GetComponent<SpriteRenderer>().color = iconcolor;
+                _obj.transform.FindChild("LabelBackground").gameObject.GetComponent<SpriteRenderer>().color = bgcolor.ShadeColor(0.38f);
             }
         }
     }

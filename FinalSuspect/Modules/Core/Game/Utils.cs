@@ -43,7 +43,7 @@ public static class Utils
     }
     public static string GetRoleColorCode(RoleTypes role)
     {
-         Main.roleColors.TryGetValue(role, out var hexColor);
+        Main.roleColors.TryGetValue(role, out var hexColor);
         return hexColor;
     }
     public static string GetRoleInfoForVanilla(this RoleTypes role, bool InfoLong = false)
@@ -74,8 +74,8 @@ public static class Utils
     {
         var bc = 0;
         var t = text.ToString();
-        foreach (var c in t) bc += Encoding.GetEncoding("UTF-8").GetByteCount(c.ToString()) == 1 ? 1 : 2;
-        return t?.PadRight(Mathf.Max(num - (bc - t.Length), 0));
+        foreach (var c in t!) bc += Encoding.GetEncoding("UTF-8").GetByteCount(c.ToString()) == 1 ? 1 : 2;
+        return t.PadRight(Mathf.Max(num - (bc - t.Length), 0));
     }
     public static DirectoryInfo GetLogFolder(bool auto = false)
     {
@@ -227,7 +227,7 @@ public static class Utils
     /// </summary>
 
     public static bool TryCast<T>(this Il2CppObjectBase obj, out T casted)
-    where T : Il2CppObjectBase
+        where T : Il2CppObjectBase
     {
         casted = obj.TryCast<T>();
         return casted != null;
@@ -239,9 +239,8 @@ public static class Utils
     public static bool AmDev() => IsDev(EOSManager.Instance.FriendCode);
     public static bool IsDev(this PlayerControl pc) => IsDev(pc.FriendCode);
     public static bool IsDev(string friendCode) => friendCode
-
-    is "teamelder#5856" //Slok
-    or "cloakhazy#9133"; //LezaiYa
+        is "teamelder#5856" //Slok
+        or "cloakhazy#9133"; //LezaiYa
 
     public static void AddChatMessage(string text, string title = "")
     {
@@ -347,28 +346,28 @@ public static class Utils
         switch (type)
         {
             case SystemTypes.Electrical:
-                {
-                    var SwitchSystem = ShipStatus.Instance.Systems[type].Cast<SwitchSystem>();
-                    return SwitchSystem != null && SwitchSystem.IsActive;
-                }
+            {
+                var SwitchSystem = ShipStatus.Instance.Systems[type].Cast<SwitchSystem>();
+                return SwitchSystem != null && SwitchSystem.IsActive;
+            }
             case SystemTypes.Reactor:
             {
                 if (mapId == 2) return false;
                 var ReactorSystemType = ShipStatus.Instance.Systems[type].Cast<ReactorSystemType>();
                 return ReactorSystemType != null && ReactorSystemType.IsActive;
             }
-            case SystemTypes.Laboratory:
-                {
-                    if (mapId != 2) return false;
-                    var ReactorSystemType = ShipStatus.Instance.Systems[type].Cast<ReactorSystemType>();
-                    return ReactorSystemType != null && ReactorSystemType.IsActive;
-                }
+            case SystemTypes.Laboratory: 
+            {
+                if (mapId != 2) return false;
+                var ReactorSystemType = ShipStatus.Instance.Systems[type].Cast<ReactorSystemType>();
+                return ReactorSystemType != null && ReactorSystemType.IsActive;
+            }
             case SystemTypes.LifeSupp:
-                {
-                    if (mapId is 2 or 4) return false;
-                    var LifeSuppSystemType = ShipStatus.Instance.Systems[type].Cast<LifeSuppSystemType>();
-                    return LifeSuppSystemType != null && LifeSuppSystemType.IsActive;
-                }
+            {
+                if (mapId is 2 or 4) return false;
+                var LifeSuppSystemType = ShipStatus.Instance.Systems[type].Cast<LifeSuppSystemType>();
+                return LifeSuppSystemType != null && LifeSuppSystemType.IsActive;
+            }
             case SystemTypes.Comms:
             {
                 if (mapId is 1 or 5)
@@ -409,9 +408,9 @@ public static class Utils
         bothImp = PlayerControl.LocalPlayer.IsImpostor() && target.IsImpostor();
 
         return target.IsLocalPlayer() ||
-        BothDeathCanSee ||
-        bothImp && LocalDead || 
-        Main.GodMode.Value;
+               BothDeathCanSee ||
+               bothImp && LocalDead || 
+               Main.GodMode.Value;
     }
     public static bool CanSeeOthersRole()
     {

@@ -59,7 +59,7 @@ public static class CustomPopup
 
         if (buttons != null)
         {
-            foreach (var buttonInfo in buttons.Where(b => b.Item1?.Trim() is not null and not ""))
+            foreach (var buttonInfo in buttons.Where(b => b.Item1.Trim() is not null and not ""))
             {
                 var (text, action) = buttonInfo;
                 var button = Object.Instantiate(ActionButtonPrefab, InfoScreen.transform);
@@ -72,13 +72,10 @@ public static class CustomPopup
                 button.OnClick = new();
                 button.OnClick.AddListener((Action)(() =>
                 {
-                    InfoScreen?.SetActive(false);
-                    Fill?.SetActive(false);
+                    InfoScreen.SetActive(false);
+                    Fill.SetActive(false);
                 }));
-                if (action != null)
-                {
-                    button.OnClick.AddListener(action);
-                }
+                button.OnClick.AddListener(action);
                 button.transform.SetLocalX(0);
                 button.gameObject.SetActive(true);
                 ActionButtons?.Add(button);
@@ -87,7 +84,7 @@ public static class CustomPopup
 
         if (ActionButtons?.Count > 1)
         {
-            var widthSum = ActionButtons.Count * (ActionButtonPrefab?.gameObject.GetComponent<BoxCollider2D>()?.size.x ?? 0);
+            var widthSum = ActionButtons.Count * (ActionButtonPrefab.gameObject.GetComponent<BoxCollider2D>()?.size.x ?? 0);
             widthSum += (ActionButtons.Count - 1) * 0.1f;
             var start = -Math.Abs(widthSum / 2);
             var each = widthSum / ActionButtons.Count;
@@ -99,8 +96,8 @@ public static class CustomPopup
             }
         }
 
-        Fill?.SetActive(true);
-        InfoScreen?.SetActive(true);
+        Fill.SetActive(true);
+        InfoScreen.SetActive(true);
 
         busy = false;
     }

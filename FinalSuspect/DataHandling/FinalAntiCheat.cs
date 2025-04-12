@@ -26,7 +26,7 @@ public static class FinalAntiCheat
         {
             IsSuspectCheater = false;
             SetNameTimes = 
-            SendQuickMessageCountPerSecond = 0;
+                SendQuickMessageCountPerSecond = 0;
             _lastKillTime = _lastSendTime = -1;
             Player = player;
             ClientData = Player.GetClient();
@@ -131,7 +131,7 @@ public static class FinalAntiCheat
     }
     internal class FAC
     {
-        public static int MeetingTimes = 0;
+
         public static int DeNum;
         public static long _lastHandleCheater = -1;
         public static List<byte> LobbyDeadBodies = [];
@@ -151,7 +151,7 @@ public static class FinalAntiCheat
                 ErrorText.Instance.SBDetected = DeNum > 10;
                 if (ErrorText.Instance.CheatDetected)
                     ErrorText.Instance.AddError(
-                    ErrorText.Instance.SBDetected ? ErrorCode.SBDetected : ErrorCode.CheatDetected);
+                        ErrorText.Instance.SBDetected ? ErrorCode.SBDetected : ErrorCode.CheatDetected);
                 else
                     ErrorText.Instance.Clear();
             }
@@ -211,18 +211,19 @@ public static class FinalAntiCheat
                         case RpcCalls.StartMeeting:
                         case RpcCalls.ReportDeadBody:
                         case RpcCalls.CheckProtect:
-                        case RpcCalls.ProtectPlayer: 
+                        case RpcCalls.ProtectPlayer:
                         case RpcCalls.AddVote:
                         case RpcCalls.CastVote:
                         case RpcCalls.ClearVote:
-                        case RpcCalls.VotingComplete: 
+                        case RpcCalls.VotingComplete:
                         case RpcCalls.ClimbLadder:
                         case RpcCalls.UpdateSystem:
-                        //case RpcCalls.SetStartCounter:
+                        {
                             if (AmongUsClient.Instance.AmHost) return true;
                             NotificationPopperPatch.NotificationPop(GetString("Warning.RoomBroken"));
                             notify = false;
                             return true;
+                        }
                         case RpcCalls.SendQuickChat:
                             if (pc.GetCheatData().HandleSendQuickChat())
                             {
@@ -305,19 +306,19 @@ public static class FinalAntiCheat
         {
             if (player.PlayerId != 0 && !Enum.IsDefined(typeof(RpcCalls), callId) && !OtherModHost)
             {
-                Warn($"{player?.Data?.PlayerName}:{callId}({RPC.GetRpcName(callId)}) 已取消，因为它是由主机以外的其他人发送的。", "FAC");
+                Warn($"{player.Data?.PlayerName}:{callId}({RPC.GetRpcName(callId)}) 已取消，因为它是由主机以外的其他人发送的。", "FAC");
                 if (ReceiveInvalidRpc(player, callId)) return true;
                 if (AmongUsClient.Instance.AmHost)
                 {
-                    Warn($"收到来自 {player?.Data?.PlayerName} 的不受信用的RPC，因此将其踢出。", "Kick");
+                    Warn($"收到来自 {player.Data?.PlayerName} 的不受信用的RPC，因此将其踢出。", "Kick");
                     NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.InvalidRpc"),
-                        player?.Data?.PlayerName, callId));
+                        player.Data?.PlayerName, callId));
                     return true;
                 }
 
-                Warn($"收到来自 {player?.Data?.PlayerName} 的不受信用的RPC", "Kick?");
+                Warn($"收到来自 {player.Data?.PlayerName} 的不受信用的RPC", "Kick?");
                 NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.InvalidRpc_NotHost"),
-                    player?.Data?.PlayerName, callId));
+                    player.Data?.PlayerName, callId));
                 return true;
             }
             return false;

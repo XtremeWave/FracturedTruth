@@ -39,7 +39,10 @@ public static class CustomSoundsManager
                 Msg($"播放声音：{audio.Name}", "CustomSounds");
             }, 0.01F, "");
         }
-        catch { }
+        catch
+        {
+            // ignored
+        }
     }
  
     public static void StopPlayMod()

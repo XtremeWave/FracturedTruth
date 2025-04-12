@@ -45,9 +45,8 @@ static class ExtendedPlayerControl
     }
     public static string GetNameWithRole(this PlayerControl player, bool forUser = false)
     {
-        var ret = $"{player?.Data?.PlayerName}" + 
-            (IsInGame? 
-            $"({GetRoleName(player.GetRoleType())})" : "");
+        var ret = $"{player?.Data?.PlayerName}{(IsInGame ?
+            $"({GetRoleName(player.GetRoleType())})" : "")}";
         return forUser ? ret : ret.RemoveHtmlTags();
     }
     public static Color GetRoleColor(this PlayerControl player)
@@ -59,9 +58,12 @@ static class ExtendedPlayerControl
         string trynull = null;
         try
         {
-             trynull = player.GetXtremeData() != null ? player?.GetDataName() : null;
+            trynull = player.GetXtremeData() != null ? player?.GetDataName() : null;
         }
-        catch { }
+        catch
+        {
+            // ignored
+        }
 
         var nullname = trynull;
         return (isMeeting ? player?.Data?.PlayerName : player?.name) ?? nullname;

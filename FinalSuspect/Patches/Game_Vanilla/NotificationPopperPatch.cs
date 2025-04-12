@@ -7,7 +7,7 @@ namespace FinalSuspect.Patches.Game_Vanilla;
 public class NotificationPopperPatch
 {
     private static List<string> WaitToSend = [];
-    private static bool Prefix(string item)
+    public static bool Prefix(string item)
     {
         if (!WaitToSend.Contains(item)) return false;
         SpamManager.CheckSpam(ref item);

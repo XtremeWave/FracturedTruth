@@ -113,8 +113,8 @@ public static class BanManager
         => CheckFACStatus(player?.FriendCode, player?.GetHashedPuid());
     public static bool CheckFACStatus(string friendCode, string hashedPuid)
         => FACList.Any(line =>
-        !string.IsNullOrWhiteSpace(friendCode) && line.Contains(friendCode) ||
-        !string.IsNullOrWhiteSpace(hashedPuid) && line.Contains(hashedPuid));
+            !string.IsNullOrWhiteSpace(friendCode) && line.Contains(friendCode) ||
+            !string.IsNullOrWhiteSpace(hashedPuid) && line.Contains(hashedPuid));
 }
 [HarmonyPatch(typeof(BanMenu), nameof(BanMenu.Select))]
 class BanMenuSelectPatch

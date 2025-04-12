@@ -5,6 +5,7 @@ namespace FinalSuspect.Helpers;
 public static class ColorHelper
 {
     /// <summary>将颜色转换为荧光笔颜色</summary>
+    /// <param name="color">颜色</param>
     /// <param name="bright">是否将颜色调整为最大亮度。如果希望较暗的颜色保持不变，请传入 false</param>
     public static Color ToMarkingColor(this Color color, bool bright = true)
     {
@@ -14,8 +15,7 @@ public static class ColorHelper
     }
     public static Color HexToColor(string hex)
     {
-        Color color = new();
-        ColorUtility.TryParseHtmlString(hex, out color);
+        ColorUtility.TryParseHtmlString(hex, out var color);
         return color;
     }
     public static string ColorToHex(Color color)

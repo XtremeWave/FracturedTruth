@@ -23,13 +23,15 @@ internal class RPCHandlerPatch
 {
     public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)] ref byte callId, [HarmonyArgument(1)] MessageReader reader)
     {
-        Info($"{__instance?.Data?.PlayerId}" +
-             $"({__instance?.Data?.PlayerName})" +
+        if (__instance == null) return true;
+        
+        Info($"{__instance.Data?.PlayerId}" +
+             $"({__instance.Data?.PlayerName})" +
              $"{(__instance.IsHost() ? "Host" : "")}" +
              $":{callId}({RPC.GetRpcName(callId)})",
-        "ReceiveRPC");
+            "ReceiveRPC");
 
-        if (XtremePlayerData.AllPlayerData.Any(data => data.PlayerId == __instance?.Data?.PlayerId))
+        if (XtremePlayerData.AllPlayerData.Any(data => data.PlayerId == __instance.Data?.PlayerId))
             if (ReceiveRpc(__instance, callId, reader, out var notify, out var reason, out var ban))
             {
                 if (!__instance.IsLocalPlayer())
@@ -118,8 +120,12 @@ internal class RPCHandlerPatch
                             }, 5f, "Kick");
                     }*/
                 }
-                catch { }
-            break;
+                catch
+                {
+                    // ignored
+                }
+
+                break;
         }
     }
 }
@@ -142,7 +148,10 @@ internal static class RPC
             XtremeGameData.PlayerVersion.playerVersion[PlayerControl.LocalPlayer.PlayerId] = 
                 new XtremeGameData.PlayerVersion(Main.PluginVersion, $"{ThisAssembly.Git.Commit}({ThisAssembly.Git.Branch})", Main.ForkId);
         }
-        catch { }
+        catch
+        {
+            // ignored
+        }
     }
 
     public static void SendRpcLogger(uint targetNetId, byte callId, int targetClientId = -1)
@@ -156,7 +165,11 @@ internal static class RPC
             target = targetClientId < 0 ? "All" : AmongUsClient.Instance.GetClient(targetClientId).PlayerName;
             from = Main.AllPlayerControls.Where(c => c.NetId == targetNetId).FirstOrDefault()?.Data?.PlayerName;
         }
-        catch { }
+        catch
+        {
+            // ignored
+        }
+
         Info($"FromNetID:{targetNetId}({from}) TargetClientID:{targetClientId}({target}) CallID:{callId}({rpcName})", "SendRPC");
     }
     public static string GetRpcName(byte callId)

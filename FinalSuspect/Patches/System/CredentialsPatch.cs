@@ -19,7 +19,7 @@ internal class PingTrackerUpdatePatch
     public static string ServerName = "";
     private static TextMeshPro CreditTextCredential;
     private static AspectPosition CreditTextCredentialAspectPos;
-    private static void Postfix(PingTracker __instance)
+    public static void Postfix(PingTracker __instance)
     {
         if (CreditTextCredential == null)
         {
@@ -36,7 +36,7 @@ internal class PingTrackerUpdatePatch
         {
             CreditTextCredentialAspectPos.DistanceFromEdge = 
                 DestroyableSingleton<HudManager>.InstanceExists && DestroyableSingleton<HudManager>.Instance.Chat.chatButton.gameObject.active 
-                ? new(2.5f, 0f, -800f) : new(1.8f, 0f, -800f);
+                    ? new(2.5f, 0f, -800f) : new(1.8f, 0f, -800f);
         }
         StringBuilder sb = new();
         
@@ -44,10 +44,10 @@ internal class PingTrackerUpdatePatch
 
         CreditTextCredential.text = sb.ToString();
         if (
-            (GameSettingMenu.Instance?.gameObject?.active ?? false) 
+            (GameSettingMenu.Instance?.gameObject.active ?? false) 
             || IsMeeting 
-            || (FriendsListUI.Instance?.gameObject?.active ?? false)
-            || (HudManagerPatch.showHideButton?.Button?.gameObject?.active ?? false) && Main.ShowResults.Value)
+            || (FriendsListUI.Instance?.gameObject.active ?? false)
+            || (HudManagerPatch.showHideButton?.Button?.gameObject.active ?? false) && Main.ShowResults.Value)
             CreditTextCredential.text = "";
 
         var ping = AmongUsClient.Instance.Ping;
@@ -76,13 +76,13 @@ public class VersionShowerStartPatch
     public static GameObject ModLogo;
     public static GameObject TeamLogo;
 
-    private static void Postfix(VersionShower __instance)
+    public static void Postfix(VersionShower __instance)
     {
         TMPTemplate.SetBase(__instance.text);
 
         Main.CredentialsText = $"\r\n<size=120%>" +
-            $"<color={ColorHelper.TeamColor}>==</color> <color={ColorHelper.ModColor}>{Main.ModName}</color> <color={ColorHelper.TeamColor}>==</color>"
-            + "</size>";
+                               $"<color={ColorHelper.TeamColor}>==</color> <color={ColorHelper.ModColor}>{Main.ModName}</color> <color={ColorHelper.TeamColor}>==</color>"
+                               + "</size>";
         Main.CredentialsText += "\r\n <color=#fffcbe> By </color><color=#cdfffd>XtremeWave</color></size>";
         Main.CredentialsText += $"\r\n<color=#C8FF78>v{Main.DisplayedVersion}</color>";
 
@@ -109,7 +109,7 @@ public class VersionShowerStartPatch
         if ((OVersionShower = GameObject.Find("VersionShower")) != null && VisitText == null)
         {
             CreateVisitText(__instance);
-        };
+        }
 
         if ((OVersionShower = GameObject.Find("VersionShower")) != null && CreditTextCredential == null)
         {
@@ -208,7 +208,7 @@ internal class TitleLogoPatch
 
     public static Vector3 RightPanelOp;
 
-    private static void Postfix(MainMenuManager __instance)
+    public static void Postfix(MainMenuManager __instance)
     {
         GameObject.Find("BackgroundTexture")?.SetActive(!MainMenuManagerPatch.ShowedBak);
 
@@ -237,16 +237,18 @@ internal class TitleLogoPatch
             },
         };
 
+        // ReSharper disable once UnusedParameter.Local
         void FormatButtonColor(PassiveButton button, Sprite borderType, Color inActiveColor, Color activeColor, Color inActiveTextColor, Color activeTextColor)
         {
-            button.activeSprites.transform.FindChild("Shine")?.gameObject?.SetActive(false);
-            button.inactiveSprites.transform.FindChild("Shine")?.gameObject?.SetActive(false);
+            button.activeSprites.transform.FindChild("Shine")?.gameObject.SetActive(false);
+            button.inactiveSprites.transform.FindChild("Shine")?.gameObject.SetActive(false);
             var activeRenderer = button.activeSprites.GetComponent<SpriteRenderer>();
             var inActiveRenderer = button.inactiveSprites.GetComponent<SpriteRenderer>();
             activeRenderer.sprite = minorActiveSprite;
             inActiveRenderer.sprite = minorActiveSprite;
-            activeRenderer.color = activeColor.a == 0f ?
-            new Color(inActiveColor.r, inActiveColor.g, inActiveColor.b, 1f) : activeColor;
+            activeRenderer.color = activeColor.a == 0f 
+                ? new Color(inActiveColor.r, inActiveColor.g, inActiveColor.b, 1f) 
+                : activeColor;
             inActiveRenderer.color = inActiveColor;
             button.activeTextColor = activeTextColor;
             button.inactiveTextColor = inActiveTextColor;
@@ -261,9 +263,12 @@ internal class TitleLogoPatch
         }
         try
         {
-            mainButtons?.Keys?.Flatten()?.DoIf(x => x != null, x => x.buttonText.color = Color.white);
+            mainButtons.Keys.Flatten()?.DoIf(x => x != null, x => x.buttonText.color = Color.white);
         }
-        catch { }
+        catch
+        {
+            // ignored
+        }
 
         if (!(ModStamp = GameObject.Find("ModStamp"))) return;
         ModStamp.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);

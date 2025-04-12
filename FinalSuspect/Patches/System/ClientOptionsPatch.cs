@@ -117,11 +117,11 @@ public static class OptionsMenuBehaviourStartPatch
 
         CreateFeatureItem(ref SoundBtn, "SoundOption", () =>
         {
-            MyMusicPanel.CustomBackground?.gameObject?.SetActive(true);
+            MyMusicPanel.CustomBackground?.gameObject.SetActive(true);
         }, __instance);
         CreateFeatureItem(ref AudioManagementBtn, "SoundManager", () =>
         {
-            SoundManagementPanel.CustomBackground?.gameObject?.SetActive(true);
+            SoundManagementPanel.CustomBackground?.gameObject.SetActive(true);
         }, __instance);
 
         SetFeatureItemTextAndColor(SoundBtn, "SoundOptions");
@@ -281,8 +281,8 @@ public static class OptionsMenuBehaviourClosePatch
 {
     public static void Postfix()
     {
-        ClientActionItem.CustomBackground?.gameObject?.SetActive(false);
-        ClientFeatureItem.CustomBackground?.gameObject?.SetActive(false);
+        ClientActionItem.CustomBackground?.gameObject.SetActive(false);
+        ClientFeatureItem.CustomBackground?.gameObject.SetActive(false);
         ModUnloaderScreen.Hide();
         MyMusicPanel.Hide();
         SoundManagementPanel.Hide();
@@ -299,9 +299,11 @@ public static class LanguageSetterSetLanguagePatch
         {
             Object.Destroy(VersionShowerStartPatch.VisitText);
         }
-        catch 
+        catch
         {
+            // ignored
         }
+
         VersionShowerStartPatch.VisitText = null;
         VersionShowerStartPatch.CreateVisitText(null);
         OptionsMenuBehaviourStartPatch.Postfix(OptionsMenuBehaviourStartPatch.Instance);

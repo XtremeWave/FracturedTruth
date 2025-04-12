@@ -14,7 +14,7 @@ internal class ShowDisconnectPopupPatch
             {
                 void SetText(string text)
                 {
-                    if (__instance?._textArea?.text != null)
+                    if (__instance._textArea?.text != null)
                         __instance._textArea.text = text;
                 }
                 switch (Reason)
@@ -49,7 +49,10 @@ internal class ShowDisconnectPopupPatch
                         break;
                 }
             }
-            catch { }
+            catch
+            {
+                // ignored
+            }
         }, 0.01f, "Override Disconnect Text");
     }
 }
