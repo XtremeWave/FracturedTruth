@@ -16,17 +16,17 @@ namespace FinalSuspect.Modules.Core.Plugin;
 public static class Translator
 {
     public static Dictionary<int, Dictionary<string, string>> TranslateMaps = new();
-    public const string LANGUAGE_FOLDER_NAME = PathManager.LocalPath_Data + "Language";
+    public const string LANGUAGE_FOLDER_NAME = LocalPath_Data + "Language";
     
-    public static void Init()
+    public static void TranslatorInit()
     {
-        XtremeLogger.Info("加载语言文件...", "Translator");
+        Info("加载语言文件...", "Translator");
         LoadLangs();
-        XtremeLogger.Info("加载语言文件成功", "Translator");
+        Info("加载语言文件成功", "Translator");
     }
     public static void LoadLangs()
     {
-        var fileNames = Directory.GetFiles(PathManager.GetLocalPath(LocalType.Resources) + "Languages");
+        var fileNames = Directory.GetFiles(GetLocalPath(LocalType.Resources) + "Languages");
         foreach (var file in fileNames)
         {
             var fileName = Path.GetFileName(file);
@@ -43,12 +43,12 @@ public static class Translator
 
                 if (key == "LangID")
                 {
-                    langId = int.Parse(value);
+                    langId = int.Parse(value ?? string.Empty);
                     continue;
                 }
 
                 if (!dic.TryAdd(key, value))
-                    XtremeLogger.Warn($"翻译文件 [{fileName}] 出现重复字符串 => {key} / {value}", "Translator");
+                    Warn($"翻译文件 [{fileName}] 出现重复字符串 => {key} / {value}", "Translator");
             }
 
             if (langId != -1)
@@ -57,7 +57,7 @@ public static class Translator
                 TranslateMaps.Add(langId, dic);
             }
             else
-                XtremeLogger.Error($"翻译文件 [{fileName}] 没有提供语言ID", "Translator");
+                Error($"翻译文件 [{fileName}] 没有提供语言ID", "Translator");
         }
 
         // カスタム翻訳ファイルの読み込み
@@ -106,14 +106,15 @@ public static class Translator
             else
             {
                 var stringNames = EnumHelper.GetAllValues<StringNames>().Where(x => x.ToString() == str);
-                if (stringNames != null && stringNames.Any())
-                    res = GetString(stringNames.FirstOrDefault());
+                var stringNamesEnumerable = stringNames.ToList();
+                if (stringNamesEnumerable.Any())
+                    res = GetString(stringNamesEnumerable.FirstOrDefault());
             }
         }
         catch (Exception Ex)
         {
-            XtremeLogger.Fatal($"Error oucured at [{str}] in yaml", "Translator");
-            XtremeLogger.Error("Error:\n" + Ex, "Translator");
+            Fatal($"Error oucured at [{str}] in yaml", "Translator");
+            Error("Error:\n" + Ex, "Translator");
         }
 
         if (langId is SupportedLangs.SChinese && DataManager.Settings.Gameplay.streamerMode)
@@ -155,13 +156,12 @@ public static class Translator
         var path = @$"./{LANGUAGE_FOLDER_NAME}/{filename}";
         if (File.Exists(path))
         {
-            XtremeLogger.Info($"加载自定义翻译文件：{filename}", "LoadCustomTranslation");
+            Info($"加载自定义翻译文件：{filename}", "LoadCustomTranslation");
             using StreamReader sr = new(path, Encoding.GetEncoding("UTF-8"));
             string text;
-            string[] tmp = [];
             while ((text = sr.ReadLine()) != null)
             {
-                tmp = text.Split(":");
+                var tmp = text.Split(":");
                 if (tmp.Length > 1 && tmp[1] != "")
                 {
                     try
@@ -170,14 +170,14 @@ public static class Translator
                     }
                     catch (KeyNotFoundException)
                     {
-                        XtremeLogger.Warn($"无效密钥：{tmp[0]}", "LoadCustomTranslation");
+                        Warn($"无效密钥：{tmp[0]}", "LoadCustomTranslation");
                     }
                 }
             }
         }
         else
         {
-            XtremeLogger.Error($"找不到自定义翻译文件：{filename}", "LoadCustomTranslation");
+            Error($"找不到自定义翻译文件：{filename}", "LoadCustomTranslation");
         }
     }
 

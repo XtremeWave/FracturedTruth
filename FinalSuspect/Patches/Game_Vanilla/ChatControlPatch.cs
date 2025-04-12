@@ -18,7 +18,7 @@ public static class ChatControllerUpdatePatch
     }
     public static void Postfix(ChatController __instance)
     {
-        if (XtremeGameData.GameStates.OtherModHost || XtremeGameData.GameStates.IsFreePlay || XtremeGameData.GameStates.IsLocalGame)
+        if (OtherModHost || IsFreePlay || IsLocalGame)
         {
             __instance.timeSinceLastMessage = 3f;
         }
@@ -82,4 +82,3 @@ internal class ChatAdd
         __instance.chatNotification.playerNameText.text = name;
     }
 }
-

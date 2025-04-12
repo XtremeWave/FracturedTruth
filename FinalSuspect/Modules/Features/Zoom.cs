@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using FinalSuspect.Attributes;
-using FinalSuspect.Modules.Core.Game;
 using UnityEngine;
 
 namespace FinalSuspect.Modules.Features;
@@ -17,44 +16,42 @@ public static class Zoom
     {
         try
         {
-            var canZoom = XtremeGameData.GameStates.IsShip || XtremeGameData.GameStates.IsLobby ||
-                          XtremeGameData.GameStates.IsFreePlay ;
+            var canZoom = IsShip || IsLobby || IsFreePlay ;
 
-            if (!canZoom || !Utils.CanSeeOthersRole()|| XtremeGameData.GameStates.IsMeeting || !XtremeGameData.GameStates.IsCanMove || InGameRoleInfoMenu.Showing)
+            if (!canZoom || !CanSeeOthersRole()|| IsMeeting || !IsCanMove || InGameRoleInfoMenu.Showing)
             {
                 Flag.Run(() => { SetZoomSize(reset: true); }, "Zoom");
                 return;
             }
 
-
-            if (Camera.main.orthographicSize > 3.0f) ResetButtons = true;
+            if (Camera.main?.orthographicSize > 3.0f) ResetButtons = true;
             if (Input.mouseScrollDelta.y > 0)
             {
-                if (Camera.main.orthographicSize > 3.0f) SetZoomSize(times: false);
+                if (Camera.main?.orthographicSize > 3.0f) SetZoomSize(times: false);
             }
 
             if (Input.mouseScrollDelta.y < 0)
             {
-                if (XtremeGameData.GameStates.IsDead || XtremeGameData.GameStates.IsFreePlay ||
-                    DebugModeManager.AmDebugger || XtremeGameData.GameStates.IsLobby || Main.GodMode.Value)
+                if (IsDead || IsFreePlay ||
+                    DebugModeManager.AmDebugger || IsLobby || Main.GodMode.Value)
                 {
-                    if (Camera.main.orthographicSize < 18.0f)
+                    if (Camera.main?.orthographicSize < 18.0f)
                     {
                         SetZoomSize(times: true);
                     }
                 }
             }
-
             Flag.NewFlag("Zoom");
         }
-        catch 
+        catch
         {
+            // ignored
         }
-        
     }
 
     public static void SetZoomSize(bool times = false, bool reset = false)
     {
+        if (Camera.main == null) return;
         var size = 1.5f;
         if (!times) size = 1 / size;
         if (reset)
@@ -62,14 +59,14 @@ public static class Zoom
             Camera.main.orthographicSize = 3.0f;
             HudManager.Instance.UICamera.orthographicSize = 3.0f;
             HudManager.Instance.Chat.transform.localScale = Vector3.one;
-            if (XtremeGameData.GameStates.IsMeeting) MeetingHud.Instance.transform.localScale = Vector3.one;
+            if (IsMeeting) MeetingHud.Instance.transform.localScale = Vector3.one;
         }
         else
         {
             Camera.main.orthographicSize *= size;
             HudManager.Instance.UICamera.orthographicSize *= size;
         }
-        DestroyableSingleton<HudManager>.Instance?.ShadowQuad?.gameObject?.SetActive((reset || Camera.main.orthographicSize == 3.0f) && PlayerControl.LocalPlayer.IsAlive());
+        DestroyableSingleton<HudManager>.Instance?.ShadowQuad?.gameObject.SetActive((reset || Mathf.Approximately(Camera.main.orthographicSize, 3.0f)) && PlayerControl.LocalPlayer.IsAlive());
         if (ResetButtons)
         {
             ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height, Screen.width, Screen.height, Screen.fullScreen);
@@ -83,7 +80,7 @@ public static class Zoom
         SetZoomSize(reset: true);
     }
     public static void OnFixedUpdate()
-        => DestroyableSingleton<HudManager>.Instance?.ShadowQuad?.gameObject?.SetActive(Camera.main.orthographicSize == 3.0f && PlayerControl.LocalPlayer.IsAlive());
+        => DestroyableSingleton<HudManager>.Instance?.ShadowQuad?.gameObject.SetActive(Mathf.Approximately(Camera.main!.orthographicSize, 3.0f) && PlayerControl.LocalPlayer.IsAlive());
 }
 
 public static class Flag
@@ -98,7 +95,6 @@ public static class Flag
             OneTimeList.Remove(type);
             action();
         }
-
     }
     public static void NewFlag(string type)
     {

@@ -93,6 +93,7 @@ CannotUnloadDuringGame: "Ní féidir athrú go dtí an leagan bunaidh le linn an
 Cancel: "Cealaigh"
 Unload: "Dílódáil"
 DumpLog: "Aschur Log"
+ClearAutoLogs: "Glan úsáid shonraí comhroinnte"
 SoundOptions: "Mo Cheol"
 AudioManagementOptions: "Bainistíocht Fuaime"
 OnlyAvailableInMainMenu: "Ar fáil ach amháin sa Phríomh-Roghchlár"
@@ -100,9 +101,9 @@ OnlyAvailableInMainMenu: "Ar fáil ach amháin sa Phríomh-Roghchlár"
 # 提示 / Tips
 updatePleaseWait: "Fan le do thoil..."
 updateInProgress: "Nuashonrú ar siúl..."
-downloadInProgress: "Íoslódáil ar siúl..."
+DownloadingAudios: "Íoslódáil ar siúl..."
 Playing: "Ag imirt..."
-LoadingMus: "Ag Anáil..."
+Parsing: "Ag Anáil..."
 DownLoadSucceedNotice: "Íoslódáil rathúil!"
 DownLoadFailureNotice: "Theip ar an íoslódáil =("
 PleaseWait: "Fan le do thoil..."
@@ -119,7 +120,7 @@ updateNotice: "Meabhrúchán Nuashonraithe"
 UpdateBySelfText: "Ní thacaíonn an leagan seo le nuashonruithe uathoibríocha. Déan nuashonrú de láimh le do thoil."
 updateButton: "Nuashonraigh Anois"
 updatePopupTitle: "Nuashonraigh Anois"
-updatePopupTitleFialed: "Theip ar an Nuashonrú"
+updatePopupTitleFailed: "Theip ar an Nuashonrú"
 updatePopupTitleDone: "Nuashonrú Críochnaithe"
 
 # 选择更新渠道 / Update Chose Source
@@ -286,6 +287,7 @@ LobbyTimeDisplayText: "Tempus existentiae"
 # 客户端平台 / Platform
 IPhone: "IPhone"
 Android: "Android"
+MicrosoftStore: "Microsoft"
 
 # 延迟显示 / Ping Tracker
 Ping: "Ping"

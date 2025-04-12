@@ -57,16 +57,15 @@ public static class ModUnloaderScreen
             }
             catch
             {
+                // ignored
             }
-            
 
             _ = new LateTask(() =>
             {
-                XtremeLogger.Info("模组将要禁用", nameof(ModUnloaderScreen));
+                Info("模组将要禁用", nameof(ModUnloaderScreen));
                 Harmony.UnpatchAll();
                 Main.Instance.Unload();
             }, 1f);
-
         }));
     }
 
@@ -90,9 +89,6 @@ public static class ModUnloaderScreen
     }
     public static void Hide()
     {
-        if (Popup != null)
-        {
-            Popup.gameObject.SetActive(false);
-        }
+        Popup?.gameObject.SetActive(false);
     }
 }

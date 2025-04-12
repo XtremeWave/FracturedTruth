@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using FinalSuspect.Attributes;
 using FinalSuspect.Helpers;
 
@@ -10,7 +13,7 @@ public static class PathManager
     public static string DependsSavePath = "BepInEx/core/";
     public static string DownloadFileTempPath = "BepInEx/plugins/FinalSuspect.dll.temp";
     public static string downloadUrl_github = "https://github.com/XtremeWave/FinalSuspect/releases/latest/download/FinalSuspect.dll";
-    public static string downloadUrl_gitee = "https://gitee.com/XtremeWave/FinalSuspect/releases/download/v{showVer}/FinalSuspect.dll";
+    public static string downloadUrl_gitee = "https://gitee.com/LezaiYa/FinalSuspect/releases/download/v{showVer}/FinalSuspect.dll";
     public static string downloadUrl_xtremeapi = "https://api.xtreme.net.cn/download/FinalSuspect/FinalSuspect.dll";
     
     public static string GetFile(FileType fileType, RemoteType remoteType, string file)
@@ -31,43 +34,43 @@ public static class PathManager
                 remoteBase = "github.com/XtremeWave/FinalSuspect/raw/FinalSus/Assets/";
                 break;
             case RemoteType.Gitee:
-                remoteBase = "gitee.com/XtremeWave/FinalSuspect/raw/FinalSus/Assets/";
+                remoteBase = "gitee.com/LezaiYa/FinalSuspect/raw/FinalSus/Assets/";
                 break;
             case RemoteType.XtremeApi:
-                remoteBase = "api.xtreme.net.cn/download/FinalSuspect/";
+                remoteBase = "api.xtreme.net.cn/download/FinalSuspect/Assets/";
                 break;
         }
-
         return remoteBase;
     }
 
     public static string GetLocalFilePath(FileType fileType, string file)
     {
-        switch (fileType)
+        return fileType switch
         {
-            case FileType.Depends:
-                return GetLocalPath(LocalType.BepInEx) + file;
-            default:
-                return GetResourceFilesPath(fileType, file);
-        }
+            FileType.Depends => GetLocalPath(LocalType.BepInEx) + file,
+            _ => GetResourceFilesPath(fileType, file),
+        };
     }
+    
     public static string GetLocalPath(LocalType localType)
     {
         if (localType == LocalType.BepInEx)
             return DependsSavePath;
         return  LocalPath_Data + localType + "/";
     }
+    
     public static string GetResourceFilesPath(FileType fileType, string file)
     {
         return GetLocalPath(LocalType.Resources) + fileType + "/" + file;
     }
+    
     public static string GetBanFilesPath(string file)
     {
         return GetLocalPath(LocalType.Ban) + file;
     }
 
     [PluginModuleInitializer(InitializePriority.High)]
-    public static void Init()
+    public static void InitializePaths()
     {
         CheckAndCreate(GetLocalPath(LocalType.Resources), false);
         CheckAndCreate(GetLocalPath(LocalType.Resources) + "Sounds", false);
@@ -82,22 +85,52 @@ public static class PathManager
         CheckAndCreate(GetLocalPath(LocalType.Bypass), false);
     }
 
-    public static void CheckAndCreate(string path, bool hidden = true)
+    private static void CheckAndCreate(string path, bool hidden = true)
     {
+        if (path == null) return;
+        
         if (!Directory.Exists(path))
         {
             Directory.CreateDirectory(path);
         }
+        
         var attributes = File.GetAttributes(path);
         File.SetAttributes(path, hidden
             ? attributes | FileAttributes.Hidden 
             : attributes & ~FileAttributes.Hidden);
     }
+    
     public static string GetBypassFileType(FileType fileType, BypassType bypassType)
     {
         return GetLocalPath(LocalType.Bypass) + $"BypassCheck_{fileType}_{bypassType}.xwr";
     }
     
+    private static IReadOnlyList<string> URLs => new List<string>
+    {
+#if DEBUG
+        "https://raw.githubusercontent.com/XtremeWave/FinalSuspect_Dev/FS_Dev/",
+        "https://api.xtreme.net.cn/download/FinalSuspect/",
+        $"file:///{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop))}/",
+#endif
+
+#if CANARY
+        "https://raw.githubusercontent.com/XtremeWave/FinalSuspect_Dev/FS_Dev/",
+        "https://api.xtreme.net.cn/download/FinalSuspect/",
+        $"file:///{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop))}/",
+#else        
+        "https://raw.githubusercontent.com/XtremeWave/FinalSuspect/FinalSus/",
+        "https://gitee.com/LezaiYa/FinalSuspect/raw/FinalSus/",
+        "https://api.xtreme.net.cn/download/FinalSuspect/",
+#endif
+    };
+    
+    public static IReadOnlyList<string> GetInfoFileUrlList(bool allowDesktop = false)
+    {
+        var list = URLs.ToList();
+        if (!allowDesktop && DebugModeManager.AmDebugger) list.RemoveAt(2);
+        if (IsChineseUser) list.Reverse();
+        return list;
+    }
 }
 
 public enum FileType
@@ -127,5 +160,4 @@ public enum BypassType
 {
     Once,
     Longterm,
-    
 }

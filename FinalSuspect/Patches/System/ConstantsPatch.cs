@@ -3,15 +3,15 @@
 [HarmonyPatch(typeof(Constants), nameof(Constants.GetBroadcastVersion))]
 public class ConstantsPatch
 {
-    static void Postfix(ref int __result)
+    public static void Postfix(ref int __result)
     {
-        if (XtremeGameData.GameStates.IsLocalGame)
+        if (IsLocalGame)
         {
-            XtremeLogger.Info($"IsLocalGame: {__result}", "VersionServer");
+            Info($"IsLocalGame: {__result}", "VersionServer");
         }
-        if (XtremeGameData.GameStates.IsOnlineGame)
+        if (IsOnlineGame)
         {
-            XtremeLogger.Info($"IsOnlineGame: {__result}", "VersionServer");
+            Info($"IsOnlineGame: {__result}", "VersionServer");
         }
     }
 }

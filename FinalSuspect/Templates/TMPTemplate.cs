@@ -24,7 +24,7 @@ public sealed class TMPTemplate
         TextAlignmentOptions? alignment = null,
         bool setActive = false,
         Transform parent = null
-        )
+    )
     {
         var replicatedObject = parent == null
             ? Object.Instantiate(baseTMP)
@@ -32,8 +32,8 @@ public sealed class TMPTemplate
         replicatedObject.text = text ?? "";
         replicatedObject.color = color ?? Color.white;
         replicatedObject.fontSize =
-        replicatedObject.fontSizeMax =
-        replicatedObject.fontSizeMin = fontSize ?? baseTMP.fontSize;
+            replicatedObject.fontSizeMax =
+                replicatedObject.fontSizeMin = fontSize ?? baseTMP.fontSize;
         replicatedObject.alignment = alignment ?? TextAlignmentOptions.Center;
 
         replicatedObject.gameObject.SetActive(setActive);

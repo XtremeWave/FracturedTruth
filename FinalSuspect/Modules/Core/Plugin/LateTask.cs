@@ -26,7 +26,7 @@ class LateTask
         this.name = name;
         Tasks.Add(this);
         if (name != "")
-            XtremeLogger.Info("\"" + name + "\" is created", "LateTask");
+        Info("\"" + name + "\" is created", "LateTask");
     }
     public static void Update(float deltaTime)
     {
@@ -39,13 +39,13 @@ class LateTask
                 if (task.Run(deltaTime))
                 {
                     if (task.name != "")
-                        XtremeLogger.Info($"\"{task.name}\" is finished", "LateTask");
+                    Info($"\"{task.name}\" is finished", "LateTask");
                     TasksToRemove.Add(task);
                 }
             }
             catch (Exception ex)
             {
-                XtremeLogger.Error($"{ex.GetType()}: {ex.Message}  in \"{task.name}\"\n{ex.StackTrace}", "LateTask.Error", false);
+                Error($"{ex.GetType()}: {ex.Message}  in \"{task.name}\"\n{ex.StackTrace}", "LateTask.Error", false);
                 TasksToRemove.Add(task);
             }
         }

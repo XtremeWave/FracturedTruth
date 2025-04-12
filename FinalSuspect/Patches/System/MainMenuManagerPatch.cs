@@ -33,7 +33,7 @@ public class MainMenuManagerPatch
     public static void HideRightPanel()
     {
         ShowingPanel = false;
-        AccountManager.Instance?.transform?.FindChild("AccountTab/AccountWindow")?.gameObject?.SetActive(false);
+        AccountManager.Instance?.transform.FindChild("AccountTab/AccountWindow")?.gameObject.SetActive(false);
     }
 
     public static void ShowRightPanelImmediately()
@@ -61,9 +61,9 @@ public class MainMenuManagerPatch
             var pos1 = TitleLogoPatch.RightPanel.transform.localPosition;
             var lerp1 = Vector3.Lerp(pos1, TitleLogoPatch.RightPanelOp + new Vector3(ShowingPanel ? 0f : 10f, 0f, 0f), Time.deltaTime * (ShowingPanel ? 3f : 2f));
             if (ShowingPanel
-                ? TitleLogoPatch.RightPanel.transform.localPosition.x > TitleLogoPatch.RightPanelOp.x + 0.03f
-                : TitleLogoPatch.RightPanel.transform.localPosition.x < TitleLogoPatch.RightPanelOp.x + 9f
-                ) TitleLogoPatch.RightPanel.transform.localPosition = lerp1;
+                    ? TitleLogoPatch.RightPanel.transform.localPosition.x > TitleLogoPatch.RightPanelOp.x + 0.03f
+                    : TitleLogoPatch.RightPanel.transform.localPosition.x < TitleLogoPatch.RightPanelOp.x + 9f
+               ) TitleLogoPatch.RightPanel.transform.localPosition = lerp1;
         }
 
         if (ShowedBak || !isOnline) return;
@@ -99,8 +99,6 @@ public class MainMenuManagerPatch
             aspectPosition.anchorPoint = new Vector2(col == 1 ? 0.415f : 0.583f, 0.5f - 0.08f * row);
             return button;
         }
-
-
 
         var extraLinkName = IsChineseUser ? "QQ群" : "Discord";
         var extraLinkUrl = IsChineseUser ? Main.QQInviteUrl : Main.DiscordInviteUrl;

@@ -17,17 +17,14 @@ internal class MakePublicPatch
 {
     public static bool Prefix(GameStartManager __instance)
     {
-
         if (VersionChecker.isBroken || (VersionChecker.hasUpdate && VersionChecker.forceUpdate) || !VersionChecker.IsSupported )
         {
-            var message = "";
-            message = GetString("PublicNotAvailableOnThisVersion");
+            var message = GetString("PublicNotAvailableOnThisVersion");
             if (VersionChecker.isBroken) message = GetString("ModBrokenMessage");
             if (VersionChecker.hasUpdate) message = GetString("CanNotJoinPublicRoomNoLatest");
-            XtremeLogger.Info(message, "MakePublicPatch");
-            XtremeLogger.SendInGame(message);
+            Info(message, "MakePublicPatch");
+            SendInGame(message);
             return false;
-
         }
         return true;
     }
@@ -41,8 +38,8 @@ class MMOnlineManagerStartPatch
         var obj = GameObject.Find("FindGameButton");
         if (obj)
         {
-            obj?.SetActive(false);
-            var parentObj = obj.transform.parent.gameObject;
+            obj.SetActive(false);
+            _ = obj.transform.parent.gameObject;
             var textObj = Object.Instantiate(obj.transform.FindChild("Text_TMP").GetComponent<TextMeshPro>());
             textObj.transform.position = new Vector3(0.5f, -0.4f, 0f);
             textObj.name = "CanNotJoinPublic";
@@ -63,20 +60,8 @@ class MMOnlineManagerStartPatch
             textObj.text = $"<size=2>{StringHelper.ColorString(Color.red, message)}</size>";
         }
     }
+}
 
-}
-[HarmonyPatch(typeof(SplashManager), nameof(SplashManager.Update))]
-internal class SplashLogoAnimatorPatch
-{
-    public static void Prefix(SplashManager __instance)
-    {
-        if (DebugModeManager.AmDebugger)
-        {
-            __instance.sceneChanger.AllowFinishLoadingScene();
-            __instance.startedSceneLoad = true;
-        }
-    }
-}
 [HarmonyPatch(typeof(EOSManager), nameof(EOSManager.IsAllowedOnline))]
 internal class RunLoginPatch
 {
@@ -92,16 +77,18 @@ internal class RunLoginPatch
         // If you wish to make your lobby public in a debug build, please use it only for testing purposes
         // If you modify the code, please indicate in the lobby announcement that this is a modified version and provide the author of the modification
         canOnline = Environment.UserName == "Slok7";
+        //canOnline = Environment.UserName == "LezaiYa";
+        canOnline = Environment.UserName == "Administrator";
 #endif
     }
 }
+
 [HarmonyPatch(typeof(BanMenu), nameof(BanMenu.SetVisible))]
 internal class BanMenuSetVisiblePatch
 {
     public static bool Prefix(BanMenu __instance, bool show)
     {
-        
-            if (!AmongUsClient.Instance.AmHost) return true;
+        if (!AmongUsClient.Instance.AmHost) return true;
         show &= PlayerControl.LocalPlayer && PlayerControl.LocalPlayer.Data != null;
         __instance.BanButton.gameObject.SetActive(AmongUsClient.Instance.CanBan());
         __instance.KickButton.gameObject.SetActive(AmongUsClient.Instance.CanKick());
@@ -109,6 +96,7 @@ internal class BanMenuSetVisiblePatch
         return false;
     }
 }
+
 [HarmonyPatch(typeof(InnerNetClient), nameof(InnerNetClient.CanBan))]
 internal class InnerNetClientCanBanPatch
 {
@@ -118,6 +106,7 @@ internal class InnerNetClientCanBanPatch
         return false;
     }
 }
+
 [HarmonyPatch(typeof(InnerNetClient), nameof(InnerNetClient.KickPlayer))]
 internal class KickPlayerPatch
 {
@@ -127,7 +116,7 @@ internal class KickPlayerPatch
         {
             if (Main.AllPlayerControls.Where(p => p.IsDev()).Any(p => AmongUsClient.Instance.GetRecentClient(clientId).FriendCode == p.FriendCode))
             {
-                XtremeLogger.SendInGame(GetString("Warning.CantKickDev"));
+                SendInGame(GetString("Warning.CantKickDev"));
                 return false;
             }
 
@@ -145,7 +134,11 @@ internal class KickPlayerPatch
                 }
             }
         }
-        catch { }
+        catch
+        {
+            // ignored
+        }
+
         return true;
     }
 }

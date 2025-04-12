@@ -7,7 +7,6 @@ using TMPro;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-
 namespace FinalSuspect.Patches.System;
 
 [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.Update))]
@@ -20,10 +19,10 @@ public static class GameStartManagerUpdatePatch
         //Scrapped
         //if (CreateOptionsPickerPatch.SetDleks && AmongUsClient.Instance.AmHost)
         //{
-        //    if (XtremeGameData.GameStates.IsNormalGame)
+        //    if (IsNormalGame)
         //        Main.NormalOptions.MapId = 3;
 
-        //    else if (XtremeGameData.GameStates.IsHideNSeek)
+        //    else if (IsHideNSeek)
         //        Main.HideNSeekOptions.MapId = 3;
         //}
     }
@@ -79,7 +78,7 @@ public class GameStartManagerPatch
             timerText.hideFlags = HideFlags.None;
             timerText.transform.localPosition += new Vector3(-0.55f,  -0.4f, 0f);
             timerText.transform.localScale = new(0.7f, 0.7f, 1f);
-            timerText.gameObject.SetActive(AmongUsClient.Instance.NetworkMode == NetworkModes.OnlineGame && XtremeGameData.GameStates.IsVanillaServer);
+            timerText.gameObject.SetActive(AmongUsClient.Instance.NetworkMode == NetworkModes.OnlineGame && IsVanillaServer);
 
             cancelButton = Object.Instantiate(__instance.StartButton, __instance.transform);
             var cancelLabel = cancelButton.GetComponentInChildren<TextMeshPro>();
@@ -108,8 +107,6 @@ public class GameStartManagerPatch
                 __instance.HostPrivateButton.inactiveTextColor = Palette.DisabledClear;
                 __instance.HostPrivateButton.activeTextColor = Palette.DisabledClear;
             }
-
-
         }
     }
 
@@ -123,8 +120,8 @@ public class GameStartManagerPatch
             // Lobby code
             if (DataManager.Settings.Gameplay.StreamerMode)
             {
-                __instance.GameRoomNameCode.color = new(__instance.GameRoomNameCode.color.r, __instance.GameRoomNameCode.color.g, __instance.GameRoomNameCode.color.b, 0); ;
-                HideName.enabled = !XtremeGameData.GameStates.IsLocalGame;
+                __instance.GameRoomNameCode.color = new(__instance.GameRoomNameCode.color.r, __instance.GameRoomNameCode.color.g, __instance.GameRoomNameCode.color.b, 0); 
+                HideName.enabled = !IsLocalGame;
             }
             else
             {
@@ -139,11 +136,10 @@ public class GameStartManagerPatch
                 {
                     updateTimer = 0;
                     var maxPlayers = GameManager.Instance.LogicOptions.MaxPlayers;
-                    if (GameData.Instance.PlayerCount >= maxPlayers - 1 && !XtremeGameData.GameStates.IsCountDown)
+                    if (GameData.Instance.PlayerCount >= maxPlayers - 1 && !IsCountDown)
                     {
                         GameStartManager.Instance.startState = GameStartManager.StartingStates.Countdown;
                         GameStartManager.Instance.countDownTimer = 10;
-
                     }
                 }
             }
@@ -175,9 +171,7 @@ public class GameStartManagerPatch
                 cancelButton.gameObject.SetActive(__instance.startState == GameStartManager.StartingStates.Countdown);
                 __instance.StartButton.gameObject.SetActive(!cancelButton.gameObject.active);
             }
-
-            /*
-                if (MatchVersions(0, true) || Main.VersionCheat.Value)
+                /*if (MatchVersions(0, true) || Main.VersionCheat.Value)
                     exitTimer = 0;
                 else
                 {
@@ -190,8 +184,7 @@ public class GameStartManagerPatch
                     }
                     if (exitTimer != 0)
                         warningMessage = StringHelper.ColorString(Color.red, string.Format(GetString("Warning.AutoExitAtMismatchedVersion"), $"<color={ColorHelper.ModColor}>{Main.ModName}</color>", Math.Round(5 - exitTimer).ToString()));
-                }
-                */
+                }*/
             var warningMessage = "";
             if (warningMessage == "")
             {
@@ -212,7 +205,7 @@ public class GameStartManagerPatch
             }
             timerText.text = "";
             // Lobby timer
-            if (!GameData.Instance || AmongUsClient.Instance.NetworkMode == NetworkModes.LocalGame || !XtremeGameData.GameStates.IsVanillaServer || !AmongUsClient.Instance.AmHost) return;
+            if (!GameData.Instance || AmongUsClient.Instance.NetworkMode == NetworkModes.LocalGame || !IsVanillaServer || !AmongUsClient.Instance.AmHost) return;
 
             timer = Mathf.Max(0f, timer -= Time.deltaTime);
             var minutes = (int)timer / 60;
@@ -220,14 +213,13 @@ public class GameStartManagerPatch
             var countDown = $"{minutes:00}:{seconds:00}";
             if (timer <= 60) countDown = StringHelper.ColorString(Color.red, countDown);
             timerText.text = countDown;
-
         }
         private static bool MatchVersions(byte playerId, bool acceptVanilla = false)
         {
             if (!XtremeGameData.PlayerVersion.playerVersion.TryGetValue(playerId, out var version)) return acceptVanilla;
             return Main.ForkId == version.forkId
-                && Main.version.CompareTo(version.version) == 0
-                && version.tag == $"{ThisAssembly.Git.Commit}({ThisAssembly.Git.Branch})";
+                   && Main.version.CompareTo(version.version) == 0
+                   && version.tag == $"{ThisAssembly.Git.Commit}({ThisAssembly.Git.Branch})";
         }
     }
 }
@@ -235,7 +227,7 @@ public class GameStartManagerPatch
 [HarmonyPatch(typeof(TextBoxTMP), nameof(TextBoxTMP.SetText))]
 public static class HiddenTextPatch
 {
-    private static void Postfix(TextBoxTMP __instance)
+    public static void Postfix(TextBoxTMP __instance)
     {
         if (__instance.name == "GameIdText") __instance.outputText.text = new string('*', __instance.text.Length);
     }
@@ -245,7 +237,7 @@ class ResetStartStatePatch
 {
     public static void Prefix(GameStartManager __instance)
     {
-        if (XtremeGameData.GameStates.IsCountDown)
+        if (IsCountDown)
         {
             SoundManager.Instance.StopSound(__instance.gameStartSound);
         }

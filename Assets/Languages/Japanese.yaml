@@ -93,6 +93,7 @@ CannotUnloadDuringGame: "ゲーム中は元のバージョンに切り替える�
 Cancel: "キャンセル"
 Unload: "アンロード"
 DumpLog: "ログを出力する"
+ClearAutoLogs: "自動ログをクリア"
 SoundOptions: "マイミュージック"
 AudioManagementOptions: "オーディオ管理"
 OnlyAvailableInMainMenu: "メインメニューでのみ使用可能です"
@@ -100,9 +101,9 @@ OnlyAvailableInMainMenu: "メインメニューでのみ使用可能です"
 # ヒント / Tips
 updatePleaseWait: "しばらくお待ちください..."
 updateInProgress: "更新中..."
-downloadInProgress: "ダウンロード中..."
+DownloadingAudios: "ダウンロード中..."
 Playing: "プレイ中..."
-LoadingMus: "解析中..."
+Parsing: "解析中..."
 DownLoadSucceedNotice: "ダウンロードに成功しました！"
 DownLoadFailureNotice: "ダウンロードに失敗しました =("
 PleaseWait: "しばらくお待ちください..."
@@ -119,7 +120,7 @@ updateNotice: "更新リマインダー"
 UpdateBySelfText: "このバージョンではワンクリック更新はサポートされていません。手動で更新してください。"
 updateButton: "今すぐ更新"
 updatePopupTitle: "今すぐ更新"
-updatePopupTitleFialed: "更新に失敗しました"
+updatePopupTitleFailed: "更新に失敗しました"
 updatePopupTitleDone: "更新が完了しました"
 
 # 更新ソースの選択 / Update Chose Source
@@ -286,6 +287,7 @@ LobbyTimeDisplayText: "生存期間"
 # ロビーリスト表示 / Lobby List
 IPhone: "IPhone"
 Android: "Android"
+MicrosoftStore: "Microsoft"
 
 # ピング表示 / Ping Tracker
 Ping: "ピング"

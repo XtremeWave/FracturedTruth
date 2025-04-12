@@ -1,7 +1,5 @@
 using System;
 using System.IO;
-using System.Net;
-using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -11,7 +9,6 @@ namespace FinalSuspect.Modules.Resources;
 
 public class ResourcesDownloader
 {
-    
     public static async Task<bool> StartDownload(FileType fileType, string file)
     {
         string filePath;
@@ -21,10 +18,10 @@ public class ResourcesDownloader
             case FileType.Sounds:
             case FileType.ModNews:
             case FileType.Languages:
-                filePath = PathManager.GetResourceFilesPath(fileType, file);
+                filePath = GetResourceFilesPath(fileType, file);
                 break;
             case FileType.Depends:
-                filePath = PathManager.GetLocalPath(LocalType.BepInEx) +file;
+                filePath = GetLocalPath(LocalType.BepInEx) +file;
                 break;
             default:
                 return false;
@@ -32,9 +29,8 @@ public class ResourcesDownloader
         var DownloadFileTempPath = filePath + ".xwr";
 
         var retrytimes = 0;
-        var remoteType = RemoteType.Github;
-        
-    retry:
+        var remoteType = RemoteType.Github; 
+        retry:
         if (IsChineseLanguageUser)
             switch (retrytimes)
             {
@@ -44,55 +40,54 @@ public class ResourcesDownloader
                 case 1:
                     remoteType = RemoteType.Gitee;
                     break;
-
+                case 2:
+                    remoteType = RemoteType.Github;
+                    break;
             }
 
-        var url = PathManager.GetFile(fileType, remoteType, file);
-
+        var url = GetFile(fileType, remoteType, file);
 
         if (!IsValidUrl(url))
         {
-            XtremeLogger.Error($"Invalid URL: {url}", "Download Resources", false);
+            Error($"Invalid URL: {url}", "Download Resources", false);
             return false;
         }
 
         File.Create(DownloadFileTempPath).Close();
         
-        XtremeLogger.Msg("Start Downloading from: " + url, "Download Resources");
-        XtremeLogger.Msg("Saving file to: " + filePath, "Download Resources");
+        Msg("Start Downloading from: " + url, "Download Resources");
+        Msg("Saving file to: " + filePath, "Download Resources");
 
         try
         {
             using var client = new HttpClientDownloadWithProgress(url, DownloadFileTempPath);
             await client.StartDownload();
             Thread.Sleep(100);
-            XtremeLogger.Info($"Succeed in {url}", "Download Resources");
+            Info($"Succeed in {url}", "Download Resources");
             File.Delete(filePath);
             File.Move(DownloadFileTempPath, filePath);
             return true;
         }
         catch (Exception ex)
         {
-            XtremeLogger.Error($"Failed to download\n{ex.Message}", "Download Resources", false);
+            Error($"Failed to download\n{ex.Message}", "Download Resources", false);
             File.Delete(DownloadFileTempPath);
             retrytimes++;
-            if (retrytimes < 2) 
+            if (retrytimes < 3) 
                 goto retry;
             return false;
         }
-
     }
-
     private static bool IsValidUrl(string url)
     {
         var pattern = @"^(https?|ftp)://[^\s/$.?#].[^\s]*$";
         return Regex.IsMatch(url, pattern);
     }
-    private static void OnDownloadProgressChanged(long? totalFileSize, long totalBytesDownloaded, double? progressPercentage)
+    /*private static void OnDownloadProgressChanged(long? totalFileSize, long totalBytesDownloaded, double? progressPercentage)
     {
         var msg = $"\n{totalFileSize / 1000}KB / {totalBytesDownloaded / 1000}KB  -  {(int)progressPercentage}%";
-        XtremeLogger.Info(msg, "Download Resources");
-    }
+        Info(msg, "Download Resources");
+    }*/
     public static string GetMD5HashFromFile(string fileName)
     {
         try
@@ -104,17 +99,15 @@ public class ResourcesDownloader
         }
         catch (Exception ex)
         {
-            XtremeLogger.Exception(ex, "GetMD5HashFromFile");
+            Exception(ex, "GetMD5HashFromFile");
             return "";
         }
     }
-    public static async Task<bool> IsUrl404Async(FileType fileType, string file)
+    /*public static async Task<bool> IsUrl404Async(FileType fileType, string file)
     {
         return false;
-            /*
             using var client = new HttpClient();
             try
-
             {
                 if (!IsChineseLanguageUser)
                 {
@@ -135,6 +128,5 @@ public class ResourcesDownloader
         {
             return false;
         }
-*/
-    }
+    }*/
 }

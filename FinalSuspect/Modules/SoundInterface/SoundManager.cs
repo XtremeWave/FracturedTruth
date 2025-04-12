@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Features.CheckingandBlocking;
-using FinalSuspect.Modules.Random;
+using FinalSuspect.Modules.Panels;
 using FinalSuspect.Modules.Resources;
 using UnityEngine;
 using static FinalSuspect.Modules.SoundInterface.SoundManager;
@@ -16,7 +15,7 @@ namespace FinalSuspect.Modules.SoundInterface;
 #nullable enable
 public static class SoundManager
 {
-    public static readonly string TAGS_PATH = PathManager.GetResourceFilesPath(FileType.Sounds, "SoundsName.txt");
+    public static readonly string TAGS_PATH = GetResourceFilesPath(FileType.Sounds, "SoundsName.txt");
 
     public static List<string> CustomAudios = [];
  
@@ -29,7 +28,6 @@ public static class SoundManager
             Init();
             return;
         }
-
         try
         {
             using StreamReader sr = new(TAGS_PATH);
@@ -37,12 +35,12 @@ public static class SoundManager
             {
                 if (string.IsNullOrWhiteSpace(line)) continue;
                 XtremeMusic.CreateMusic(line);
-                XtremeLogger.Info($"Audio Loaded: {line}", "AudioManager");
+                Info($"Audio Loaded: {line}", "AudioManager");
             }
         }
         catch (Exception ex)
         {
-            XtremeLogger.Error("Load Audios Failed\n" + ex, "AudioManager", false);
+            Error("Load Audios Failed\n" + ex, "AudioManager", false);
         }
     }
     
@@ -51,7 +49,6 @@ public static class SoundManager
         if (!File.Exists(TAGS_PATH)) File.Create(TAGS_PATH).Close();
         var attributes = File.GetAttributes(TAGS_PATH);
         File.SetAttributes(TAGS_PATH, attributes | FileAttributes.Hidden);
-
         XtremeMusic.InitializeAll();
     }
     
@@ -59,7 +56,6 @@ public static class SoundManager
     {
         if (path == null) return false;
         List<string> extensions = [".wav", ".flac", ".aiff", ".mp3", ".aac", ".ogg", ".m4a"];
-
 
         while (!File.Exists(path))
         {
@@ -77,7 +73,6 @@ public static class SoundManager
             path = path.Replace(matchingKey, extensionsArray[nextIndex]);
             extensions.Remove(matchingKey);
         }
-
         return true;
     }
     
@@ -161,7 +156,7 @@ public class XtremeMusic
     public bool unpublished;
 
 
-    public static async void InitializeAll()
+    public static void InitializeAll()
     {
         foreach (var file in EnumHelper.GetAllValues<SupportedMusics>().ToList())
         {
@@ -177,16 +172,15 @@ public class XtremeMusic
             {
                 if (string.IsNullOrWhiteSpace(line)) continue;
                 CreateMusic(line);
-                XtremeLogger.Info($"Sound Loaded: {line}", "AudioManager");
+                Info($"Sound Loaded: {line}", "AudioManager");
                 soundnum++;
             }
         }
         catch (Exception ex)
         {
-            XtremeLogger.Error("Load Audio Failed\n" + ex, "AudioManager", false);
+            Error("Load Audio Failed\n" + ex, "AudioManager", false);
         }
-        
-        XtremeLogger.Msg($"{soundnum} Custom Sounds Loaded", "AudioManager");
+        Msg($"{soundnum} Custom Sounds Loaded", "AudioManager");
     }
     
     private static readonly object finalMusicsLock = new();
@@ -242,7 +236,7 @@ public class XtremeMusic
 
         UnOfficial = music == SupportedMusics.UnOfficial;
         CurrectAudio = music;
-        Path = PathManager.GetResourceFilesPath(FileType.Sounds, FileName + ".wav");
+        Path = GetResourceFilesPath(FileType.Sounds, FileName + ".wav");
         CurrectAudioStates = LastAudioStates = ConvertExtension(ref Path) ? AudiosStates.Exist : AudiosStates.NotExist;
         
         lock (finalMusicsLock)
@@ -258,7 +252,7 @@ public class XtremeMusic
                 }
             }
             else if (Name != string.Empty)
-                musics.Add(this);
+            musics.Add(this);
         }
     }
 }

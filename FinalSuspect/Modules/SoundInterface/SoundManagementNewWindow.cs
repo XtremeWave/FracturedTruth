@@ -2,11 +2,12 @@
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using FinalSuspect.Modules.Panels;
 using TMPro;
 using UnityEngine;
-using Object = UnityEngine.Object;
 using static FinalSuspect.Modules.SoundInterface.SoundManager;
 using static FinalSuspect.Modules.SoundInterface.XtremeMusic;
+using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Modules.SoundInterface;
 
@@ -29,7 +30,7 @@ public static class SoundManagementNewWindow
         Window.name = "New Music Window";
         Window.transform.FindChild("Background").localScale *= 0.7f;
         Window.transform.localPosition += Vector3.back * 21;
-         Object.Destroy(Window.transform.FindChild("Button2").gameObject);
+        Object.Destroy(Window.transform.FindChild("Button2").gameObject);
 
         var closeButton = Object.Instantiate(Window.transform.parent.FindChild("CloseButton"), Window.transform);
         closeButton.transform.localPosition = new Vector3(2.4f, 1.2f, -21f);
@@ -100,7 +101,7 @@ public static class SoundManagementNewWindow
                 return;
             }
 
-            new LateTask(() =>
+            _ = new LateTask(() =>
             {
                 colorInfoTmp.text = GetString("PleaseEnterMusic");
                 colorInfoTmp.color = Color.white;
@@ -115,11 +116,9 @@ public static class SoundManagementNewWindow
         buttonPrefab.SetActive(false);
         enterPrefab.SetActive(false);
     }
-    private static bool SaveToFile(string name)
+    private static void SaveToFile(string name)
     {
-
         using StreamWriter sr = new(TAGS_PATH, true);
         sr.WriteLine(name);
-        return true;
     }
 }

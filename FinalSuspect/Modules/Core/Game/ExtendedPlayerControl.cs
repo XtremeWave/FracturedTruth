@@ -36,22 +36,17 @@ static class ExtendedPlayerControl
     }
     public static bool IsImpostor(this PlayerControl pc)
     {
-        if (XtremeGameData.GameStates.IsLobby) return false;
-        switch (pc.GetRoleType())
+        if (IsLobby) return false;
+        return pc.GetRoleType() switch
         {
-            case RoleTypes.Impostor:
-            case RoleTypes.Shapeshifter:
-            case RoleTypes.Phantom:
-            case RoleTypes.ImpostorGhost:
-                return true;
-        }
-        return false;
+            RoleTypes.Impostor or RoleTypes.Shapeshifter or RoleTypes.Phantom or RoleTypes.ImpostorGhost => true,
+            _ => false,
+        };
     }
     public static string GetNameWithRole(this PlayerControl player, bool forUser = false)
     {
-        var ret = $"{player?.Data?.PlayerName}" + 
-            (XtremeGameData.GameStates.IsInGame? 
-            $"({Utils.GetRoleName(player.GetRoleType())})" : "");
+        var ret = $"{player?.Data?.PlayerName}{(IsInGame ?
+            $"({GetRoleName(player.GetRoleType())})" : "")}";
         return forUser ? ret : ret.RemoveHtmlTags();
     }
     public static Color GetRoleColor(this PlayerControl player)
@@ -63,10 +58,11 @@ static class ExtendedPlayerControl
         string trynull = null;
         try
         {
-             trynull = player.GetXtremeData() != null ? player?.GetDataName() : null;
+            trynull = player.GetXtremeData() != null ? player?.GetDataName() : null;
         }
-        catch 
+        catch
         {
+            // ignored
         }
 
         var nullname = trynull;
@@ -83,6 +79,5 @@ static class ExtendedPlayerControl
         {
             return false;
         }
-        
     }
 }

@@ -93,6 +93,7 @@ CannotUnloadDuringGame: "游戏中不能切换为原版"
 Cancel: "取消"
 Unload: "切换"
 DumpLog: "输出日志"
+ClearAutoLogs: "清空自动日志"
 SoundOptions: "我的音乐"
 AudioManagementOptions: "音频管理"
 OnlyAvailableInMainMenu: "仅在主页使用"
@@ -100,12 +101,17 @@ OnlyAvailableInMainMenu: "仅在主页使用"
 # 提示 / Tips
 updatePleaseWait: "请稍候……"
 updateInProgress: "更新中……"
-downloadInProgress: "下载中……"
+DownloadingAudios: "下载中……"
 Playing: "播放中……"
-LoadingMus: "解析中……"
+Parsing: "解析中……"
 DownLoadSucceedNotice: "下载成功！"
 DownLoadFailureNotice: "下载失败=("
 PleaseWait: "请稍候……"
+LanguageFilesLoadingComplete: "语言文件加载完成"
+CheckingForFiles: "校验资源文件完整性……"
+DownloadingResources: "下载资源文件……"
+Loading: "加载中……"
+LoadingComplete: "加载完成！"
 
 # 更新检查 / Update Checker
 Retry: "重试"
@@ -114,10 +120,10 @@ updateCheckFailedRetry: "检查更新失败 :(\n要重试吗？\n或者试试关
 updateCheckFailedExit: "检查更新失败 :(\n请检查您的网络强度后重试\n或者试试关掉你的加速器！"
 
 # 更新提醒 / Update Reminder
-UpdateBySelfTitle: "更新提示"
+updateBySelfTitle: "更新提示"
 updateButton: "一键更新"
 updatePopupTitle: "一键更新"
-updatePopupTitleFialed: "更新失败"
+updatePopupTitleFailed: "更新失败"
 updatePopupTitleDone: "更新完成"
 updateNotice: "更新提醒"
 UpdateBySelfText: "该版本不支持一键更新，请您手动更新"
@@ -161,7 +167,6 @@ NotAllowedMusic: "音乐名称格式不合规"
 
 # 界面提示 / Interface Tips
 CustomAudioManagementHelp: "您可以在「音频管理」中下载XtremeWave支持的音乐或添加自己的音乐。当您添加自己的音乐时，请您在「音频管理」中添加音乐名并在路径“Among Us/Final Suspect_Data/Resources/Sounds”文件夹内添加同名音频文件（支持格式：.wav）。音乐可在「我的音乐」中播放。"
-# , .flac, .aiff, .mp3, .aac, .ogg, .m4a
 CustomSoundHelp: "您可以在「音频管理」中下载XtremeWave支持的音乐或添加自己的音乐，如果音乐本地资源路径不存在则会显示「【文件丢失】」"
 
 # 主界面音乐提醒 / Main Menu Music Reminder
@@ -172,7 +177,6 @@ AudioNYPro: "如果您希望提高您的游戏体验，请在「主页-设置-�
 Mus.GongXiFaCai: "恭喜发财"
 Mus.NeverGonnaGiveYouUp: "Never Gonna Give You Up"
 Mus.CountingStars: "Counting Stars"
-
 Mus.TidalSurge: "塘潮暗涌"
 Mus.TrailOfTruth: "真理之途"
 Mus.Interlude: "插叙"
@@ -286,6 +290,7 @@ LobbyTimeDisplayText: "存在时间"
 # 客户端平台 / Platform
 IPhone: "苹果"
 Android: "安卓"
+MicrosoftStore: "微软"
 
 # 延迟显示 / Ping Tracker
 Ping: "延迟"
@@ -298,13 +303,6 @@ HongKong: "香港"
 FPSSetTo: "帧数上限设置为: {0}"
 BrowsingMode: "浏览模式"
 Broken: "损坏"
-
-# 加载 / Loading
-LanguageFilesLoadingComplete: "翻译文本加载完成！"
-CheckingForFiles: "校验资源文件完整性..."
-DownloadingResources: "下载资源文件..."
-Loading: "加载中..."
-LoadingComplete: "加载完成！"
 
 # 身份 / Identity
 Host: "房主"

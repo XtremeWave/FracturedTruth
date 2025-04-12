@@ -16,7 +16,6 @@ public static class AprilFoolsModePatch
     }
 }
 
-
 #region GameManager Patches
 [HarmonyPatch(typeof(NormalGameManager), nameof(NormalGameManager.GetBodyType))]
 public static class GetNormalBodyType_Patch
@@ -137,7 +136,6 @@ public static class LongBoiPatches
     public static bool LongBoyNeckSize_Patch(LongBoiPlayerBody __instance, ref float distance)
     {
         //Remove the limit of neck size to prevent issues in FinalSuspectE HnS
-
         __instance.targetHeight = distance / 10f + 0.5f;
         __instance.SetupNeckGrowth(true); //se quiser sim mano
         return false;
@@ -165,4 +163,3 @@ public static class LongBoiPatches
     }
 }
 #endregion
-

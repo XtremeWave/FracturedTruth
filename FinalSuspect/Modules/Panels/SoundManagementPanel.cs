@@ -4,13 +4,14 @@ using System.IO;
 using System.Linq;
 using FinalSuspect.Modules.Features;
 using FinalSuspect.Modules.Resources;
+using FinalSuspect.Modules.SoundInterface;
 using TMPro;
 using UnityEngine;
 using static FinalSuspect.Modules.SoundInterface.SoundManager;
 using static FinalSuspect.Modules.SoundInterface.XtremeMusic;
 using Object = UnityEngine.Object;
 
-namespace FinalSuspect.Modules.SoundInterface;
+namespace FinalSuspect.Modules.Panels;
 
 public static class SoundManagementPanel
 {
@@ -22,12 +23,12 @@ public static class SoundManagementPanel
     public static void Hide()
     {
         if (CustomBackground != null)
-            CustomBackground?.gameObject?.SetActive(false);
+            CustomBackground?.gameObject.SetActive(false);
     }
     public static void Init(OptionsMenuBehaviour optionsMenuBehaviour)
     {
         var mouseMoveToggle = optionsMenuBehaviour.DisableMouseMovement;
-        if (!XtremeGameData.GameStates.IsNotJoined) return;
+        if (!IsNotJoined) return;
 
         if (CustomBackground == null)
         {
@@ -59,7 +60,7 @@ public static class SoundManagementPanel
             newPassiveButton.OnClick = new();
             newPassiveButton.OnClick.AddListener(new Action(SoundManagementNewWindow.Open));
 
-            var helpText = Object.Instantiate(CustomPopup.InfoTMP.gameObject, CustomBackground.transform);
+            var helpText = Object.Instantiate(CustomPopup.InfoTMP?.gameObject, CustomBackground.transform);
             helpText.name = "Help Text";
             helpText.transform.localPosition = new(-1.25f, -2.15f, -15f);
             helpText.transform.localScale = new(1f, 1f, 1f);
@@ -81,12 +82,11 @@ public static class SoundManagementPanel
                 mask.transform.localScale = new Vector3(4.9f, 3.92f, 1f);
             }
         }
-        
         RefreshTagList();
     }
     public static void RefreshTagList()
     {
-        if (!XtremeGameData.GameStates.IsNotJoined) return;
+        if (!IsNotJoined) return;
         numItems = 0;
         var scroller = Slider.GetComponent<Scroller>();
         scroller.Inner.gameObject.ForEachChild((Action<GameObject>)DestroyObj);
@@ -98,7 +98,7 @@ public static class SoundManagementPanel
         var numberSetter = AccountManager.Instance.transform.FindChild("DOBEnterScreen/EnterAgePage/MonthMenu/Months").GetComponent<NumberSetter>();
         var buttonPrefab = numberSetter.ButtonPrefab.gameObject;
 
-        Items?.Values?.Do(Object.Destroy);
+        Items?.Values.Do(Object.Destroy);
         Items = new();
         foreach (var audio in musics)
         {
@@ -118,21 +118,19 @@ public static class SoundManagementPanel
             previewText.fontSize = 1f;
             previewText.name = "PreText-" + filename;
 
-
             Object.Destroy(button.GetComponent<UIScrollbarHelper>());
             Object.Destroy(button.GetComponent<NumberButton>());
 
             string buttontext;
             Color buttonColor;
             var enable = true;
-            var preview = "???";
 
             var audioExist = audio.CurrectAudioStates is not AudiosStates.NotExist || CustomAudios.Contains(filename);
             var unpublished = audio.unpublished;
             
             if (audio.CurrectAudioStates == AudiosStates.IsDownLoading)
             {
-                buttontext = GetString("downloadInProgress");
+                buttontext = GetString("DownloadingAudios");
                 buttonColor = Color.yellow;
                 enable = false;
             }
@@ -167,8 +165,8 @@ public static class SoundManagementPanel
                 buttonColor = Palette.DisabledGrey;
                 enable = false;
             }
-            preview = audio.Name;
 
+            var preview = audio.Name;
 
             var passiveButton = button.GetComponent<PassiveButton>();
             passiveButton.OnClick = new();
@@ -185,18 +183,18 @@ public static class SoundManagementPanel
                     var task = ResourcesDownloader.StartDownload(FileType.Sounds, filename + ".wav");
                     task.ContinueWith(t => 
                     {
-                        new LateTask(() =>
+                        _ = new LateTask(() =>
                         {
                             audio.CurrectAudioStates = audio.LastAudioStates = t.Result ? AudiosStates.DownLoadSucceedNotice : AudiosStates.DownLoadFailureNotice;
                             RefreshTagList();
 
-                            new LateTask(() =>
+                            _ = new LateTask(() =>
                             {
                                 CreateMusic(music: audio.CurrectAudio);
                                 RefreshTagList();
                                 MyMusicPanel.RefreshTagList();
                             }, 3f, "Refresh Tag List");
-                        },0.01f, "Download Notice");
+                        }, 0.01f, "Download Notice");
                     });
                 }
             }));
@@ -207,11 +205,9 @@ public static class SoundManagementPanel
             previewText.text = preview;
             Items.Add(filename, button);
         }
-
         scroller.SetYBoundsMin(0f);
         scroller.SetYBoundsMax(0.6f * numItems);
     }
-
 
     public static void Delete(XtremeMusic audio)
     {
@@ -228,12 +224,11 @@ public static class SoundManagementPanel
     {
         using StreamReader sr = new(TAGS_PATH);
 
-        string line;
         List<string> update = [];
-        while ((line = sr.ReadLine()) != null)
+        while (sr.ReadLine() is { } line)
         {
             if (string.IsNullOrWhiteSpace(line)) continue;
-            if (line != null && line != name)
+            if (line != name)
             {
                 update.Add(line);
             }
@@ -250,14 +245,14 @@ public static class SoundManagementPanel
 
         foreach (var updateline in update)
         {
-            sw.WriteLine(line);
+            sw.WriteLine(updateline);
         }
         var item = musics.Where(x => x.Name == name).FirstOrDefault();
         musics.Remove(item);
     }
     static void DeleteSoundInFile(string sound)
     {
-        var path = PathManager.GetResourceFilesPath(FileType.Sounds, sound + ".wav");
+        var path = GetResourceFilesPath(FileType.Sounds, sound + ".wav");
         File.Delete(path);
     }
 }

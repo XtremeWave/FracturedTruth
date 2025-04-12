@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using AmongUs.GameOptions;
 using FinalSuspect.Modules.Core.Game;
@@ -11,7 +10,7 @@ public static partial class XtremeGameData
 {
     public static class GameStates
     {
-        public static bool InGame { private get; set; } = false;
+        public static bool InGame { private get; set; }
 
         public static bool OtherModHost
         {
@@ -27,8 +26,6 @@ public static partial class XtremeGameData
                 {
                     return false;
                 }
-
-
             }
         }
 
@@ -54,11 +51,9 @@ public static partial class XtremeGameData
         public static bool IsCanMove => PlayerControl.LocalPlayer?.CanMove is true;
         public static bool IsDead => PlayerControl.LocalPlayer?.Data?.IsDead is true && !IsLobby;
 
-        public static bool IsNormalGame =>
-            GameOptionsManager.Instance.CurrentGameOptions.GameMode is GameModes.Normal or GameModes.NormalFools;
+        public static bool IsNormalGame => GameOptionsManager.Instance.CurrentGameOptions.GameMode is GameModes.Normal or GameModes.NormalFools;
 
-        public static bool IsHideNSeek =>
-            GameOptionsManager.Instance.CurrentGameOptions.GameMode is GameModes.HideNSeek or GameModes.SeekFools;
+        public static bool IsHideNSeek => GameOptionsManager.Instance.CurrentGameOptions.GameMode is GameModes.HideNSeek or GameModes.SeekFools;
 
         public static bool MapIsActive(MapNames name)
         {
@@ -87,9 +82,7 @@ public static partial class XtremeGameData
     
     public static bool IsFinalSuspect(this PlayerControl pc)  => IsFinalSuspect(pc.PlayerId);
 
-    public static bool IsFinalSuspect(byte id) =>
-        PlayerVersion.playerVersion.TryGetValue(id, out var ver) && Main.ForkId == ver.forkId;
-
+    public static bool IsFinalSuspect(byte id) => PlayerVersion.playerVersion.TryGetValue(id, out var ver) && Main.ForkId == ver.forkId;
 }
 
 public enum VanillaDeathReason

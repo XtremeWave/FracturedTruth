@@ -93,6 +93,7 @@ CannotUnloadDuringGame: "게임 중에는 원래 버전으로 전환할 수 없�
 Cancel: "취소"
 Unload: "アン로ード"
 DumpLog: "로그 출력"
+ClearAutoLogs: "자동 로그 삭제"
 SoundOptions: "내 음악"
 AudioManagementOptions: "오디오 관리"
 OnlyAvailableInMainMenu: "메인 메뉴에서만 사용 가능"
@@ -100,9 +101,9 @@ OnlyAvailableInMainMenu: "메인 메뉴에서만 사용 가능"
 # 提示 / Tips
 updatePleaseWait: "잠시만 기다려 주세요..."
 updateInProgress: "업데이트 중..."
-downloadInProgress: "다운로드 중..."
+DownloadingAudios: "다운로드 중..."
 Playing: "게임 중..."
-LoadingMus: "분석 중..."
+Parsing: "분석 중..."
 DownLoadSucceedNotice: "다운로드가 성공했습니다!"
 DownLoadFailureNotice: "다운로드에 실패했습니다 =("
 PleaseWait: "잠시만 기다려 주세요..."
@@ -119,7 +120,7 @@ updateNotice: "업데이트 알림"
 UpdateBySelfText: "이 버전은 한 클릭 업데이트를 지원하지 않습니다. 수동으로 업데이트하십시오."
 updateButton: "지금 업데이트"
 updatePopupTitle: "지금 업데이트"
-updatePopupTitleFialed: "업데이트 실패"
+updatePopupTitleFailed: "업데이트 실패"
 updatePopupTitleDone: "업데이트 완료"
 
 # 업데이트 소스 선택 / Update Chose Source
@@ -286,6 +287,7 @@ LobbyTimeDisplayText: "존재 경과 시간"
 # 룸 리스트 표시 / Lobby List
 IPhone: "IPhone"
 Android: "Android"
+MicrosoftStore: "Microsoft"
 
 # 지연 표시 / Ping Tracker
 Ping: "핑"

@@ -93,6 +93,7 @@ CannotUnloadDuringGame: "遊戲中不能切換為原版"
 Cancel: "取消"
 Unload: "切換"
 DumpLog: "輸出日誌"
+ClearAutoLogs: "清除自動日誌"
 SoundOptions: "我的音樂"
 AudioManagementOptions: "音頻管理"
 OnlyAvailableInMainMenu: "僅在主頁使用"
@@ -100,12 +101,17 @@ OnlyAvailableInMainMenu: "僅在主頁使用"
 # 提示 / Tips
 updatePleaseWait: "請稍候……"
 updateInProgress: "更新中……"
-downloadInProgress: "下載中……"
+DownloadingAudios: "下載中……"
 Playing: "播放中……"
-LoadingMus: "解析中……"
+Parsing: "解析中……"
 DownLoadSucceedNotice: "下載成功！"
 DownLoadFailureNotice: "下載失敗=("
 PleaseWait: "請稍候……"
+LanguageFilesLoadingComplete: "翻譯文本加載完成！"
+CheckingForFiles: "驗證資源文件完整性中..."
+DownloadingResources: "下載資源文件中..."
+Loading: "加載中..."
+LoadingComplete: "加載完成！"
 
 # 更新检查
 Retry: "重試"
@@ -117,7 +123,7 @@ updateCheckFailedExit: "檢查更新失敗 :(\n請檢查您的網絡強度後重
 UpdateBySelfTitle: "更新提示"
 updateButton: "一鍵更新"
 updatePopupTitle: "一鍵更新"
-updatePopupTitleFialed: "更新失敗"
+updatePopupTitleFailed: "更新失敗"
 updatePopupTitleDone: "更新完成"
 updateNotice: "更新提醒"
 UpdateBySelfText: "該版本不支持一鍵更新，請您手動更新"
@@ -286,6 +292,7 @@ LobbyTimeDisplayText: "生存期間"
 # 客户端平台 / Platform
 IPhone: "蘋果"
 Android: "安卓"
+MicrosoftStore: "Microsoft"
 
 # 延迟显示 / Ping Tracker
 Ping: "延遲"
@@ -298,13 +305,6 @@ HongKong: "香港"
 FPSSetTo: "幀數上限設置為: {0}"
 BrowsingMode: "瀏覽模式"
 Broken: "損壞"
-
-# 加载 / Loading
-LanguageFilesLoadingComplete: "翻譯文本加載完成！"
-CheckingForFiles: "驗證資源文件完整性中..."
-DownloadingResources: "下載資源文件中..."
-Loading: "加載中..."
-LoadingComplete: "加載完成！"
 
 # 身份 / Identity
 Host: "房主"

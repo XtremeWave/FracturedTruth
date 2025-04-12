@@ -7,19 +7,15 @@ using FinalSuspect.Modules.LogHandler;
 namespace FinalSuspect.Attributes;
 
 [AttributeUsage(AttributeTargets.Method)]
-public abstract class InitializerAttribute<T> : Attribute
+public abstract class InitializerAttribute<T>(InitializePriority priority) : Attribute
 {
     /// <summary>所有初始化方法</summary>
     private static MethodInfo[] allInitializers;
-    private static LogHandler logger = XtremeLogger.Handler(nameof(InitializerAttribute<T>));
+    private static LogHandler logger = Handler(nameof(InitializerAttribute<T>));
 
     public InitializerAttribute() : this(InitializePriority.Normal) { }
-    public InitializerAttribute(InitializePriority priority)
-    {
-        this.priority = priority;
-    }
 
-    private readonly InitializePriority priority = InitializePriority.Normal;
+    private readonly InitializePriority priority = priority;
     /// <summary>在初始化时调用的方法</summary>
     private MethodInfo targetMethod;
 
@@ -48,7 +44,6 @@ public abstract class InitializerAttribute<T> : Attribute
         }
         // 将找到的初始化方法按照优先级排序并转换为数组
         allInitializers = initializers.OrderBy(initializer => initializer.priority).Select(initializer => initializer.targetMethod).ToArray();
-
     }
     public static void InitializeAll()
     {
@@ -57,15 +52,16 @@ public abstract class InitializerAttribute<T> : Attribute
         {
             FindInitializers();
         }
+
+        if (allInitializers == null) return;
         foreach (var initializer in allInitializers)
         {
-            logger.Info($"初始化: {initializer.DeclaringType.Name}.{initializer.Name}");
-            initializer.Invoke(null, null);
+            logger.Info($"初始化: {initializer?.DeclaringType?.Name}.{initializer?.Name}");
+            initializer?.Invoke(null, null);
         }
     }
 }
-
-    public enum InitializePriority
+public enum InitializePriority
 {
     /// <summary>最高优先级，首先执行</summary>
     VeryHigh,

@@ -2,7 +2,6 @@
 using System.Linq;
 using FinalSuspect.Attributes;
 using FinalSuspect.Helpers;
-using FinalSuspect.Modules.Scrapped;
 using FinalSuspect.Patches.System;
 using UnityEngine;
 
@@ -62,7 +61,6 @@ public static class ServerAddManager
             "Niko233(EU)" => "Niko[EU]",
             "Niko233(CN)" => "Niko[CN]",
             "XtremeWave[HongKong]" => "XW[HK]",
-
             _ => serverName,
         };
 
@@ -77,10 +75,10 @@ public static class ServerAddManager
                 "XW[HK]" => "XW[香港]",
                 _ => name,
             };
-        };
+        }
 
         var color = GetServerColor(serverName);
-        Cloud.ServerName = name;
+        //Cloud.ServerName = name;
         PingTrackerUpdatePatch.ServerName = StringHelper.ColorString(color, name);
     }
 

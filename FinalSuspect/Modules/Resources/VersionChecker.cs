@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FinalSuspect.Attributes;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Features;
-using Il2CppSystem.Diagnostics.Tracing;
+using FinalSuspect.Modules.Features.CheckingandBlocking;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 
@@ -21,27 +18,14 @@ public static class VersionChecker
         public static void Postfix()
         {
             CustomPopup.Init();
-            if (firstStart) CheckForUpdate();
+            if (firstStart)
+            {
+                CheckForUpdate();
+                SpamManager.Init();
+            }
             ModUpdater.SetUpdateButtonStatus();
             firstStart = false;
         }
-    }
-
-    private static IReadOnlyList<string> URLs => new List<string>
-    {
-#if DEBUG
-        $"file:///{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "fs_info.json")}",
-#else
-        "https://raw.githubusercontent.com/XtremeWave/FinalSuspect/FinalSus/fs_info.json",
-        "https://gitee.com/XtremeWave/FinalSuspect/raw/FinalSus/fs_info.json",
-        "https://api.xtreme.net.cn/download/FinalSuspect/fs_info.json",
-#endif
-    };
-    private static IReadOnlyList<string> GetInfoFileUrlList()
-    {
-        var list = URLs.ToList();
-        if (IsChineseUser) list.Reverse();
-        return list;
     }
 
     public static bool firstStart = true;
@@ -53,7 +37,6 @@ public static class VersionChecker
     public static bool DebugUnused = false;
     public static string versionInfoRaw = "";
 
-    
     public static Version latestVersion;
     public static string showVer = "";
     public static Version DebugVer;
@@ -79,38 +62,39 @@ public static class VersionChecker
         }
     }
 
-    public static void Retry()
+    private static void Retry()
     {
         retried++;
         CustomPopup.Show(GetString("updateCheckPopupTitle"), GetString("PleaseWait"), null);
         _ = new LateTask(CheckForUpdate, 0.3f, "Retry Check Update");
     }
-    public static void CheckForUpdate()
+
+    private static void CheckForUpdate()
     {
         ResolutionManager.SetResolution(1920, 1080, Screen.fullScreen);
         isChecked = false;
         ModUpdater.DeleteOldFiles();
 
-        foreach (var url in GetInfoFileUrlList())
+        foreach (var url in GetInfoFileUrlList(true))
         {
-            if (!GetVersionInfo(url).GetAwaiter().GetResult()) continue;
+            if (!GetVersionInfo(url + "fs_info.json").GetAwaiter().GetResult()) continue;
             isChecked = true;
             break;
         }
 
-        XtremeLogger.Msg("Check For Update: " + isChecked, "CheckRelease");
+        Msg("Check For Update: " + isChecked, "CheckRelease");
         isBroken = !isChecked;
         if (isChecked)
         {
-            XtremeLogger.Info("Has Update: " + hasUpdate, "CheckRelease");
-            XtremeLogger.Info("Latest Version: " + latestVersion, "CheckRelease");
-            XtremeLogger.Info("Minimum Version: " + minimumVersion, "CheckRelease");
-            XtremeLogger.Info("Creation: " + creation, "CheckRelease");
-            XtremeLogger.Info("Force Update: " + forceUpdate, "CheckRelease");
-            XtremeLogger.Info("File MD5: " + md5, "CheckRelease");
-            XtremeLogger.Info("Github Url: " + PathManager.downloadUrl_github, "CheckRelease");
-            XtremeLogger.Info("Gitee Url: " + PathManager.downloadUrl_gitee, "CheckRelease");
-            XtremeLogger.Info("Website Url: " + PathManager.downloadUrl_xtremeapi, "CheckRelease");
+            Info("Has Update: " + hasUpdate, "CheckRelease");
+            Info("Latest Version: " + latestVersion, "CheckRelease");
+            Info("Minimum Version: " + minimumVersion, "CheckRelease");
+            Info("Creation: " + creation, "CheckRelease");
+            Info("Force Update: " + forceUpdate, "CheckRelease");
+            Info("File MD5: " + md5, "CheckRelease");
+            Info("Github Url: " + downloadUrl_github, "CheckRelease");
+            Info("Gitee Url: " + downloadUrl_gitee, "CheckRelease");
+            Info("Website Url: " + downloadUrl_xtremeapi, "CheckRelease");
 
             if (firstLaunch || isBroken)
             {
@@ -129,12 +113,12 @@ public static class VersionChecker
             else CustomPopup.Show(GetString("updateCheckPopupTitle"), GetString("updateCheckFailedRetry"),
                 [(GetString("Retry"), Retry)]);
         }
-
         ModUpdater.SetUpdateButtonStatus();
     }
-    public static async Task<bool> GetVersionInfo(string url)
+
+    private static async Task<bool> GetVersionInfo(string url)
     {
-        XtremeLogger.Msg(url, "CheckRelease");
+        Msg(url, "CheckRelease");
         try
         {
             string result;
@@ -148,11 +132,12 @@ public static class VersionChecker
                 client.DefaultRequestHeaders.Add("User-Agent", "FinalSuspect Updater");
                 client.DefaultRequestHeaders.Add("Referer", "api.xtreme.net.cn");
                 using var response = await client.GetAsync(new Uri(url), HttpCompletionOption.ResponseContentRead);
-                if (!response.IsSuccessStatusCode || response.Content == null)
+                if (!response.IsSuccessStatusCode)
                 {
-                    XtremeLogger.Error($"Failed: {response.StatusCode}", "CheckRelease");
+                    Error($"Failed: {response.StatusCode}", "CheckRelease");
                     return false;
                 }
+                
                 result = await response.Content.ReadAsStringAsync();
                 result = result.Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
             }
@@ -161,35 +146,31 @@ public static class VersionChecker
 
             verHead = new(data["verHead"]?.ToString());
 
-            DebugVer = new(data["DebugVer"]?.ToString());
-
+            DebugVer = new(data["DebugVer"]?.ToString() ?? string.Empty);
 
             CanUpdate = bool.Parse(new(data["CanUpdate"]?.ToString()));
 
-
-
             verDate = new(data["verDate"]?.ToString());
             md5 = data["md5"]?.ToString();
-            latestVersion = new(data["version"]?.ToString());
+            latestVersion = new(data["version"]?.ToString() ?? string.Empty);
 
             showVer = $"{verHead}_{verDate}";
 
             var minVer = data["minVer"]?.ToString();
-            minimumVersion = minVer.ToLower() == "latest" ? latestVersion : new(minVer);
-            creation = int.Parse(data["creation"]?.ToString());
+            if (minVer != null) minimumVersion = minVer?.ToLower() == "latest" ? latestVersion : new(minVer);
+            creation = int.Parse(data["creation"]?.ToString() ?? string.Empty);
             isBroken = data["allowStart"]?.ToString().ToLower() != "true";
 
             var announcement = data["announcement"].Cast<JObject>();
             foreach (var langid in EnumHelper.GetAllValues<SupportedLangs>())
-                ModUpdater.announcement[langid] = announcement[langid.ToString()]?.ToString();
-            PathManager.downloadUrl_gitee = PathManager.downloadUrl_gitee.Replace("{showVer}", showVer);
+            ModUpdater.announcement[langid] = announcement[langid.ToString()]?.ToString();
+            downloadUrl_gitee = downloadUrl_gitee.Replace("{showVer}", showVer);
             hasUpdate = Main.version < latestVersion && creation > Main.PluginCreation;
             forceUpdate = Main.version < minimumVersion || creation > Main.PluginCreation;
 #if DEBUG
             DebugUnused = Main.version < DebugVer;
             hasUpdate = forceUpdate = DebugUnused;
 #endif
-
             return true;
         }
         catch
@@ -197,5 +178,4 @@ public static class VersionChecker
             return false;
         }
     }
-
 }

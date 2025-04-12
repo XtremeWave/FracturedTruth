@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using FinalSuspect.Helpers;
+using FinalSuspect.Modules.SoundInterface;
 using TMPro;
 using UnityEngine;
-using static FinalSuspect.Modules.SoundInterface.SoundManager;
+using static FinalSuspect.Modules.SoundInterface.CustomSoundsManager;
 using static FinalSuspect.Modules.SoundInterface.XtremeMusic;
 using Object = UnityEngine.Object;
-using static FinalSuspect.Modules.SoundInterface.CustomSoundsManager;
 
-
-namespace FinalSuspect.Modules.SoundInterface;
+namespace FinalSuspect.Modules.Panels;
 
 public static class MyMusicPanel
 {
@@ -18,25 +17,25 @@ public static class MyMusicPanel
     public static List<GameObject> Items { get; private set; }
     public static OptionsMenuBehaviour OptionsMenuBehaviourNow { get; private set; }
 
-    public static int currentPage { get; private set; } = 1;
-    public static int itemsPerPage => 7;
-    public static int totalPageCount => (musics.Count + itemsPerPage - 1) / itemsPerPage;
+    public static int CurrentPage { get; private set; } = 1;
+    public static int ItemsPerPage => 7;
+    public static int TotalPageCount => (musics.Count + ItemsPerPage - 1) / ItemsPerPage;
 
     private static int numItems;
     public static int PlayMode;
-    public static ToggleButtonBehaviour ChangePlayMode { get; private set; }
+    //public static ToggleButtonBehaviour ChangePlayMode { get; private set; }
     public static void Hide()
     {
         if (CustomBackground != null)
-            CustomBackground?.gameObject?.SetActive(false);
+            CustomBackground?.gameObject.SetActive(false);
     }
     public static void Init(OptionsMenuBehaviour optionsMenuBehaviour)
     {
-        var mouseMoveToggle = optionsMenuBehaviour.DisableMouseMovement;
-            OptionsMenuBehaviourNow = optionsMenuBehaviour;
+        var mouseMoveToggle = optionsMenuBehaviour.DisableMouseMovement; 
+        OptionsMenuBehaviourNow = optionsMenuBehaviour;
         if (CustomBackground == null)
         {
-            currentPage = 1;
+            CurrentPage = 1;
             numItems = 0;
             PlayMode = 0;
             CustomBackground = Object.Instantiate(optionsMenuBehaviour.Background, optionsMenuBehaviour.transform);
@@ -80,7 +79,7 @@ public static class MyMusicPanel
             helpTextTMP.text = GetString("CustomSoundHelp");
             helpText.gameObject.GetComponent<RectTransform>().sizeDelta = new(2.45f, 1f);
 
-            AddChangePlayModeButton(optionsMenuBehaviour);
+            //AddChangePlayModeButton(optionsMenuBehaviour);
         }
         RefreshTagList();
     }
@@ -99,18 +98,17 @@ public static class MyMusicPanel
         nextPagePassiveButton.OnClick = new();
         nextPagePassiveButton.OnClick.AddListener(new Action(() =>
         {
-            
-            currentPage++;
+            CurrentPage++;
 
-            if (currentPage > totalPageCount)
+            if (CurrentPage > TotalPageCount)
             {
-                currentPage = 1;
+                CurrentPage = 1;
             }
             
             RefreshTagList() ;
         }));
     }
-    static void AddChangePlayModeButton(OptionsMenuBehaviour optionsMenuBehaviour)
+    /*static void AddChangePlayModeButton(OptionsMenuBehaviour optionsMenuBehaviour)
     {
         //var mouseMoveToggle = optionsMenuBehaviour.DisableMouseMovement;
         //ChangePlayMode = Object.Instantiate(mouseMoveToggle, CustomBackground.transform);
@@ -133,29 +131,26 @@ public static class MyMusicPanel
         //    Object.Destroy(ChangePlayMode.gameObject);
         //    AddChangePlayModeButton(OptionsMenuBehaviourNow);
         //}));
-    }
+    }*/
     public static void RefreshTagList()
     {
         Items?.Do(Object.Destroy);
         Items = [];
         numItems = 0;
         var optionsMenuBehaviour = OptionsMenuBehaviourNow;
-        var startIndex = (currentPage - 1) * itemsPerPage;
+        var startIndex = (CurrentPage - 1) * ItemsPerPage;
 
         var count = 0;
         foreach (var audio in musics.Skip(startIndex))
         {
-            if (count >= itemsPerPage)
+            if (count >= ItemsPerPage)
             {
                 break; 
             }
 
             RefreshTags(optionsMenuBehaviour, audio); 
-
-            count++;
-           
+            count++; 
         }
-        
     }
     public static void RefreshTags(OptionsMenuBehaviour optionsMenuBehaviour, XtremeMusic audio)
     {
@@ -203,7 +198,7 @@ public static class MyMusicPanel
                     break;
                 case AudiosStates.IsLoading:
                     color = ColorHelper.ClientOptionColor;
-                    preview = GetString("LoadingMus");
+                    preview = GetString("Parsing");
                     break;
                 case AudiosStates.DownLoadSucceedNotice:
                 case AudiosStates.Exist:
@@ -220,7 +215,6 @@ public static class MyMusicPanel
                     break;
                 }
             }
-            
 
             previewText.text = preview;
             ToggleButton.Background.color = color;
@@ -231,10 +225,9 @@ public static class MyMusicPanel
             passiveButton.OnClick.AddListener(new Action(OnClick));
             void OnClick()
             {
-                XtremeLogger.Info($"Try To Play {filename}:{path}", "MyMusicPanel");
+                Info($"Try To Play {filename}:{path}", "MyMusicPanel");
                 Play(audio);
             }
-
             Items.Add(ToggleButton.gameObject);
             Items.Add(previewText.gameObject);
         }
@@ -242,7 +235,5 @@ public static class MyMusicPanel
         {
             numItems++;
         }
-
     }
-
 }

@@ -16,6 +16,7 @@ public class ErrorText : MonoBehaviour
         }
     }
     private static ErrorText _instance;
+
     private void Awake()
     {
         if (_instance != null)
@@ -43,7 +44,6 @@ public class ErrorText : MonoBehaviour
         Text.outlineColor = Color.black;
         Text.alignment = TextAlignmentOptions.Top;
     }
-
     public TextMeshPro Text;
     public Camera Camera;
     public List<ErrorData> AllErrors = [];
@@ -52,9 +52,10 @@ public class ErrorText : MonoBehaviour
     {
         AllErrors.ForEach(err => err.IncreaseTimer());
         var ToRemove = AllErrors.Where(err => err.ErrorLevel <= 1 && 30f < err.Timer);
-        if (ToRemove.Any())
+        var errorDatas = ToRemove.ToList();
+        if (errorDatas.Any())
         {
-            AllErrors.RemoveAll(err => ToRemove.Contains(err));
+            AllErrors.RemoveAll(err => errorDatas.Contains(err));
             UpdateText();
         }
     }
@@ -73,7 +74,7 @@ public class ErrorText : MonoBehaviour
     {
         var error = new ErrorData(code);
         if (0 < error.ErrorLevel)
-            XtremeLogger.Error($"エラー発生: {error}: {error.Message}", "ErrorText");
+            Error($"エラー発生: {error}: {error.Message}", "ErrorText");
 
         if (!AllErrors.Any(e => e.Code == code))
         {
@@ -97,12 +98,12 @@ public class ErrorText : MonoBehaviour
         }
         else
         {
-                text += $"{GetString($"ErrorLevel{maxLevel}")}";
+            text += $"{GetString($"ErrorLevel{maxLevel}")}";
             if (CheatDetected)
                 text = SBDetected ? GetString("FAC.CheatDetected.HighLevel") : GetString("FAC.CheatDetected.LowLevel");
             Text.enabled = true;
         }
-        if (XtremeGameData.GameStates.IsInGame && maxLevel != 3 && !CheatDetected)
+        if (IsInGame && maxLevel != 3 && !CheatDetected)
             text += $"\n{GetString("TerminateCommand")}: Shift+L+Enter";
         Text.text = text;
     }

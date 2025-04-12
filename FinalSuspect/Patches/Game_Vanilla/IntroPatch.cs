@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game;
-using Il2CppSystem.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -13,16 +12,16 @@ class IntroCutscenePatch
     [HarmonyPatch(nameof(IntroCutscene.ShowRole)), HarmonyPostfix]
     public static void ShowRole_Postfix(IntroCutscene __instance)
     {
-        if (XtremeGameData.GameStates.OtherModHost) return;
+        if (OtherModHost) return;
 
         _ = new LateTask(() =>
         {
             var roleType = PlayerControl.LocalPlayer.Data.Role.Role;
             var cr = roleType;
-            __instance.YouAreText.color = __instance.RoleText.color = __instance.RoleBlurbText.color = Utils.GetRoleColor(cr);
-            __instance.RoleText.text = Utils.GetRoleName(cr);
+            __instance.YouAreText.color = __instance.RoleText.color = __instance.RoleBlurbText.color = GetRoleColor(cr);
+            __instance.RoleText.text = GetRoleName(cr);
             __instance.RoleText.fontWeight = FontWeight.Thin;
-            __instance.RoleText.SetOutlineColor(Utils.GetRoleColor(cr).ShadeColor(0.1f).SetAlpha(0.38f));
+            __instance.RoleText.SetOutlineColor(GetRoleColor(cr).ShadeColor(0.1f).SetAlpha(0.38f));
             __instance.RoleText.SetOutlineThickness(0.17f);
             __instance.RoleBlurbText.text = cr.GetRoleInfoForVanilla();
         }, 0.0001f, "Override Role Text");
@@ -31,13 +30,13 @@ class IntroCutscenePatch
     [HarmonyPatch(nameof(IntroCutscene.CoBegin)), HarmonyPrefix]
     public static void CoBegin_Prefix()
     {
-        XtremeGameData.GameStates.InGame = true;
-        XtremeLogger.Info("Game Start", "IntroCutscene");
+        InGame = true;
+        Info("Game Start", "IntroCutscene");
     }
     [HarmonyPatch(nameof(IntroCutscene.BeginImpostor)), HarmonyPostfix]
-    public static void BeginImpostor_Postfix(IntroCutscene __instance, ref List<PlayerControl> yourTeam)
+    public static void BeginImpostor_Postfix(IntroCutscene __instance)
     {
-        if (XtremeGameData.GameStates.OtherModHost) return;
+        if (OtherModHost) return;
 
         __instance.ImpostorText.gameObject.SetActive(true);
         var onlyimp = GameManager.Instance.LogicOptions.GetAdjustedNumImpostors(GameData.Instance.PlayerCount) == 1;
@@ -64,9 +63,9 @@ class IntroCutscenePatch
     }
 
     [HarmonyPatch(nameof(IntroCutscene.BeginCrewmate)), HarmonyPostfix]
-    public static void BeginCrewmate_Postfix(IntroCutscene __instance, ref List<PlayerControl> teamToDisplay)
+    public static void BeginCrewmate_Postfix(IntroCutscene __instance)
     {
-        if (XtremeGameData.GameStates.OtherModHost) return;
+        if (OtherModHost) return;
 
         __instance.TeamTitle.text = $"{GetString("TeamCrewmate")}";
         __instance.ImpostorText.text = 
@@ -99,11 +98,10 @@ class IntroCutscenePatch
             var LerpingColor = Color.Lerp(start, end, time);
             if (__instance == null || milliseconds > 500)
             {
-                XtremeLogger.Info("break", "StartFadeIntro");
+                Info("break", "StartFadeIntro");
                 break;
             }
             __instance.BackgroundBar.material.color = LerpingColor;
         }
     }
-
 }

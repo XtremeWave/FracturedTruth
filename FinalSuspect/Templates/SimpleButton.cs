@@ -11,11 +11,11 @@ public class SimpleButton
     /// <summary>新しいボタンを作成する</summary>
     /// <param name="parent">親オブジェクト</param>
     /// <param name="name">オブジェクト名</param>
+    /// <param name="localPosition"></param>
     /// <param name="normalColor">通常時の背景色</param>
     /// <param name="hoverColor">マウスホバー時の背景色</param>
     /// <param name="action">クリック時に発火するアクション</param>
     /// <param name="label">ボタンのラベル</param>
-    /// <param name="scale">ボタンの大きさ</param>
     /// <param name="isActive">初期状態でアクティブにするかどうか(デフォルトtrue)</param>
     public SimpleButton(
         Transform parent,
@@ -96,6 +96,6 @@ public class SimpleButton
         buttonCollider.offset = new(0f, 0f);
         baseButton.OnClick = new();
     }
-
+    
     public static bool IsNullOrDestroyed(SimpleButton button) => button == null || button.Button == null;
 }

@@ -13,9 +13,9 @@ public sealed class ClientOptionItem_Boolean : ClientActionItem
         string name,
         ConfigEntry<bool> config,
         OptionsMenuBehaviour optionsMenuBehaviour)
-    : base(
-        name,
-        optionsMenuBehaviour)
+        : base(
+            name,
+            optionsMenuBehaviour)
     {
         Config = config;
         UpdateToggle();
@@ -44,7 +44,6 @@ public sealed class ClientOptionItem_Boolean : ClientActionItem
         };
         return item;
     }
-   
 
     public void UpdateToggle()
     {
@@ -65,9 +64,9 @@ public sealed class ClientOptionItem_String : ClientActionItem
         ConfigEntry<string> config,
         string[] selections,
         OptionsMenuBehaviour optionsMenuBehaviour)
-    : base(
-        showingName,
-        optionsMenuBehaviour)
+        : base(
+            showingName,
+            optionsMenuBehaviour)
     {
         Name = name;
         Config = config;
@@ -99,13 +98,13 @@ public sealed class ClientOptionItem_String : ClientActionItem
             
             if (currentIndex == -1)
             {
-                XtremeLogger.Error("wrong index", "ClientOptionItem_String");
+                Error("wrong index", "ClientOptionItem_String");
                 return;
             }
             
             var nextIndex = (currentIndex + 1) % selections.Length;
             showingName = 
-            config.Value = selections[nextIndex];
+                config.Value = selections[nextIndex];
             item.UpdateToggle(selections);
             item.UpdateName(showingName);
             additionalOnClickAction?.Invoke();
@@ -130,6 +129,5 @@ public sealed class ClientOptionItem_String : ClientActionItem
         ToggleButton.Text.text = GetString(name);
         if (Config.Value == "HorseMode")
             ToggleButton.Text.text += $"({GetString("Broken")})";
-
     }
 }

@@ -3,18 +3,12 @@ using System.Text;
 
 namespace FinalSuspect.Modules.Core.Plugin;
 
-public class HashAuth
+public class HashAuth(string hashValue, string salt = null, HashAlgorithm algorithm = null)
 {
-    public readonly string HashValue;
+    public readonly string HashValue = hashValue;
 
-    private readonly string salt;
-    private HashAlgorithm algorithm;
-    public HashAuth(string hashValue, string salt = null, HashAlgorithm algorithm = null)
-    {
-        HashValue = hashValue;
-        this.salt = salt;
-        this.algorithm = algorithm ?? SHA256.Create(); // 引数のalgorithmがnullの場合のみ新しく作る
-    }
+    private readonly string salt = salt;
+    private HashAlgorithm algorithm = algorithm ?? SHA256.Create();
 
     public bool CheckString(string value)
     {
@@ -57,8 +51,8 @@ public class HashAuth
         // 2.ハッシュ値のログ出力
         //  salt有: ハッシュ値算出結果:<value> => <hashValue> (salt: <saltValue>)
         //  salt無: ハッシュ値算出結果:<value> => <hashValue>
-        XtremeLogger.Info($"ハッシュ値算出結果: {value} => {hashValue} {(salt == null ? "" : $"(salt: {salt})")}", "HashAuth");
-        XtremeLogger.Warn("以上の値をソースコード上にペーストしてください。", "HashAuth");
+        Info($"ハッシュ値算出結果: {value} => {hashValue} {(salt == null ? "" : $"(salt: {salt})")}", "HashAuth");
+        Warn("以上の値をソースコード上にペーストしてください。", "HashAuth");
 
         // 3.HashAuthインスタンスの生成・リターン
         return new HashAuth(hashValue, salt, algorithm);

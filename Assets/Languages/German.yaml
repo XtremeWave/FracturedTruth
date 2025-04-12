@@ -93,6 +93,7 @@ CannotUnloadDuringGame: "Während des Spiels kann nicht zur Originalversion gewe
 Cancel: "Abbrechen"
 Unload: "Deaktivieren"
 DumpLog: "Log auswerfen"
+ClearAutoLogs: "Automatische Protokolle löschen"
 SoundOptions: "Meine Musik"
 AudioManagementOptions: "Audioverwaltung"
 OnlyAvailableInMainMenu: "Nur im Hauptmenü verfügbar"
@@ -100,9 +101,9 @@ OnlyAvailableInMainMenu: "Nur im Hauptmenü verfügbar"
 # 提示 / Tips
 updatePleaseWait: "Bitte warten..."
 updateInProgress: "Aktualisierung läuft..."
-downloadInProgress: "Download läuft..."
+DownloadingAudios: "Download läuft..."
 Playing: "Wird gespielt..."
-LoadingMus: "Analyse..."
+Parsing: "Analyse..."
 DownLoadSucceedNotice: "Download erfolgreich!"
 DownLoadFailureNotice: "Download fehlgeschlagen =("
 PleaseWait: "Bitte warten..."
@@ -119,7 +120,7 @@ updateNotice: "Aktualisierungserinnerung"
 UpdateBySelfText: "Diese Version unterstützt keine automatischen Aktualisierungen. Bitte aktualisiere manuell."
 updateButton: "Jetzt aktualisieren"
 updatePopupTitle: "Jetzt aktualisieren"
-updatePopupTitleFialed: "Aktualisierung fehlgeschlagen"
+updatePopupTitleFailed: "Aktualisierung fehlgeschlagen"
 updatePopupTitleDone: "Aktualisierung abgeschlossen"
 
 # 选择更新渠道 / Update Chose Source
@@ -286,6 +287,7 @@ LobbyTimeDisplayText: "Zeit des Bestehens"
 # 客户端平台 / Platform
 IPhone: "IPhone"
 Android: "Android"
+MicrosoftStore: "Microsoft"
 
 # 延迟显示 / Ping Tracker
 Ping: "Ping"

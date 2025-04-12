@@ -42,7 +42,7 @@ class XtremeLogger
         else sendToGameList.Remove(tag);
     }
     public static void Disable(string tag) { if (!disableList.Contains(tag)) disableList.Add(tag); }
-    public static void SendInGame(string text, bool isAlways = false)
+    public static void SendInGame(string text)
     {
         if (!isEnable) return;
         NotificationPopperPatch.NotificationPop(text);
@@ -59,8 +59,8 @@ class XtremeLogger
         if (isDetail && DebugModeManager.AmDebugger)
         {
             StackFrame stack = new(2);
-            var className = stack.GetMethod().ReflectedType.Name;
-            var memberName = stack.GetMethod().Name;
+            var className = stack.GetMethod()?.ReflectedType?.Name ?? "NullClass";
+            var memberName = stack.GetMethod()?.Name ?? "NullMember";
             log_text = $"[{t}][{className}.{memberName}({Path.GetFileName(fileName)}:{lineNumber})][{tag}]{text}";
         }
         switch (level)
@@ -106,7 +106,7 @@ class XtremeLogger
     public static void CurrentMethod([CallerLineNumber] int lineNumber = 0, [CallerFilePath] string fileName = "")
     {
         StackFrame stack = new(1);
-        Msg($"\"{stack.GetMethod().ReflectedType.Name}.{stack.GetMethod().Name}\" Called in \"{Path.GetFileName(fileName)}({lineNumber})\"", "Method");
+        Msg($"\"{stack.GetMethod()?.ReflectedType?.Name}.{stack.GetMethod()?.Name}\" Called in \"{Path.GetFileName(fileName)}({lineNumber})\"", "Method");
     }
 
     public static LogHandler.LogHandler Handler(string tag)

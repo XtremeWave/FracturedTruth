@@ -1,15 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using AmongUs.GameOptions;
 using FinalSuspect.Modules.Core.Game;
 using FinalSuspect.Modules.Features.CheckingandBlocking;
 using FinalSuspect.Patches.Game_Vanilla;
 using Hazel;
 using InnerNet;
-using Unity.Services.Core.Internal;
-using static FinalSuspect.DataHandling.FinalAntiCheat.FAC;
-
 
 namespace FinalSuspect.DataHandling;
 
@@ -30,7 +26,7 @@ public static class FinalAntiCheat
         {
             IsSuspectCheater = false;
             SetNameTimes = 
-            SendQuickMessageCountPerSecond = 0;
+                SendQuickMessageCountPerSecond = 0;
             _lastKillTime = _lastSendTime = -1;
             Player = player;
             ClientData = Player.GetClient();
@@ -46,60 +42,51 @@ public static class FinalAntiCheat
             if (SetNameTimes > 3)
             {
                 var name = Player.GetDataName();
-                XtremeLogger.Warn($"{name}({FriendCode})({Puid})多次设置名称", "FAC");
+                Warn($"{name}({FriendCode})({Puid})多次设置名称", "FAC");
                 if (AmongUsClient.Instance.AmHost)
                 {
-                    NotificationPopperPatch.NotificationPop(
-                        string.Format(GetString("Warning.SetName"),
-                            name));
+                    NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.SetName"), name));
                     WarnHost();
                     return true;
                 }
-                if (!XtremeGameData.GameStates.OtherModHost)
+                if (!OtherModHost)
                 {
-                    NotificationPopperPatch.NotificationPop(
-                        string.Format(GetString("Warning.SetName_NotHost"),
-                            name));
+                    NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.SetName_NotHost"), name));
                     return true;
                 }
             }
-
             return false;
         }
         public bool HandleSendQuickChat()
         {
-            if (_lastSendTime != -1 && _lastSendTime + ResetInterval > Utils.GetTimeStamp())
+            if (_lastSendTime != -1 && _lastSendTime + ResetInterval > GetTimeStamp())
             {
                 SendQuickMessageCountPerSecond++;
                 if (SendQuickMessageCountPerSecond > 1)
                 {
                     var name = Player.GetDataName();
-                    XtremeLogger.Warn($"{name}({FriendCode})({Puid})一秒内多次发送快捷消息", "FAC");
+                    Warn($"{name}({FriendCode})({Puid})一秒内多次发送快捷消息", "FAC");
                     if (AmongUsClient.Instance.AmHost)
                     {
-                        NotificationPopperPatch.NotificationPop(
-                            string.Format(GetString("Warning.SendQuickChat"),
-                                name));
+                        NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.SendQuickChat"), name));
                         WarnHost();
                         return true;
                     }
 
-                    if (!XtremeGameData.GameStates.OtherModHost)
+                    if (!OtherModHost)
                     {
-                        NotificationPopperPatch.NotificationPop(
-                            string.Format(GetString("Warning.SendQuickChat_NotHost"),
-                                name));
+                        NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.SendQuickChat_NotHost"), name));
                         return true;
                     }
                 }
             }
-            _lastSendTime = Utils.GetTimeStamp();
+            _lastSendTime = GetTimeStamp();
             return false;
         }
         public bool HandleMurderPlayer(PlayerControl target)
         {
-            var KillOnePlayerForManyTimes = _lastKillTime != -1 && _lastKillTime + AdjustDelay < Utils.GetTimeStamp() && !target.IsAlive();
-            _lastKillTime = Utils.GetTimeStamp();
+            var KillOnePlayerForManyTimes = _lastKillTime != -1 && _lastKillTime + AdjustDelay < GetTimeStamp() && !target.IsAlive();
+            _lastKillTime = GetTimeStamp();
             return KillOnePlayerForManyTimes || !Player.IsImpostor();
         }
         public void HandleBan()
@@ -109,17 +96,15 @@ public static class FinalAntiCheat
         }
         public void HandleLobbyPosition()
         {
-            if (XtremeGameData.GameStates.IsLobby)
+            if (IsLobby)
             {
-
-
                 var posXOutOfRange = Player.GetTruePosition().x > 3.5f || Player.GetTruePosition().x < -3.5f;
                 var posYOutOfRange = Player.GetTruePosition().y > 4f || Player.GetTruePosition().y < -1f;
                 if (posXOutOfRange || posYOutOfRange)
                     MarkAsCheater();
             }
-            else
-            {
+            //else
+            //{
                 /*List<PlainShipRoom> rooms = [];
                 foreach (var room in ShipStatus.Instance.FastRooms)
                 {
@@ -132,26 +117,24 @@ public static class FinalAntiCheat
                     || rooms.Any(room => room.roomArea.IsTouching(Player.Collider)) 
                     || !Player.IsAlive()) return;
                 MarkAsCheater();*/
-            }
+            //}
         }
         public void HandleSuspectCheater()
         {
-            if (Main.DisableFAC.Value || !IsSuspectCheater || _lastHandleCheater != -1 && _lastHandleCheater + 1 >= Utils.GetTimeStamp()) return;
-            _lastHandleCheater = Utils.GetTimeStamp();
-            NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.SetName_NotHost"),
-                Player.GetDataName()));
+            if (Main.DisableFAC.Value || !IsSuspectCheater || _lastHandleCheater != -1 && _lastHandleCheater + 1 >= GetTimeStamp()) return;
+            _lastHandleCheater = GetTimeStamp();
+            NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.SetName_NotHost"), Player.GetDataName()));
             if (!AmongUsClient.Instance.AmHost)return;
-            Utils.KickPlayer(Player.PlayerId, false, "Suspect Cheater");
-            
+            KickPlayer(Player.PlayerId, false, "Suspect Cheater");
         }
         public void MarkAsCheater() => IsSuspectCheater = true;
     }
     internal class FAC
     {
-        public static int MeetingTimes = 0;
+
         public static int DeNum;
         public static long _lastHandleCheater = -1;
-        private static List<byte> LobbyDeadBodies = [];
+        public static List<byte> LobbyDeadBodies = [];
 
         public static void Init()
         {
@@ -174,8 +157,7 @@ public static class FinalAntiCheat
             }
         }
 
-        public static bool ReceiveRpc(PlayerControl pc, byte callId, MessageReader reader, out bool notify,
-            out string reason, out bool ban)
+        public static bool ReceiveRpc(PlayerControl pc, byte callId, MessageReader reader, out bool notify, out string reason, out bool ban)
         {
             notify = true;
             reason = "Hacking";
@@ -191,7 +173,6 @@ public static class FinalAntiCheat
                     notify = false;
                     return true;
                 }
-
 
                 switch (rpc)
                 {
@@ -215,10 +196,9 @@ public static class FinalAntiCheat
                         if (text.Length > 100)
                             return true;
                         break;
-
                 }
 
-                if (XtremeGameData.GameStates.IsLobby)
+                if (IsLobby)
                     switch (rpc)
                     {
                         case RpcCalls.CheckMurder:
@@ -231,17 +211,19 @@ public static class FinalAntiCheat
                         case RpcCalls.StartMeeting:
                         case RpcCalls.ReportDeadBody:
                         case RpcCalls.CheckProtect:
-                        case RpcCalls.ProtectPlayer: 
+                        case RpcCalls.ProtectPlayer:
                         case RpcCalls.AddVote:
                         case RpcCalls.CastVote:
                         case RpcCalls.ClearVote:
-                        case RpcCalls.VotingComplete: 
+                        case RpcCalls.VotingComplete:
                         case RpcCalls.ClimbLadder:
                         case RpcCalls.UpdateSystem:
+                        {
                             if (AmongUsClient.Instance.AmHost) return true;
                             NotificationPopperPatch.NotificationPop(GetString("Warning.RoomBroken"));
                             notify = false;
                             return true;
+                        }
                         case RpcCalls.SendQuickChat:
                             if (pc.GetCheatData().HandleSendQuickChat())
                             {
@@ -252,7 +234,7 @@ public static class FinalAntiCheat
                             break;
                     }
 
-                if (XtremeGameData.GameStates.IsInTask)
+                if (IsInTask)
                     switch (rpc)
                     {
                         case RpcCalls.Exiled:
@@ -262,7 +244,7 @@ public static class FinalAntiCheat
                         case RpcCalls.SetName:
                         case RpcCalls.CheckName:
                         case RpcCalls.SetLevel:
-                        case RpcCalls.SetHat:
+                        case RpcCalls.SetHatStr:
                             return true;
                         case RpcCalls.SendChat:
                         case RpcCalls.SendQuickChat:
@@ -275,13 +257,13 @@ public static class FinalAntiCheat
                                 return true;
                             break;
                         case RpcCalls.ReportDeadBody:
-                            var deadbody = Utils.GetPlayerById(sr.ReadByte());
+                            var deadbody = GetPlayerById(sr.ReadByte());
                             if (deadbody == null || !deadbody.IsAlive())
                                 break;
                             return true;
                     }
 
-                if (XtremeGameData.GameStates.IsMeeting)
+                if (IsMeeting)
                     switch (rpc)
                     {
                         case RpcCalls.CheckMurder:
@@ -306,7 +288,7 @@ public static class FinalAntiCheat
             }
             catch (Exception e)
             {
-                XtremeLogger.Exception(e, "FAC");
+                Exception(e, "FAC");
                 throw;
             }
 
@@ -322,29 +304,23 @@ public static class FinalAntiCheat
         //}
         private static bool CheckForInvalidRpc(PlayerControl player, byte callId)
         {
-            if (player.PlayerId != 0 && !Enum.IsDefined(typeof(RpcCalls), callId) &&
-                !XtremeGameData.GameStates.OtherModHost)
+            if (player.PlayerId != 0 && !Enum.IsDefined(typeof(RpcCalls), callId) && !OtherModHost)
             {
-                XtremeLogger.Warn(
-                    $"{player?.Data?.PlayerName}:{callId}({RPC.GetRpcName(callId)}) 已取消，因为它是由主机以外的其他人发送的。",
-                    "FAC");
+                Warn($"{player.Data?.PlayerName}:{callId}({RPC.GetRpcName(callId)}) 已取消，因为它是由主机以外的其他人发送的。", "FAC");
                 if (ReceiveInvalidRpc(player, callId)) return true;
                 if (AmongUsClient.Instance.AmHost)
                 {
-                   
-                    XtremeLogger.Warn($"收到来自 {player?.Data?.PlayerName} 的不受信用的RPC，因此将其踢出。", "Kick");
+                    Warn($"收到来自 {player.Data?.PlayerName} 的不受信用的RPC，因此将其踢出。", "Kick");
                     NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.InvalidRpc"),
-                        player?.Data?.PlayerName, callId));
+                        player.Data?.PlayerName, callId));
                     return true;
-
                 }
 
-                XtremeLogger.Warn($"收到来自 {player?.Data?.PlayerName} 的不受信用的RPC", "Kick?");
+                Warn($"收到来自 {player.Data?.PlayerName} 的不受信用的RPC", "Kick?");
                 NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.InvalidRpc_NotHost"),
-                    player?.Data?.PlayerName, callId));
+                    player.Data?.PlayerName, callId));
                 return true;
             }
-
             return false;
         }
 
@@ -352,7 +328,7 @@ public static class FinalAntiCheat
         {
             switch (callId)
             {
-                case unchecked((byte)42069):
+                case unchecked((byte)42069): //AUM RPC 85
                 case 101:
                     //Report(pc, "AUM");
                     HandleCheat(pc, GetString("FAC.CheatDetected.FAC"));
@@ -361,18 +337,16 @@ public static class FinalAntiCheat
                     //Report(pc, "YM");
                     HandleCheat(pc, GetString("FAC.CheatDetected.FAC"));
                     return true;
-                case 168:
-                case unchecked((byte)420):
+                case unchecked((byte)420): //SM RPC 164
                     //Report(pc, "SM");
                     HandleCheat(pc, GetString("FAC.CheatDetected.FAC"));
                     return true;
                 case 119:
-                case unchecked(250):
+                case 250:
                     //Report(pc, "KN");
                     HandleCheat(pc, GetString("FAC.CheatDetected.FAC"));
                     return true;
             }
-
             return false;
         }
 

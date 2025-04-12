@@ -93,6 +93,7 @@ CannotUnloadDuringGame: "Kan niet overschakelen naar oorspronkelijke versie tijd
 Cancel: "Annuleren"
 Unload: "Ontladen"
 DumpLog: "Log wegschrijven"
+ClearAutoLogs: "Automatische log wissen"
 SoundOptions: "Mijn Muziek"
 AudioManagementOptions: "Geluidbeheer"
 OnlyAvailableInMainMenu: "Alleen beschikbaar in hoofdmenu"
@@ -100,9 +101,9 @@ OnlyAvailableInMainMenu: "Alleen beschikbaar in hoofdmenu"
 # 提示 / Tips
 updatePleaseWait: "Even geduld aub..."
 updateInProgress: "Bezig met bijwerken..."
-downloadInProgress: "Bezig met downloaden..."
+DownloadingAudios: "Bezig met downloaden..."
 Playing: "Aan het spelen..."
-LoadingMus: "Analyseren..."
+Parsing: "Analyseren..."
 DownLoadSucceedNotice: "Download geslaagd!"
 DownLoadFailureNotice: "Download mislukt =("
 PleaseWait: "Even geduld aub..."
@@ -119,7 +120,7 @@ updateNotice: "Bijwerken"
 UpdateBySelfText: "Deze versie ondersteunt geen automatische bijwerkingen. Gelieve handmatig bij te werken."
 updateButton: "Nu bijwerken"
 updatePopupTitle: "Nu bijwerken"
-updatePopupTitleFialed: "Bijwerken mislukt"
+updatePopupTitleFailed: "Bijwerken mislukt"
 updatePopupTitleDone: "Bijwerken voltooid"
 
 # 选择更新渠道 / Update Chose Source
@@ -286,6 +287,7 @@ LobbyTimeDisplayText: "Verstreken tijd van bestaan"
 # 客户端平台 / Platform
 IPhone: "IPhone"
 Android: "Android"
+MicrosoftStore: "Microsoft"
 
 # 延迟显示 / Ping Tracker
 Ping: "Ping"

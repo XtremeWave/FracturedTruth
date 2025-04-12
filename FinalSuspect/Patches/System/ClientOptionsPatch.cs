@@ -1,11 +1,13 @@
 using System;
+using System.IO;
 using BepInEx.Configuration;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.ClientOptions;
 using FinalSuspect.Modules.Core.Game;
+using FinalSuspect.Modules.Panels;
 using FinalSuspect.Modules.SoundInterface;
 using UnityEngine;
-using Object = System.Object;
+using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Patches.System;
 
@@ -26,8 +28,9 @@ public static class OptionsMenuBehaviourStartPatch
     private static ClientOptionItem_Boolean ShowPlayerInfo;
     private static ClientOptionItem_Boolean UseModCursor;
     private static ClientOptionItem_Boolean FastBoot;
-    private static ClientFeatureItem UnloadMod;
+    private static ClientFeatureItem ClearAutoLogs;
     private static ClientFeatureItem DumpLog;
+    private static ClientFeatureItem UnloadMod;
     private static ClientOptionItem_Boolean VersionCheat;
     private static ClientOptionItem_Boolean GodMode;
     private static ClientOptionItem_Boolean NoGameEnd;
@@ -54,15 +57,15 @@ public static class OptionsMenuBehaviourStartPatch
         if (recreate)
         {
             ClientActionItem.ModOptionsButton.gameObject.SetActive(false);
-            GameObject.Destroy(ClientActionItem.ModOptionsButton);
-            GameObject.Destroy(ClientActionItem.CustomBackground);
+            Object.Destroy(ClientActionItem.ModOptionsButton);
+            Object.Destroy(ClientActionItem.CustomBackground);
             ClientFeatureItem.ModOptionsButton.gameObject.SetActive(false);
-            GameObject.Destroy(ClientFeatureItem.ModOptionsButton);
-            GameObject.Destroy(ClientFeatureItem.CustomBackground);
+            Object.Destroy(ClientFeatureItem.ModOptionsButton);
+            Object.Destroy(ClientFeatureItem.CustomBackground);
 
-            GameObject.Destroy(ModUnloaderScreen.Popup);
-            GameObject.Destroy(MyMusicPanel.CustomBackground);
-            GameObject.Destroy(SoundManagementPanel.CustomBackground);
+            Object.Destroy(ModUnloaderScreen.Popup);
+            Object.Destroy(MyMusicPanel.CustomBackground);
+            Object.Destroy(SoundManagementPanel.CustomBackground);
             ClientActionItem.ModOptionsButton = null;
             ClientActionItem.CustomBackground = null;
 
@@ -101,31 +104,44 @@ public static class OptionsMenuBehaviourStartPatch
             CreateOptionItem(ref NoGameEnd, "NoGameEnd", Main.NoGameEnd, __instance);
         }
 
+        CreateFeatureItem(ref DumpLog, "DumpLog", () =>
+        {
+            Utils.DumpLog();
+        }, __instance);
+        CreateFeatureItem(ref ClearAutoLogs, "ClearAutoLogs", () =>
+        {
+            Utils.ClearAutoLogs();
+            SetFeatureItemDisabled(ClearAutoLogs);
+        }, __instance);
         CreateFeatureItem(ref UnloadMod, "UnloadMod", ModUnloaderScreen.Show, __instance);
-        CreateFeatureItem(ref DumpLog, "DumpLog", () => Utils.DumpLog(), __instance);
+
         CreateFeatureItem(ref SoundBtn, "SoundOption", () =>
         {
-            MyMusicPanel.CustomBackground?.gameObject?.SetActive(true);
+            MyMusicPanel.CustomBackground?.gameObject.SetActive(true);
         }, __instance);
         CreateFeatureItem(ref AudioManagementBtn, "SoundManager", () =>
         {
-            SoundManagementPanel.CustomBackground?.gameObject?.SetActive(true);
+            SoundManagementPanel.CustomBackground?.gameObject.SetActive(true);
         }, __instance);
 
         SetFeatureItemTextAndColor(SoundBtn, "SoundOptions");
         SetFeatureItemTextAndColor(AudioManagementBtn, "AudioManagementOptions");
 
-        if (!XtremeGameData.GameStates.IsNotJoined)
+        if (!IsNotJoined)
         {
-            SetOptionItemDisabled(ChangeOutfit);
-            SetFeatureItemDisabled(AudioManagementBtn);
+            SetOptionItemDisabled_Menu(ChangeOutfit);
+            SetFeatureItemDisabled_Menu(AudioManagementBtn);
         }
 
+        if (Directory.GetFiles(GetLogFolder(true).FullName + "/Final Suspect-logs").Length <= 0)
+        {
+            SetFeatureItemDisabled(ClearAutoLogs);
+        }
+        
         Modules.SoundInterface.SoundManager.ReloadTag();
         MyMusicPanel.Init(__instance);
         SoundManagementPanel.Init(__instance);
 
-        
         if (ModUnloaderScreen.Popup == null)
             ModUnloaderScreen.Init(__instance);
         recreate = false;
@@ -135,22 +151,20 @@ public static class OptionsMenuBehaviourStartPatch
     {
         if (recreate)
         {
-            GameObject.Destroy(item.ToggleButton.gameObject);
+            Object.Destroy(item.ToggleButton.gameObject);
             item = null;
         }
         if (item == null || item.ToggleButton == null)
         {
             item = ClientOptionItem_Boolean.Create(name, value, instance, toggleAction);
         }
-
-        
     }
 
     private static void CreateOptionItem(ref ClientOptionItem_String item, string name, ConfigEntry<string> value, OptionsMenuBehaviour instance, string[] options, Action toggleAction = null)
     {
         if (recreate)
         {
-            GameObject.Destroy(item.ToggleButton.gameObject);
+            Object.Destroy(item.ToggleButton.gameObject);
             item = null;
         }
         if (item == null || item.ToggleButton == null)
@@ -163,7 +177,7 @@ public static class OptionsMenuBehaviourStartPatch
     {
         if (recreate)
         {
-            GameObject.Destroy(item.ToggleButton.gameObject);
+            Object.Destroy(item.ToggleButton.gameObject);
             item = null;
         }
         if (item == null || item.ToggleButton == null)
@@ -176,7 +190,7 @@ public static class OptionsMenuBehaviourStartPatch
     {
         if (recreate)
         {
-            GameObject.Destroy(item.ToggleButton.gameObject);
+            Object.Destroy(item.ToggleButton.gameObject);
             item = null;
         }
         if (item == null || item.ToggleButton == null)
@@ -197,23 +211,33 @@ public static class OptionsMenuBehaviourStartPatch
         item.ToggleButton.GetComponent<PassiveButton>().enabled = false;
         item.ToggleButton.Background.color = ColorHelper.ClientOptionColor_CanNotUse;
     }
-    private static void SetOptionItemDisabled(ClientOptionItem_String item)
+    private static void SetOptionItemDisabled_Menu(ClientOptionItem_String item)
     {
         item.ToggleButton.Text.text = GetString(item.Name) + $"\n|{GetString("OnlyAvailableInMainMenu")}|";
         item.ToggleButton.GetComponent<PassiveButton>().enabled = false;
         item.ToggleButton.Background.color = ColorHelper.ClientOptionColor_CanNotUse;
     }
-    private static void SetFeatureItemDisabled(ClientFeatureItem item)
+    private static void SetFeatureItemDisabled_Menu(ClientFeatureItem item)
     {
         item.ToggleButton.Text.text += $"\n|{GetString("OnlyAvailableInMainMenu")}|";
+        SetFeatureItemDisabled(item);
+    }
+    
+    private static void SetFeatureItemDisabled(ClientFeatureItem item)
+    {
         item.ToggleButton.GetComponent<PassiveButton>().enabled = false;
         item.ToggleButton.Background.color = ColorHelper.ClientFeatureColor_CanNotUse;
     }
 
+    private static void SetFeatureItemEnable(ClientFeatureItem item)
+    {
+        item.ToggleButton.GetComponent<PassiveButton>().enabled = true;
+        item.ToggleButton.Background.color = ColorHelper.ClientFeatureColor;
+    }
     private static void UnlockFPSButtonToggle()
     {
         Application.targetFrameRate = Main.UnlockFPS.Value ? 165 : 60;
-        XtremeLogger.SendInGame(string.Format(GetString("FPSSetTo"), Application.targetFrameRate));
+        SendInGame(string.Format(GetString("FPSSetTo"), Application.targetFrameRate));
     }
 
     private static void SwitchHorseMode()
@@ -232,7 +256,7 @@ public static class OptionsMenuBehaviourStartPatch
 
     private static void AutoStartButtonToggle()
     {
-        if (Main.AutoStartGame.Value == false && XtremeGameData.GameStates.IsCountDown)
+        if (Main.AutoStartGame.Value == false && IsCountDown)
         {
             GameStartManager.Instance.ResetStartState();
         }
@@ -242,23 +266,23 @@ public static class OptionsMenuBehaviourStartPatch
     {
         try
         {
-            var sprite = Utils.LoadSprite("Cursor.png");
+            var sprite = LoadSprite("Cursor.png");
             Cursor.SetCursor(Main.UseModCursor.Value ? sprite.texture: null, Vector2.zero, CursorMode.Auto);
         }
         catch
         {
             Main.UseModCursor.Value = false;
         }
-       
     }
 }
+
 [HarmonyPatch(typeof(OptionsMenuBehaviour), nameof(OptionsMenuBehaviour.Close))]
 public static class OptionsMenuBehaviourClosePatch
 {
     public static void Postfix()
     {
-        ClientActionItem.CustomBackground?.gameObject?.SetActive(false);
-        ClientFeatureItem.CustomBackground?.gameObject?.SetActive(false);
+        ClientActionItem.CustomBackground?.gameObject.SetActive(false);
+        ClientFeatureItem.CustomBackground?.gameObject.SetActive(false);
         ModUnloaderScreen.Hide();
         MyMusicPanel.Hide();
         SoundManagementPanel.Hide();
@@ -273,11 +297,13 @@ public static class LanguageSetterSetLanguagePatch
         OptionsMenuBehaviourStartPatch.recreate = true;
         try
         {
-            GameObject.Destroy(VersionShowerStartPatch.VisitText);
+            Object.Destroy(VersionShowerStartPatch.VisitText);
         }
-        catch 
+        catch
         {
+            // ignored
         }
+
         VersionShowerStartPatch.VisitText = null;
         VersionShowerStartPatch.CreateVisitText(null);
         OptionsMenuBehaviourStartPatch.Postfix(OptionsMenuBehaviourStartPatch.Instance);

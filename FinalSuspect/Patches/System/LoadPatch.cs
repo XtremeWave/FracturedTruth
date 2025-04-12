@@ -4,14 +4,13 @@ using System.Collections.Generic;
 using System.IO;
 using BepInEx.Unity.IL2CPP.Utils;
 using FinalSuspect.Helpers;
-using FinalSuspect.Modules.Core.Game;
 using FinalSuspect.Modules.Resources;
 using TMPro;
 using UnityEngine;
+using Object = UnityEngine.Object;
 using static FinalSuspect.Modules.Resources.ResourcesDownloader;
 
 namespace FinalSuspect.Patches.System;
-
 
 public class LoadPatch
 {
@@ -59,6 +58,8 @@ public class LoadPatch
         "FS.v1.0_20250129.txt",
         "FeaturesIntroduction.v1.0.txt",
         "FS.v1.1_20250216.txt",
+        "FS.v1.1_20250412.txt",
+        "FeaturesIntroduction.v1.1.txt",
     ];
 
     private static List<string> remoteLanguageList =
@@ -69,7 +70,7 @@ public class LoadPatch
         "Dutch.yaml",
         "English.yaml",
         "Filipino.yaml",
-        "Franch.yaml",
+        "French.yaml",
         "German.yaml",
         "Irish.yaml",
         "Italian.yaml",
@@ -88,12 +89,12 @@ public class LoadPatch
     private static SpriteRenderer ModlogoBlurred = null!;
     private static SpriteRenderer Glow = null!;
     private static bool ReloadLanguage;
-    private static bool SkipLoadAnima = false;
+    private static bool SkipLoadAnima;
 
     [HarmonyPatch(typeof(SplashManager), nameof(SplashManager.Start))]
-    private class Start
+    public class Start
     {
-        private static bool Prefix(SplashManager __instance)
+        public static bool Prefix(SplashManager __instance)
         {
             ResolutionManager.SetResolution(1920, 1080, Screen.fullScreen);
             __instance.startTime = Time.time;
@@ -105,20 +106,20 @@ public class LoadPatch
         {
             #region Resources and variables
             
-            LoadText = GameObject.Instantiate(__instance.errorPopup.InfoText, null);
+            LoadText = Object.Instantiate(__instance.errorPopup.InfoText, null);
             LoadText.transform.localPosition = new(0f, 0, -10f);
             LoadText.fontStyle = FontStyles.Bold;
             LoadText.text = null;
             
-            ProcessText = GameObject.Instantiate(__instance.errorPopup.InfoText, null);
+            ProcessText = Object.Instantiate(__instance.errorPopup.InfoText, null);
             ProcessText.transform.localPosition = new(0f, -0.7f, -10f);
             ProcessText.fontStyle = FontStyles.Bold;
             ProcessText.text = null;
 
             float p;
             
-            var reloadBypassPath_Once = PathManager.GetBypassFileType(FileType.Languages, BypassType.Once);
-            var reloadBypassPath_Longterm = PathManager.GetBypassFileType(FileType.Languages, BypassType.Longterm);
+            var reloadBypassPath_Once = GetBypassFileType(FileType.Languages, BypassType.Once);
+            var reloadBypassPath_Longterm = GetBypassFileType(FileType.Languages, BypassType.Longterm);
             var thisversion = $"{Main.PluginVersion}|{Main.DisplayedVersion}|{ThisAssembly.Git.Commit}-{ThisAssembly.Git.Branch}";
             var writeinVer = false;
             ReloadLanguage = thisversion != Main.LastStartVersion.Value 
@@ -169,19 +170,19 @@ public class LoadPatch
             ProcessText.SetOutlineThickness(0.15f);
             
             Teamlogo = ObjectHelper.CreateObject<SpriteRenderer>("Team_Logo", null, new Vector3(0, 0f, -5f));
-            Teamlogo.sprite = Utils.LoadSprite("TeamLogo.png", 120f);
+            Teamlogo.sprite = LoadSprite("TeamLogo.png", 120f);
             Teamlogo.color = Color.clear;
             
             Modlogo = ObjectHelper.CreateObject<SpriteRenderer>("Mod_Logo", null, new Vector3(0, 0.3f, -5f));
-            Modlogo.sprite = Utils.LoadSprite("FinalSuspect-Logo.png", 150f);
+            Modlogo.sprite = LoadSprite("FinalSuspect-Logo.png", 150f);
             Modlogo.color = Color.clear;
             
             ModlogoBlurred = ObjectHelper.CreateObject<SpriteRenderer>("Mod_Logo_Blurred", null, new Vector3(0, 0.3f, -5f));
-            ModlogoBlurred.sprite = Utils.LoadSprite("FinalSuspect-Logo-Blurred.png", 150f);
+            ModlogoBlurred.sprite = LoadSprite("FinalSuspect-Logo-Blurred.png", 150f);
             ModlogoBlurred.color = Color.clear;
             
             Glow = ObjectHelper.CreateObject<SpriteRenderer>("Glow", null, new Vector3(0, 0.3f, -5f));
-            Glow.sprite = Utils.LoadSprite("FinalSuspect-Logo.png");
+            Glow.sprite = LoadSprite("FinalSuspect-Logo.png");
             Glow.color = Color.clear;
 
             #region Fast Boot
@@ -198,7 +199,7 @@ public class LoadPatch
                     Modlogo.transform.localScale = new Vector3(1.5f, 1.5f, 1f);
                     Glow.color = Color.green;
                     if (writeinVer) Main.LastStartVersion.Value = thisversion;
-                    Init();
+                    TranslatorInit();
                     ProcessText.text = GetString("FastBoot");
                     ProcessText.color = Color.green;
                     ProcessText.transform.localPosition = new Vector3(0, -0.7f, -5f);
@@ -305,7 +306,7 @@ public class LoadPatch
                 #region After Download Depends
 
                 if (writeinVer) Main.LastStartVersion.Value = thisversion;
-                Init();
+                TranslatorInit();
                 if (TranslationController.Instance.currentLanguage.languageID is not SupportedLangs.English)
                 {
                     yield return FadeLoadText(false);
@@ -340,10 +341,10 @@ public class LoadPatch
                 {
                     var file = $"{lang}/{resource}";
 
-                    var localFilePath = PathManager.GetResourceFilesPath(FileType.ModNews, file);
+                    var localFilePath = GetResourceFilesPath(FileType.ModNews, file);
                     if (File.Exists(localFilePath)) continue;
                     remoteModNewsList.Add(file);
-                    XtremeLogger.Warn($"File do not exists: {localFilePath}", "Check");
+                    Warn($"File do not exists: {localFilePath}", "Check");
                 }
             }
             
@@ -362,20 +363,16 @@ public class LoadPatch
                     yield return FadeProcessText(false);
 
                     ProcessText.color = ColorHelper.DownloadYellow;
-                    ProcessText.text = GetString("DownloadingResources") +
-                                       $"({process}/{remoteImageList.Count + remoteModNewsList.Count})";
+                    ProcessText.text = GetString("DownloadingResources") + $"({process}/{remoteImageList.Count + remoteModNewsList.Count})";
                     yield return FadeProcessText(true);
                 }
             }
 
-            Action downloadAction = fastboot
-                ? null
-                : () => 
-                {
-                    process++;
-                    ProcessText.text = GetString("DownloadingResources") +
-                                       $"({process}/{remoteImageList.Count + remoteModNewsList.Count})";
-                };
+            Action downloadAction = fastboot? null: () => 
+            {
+                process++;
+                ProcessText.text = GetString("DownloadingResources") + $"({process}/{remoteImageList.Count + remoteModNewsList.Count})";
+            };
                 
             yield return DownloadListResources(remoteImageList, FileType.Images, downloadAction);
             yield return DownloadListResources(remoteModNewsList, FileType.ModNews, downloadAction);
@@ -430,17 +427,15 @@ public class LoadPatch
                     yield return null;
                 }
 
-                GameObject.Destroy(LoadText.gameObject);
-                GameObject.Destroy(ProcessText.gameObject);
-                GameObject.Destroy(Modlogo.gameObject);
-                GameObject.Destroy(ModlogoBlurred.gameObject);
-                GameObject.Destroy(Teamlogo.gameObject);
-                GameObject.Destroy(Glow.gameObject);
+                Object.Destroy(LoadText.gameObject);
+                Object.Destroy(ProcessText.gameObject);
+                Object.Destroy(Modlogo.gameObject);
+                Object.Destroy(ModlogoBlurred.gameObject);
+                Object.Destroy(Teamlogo.gameObject);
+                Object.Destroy(Glow.gameObject);
 
                 #endregion
             }
-            
-
             __instance.sceneChanger.BeginLoadingScene();
             __instance.doneLoadingRefdata = true;
         }
@@ -451,14 +446,14 @@ public class LoadPatch
             {
                 action?.Invoke();
                 var resource = targetList[i];
-                var localFilePath = PathManager.GetLocalFilePath(fileType, resource);
+                var localFilePath = GetLocalFilePath(fileType, resource);
                 if (File.Exists(localFilePath))
                 {
                     targetList.Remove(resource);
                 }
                 else
                 {
-                    XtremeLogger.Warn($"File do not exists: {localFilePath}", "Check");
+                    Warn($"File do not exists: {localFilePath}", "Check");
                 }
             }
         }
@@ -476,7 +471,7 @@ public class LoadPatch
 
                 if (task.IsFaulted)
                 {
-                    XtremeLogger.Error($"Download of {resource} failed: {task.Exception}", "Download Resource");
+                    Error($"Download of {resource} failed: {task.Exception}", "Download Resource");
                 }
             }
         }
@@ -516,19 +511,30 @@ public class LoadPatch
             }
             catch
             {
-                //
+                // ignored
             }
         }
     }
     
     [HarmonyPatch(typeof(SplashManager), nameof(SplashManager.Update))]
-    internal class SplashLogoAnimatorPatch
+    public class SplashLogoAnimatorPatch
     {
         public static void Prefix(SplashManager __instance)
         {
             if (!SkipLoadAnima) return;
             __instance.sceneChanger.AllowFinishLoadingScene();
             __instance.startedSceneLoad = true;
+        }
+    }
+    
+    [HarmonyPatch(typeof(LoadingBarManager), nameof(LoadingBarManager.ToggleLoadingBar))]
+    public class LoadingBarManagerPatch
+    {
+        public static void Prefix(LoadingBarManager __instance, ref bool on)
+        {
+            on = false;
+            
+            //以后有用，暂时这样处理
         }
     }
 }

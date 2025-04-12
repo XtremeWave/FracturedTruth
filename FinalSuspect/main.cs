@@ -11,15 +11,14 @@ using BepInEx.Unity.IL2CPP;
 using FinalSuspect;
 using FinalSuspect.Attributes;
 using FinalSuspect.Helpers;
-using FinalSuspect.Modules.Core.Game;
 using FinalSuspect.Modules.Random;
 using Il2CppInterop.Runtime.Injection;
 using UnityEngine;
 
-
 [assembly: AssemblyFileVersion(Main.PluginVersion)]
 [assembly: AssemblyInformationalVersion(Main.PluginVersion)]
 [assembly: AssemblyVersion(Main.PluginVersion)]
+
 namespace FinalSuspect;
 
 [BepInPlugin(PluginGuid, "FinalSuspect", PluginVersion)]
@@ -29,7 +28,7 @@ public class Main : BasePlugin
     // == 程序基本设定 / Program Config ==
     public const string ModName = "Final Suspect";
     public const string ForkId = "Final Suspect";
-    public const string PluginVersion = "1.2.0";
+    public const string PluginVersion = "1.1.2";
     public const string PluginGuid = "cn.finalsuspect.xtremewave";
     public const int PluginCreation = 0;
 
@@ -39,12 +38,10 @@ public class Main : BasePlugin
     public const string DebugKeySalt = "59687b";
     public static ConfigEntry<string> DebugKeyInput { get; private set; }
     // == 版本相关设定 / Version Config ==
-    public const string LowestSupportedVersion = "2024.10.29";
+    public const string LowestSupportedVersion = "2025.3.31"; // 16.0.2 also 2025.3.25
 
-
-    public const string DisplayedVersion_Head = "1.2";
+    public const string DisplayedVersion_Head = "1.1";
     private static string DisplayedVersion_Date
-
     {
         get
         {
@@ -55,14 +52,10 @@ public class Main : BasePlugin
             var day = currentDate.Day.ToString("D2");    
             return $"{year}{month}{day}";
 #else
-            return "20240216";
+            return "20250412";
 #endif
         }
     }
-    
-
-
-        
 
     /// <summary>
     /// 测试信息；
@@ -75,32 +68,31 @@ public class Main : BasePlugin
     /// Preview: 预览/预发行版
     /// Scrapter: 废弃版
     /// </summary>
-    private const VersionTypes DisplayedVersion_TestText = VersionTypes.Alpha;
+    private const VersionTypes DisplayedVersion_Type = VersionTypes.Release;
 
-    private const int DisplayedVersion_TestCreation = 1;
+    private const int DisplayedVersion_TestCreation = 0;
     
     public static readonly string DisplayedVersion = 
         $"{DisplayedVersion_Head}_{DisplayedVersion_Date}" +
-        $"{(DisplayedVersion_TestText != VersionTypes.Release ? 
-            $"_{DisplayedVersion_TestText}_{DisplayedVersion_TestCreation}" : "")}";
-
+        $"{(DisplayedVersion_Type != VersionTypes.Release ? 
+            $"_{DisplayedVersion_Type}_{DisplayedVersion_TestCreation}" : "")}";
 
     // == 链接相关设定 / Link Config ==
     //public static readonly string WebsiteUrl = IsChineseLanguageUser ? "https://www.xtreme.net.cn/project/FS/" : "https://www.xtreme.net.cn/en/project/FS/";
-    public static readonly string QQInviteUrl = "https://qm.qq.com/q/GNbm9UjfCa";
-    public static readonly string DiscordInviteUrl = "https://discord.gg/kz787Zg7h8/";
-    public static readonly string GithubRepoUrl = "https://github.com/XtremeWave/FinalSuspect/";
+    public const string QQInviteUrl = "https://qm.qq.com/q/GNbm9UjfCa";
+    public const string DiscordInviteUrl = "https://discord.gg/kz787Zg7h8/";
+    public const string GithubRepoUrl = "https://github.com/XtremeWave/FinalSuspect/";
 
     // ==========
     public Harmony Harmony { get; } = new (PluginGuid);
-    public static Version version = Version.Parse(PluginVersion);
+    public static readonly Version version = Version.Parse(PluginVersion);
     public static ManualLogSource Logger;
     public static bool hasArgumentException;
     public static string ExceptionMessage;
     public static bool ExceptionMessageIsShown;
     public static string CredentialsText;
-    public static NormalGameOptionsV08 NormalOptions => GameOptionsManager.Instance.currentNormalGameOptions;
-    public static HideNSeekGameOptionsV08 HideNSeekOptions => GameOptionsManager.Instance.currentHideNSeekGameOptions;
+    public static NormalGameOptionsV09 NormalOptions => GameOptionsManager.Instance.currentNormalGameOptions;
+    public static HideNSeekGameOptionsV09 HideNSeekOptions => GameOptionsManager.Instance.currentHideNSeekGameOptions;
 
     //Client Options
     public static ConfigEntry<bool> KickPlayerWhoFriendCodeNotExist { get; private set; }
@@ -121,11 +113,11 @@ public class Main : BasePlugin
     public static ConfigEntry<bool> GodMode { get; private set; }
     public static ConfigEntry<bool> NoGameEnd { get; private set; }
     
-
     public static readonly string[] OutfitType =
     [
         "BeanMode", "HorseMode", "LongMode"
     ];
+    
     //Other Configs
     public static ConfigEntry<string> HideName { get; private set; }
     public static ConfigEntry<string> HideColor { get; private set; }
@@ -133,7 +125,6 @@ public class Main : BasePlugin
     public static ConfigEntry<string> WebhookURL { get; private set; }
     public static ConfigEntry<bool> EnableFinalSuspect { get; private set; }
     public static ConfigEntry<string> LastStartVersion { get; private set; }
-
 
     public static Dictionary<RoleTypes, string> roleColors;
     public static List<int> clientIdList = [];
@@ -152,13 +143,14 @@ public class Main : BasePlugin
 
     public static bool NewLobby = false;
 
-    public static List<string> TName_Snacks_CN =
+    public static readonly List<string> TName_Snacks_CN =
     [
         "冰激凌", "奶茶", "巧克力", "蛋糕", "甜甜圈", "可乐", "柠檬水", "冰糖葫芦", "果冻", "糖果", "牛奶",
         "抹茶", "烧仙草", "菠萝包", "布丁", "椰子冻", "曲奇", "红豆土司", "三彩团子", "艾草团子", "泡芙", "可丽饼",
         "桃酥", "麻薯", "鸡蛋仔", "马卡龙", "雪梅娘", "炒酸奶", "蛋挞", "松饼", "西米露", "奶冻", "奶酥", "可颂", "奶糖"
     ];
-    public static List<string> TName_Snacks_EN =
+
+    public static readonly List<string> TName_Snacks_EN =
     [
         "Ice cream", "Milk tea", "Chocolate", "Cake", "Donut", "Coke", "Lemonade", "Candied haws", "Jelly", "Candy",
         "Milk",
@@ -168,9 +160,10 @@ public class Main : BasePlugin
         "Snow Plum Niang", "Fried Yogurt", "Egg Tart", "Muffin", "Sago Dew", "panna cotta", "soufflé", "croissant",
         "toffee"
     ];
-    public static string Get_TName_Snacks => TranslationController.Instance.currentLanguage.languageID is SupportedLangs.SChinese or SupportedLangs.TChinese ?
-        TName_Snacks_CN[IRandom.Instance.Next(0, TName_Snacks_CN.Count)] :
-        TName_Snacks_EN[IRandom.Instance.Next(0, TName_Snacks_EN.Count)];
+
+    public static string Get_TName_Snacks => TranslationController.Instance.currentLanguage.languageID is SupportedLangs.SChinese or SupportedLangs.TChinese 
+        ? TName_Snacks_CN[IRandom.Instance.Next(0, TName_Snacks_CN.Count)] 
+        : TName_Snacks_EN[IRandom.Instance.Next(0, TName_Snacks_EN.Count)];
 
     public override void Load()
     {
@@ -204,15 +197,16 @@ public class Main : BasePlugin
         NoGameEnd = Config.Bind("Client Options", "No Game End", false);
 
         Logger = BepInEx.Logging.Logger.CreateLogSource("FinalSuspect");
-        XtremeLogger.Enable();
-        XtremeLogger.Disable("SwitchSystem");
-        XtremeLogger.Disable("ModNews");
-        XtremeLogger.Disable("CancelPet");
+        Enable();
+        Disable("SwitchSystem");
+        Disable("ModNews");
+        Disable("CancelPet");
         if (!DebugModeManager.AmDebugger)
         {
-            XtremeLogger.Disable("Download Resources");
+            Disable("Download Resources");
         }
-        XtremeLogger.isDetail = true;
+        
+        isDetail = true;
 
         // 認証関連-初期化
         DebugKeyAuth = new HashAuth(DebugKeyHash, DebugKeySalt);
@@ -243,8 +237,8 @@ public class Main : BasePlugin
         }
         catch (ArgumentException ex)
         {
-            XtremeLogger.Error("错误：字典出现重复项", "LoadDictionary");
-            XtremeLogger.Exception(ex, "LoadDictionary");
+            Error("错误：字典出现重复项", "LoadDictionary");
+            Exception(ex, "LoadDictionary");
             hasArgumentException = true;
             ExceptionMessage = ex.Message;
             ExceptionMessageIsShown = false;
@@ -256,9 +250,9 @@ public class Main : BasePlugin
 
         IRandom.SetInstance(new NetRandomWrapper());
 
-        XtremeLogger.Info($"{Application.version}", "AmongUs Version");
+        Info($"{Application.version}", "AmongUs Version");
 
-        var handler = XtremeLogger.Handler("GitVersion");
+        var handler = Handler("GitVersion");
         handler.Info($"{nameof(ThisAssembly.Git.BaseTag)}: {ThisAssembly.Git.BaseTag}");
         handler.Info($"{nameof(ThisAssembly.Git.Commit)}: {ThisAssembly.Git.Commit}");
         handler.Info($"{nameof(ThisAssembly.Git.Commits)}: {ThisAssembly.Git.Commits}");
@@ -275,19 +269,19 @@ public class Main : BasePlugin
         if (DebugModeManager.AmDebugger) ConsoleManager.CreateConsole();
         else ConsoleManager.DetachConsole();
 
-        XtremeLogger.Msg("========= FinalSuspect loaded! =========", "Plugin Load");
-        Application.quitting += new Action(Utils.SaveNowLog);
+        Msg("========= FinalSuspect loaded! =========", "Plugin Load");
+        Application.quitting += new Action(SaveNowLog);
     }
 }
 
 public enum VersionTypes
 {
-    Alpha,// 早期内测版
-    Beta,// 内测版
-    Canary,// 测试版(不稳定)
-    Dev,// 开发版
-    RC,// 发行候选版Release Candidate
-    Preview,// 预览/预发行版
-    Scrapter,// 废弃版
-    Release,// 发行版
+    Alpha, // 早期内测版
+    Beta, // 内测版
+    Canary, // 测试版(不稳定)
+    Dev, // 开发版
+    RC, // 发行候选版Release Candidate
+    Preview, // 预览/预发行版
+    Scrapter, // 废弃版
+    Release, // 发行版
 }

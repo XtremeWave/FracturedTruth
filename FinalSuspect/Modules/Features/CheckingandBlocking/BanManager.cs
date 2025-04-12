@@ -2,13 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using FinalSuspect.Attributes;
 using FinalSuspect.Modules.Core.Game;
-using FinalSuspect.Modules.Resources;
 using FinalSuspect.Patches.Game_Vanilla;
 using InnerNet;
 
@@ -16,46 +13,8 @@ namespace FinalSuspect.Modules.Features.CheckingandBlocking;
 
 public static class BanManager
 {
-    
-    private static readonly string BAN_LIST_PATH = PathManager.GetBanFilesPath("BanList.txt");
-    private static List<string> FACList = [];
-
-    [PluginModuleInitializer]
-    public static void Init()
-    {
-        try
-        {
-            if (!File.Exists(BAN_LIST_PATH))
-            {
-                XtremeLogger.Warn("Create New BanList.txt", "BanManager");
-                File.Create(BAN_LIST_PATH).Close();
-            }
-
-            //读取FAC名单
-            var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("FinalSuspect.Resources.Configs.FACList.txt");
-            stream.Position = 0;
-            using StreamReader sr = new(stream, Encoding.UTF8);
-            string line;
-            while ((line = sr.ReadLine()) != null)
-            {
-                if (string.IsNullOrWhiteSpace(line) || line.StartsWith("#")) continue;
-                if (Main.AllPlayerControls.Any(p => p.IsDev() && line.Contains(p.FriendCode))) continue;
-                FACList.Add(line);
-            }
-        }
-        catch (Exception ex)
-        {
-            XtremeLogger.Exception(ex, "BanManager");
-        }
-    }
-    private static string GetResourcesTxt(string path)
-    {
-        var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(path);
-        stream.Position = 0;
-        using StreamReader reader = new(stream, Encoding.UTF8);
-        return reader.ReadToEnd();
-    }
-
+    private static readonly string BAN_LIST_PATH = GetBanFilesPath("BanList.json");
+    public static List<string> FACList = [];
     public static string GetHashedPuid(this PlayerControl player)
         => player.GetClient().GetHashedPuid();
     public static string GetHashedPuid(this ClientData player)
@@ -74,7 +33,7 @@ public static class BanManager
         if (player.IsBannedPlayer())
         {
             File.AppendAllText(BAN_LIST_PATH, $"{player.FriendCode},{player.GetHashedPuid()},{player.PlayerName}\n");
-            XtremeLogger.SendInGame(string.Format(GetString("Message.AddedPlayerToBanList"), player.PlayerName));
+            SendInGame(string.Format(GetString("Message.AddedPlayerToBanList"), player.PlayerName));
         }
     }
     public static void CheckDenyNamePlayer(ClientData player)
@@ -90,16 +49,16 @@ public static class BanManager
                 if (Main.AllPlayerControls.Any(p => p.IsDev() && line.Contains(p.FriendCode))) continue;
                 if (Regex.IsMatch(player.PlayerName, line))
                 {
-                    Utils.KickPlayer(player.Id, false, "DenyName");
+                    KickPlayer(player.Id, false, "DenyName");
                     NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.KickedByDenyName"), player.PlayerName, line));
-                    XtremeLogger.Info($"{player.PlayerName}は名前が「{line}」に一致したためキックされました。", "Kick");
+                    Info($"{player.PlayerName}は名前が「{line}」に一致したためキックされました。", "Kick");
                     return;
                 }
             }
         }
         catch (Exception ex)
         {
-            XtremeLogger.Exception(ex, "CheckDenyNamePlayer");
+            Exception(ex, "CheckDenyNamePlayer");
         }
     }
 
@@ -110,15 +69,15 @@ public static class BanManager
             if (!Main.KickPlayerInBanList.Value) return;
             if (player.IsBannedPlayer())
             {
-                Utils.KickPlayer(player.Id, true, "BanList");
+                KickPlayer(player.Id, true, "BanList");
                 NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.BanedByBanList"), player.PlayerName));
-                XtremeLogger.Info($"{player.PlayerName}は過去にBAN済みのためBANされました。", "BAN");
+                Info($"{player.PlayerName}は過去にBAN済みのためBANされました。", "BAN");
             }
             else if (player.IsFACPlayer())
             {
-                Utils.KickPlayer(player.Id, true, "FACList");
+                KickPlayer(player.Id, true, "FACList");
                 NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.BanedByFACList"), player.PlayerName));
-                XtremeLogger.Info($"{player.PlayerName}存在于FAC封禁名单", "BAN");
+                Info($"{player.PlayerName}存在于FAC封禁名单", "BAN");
             }
         }
     }
@@ -143,7 +102,7 @@ public static class BanManager
         }
         catch (Exception ex)
         {
-            XtremeLogger.Exception(ex, "CheckBanList");
+            Exception(ex, "CheckBanList");
         }
         return false;
     }
@@ -154,8 +113,8 @@ public static class BanManager
         => CheckFACStatus(player?.FriendCode, player?.GetHashedPuid());
     public static bool CheckFACStatus(string friendCode, string hashedPuid)
         => FACList.Any(line =>
-        !string.IsNullOrWhiteSpace(friendCode) && line.Contains(friendCode) ||
-        !string.IsNullOrWhiteSpace(hashedPuid) && line.Contains(hashedPuid));
+            !string.IsNullOrWhiteSpace(friendCode) && line.Contains(friendCode) ||
+            !string.IsNullOrWhiteSpace(hashedPuid) && line.Contains(hashedPuid));
 }
 [HarmonyPatch(typeof(BanMenu), nameof(BanMenu.Select))]
 class BanMenuSelectPatch
