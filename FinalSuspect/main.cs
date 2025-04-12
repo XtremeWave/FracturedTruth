@@ -27,7 +27,7 @@ public class Main : BasePlugin
     // == 程序基本设定 / Program Config ==
     public const string ModName = "Final Suspect";
     public const string ForkId = "Final Suspect";
-    public const string PluginVersion = "1.1.2";
+    public const string PluginVersion = "1.1";
     public const string PluginGuid = "cn.finalsuspect.xtremewave";
     public const int PluginCreation = 0;
 
@@ -39,7 +39,7 @@ public class Main : BasePlugin
     // == 版本相关设定 / Version Config ==
     public const string LowestSupportedVersion = "2025.3.31"; // 16.0.2 also 2025.3.25
 
-    public const string DisplayedVersion_Head = "1.1.2";
+    public const string DisplayedVersion_Head = "1.1";
     private static string DisplayedVersion_Date
     {
         get
