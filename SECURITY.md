@@ -23,3 +23,5 @@
 - QingFeng
   - 微信号: qingfengawa
   - (建议)QQ号: 3094606169
+
+你也可以通过在[安全](https://github.com/XtremeWave/FinalSuspect/security)页面点击`Report a vulnerability`以通过GitHub向我们报告一个安全问题。
