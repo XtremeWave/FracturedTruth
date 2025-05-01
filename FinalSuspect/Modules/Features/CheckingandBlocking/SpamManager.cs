@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using FinalSuspect.Modules.Core.Game;
 using Newtonsoft.Json.Linq;
@@ -123,29 +124,52 @@ public static class SpamManager
             string result;
             if (url.StartsWith("file:///"))
             {
-                result = await File.ReadAllTextAsync(url[8..]);
+                try
+                {
+                    // Windows 格式
+                    string filePath = url[8..].Replace('/', '\\');
+                    result = await File.ReadAllTextAsync(filePath);
+                }
+                catch (FileNotFoundException)
+                {
+                    Warn($"服务器文件缺失: {url[8..]}", "SpamManager");
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    Error($"读取本地文件失败: {ex.Message}", "SpamManager");
+                    return false;
+                }
             }
             else
             {
                 using HttpClient client = new();
                 client.DefaultRequestHeaders.Add("User-Agent", "FinalSuspect" + name);
-                client.DefaultRequestHeaders.Add("Referer", "api.xtreme.net.cn");
+                client.DefaultRequestHeaders.Add("Referer", "gitee.com");
+                
                 using var response = await client.GetAsync(new Uri(url), HttpCompletionOption.ResponseContentRead);
                 if (!response.IsSuccessStatusCode)
                 {
-                    Error($"Failed: {response.StatusCode}", "CheckRelease");
+                    Error($"服务器请求失败 [{url}]: {response.StatusCode}", "CheckRelease");
                     return false;
                 }
-
                 result = await response.Content.ReadAsStringAsync();
                 result = result.Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
             }
 
-            var data = JObject.Parse(result);
-
-            ProcessBanWords(data);
-            ProcessDenyNames(data);
-            ProcessFacList(data);
+            // 增强JSON解析
+            try
+            {
+                var data = JObject.Parse(result);
+                ProcessBanWords(data);
+                ProcessDenyNames(data);
+                ProcessFacList(data);
+            }
+            catch (JsonException ex)
+            {
+                Error($"JSON 解析失败: {ex.Message}", "SpamManager");
+                return false;
+            }
 
             await Task.Delay(100);
             return true;

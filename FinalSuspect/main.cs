@@ -38,7 +38,7 @@ public class Main : BasePlugin
     public const string DebugKeySalt = "59687b";
     public static ConfigEntry<string> DebugKeyInput { get; private set; }
     // == 版本相关设定 / Version Config ==
-    public const string LowestSupportedVersion = "2025.3.31"; // 16.0.2 also 2025.3.25
+    public const string LowestSupportedVersion = "2025.3.31"; // 16.0.2
 
     public const string DisplayedVersion_Head = "1.1";
     private static string DisplayedVersion_Date
@@ -52,7 +52,7 @@ public class Main : BasePlugin
             var day = currentDate.Day.ToString("D2");    
             return $"{year}{month}{day}";
 #else
-            return "20250412";
+            return "20250501";
 #endif
         }
     }
@@ -75,7 +75,7 @@ public class Main : BasePlugin
     public static readonly string DisplayedVersion = 
         $"{DisplayedVersion_Head}_{DisplayedVersion_Date}" +
         $"{(DisplayedVersion_Type != VersionTypes.Release ? 
-            $"_{DisplayedVersion_Type}_{DisplayedVersion_TestCreation}" : "")}";
+        $"_{DisplayedVersion_Type}_{DisplayedVersion_TestCreation}" : "")}";
 
     // == 链接相关设定 / Link Config ==
     //public static readonly string WebsiteUrl = IsChineseLanguageUser ? "https://www.xtreme.net.cn/project/FS/" : "https://www.xtreme.net.cn/en/project/FS/";
@@ -222,17 +222,17 @@ public class Main : BasePlugin
         {
             roleColors = new Dictionary<RoleTypes, string>
             {
-                { RoleTypes.CrewmateGhost, "#8CFFFF" },
-                { RoleTypes.GuardianAngel, "#8CFFDB" },
-                { RoleTypes.Crewmate, "#8CFFFF" },
-                { RoleTypes.Scientist, "#F8FF8C" },
-                { RoleTypes.Engineer, "#A5A8FF" },
-                { RoleTypes.Noisemaker, "#FFC08C" },
-                { RoleTypes.Tracker, "#93FF8C" },
-                { RoleTypes.ImpostorGhost, "#FF1919" },
-                { RoleTypes.Impostor, "#FF1919" },
-                { RoleTypes.Shapeshifter, "#FF819E" },
-                { RoleTypes.Phantom, "#CA8AFF" },
+                { CrewmateGhost, "#8CFFFF" },
+                { GuardianAngel, "#8CFFDB" },
+                { Crewmate, "#8CFFFF" },
+                { Scientist, "#F8FF8C" },
+                { Engineer, "#A5A8FF" },
+                { Noisemaker, "#FFC08C" },
+                { Tracker, "#93FF8C" },
+                { ImpostorGhost, "#FF1919" },
+                { Impostor, "#FF1919" },
+                { Shapeshifter, "#FF819E" },
+                { Phantom, "#CA8AFF" },
             };
         }
         catch (ArgumentException ex)

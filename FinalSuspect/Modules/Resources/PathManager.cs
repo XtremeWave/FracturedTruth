@@ -13,8 +13,8 @@ public static class PathManager
     public static string DependsSavePath = "BepInEx/core/";
     public static string DownloadFileTempPath = "BepInEx/plugins/FinalSuspect.dll.temp";
     public static string downloadUrl_github = "https://github.com/XtremeWave/FinalSuspect/releases/latest/download/FinalSuspect.dll";
-    public static string downloadUrl_gitee = "https://gitee.com/LezaiYa/FinalSuspect/releases/download/v{showVer}/FinalSuspect.dll";
-    public static string downloadUrl_xtremeapi = "https://api.xtreme.net.cn/download/FinalSuspect/FinalSuspect.dll";
+    public static string downloadUrl_gitee = "https://gitee.com/LezaiYa/FinalSuspectAssets/releases/download/v{showVer}/FinalSuspect.dll";
+    //public static string downloadUrl_xtremeapi = "https://api.xtreme.net.cn/download/FinalSuspect/FinalSuspect.dll";
     
     public static string GetFile(FileType fileType, RemoteType remoteType, string file)
     {
@@ -34,11 +34,11 @@ public static class PathManager
                 remoteBase = "github.com/XtremeWave/FinalSuspect/raw/FinalSus/Assets/";
                 break;
             case RemoteType.Gitee:
-                remoteBase = "gitee.com/LezaiYa/FinalSuspect/raw/FinalSus/Assets/";
+                remoteBase = "gitee.com/LezaiYa/FinalSuspectAssets/raw/main/Assets/";
                 break;
-            case RemoteType.XtremeApi:
-                remoteBase = "api.xtreme.net.cn/download/FinalSuspect/Assets/";
-                break;
+            //case RemoteType.XtremeApi:
+            //    remoteBase = "api.xtreme.net.cn/download/FinalSuspect/Assets/";
+            //    break;
         }
         return remoteBase;
     }
@@ -109,18 +109,18 @@ public static class PathManager
     {
 #if DEBUG
         "https://raw.githubusercontent.com/XtremeWave/FinalSuspect_Dev/FS_Dev/",
-        "https://api.xtreme.net.cn/download/FinalSuspect/",
+        //"https://api.xtreme.net.cn/download/FinalSuspect/",
         $"file:///{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop))}/",
 #endif
 
 #if CANARY
         "https://raw.githubusercontent.com/XtremeWave/FinalSuspect_Dev/FS_Dev/",
-        "https://api.xtreme.net.cn/download/FinalSuspect/",
+        //"https://api.xtreme.net.cn/download/FinalSuspect/",
         $"file:///{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop))}/",
 #else        
         "https://raw.githubusercontent.com/XtremeWave/FinalSuspect/FinalSus/",
-        "https://gitee.com/LezaiYa/FinalSuspect/raw/FinalSus/",
-        "https://api.xtreme.net.cn/download/FinalSuspect/",
+        "https://gitee.com/LezaiYa/FinalSuspectAssets/raw/main",
+        //"https://api.xtreme.net.cn/download/FinalSuspect/",
 #endif
     };
     
@@ -146,7 +146,7 @@ public enum RemoteType
 {
     Github,
     Gitee,
-    XtremeApi
+    //XtremeApi
 }
 public enum LocalType
 {
