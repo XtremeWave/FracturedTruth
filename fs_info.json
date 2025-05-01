@@ -1,7 +1,7 @@
 {
   "version": "1.1.2",
   "verHead": "1.1",
-  "verDate": "20250412",
+  "verDate": "20250501",
 
 
   "minVer": "latest",
@@ -10,7 +10,7 @@
   "CanUpdate": "true",
   "DebugVer": "0.0.0",
 
-  "md5": "ad5796ab007c1f59fb9997bb24c28fd2",
+  "md5": "c3fc5dd5e97f3538ab85b2cd940681d6",
   "announcement": {
     "English": "If the update is unsuccessful, please try to visit the website to update manually.\nDue to the developer's personal academic and current situation, the next version update may take a long time.\nThank you for your support!",
     "Latam": "Si la actualización no tiene éxito, por favor intente visitar el sitio web para actualizar manualmente.\nDebido a la situación académica y personal del desarrollador, la próxima actualización de versión podría tardar mucho tiempo.\n¡Gracias por su apoyo!\nEl idioma que estás utilizando se traduce mediante IA y puede contener inexactitudes. Por favor, proporciona retroalimentación al desarrollador de manera oportuna.",
