@@ -11,6 +11,7 @@ using FinalSuspect.Patches.System;
 using Il2CppInterop.Runtime.InteropTypes;
 using InnerNet;
 using UnityEngine;
+using static AmongUs.GameOptions.RoleTypes;
 
 namespace FinalSuspect.Modules.Core.Game;
 

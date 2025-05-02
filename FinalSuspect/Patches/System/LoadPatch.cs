@@ -8,9 +8,9 @@ using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Resources;
 using TMPro;
 using UnityEngine;
-using Object = UnityEngine.Object;
 using static FinalSuspect.Helpers.ResourcesHelper;
 using static FinalSuspect.Modules.Resources.ResourcesDownloader;
+using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Patches.System;
 

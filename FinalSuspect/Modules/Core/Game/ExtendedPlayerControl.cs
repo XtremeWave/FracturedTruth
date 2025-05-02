@@ -3,6 +3,7 @@ using AmongUs.GameOptions;
 using FinalSuspect.Helpers;
 using InnerNet;
 using UnityEngine;
+using static AmongUs.GameOptions.RoleTypes;
 
 namespace FinalSuspect.Modules.Core.Game;
 

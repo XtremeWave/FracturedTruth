@@ -1,5 +1,6 @@
 using System.Linq;
 using AmongUs.GameOptions;
+using static AmongUs.GameOptions.RoleTypes;
 using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Patches.Game_Vanilla;

@@ -15,6 +15,7 @@ using FinalSuspect.Modules.Random;
 using HarmonyLib.Tools;
 using Il2CppInterop.Runtime.Injection;
 using UnityEngine;
+using static AmongUs.GameOptions.RoleTypes;
 
 [assembly: AssemblyFileVersion(Main.PluginVersion)]
 [assembly: AssemblyInformationalVersion(Main.PluginVersion)]
