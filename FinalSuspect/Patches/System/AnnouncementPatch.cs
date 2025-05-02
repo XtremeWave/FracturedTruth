@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,17 +6,11 @@ using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AmongUs.Data;
 using AmongUs.Data.Player;
 using Assets.InnerNet;
-using BepInEx.Unity.IL2CPP.Utils.Collections;
 using FinalSuspect.Helpers;
-using FinalSuspect.Modules.Resources;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
-using Newtonsoft.Json;
 using UnityEngine;
-using UnityEngine.Networking;
-using static FinalSuspect.Patches.System.ModNewsHistory;
 
 namespace FinalSuspect.Patches.System;
 
@@ -101,7 +94,6 @@ public class ModNewsHistory
 		{
 			Error($"Exception in SetModAnnouncements: {ex}", "SetModAnnouncements");
 		}
-
 		return true;
 	}
 
@@ -150,7 +142,6 @@ public class ModNewsHistory
 						{
 							/*Ignore*/
 						}
-
 						break;
 					}
 				}
@@ -163,7 +154,6 @@ public class ModNewsHistory
 				{
 					return string.IsNullOrEmpty(a1.Date) ? 1 : -1;
 				}
-
 				return DateTime.Parse(a2.Date).CompareTo(DateTime.Parse(a1.Date));
 			});
 		}
@@ -221,7 +211,6 @@ public class ModNewsHistory
 		}
 		catch
 		{
-			/*Ignore*/
 			return (false, "");
 		}
 	}
