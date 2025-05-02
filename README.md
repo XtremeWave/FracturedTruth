@@ -6,11 +6,7 @@
 
 <img src="https://badgen.net/github/license/XtremeWave/FinalSuspect" alt="Licences">
 <img src="https://badgen.net/github/tag/XtremeWave/FinalSuspect" alt="LatestTag">
-<img src="https://badgen.net/github/assets-dl/XtremeWave/FinalSuspect" alt="Downloads">
-<img src="https://badgen.net/github/watchers/XtremeWave/FinalSuspect" alt="Watchers">
-<img src="https://badgen.net/github/stars/XtremeWave/FinalSuspect" alt="Stars">
-<img src="https://badgen.net/github/forks/XtremeWave/FinalSuspect" alt="Forks">
-<img src="https://badgen.net/github/prs/XtremeWave/FinalSuspect" alt="PRs">
+<img src="https://badgen.net/github/stars/XtremeWave/FinalSuspect/" alt="Stars">
 
 [English] | [简体中文](README_zh.md)
 
