@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using AmongUs.GameOptions;
 using FinalSuspect.Helpers;
 using TMPro;
 using UnityEngine;
