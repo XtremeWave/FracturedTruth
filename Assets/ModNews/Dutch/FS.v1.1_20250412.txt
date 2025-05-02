@@ -1,8 +1,8 @@
-#Number:100004  
-#Title:Final Suspect v1.1  
-#SubTitle:★★★★ Version Support ★★★★  
-#ShortTitle:★ Version Support v1.1  
-#Date:2025-04-12T00:00:00Z  
+#Number:100005
+#Title:Final Suspect v1.1
+#SubTitle:★★★★ Version Support ★★★★
+#ShortTitle:★ Version Support v1.1
+#Date:2025-04-12T00:00:00Z
 #-----------------------------
 # English  
 Fixed bugs in v1.1 and improved compatibility with the new version  

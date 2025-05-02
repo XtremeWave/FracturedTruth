@@ -202,19 +202,19 @@ public class XtremeMusic
     {
         if (CurrectAudioStates != AudiosStates.Exist) return;
         var task = AudioLoader.LoadAudioClipAsync(Path);
-        _ = new LateTask(() =>
+        _ = new MainThreadTask(() =>
         {
             LastAudioStates = CurrectAudioStates = AudiosStates.IsLoading;
             MyMusicPanel.RefreshTagList();
-        }, 0.01F, "");
+        }, "Update Audio States");
         await task;
-        _ = new LateTask(() =>
+        _ = new MainThreadTask(() =>
         {
             if (task.Result != null)
                 Clip = task.Result;
             LastAudioStates = CurrectAudioStates = Clip != null ? AudiosStates.Exist : AudiosStates.NotExist;
             MyMusicPanel.RefreshTagList();
-        }, 0.01F, "");
+        }, "Update Audio States");
     }
 
     private void Create(string name, SupportedMusics music)

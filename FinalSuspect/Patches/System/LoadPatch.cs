@@ -2,95 +2,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using BepInEx.Unity.IL2CPP.Utils;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Resources;
 using TMPro;
 using UnityEngine;
 using Object = UnityEngine.Object;
+using static FinalSuspect.Helpers.ResourcesHelper;
 using static FinalSuspect.Modules.Resources.ResourcesDownloader;
 
 namespace FinalSuspect.Patches.System;
 
-public class LoadPatch
+public static class LoadPatch
 {
-    private static List<string> preReadyRemoteImageList =
-    [
-        "FinalSuspect-Logo.png",
-        "FinalSuspect-Logo-Blurred.png",
-        "LastResult-BG.png",
-        "TeamLogo.png"
-    ];
+    #region UI Components
 
-    private static List<string> remoteImageList =
-    [
-        "CI_Crewmate.png",
-        "CI_CrewmateGhost.png",
-        "CI_Engineer.png",
-        "CI_GuardianAngel.png",
-        "CI_HnSEngineer.png",
-        "CI_HnSImpostor.png",
-        "CI_Impostor.png",
-        "CI_ImpostorGhost.png",
-        "CI_Noisemaker.png",
-        "CI_Phantom.png",
-        "CI_Scientist.png",
-        "CI_Shapeshifter.png",
-        "CI_Tracker.png",
-        "Cursor.png",
-        "DleksBanner.png",
-        "DleksBanner-Wordart.png",
-        "DleksButton.png",
-        "FinalSuspect-BG-MiraHQ.jpg",
-        "FinalSuspect-BG-NewYear.png",
-        "ModStamp.png",
-        "RightPanelCloseButton.png"
-    ];
+    private static TextMeshPro _loadText = null!;
+    private static TextMeshPro _processText = null!;
+    private static SpriteRenderer _teamLogo = null!;
+    private static SpriteRenderer _modLogo = null!;
+    private static SpriteRenderer _modLogoBlurred = null!;
+    private static SpriteRenderer _glow = null!;
+    
+    #endregion
 
-    private static List<string> remoteDependList =
-    [
-        "YamlDotNet.dll",
-        "YamlDotNet.xml"
-    ];
-
-    private static List<string> remoteModNewsList =
-    [
-        "FS.v1.0_20250129.txt",
-        "FeaturesIntroduction.v1.0.txt",
-        "FS.v1.1_20250216.txt",
-        "FS.v1.1_20250412.txt",
-        "FS.v1.1_20250501.txt",
-        "FeaturesIntroduction.v1.1.txt",
-    ];
-
-    private static List<string> remoteLanguageList =
-    [
-        "Brazilian.yaml",
-        "SChinese.yaml",
-        "TChinese.yaml",
-        "Dutch.yaml",
-        "English.yaml",
-        "Filipino.yaml",
-        "French.yaml",
-        "German.yaml",
-        "Irish.yaml",
-        "Italian.yaml",
-        "Japanese.yaml",
-        "Korean.yaml",
-        "Latam.yaml",
-        "Portuguese.yaml",
-        "Russian.yaml",
-        "Spanish.yaml"
-    ];
-
-    private static TextMeshPro LoadText = null!;
-    private static TextMeshPro ProcessText = null!;
-    private static SpriteRenderer Teamlogo = null!;
-    private static SpriteRenderer Modlogo = null!;
-    private static SpriteRenderer ModlogoBlurred = null!;
-    private static SpriteRenderer Glow = null!;
-    private static bool ReloadLanguage;
-    private static bool SkipLoadAnima;
+    private static bool _reloadLanguage;
+    private static bool _skipLoadAnimation;
+    private static bool _firstLaunch;
 
     [HarmonyPatch(typeof(SplashManager), nameof(SplashManager.Start))]
     public class Start
@@ -99,409 +38,408 @@ public class LoadPatch
         {
             ResolutionManager.SetResolution(1920, 1080, Screen.fullScreen);
             __instance.startTime = Time.time;
-            __instance.StartCoroutine(InitializeRefdata(__instance));
+            __instance.StartCoroutine(InitializeRefData(__instance));
             return false;
         }
 
-        private static IEnumerator InitializeRefdata(SplashManager __instance)
+        private static IEnumerator InitializeRefData(SplashManager instance)
         {
-            #region Resources and variables
-            
-            LoadText = Object.Instantiate(__instance.errorPopup.InfoText, null);
-            LoadText.transform.localPosition = new(0f, 0, -10f);
-            LoadText.fontStyle = FontStyles.Bold;
-            LoadText.text = null;
-            
-            ProcessText = Object.Instantiate(__instance.errorPopup.InfoText, null);
-            ProcessText.transform.localPosition = new(0f, -0.7f, -10f);
-            ProcessText.fontStyle = FontStyles.Bold;
-            ProcessText.text = null;
+            CreateTextComponents(instance);
+            yield return HandleFirstLaunch();
+            CreateLogoComponents();
+            yield return HandleCoreLoadingProcess();
+            instance.sceneChanger.BeginLoadingScene();
+            instance.doneLoadingRefdata = true;
+        }
 
-            float p;
-            
-            var reloadBypassPath_Once = GetBypassFileType(FileType.Languages, BypassType.Once);
-            var reloadBypassPath_Longterm = GetBypassFileType(FileType.Languages, BypassType.Longterm);
-            var thisversion = $"{Main.PluginVersion}|{Main.DisplayedVersion}|{ThisAssembly.Git.Commit}-{ThisAssembly.Git.Branch}";
-            var writeinVer = false;
-            ReloadLanguage = thisversion != Main.LastStartVersion.Value 
-                             && !(File.Exists(reloadBypassPath_Once) || File.Exists(reloadBypassPath_Longterm));
+        #region Initialization Helpers
 
-            if (File.Exists(reloadBypassPath_Once) || File.Exists(reloadBypassPath_Longterm))
+        private static void CreateTextComponents(SplashManager instance)
+        {
+            _loadText = CreateTextComponent(instance, new Vector3(0f, -0.28f, -10f));
+            _processText = CreateTextComponent(instance, new Vector3(0f, -0.7f, -10f));
+        }
+
+        private static TextMeshPro CreateTextComponent(SplashManager instance, Vector3 position)
+        {
+            var text = Object.Instantiate(instance.errorPopup.InfoText, null);
+            text.transform.localPosition = position;
+            text.fontStyle = FontStyles.Bold;
+            text.text = string.Empty;
+            return text;
+        }
+
+        private static void CreateLogoComponents()
+        {
+            _teamLogo = CreateSpriteRenderer("Team_Logo", "TeamLogo.png", 120f, new Vector3(0, 0f, -5f));
+            _modLogo = CreateSpriteRenderer("Mod_Logo", "FinalSuspect-Logo.png", 150f, new Vector3(0, 0.3f, -5f));
+            _modLogoBlurred = CreateSpriteRenderer("Mod_Logo_Blurred", "FinalSuspect-Logo-Blurred.png", 150f, new Vector3(0, 0.3f, -5f));
+            _glow = CreateSpriteRenderer("Glow", "FinalSuspect-Logo.png", 1f, new Vector3(0, 0.3f, -5f));
+        }
+
+        private static SpriteRenderer CreateSpriteRenderer(string name, string spriteName, float pixelsPerUnit, Vector3 position)
+        {
+            var renderer = ObjectHelper.CreateObject<SpriteRenderer>(name, null, position);
+            renderer.sprite = LoadSprite(spriteName, pixelsPerUnit);
+            renderer.color = Color.clear;
+            return renderer;
+        }
+  
+        #endregion
+
+        #region Loading Process
+ 
+        private static IEnumerator HandleFirstLaunch()
+        {
+            var logoAnimator = GameObject.Find("LogoAnimator");
+            logoAnimator.SetActive(false);
+
+            CheckForListResources(ref PreReadyRemoteImageList, FileType.Images);
+            yield return DownloadResources(PreReadyRemoteImageList, FileType.Images, HandleFirstLaunchText, true);
+            if (string.IsNullOrEmpty(_loadText.text)) yield break;
+            _loadText.text = string.Empty;
+            _firstLaunch = true;
+            yield return new WaitForSeconds(2f);
+        }
+
+        private static void HandleFirstLaunchText()
+        {
+            _loadText.text = $"Welcome to <color={ColorHelper.ModColor}>FinalSuspect</color>.";
+        }
+
+        private static IEnumerator HandleCoreLoadingProcess()
+        {
+            var fastBoot = CheckFastBootCondition() && !_firstLaunch;
+            yield return fastBoot ? HandleFastBoot() : HandleNormalBoot();
+
+            yield return LoadEssentialResources();
+            yield return HandlePostDownloadProcess(fastBoot);
+        }
+        
+        private static bool CheckFastBootCondition()
+        {
+            var currentVersion = $"{Main.PluginVersion}|{Main.DisplayedVersion}|{ThisAssembly.Git.Commit}-{ThisAssembly.Git.Branch}";
+            var bypassPathOnce = GetBypassFileType(FileType.Languages, BypassType.Once);
+            var bypassPathLongTerm = GetBypassFileType(FileType.Languages, BypassType.Longterm);
+            
+            _reloadLanguage = currentVersion != Main.LastStartVersion.Value && 
+                              !(File.Exists(bypassPathOnce) || File.Exists(bypassPathLongTerm));
+            
+            if (File.Exists(bypassPathOnce) || File.Exists(bypassPathLongTerm))
             {
-                if (File.Exists(reloadBypassPath_Once))
+                if (File.Exists(bypassPathOnce))
                 {
-                    File.Delete(reloadBypassPath_Once);
+                    File.Delete(bypassPathOnce);
                 }
             }
             else
             {
-                writeinVer = true;
-            }
-
-            var fastboot = Main.FastBoot.Value && !ReloadLanguage;
-            
-            #endregion
-
-            var logoAnimator = GameObject.Find("LogoAnimator");
-            logoAnimator.SetActive(false);
-
-            #region First Launch Final Suspect
-            
-            CheckForListResources_Remove(ref preReadyRemoteImageList, FileType.Images);
-            yield return DownloadListResources(preReadyRemoteImageList, FileType.Images,
-                () =>
-                {
-                    fastboot = false;
-                    LoadText.text = $"Welcome to <color={ColorHelper.ModColor}>FinalSuspect</color>.";
-                });
-
-            if (!string.IsNullOrEmpty(LoadText.text))
-            {
-                LoadText.text = null;
-                yield return new WaitForSeconds(2f);
+                Main.LastStartVersion.Value = currentVersion;
             }
             
-            #endregion
+            return Main.FastBoot.Value && !_reloadLanguage;
+        }
+        
+        #endregion
 
-            LoadText.transform.localPosition = new(0f, -0.28f, -10f);
-            LoadText.SetOutlineColor(Color.black);
-            LoadText.SetOutlineThickness(0.15f);
-            
-            ProcessText.SetOutlineColor(Color.black);
-            ProcessText.SetOutlineThickness(0.15f);
-            
-            Teamlogo = ObjectHelper.CreateObject<SpriteRenderer>("Team_Logo", null, new Vector3(0, 0f, -5f));
-            Teamlogo.sprite = LoadSprite("TeamLogo.png", 120f);
-            Teamlogo.color = Color.clear;
-            
-            Modlogo = ObjectHelper.CreateObject<SpriteRenderer>("Mod_Logo", null, new Vector3(0, 0.3f, -5f));
-            Modlogo.sprite = LoadSprite("FinalSuspect-Logo.png", 150f);
-            Modlogo.color = Color.clear;
-            
-            ModlogoBlurred = ObjectHelper.CreateObject<SpriteRenderer>("Mod_Logo_Blurred", null, new Vector3(0, 0.3f, -5f));
-            ModlogoBlurred.sprite = LoadSprite("FinalSuspect-Logo-Blurred.png", 150f);
-            ModlogoBlurred.color = Color.clear;
-            
-            Glow = ObjectHelper.CreateObject<SpriteRenderer>("Glow", null, new Vector3(0, 0.3f, -5f));
-            Glow.sprite = LoadSprite("FinalSuspect-Logo.png");
-            Glow.color = Color.clear;
-
-            #region Fast Boot
-
-            switch (fastboot)
-            {
-                case true:
-                {
-                    Teamlogo.color = Color.white;
-                    Teamlogo.transform.localPosition = new Vector3(0, 1.7f, -5f);
-                    Teamlogo.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
-                    Modlogo.color = Color.white;
-                    Modlogo.transform.localPosition = new Vector3(0, 0, -5f);
-                    Modlogo.transform.localScale = new Vector3(1.5f, 1.5f, 1f);
-                    Glow.color = Color.green;
-                    if (writeinVer) Main.LastStartVersion.Value = thisversion;
-                    TranslatorInit();
-                    ProcessText.text = GetString("FastBoot");
-                    ProcessText.color = Color.green;
-                    ProcessText.transform.localPosition = new Vector3(0, -0.7f, -5f);
-                    yield return new WaitForSeconds(1f);
-                    SkipLoadAnima = true;
-                    break;
-                }
-                case false:
-                {
-                    #region Team Logo Anima
-
-                    yield return new WaitForSeconds(0.5f);
-                    p = 1f;
-                    while (p > 0f)
-                    {
-                        p -= Time.deltaTime * 2.8f;
-                        var alpha = 1 - p;
-                        Teamlogo.color = Color.white.AlphaMultiplied(alpha);
-                        yield return null;
-                    }
-                
-                    yield return new WaitForSeconds(1.5f);
-
-                    p = 1f;
-                    while (p > 0f)
-                    {
-                        p -= Time.deltaTime * 2.8f;
-                        Teamlogo.color = Color.white.AlphaMultiplied(p);
-                        yield return null;
-                    }
-
-                    yield return new WaitForSeconds(2f);
-
-                    #endregion
-            
-                    #region Start Load
-
-                    p = 1f;
-                    while (p > 0f)
-                    {
-                        p -= Time.deltaTime * 2.8f;
-                        var alpha = 1 - p;
-                        if (fastboot)
-                            Glow.color = Color.white.AlphaMultiplied(alpha);
-                        Modlogo.color = Color.white.AlphaMultiplied(alpha);
-                        ModlogoBlurred.color = Color.white.AlphaMultiplied(Mathf.Min(1f, alpha * (p * 2)));
-                        Modlogo.transform.localScale = Vector3.one * (p * p * 0.012f + 1f);
-                        ModlogoBlurred.transform.localScale = Vector3.one * (p * p * 0.012f + 1f);
-                        yield return null;
-                    }
-
-                    Modlogo.color = Color.white;
-                    ModlogoBlurred.gameObject.SetActive(false);
-                    Modlogo.transform.localScale = Vector3.one;
-                    if (!fastboot)
-                        yield return new WaitForSeconds(0.75f);
-
-                    if (!fastboot)
-                    {
-                        LoadText.color = Color.white.AlphaMultiplied(0.75f);
-                        LoadText.text = "Loading...";
-                        p = 1f;
-                        while (p > 0)
-                        {
-                            p -= Time.deltaTime * 2.8f;
-                            var alpha = 1 - p;
-                            Glow.color = Color.white.AlphaMultiplied(alpha);
-                            if (alpha < 0.75f)
-                                LoadText.color = Color.white.AlphaMultiplied(alpha);
-                            yield return null;
-                        }
-                    }
-
-                    #endregion
-
-                    break;
-                }
-            }
-            
-            #endregion
-
-            #region Initialize Among Us Translation
-
-            yield return LoadAmongUsTranslation();
-
-            #endregion
-
-            #region Download Depends
-
-            CheckForListResources_Remove(ref remoteDependList, FileType.Depends);
-            yield return DownloadListResources(remoteDependList, FileType.Depends);
-
-            if (!ReloadLanguage)
-            {
-                CheckForListResources_Remove(ref remoteLanguageList, FileType.Languages);
-            }
-            
-            yield return DownloadListResources(remoteLanguageList, FileType.Languages);
-
-            #endregion
-
-            if (!fastboot)
-            {
-                #region After Download Depends
-
-                if (writeinVer) Main.LastStartVersion.Value = thisversion;
-                TranslatorInit();
-                if (TranslationController.Instance.currentLanguage.languageID is not SupportedLangs.English)
-                {
-                    yield return FadeLoadText(false);
-                    LoadText.text = GetString("Loading");
-                    LoadText.color = Color.white;
-                    yield return FadeLoadText(true);
-                }
-
-                yield return new WaitForSeconds(1f);
-
-                #endregion
-            }
-
-            #region Check for resources
-
-            if (!fastboot)
-            {
-                ProcessText.text = GetString("CheckingForFiles");
-                ProcessText.color = Color.blue.AlphaMultiplied(0.75f);
-
-                yield return FadeProcessText(true);
-            }
-
-            CheckForListResources_Remove(ref remoteImageList, FileType.Images);
-
-            for (var i = remoteModNewsList.Count - 1; i >= 0; i--)
-            {
-                var resource = remoteModNewsList[i];
-                remoteModNewsList.Remove(resource);
-
-                foreach (var lang in EnumHelper.GetAllNames<SupportedLangs>())
-                {
-                    var file = $"{lang}/{resource}";
-
-                    var localFilePath = GetResourceFilesPath(FileType.ModNews, file);
-                    if (File.Exists(localFilePath)) continue;
-                    remoteModNewsList.Add(file);
-                    Warn($"File do not exists: {localFilePath}", "Check");
-                }
-            }
-            
-            #endregion
-
-            #region Download Resources
-            
-            var process = 0;
-            
-            if (!fastboot)
-            {
-                yield return new WaitForSeconds(0.5f);
-                
-                if (remoteImageList.Count > 0 || remoteModNewsList.Count > 0)
-                {
-                    yield return FadeProcessText(false);
-
-                    ProcessText.color = ColorHelper.DownloadYellow;
-                    ProcessText.text = GetString("DownloadingResources") + $"({process}/{remoteImageList.Count + remoteModNewsList.Count})";
-                    yield return FadeProcessText(true);
-                }
-            }
-
-            Action downloadAction = fastboot? null: () => 
-            {
-                process++;
-                ProcessText.text = GetString("DownloadingResources") + $"({process}/{remoteImageList.Count + remoteModNewsList.Count})";
-            };
-                
-            yield return DownloadListResources(remoteImageList, FileType.Images, downloadAction);
-            yield return DownloadListResources(remoteModNewsList, FileType.ModNews, downloadAction);
-            
-            if (!fastboot)
-            {
-                if (process > 0)
-                {
-                    ProcessText.color = ColorHelper.DownloadYellow;
-                    yield return FadeProcessText(false);
-                    ProcessText.color = ColorHelper.DownloadYellow;
-                    ProcessText.text = GetString("DownLoadSucceedNotice");
-                    yield return FadeProcessText(true);
-                }
-
-                yield return new WaitForSeconds(0.5f);
-
-                yield return FadeProcessText(false);
-            }
-
-            #endregion
-
-            if (!fastboot)
-            {
-                #region Load Complete
-                
-                yield return new WaitForSeconds(1f);
-            
-                Color green = ColorHelper.LoadCompleteGreen;
-                LoadText.color = green.AlphaMultiplied(0.75f);
-                LoadText.text = GetString("LoadingComplete");
-            
-                for (var i = 0; i < 3; i++)
-                {
-                    LoadText.gameObject.SetActive(false);
-                    yield return new WaitForSeconds(0.03f);
-                    LoadText.gameObject.SetActive(true);
-                    yield return new WaitForSeconds(0.03f);
-                }
-
-                yield return new WaitForSeconds(0.5f);
-
-                p = 1f;
-                while (p > 0f)
-                {
-                    p -= Time.deltaTime * 1.2f;
-
-                    Glow.color = Color.white.AlphaMultiplied(p);
-                    Modlogo.color = Color.white.AlphaMultiplied(p);
-                    if (p >= 0.75f)
-                        LoadText.color = green.AlphaMultiplied(p - 0.75f);
-                    yield return null;
-                }
-
-                Object.Destroy(LoadText.gameObject);
-                Object.Destroy(ProcessText.gameObject);
-                Object.Destroy(Modlogo.gameObject);
-                Object.Destroy(ModlogoBlurred.gameObject);
-                Object.Destroy(Teamlogo.gameObject);
-                Object.Destroy(Glow.gameObject);
-
-                #endregion
-            }
-            __instance.sceneChanger.BeginLoadingScene();
-            __instance.doneLoadingRefdata = true;
+        #region Boot Handlers
+        
+        private static IEnumerator HandleFastBoot()
+        {
+            SetFastBootVisuals();
+            TranslatorInit();
+            UpdateProcessText(GetString("FastBoot"), Color.green);
+            yield return new WaitForSeconds(1f);
+            _skipLoadAnimation = true;
         }
 
-        private static void CheckForListResources_Remove(ref List<string> targetList, FileType fileType, Action action = null)
+        private static void SetFastBootVisuals()
         {
-            for (var i = targetList.Count - 1; i >= 0; i--)
-            {
-                action?.Invoke();
-                var resource = targetList[i];
-                var localFilePath = GetLocalFilePath(fileType, resource);
-                if (File.Exists(localFilePath))
-                {
-                    targetList.Remove(resource);
-                }
-                else
-                {
-                    Warn($"File do not exists: {localFilePath}", "Check");
-                }
-            }
+            _teamLogo.color = Color.white;
+            _teamLogo.transform.localPosition = new Vector3(0, 1.7f, -5f);
+            _teamLogo.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
+            
+            _modLogo.color = Color.white;
+            _modLogo.transform.localPosition = new Vector3(0, 0, -5f);
+            _modLogo.transform.localScale = new Vector3(1.5f, 1.5f, 1f);
+            
+            _glow.color = Color.green;
         }
 
-        private static IEnumerator DownloadListResources(List<string> targetList, FileType fileType, Action action = null)
+        private static IEnumerator HandleNormalBoot()
         {
-            foreach (var resource in targetList)
-            {
-                action?.Invoke();
-                var task = StartDownload(fileType, resource);
-                while (!task.IsCompleted)
-                {
-                    yield return null;
-                }
+            yield return AnimateTeamLogo();
+            yield return AnimateModLogo();
+            yield return ShowLoadingProgress();
+        }
+        
+        #endregion
 
-                if (task.IsFaulted)
-                {
-                    Error($"Download of {resource} failed: {task.Exception}", "Download Resource");
-                }
-            }
+        #region Animation Coroutines
+        
+        private static IEnumerator AnimateTeamLogo()
+        {
+            yield return FadeSprite(_teamLogo, 2.8f, false);
+            yield return new WaitForSeconds(1.5f);
+            yield return FadeSprite(_teamLogo, 2.8f, true);
+            yield return new WaitForSeconds(2f);
         }
 
-        private static IEnumerator FadeProcessText(bool show)
+        private static IEnumerator AnimateModLogo()
         {
-            var cur = ProcessText.color;
-            var p = 0.75f;
-            while (p > 0)
+            var progress = 1f;
+            while (progress > 0f)
             {
-                p -= Time.deltaTime * 2.8f;
-                var alpha = show ? 0.75f - p : p;
-                ProcessText.color = cur.AlphaMultiplied(alpha);
+                progress -= Time.deltaTime * 2.8f;
+                var alpha = 1 - progress;
+                
+                _modLogo.color = Color.white.AlphaMultiplied(alpha);
+                _modLogoBlurred.color = Color.white.AlphaMultiplied(Mathf.Min(1f, alpha * (progress * 2)));
+                
+                var scale = Vector3.one * (progress * progress * 0.012f + 1f);
+                _modLogo.transform.localScale = scale;
+                _modLogoBlurred.transform.localScale = scale;
+                
+                yield return null;
+            }
+            
+            _modLogo.color = Color.white;
+            _modLogoBlurred.gameObject.SetActive(false);
+            _modLogo.transform.localScale = Vector3.one;
+            yield return new WaitForSeconds(0.75f);
+        }
+
+        private static IEnumerator ShowLoadingProgress()
+        {
+            _loadText.color = Color.white.AlphaMultiplied(0.75f);
+            _loadText.text = "Loading...";
+            
+            var progress = 1f;
+            while (progress > 0)
+            {
+                progress -= Time.deltaTime * 2.8f;
+                var alpha = 1 - progress;
+                _glow.color = Color.white.AlphaMultiplied(alpha);
+                
+                if (alpha < 0.75f)
+                    _loadText.color = Color.white.AlphaMultiplied(alpha);
+                
                 yield return null;
             }
         }
         
-        private static IEnumerator FadeLoadText(bool show)
+        #endregion
+
+        #region Resource Management
+        
+        private static IEnumerator LoadEssentialResources()
         {
-            var cur = LoadText.color;
-            var p = 0.75f;
-            while (p > 0)
+            yield return LoadAmongUsTranslation();
+            
+            CheckForListResources(ref RemoteDependList, FileType.Depends);
+            yield return DownloadResources(RemoteDependList, FileType.Depends, null, true);
+
+            List<string> RemoteLanguageList = [];
+            RemoteLanguageList.AddRange(EnumHelper.GetAllNames<SupportedLangs>().Select(lang => lang + ".yaml"));
+
+            if (!_reloadLanguage)
+                CheckForListResources(ref RemoteLanguageList, FileType.Languages);
+            
+            if (RemoteLanguageList.Count > 0)
+                yield return DownloadResources(RemoteLanguageList, FileType.Languages, null, true);
+            TranslatorInit();
+        }
+
+        private static IEnumerator HandlePostDownloadProcess(bool fastBoot)
+        {
+            if (fastBoot) yield break;
+            
+            if (TranslationController.Instance.currentLanguage.languageID != SupportedLangs.English)
             {
-                p -= Time.deltaTime * 2.8f;
-                var alpha = show ? 0.75f - p : p;
-                LoadText.color = cur.AlphaMultiplied(alpha);
+                yield return FadeText(_loadText, false);
+                _loadText.text = GetString("Loading");
+                _loadText.color = Color.white;
+                yield return FadeText(_loadText, true);
+            }
+
+            yield return new WaitForSeconds(1f);
+            yield return VerifyAdditionalResources();
+            
+            yield return ShowLoadCompleteAnimation();
+        }
+
+        private static IEnumerator VerifyAdditionalResources()
+        {
+            UpdateProcessText(GetString("CheckingForFiles"), Color.blue.AlphaMultiplied(0.75f));
+            yield return FadeText(_processText, true);
+
+            CheckForListResources(ref RemoteImageList, FileType.Images);
+
+            if (RemoteImageList.Count > 0)
+                yield return HandleResourceDownloads();
+            else
+                yield return FadeText(_processText, false);
+            
+        }
+
+        private static IEnumerator HandleResourceDownloads()
+        {
+            var downloadCount = RemoteImageList.Count;
+            var progress = 0;
+
+            UpdateProcessText($"{GetString("DownloadingResources")}({progress}/{downloadCount})", 
+                ColorHelper.DownloadYellow);
+            yield return FadeText(_processText, true);
+
+            var updateProgress = new Action(() => 
+            {
+                progress++;
+                _processText.text = $"{GetString("DownloadingResources")}({progress}/{downloadCount})";
+            });
+
+            yield return DownloadResources(RemoteImageList, FileType.Images, updateProgress);
+
+            yield return ShowDownloadCompletion();
+        }
+
+        private static IEnumerator ShowDownloadCompletion()
+        {
+            yield return FadeText(_processText, false);
+            UpdateProcessText(GetString("DownLoadSucceedNotice"), ColorHelper.DownloadYellow);
+            yield return FadeText(_processText, true);
+            yield return new WaitForSeconds(0.5f);
+            yield return FadeText(_processText, false);
+        }
+
+        #region Load Complete Animation
+
+        private static IEnumerator ShowLoadCompleteAnimation()
+        {
+            yield return new WaitForSeconds(1f);
+
+            Color green = ColorHelper.LoadCompleteGreen;
+            _loadText.color = green.AlphaMultiplied(0.75f);
+            _loadText.text = GetString("LoadingComplete");
+            
+            for (var i = 0; i < 3; i++)
+            {
+                _loadText.gameObject.SetActive(false);
+                yield return new WaitForSeconds(0.03f);
+                _loadText.gameObject.SetActive(true);
+                yield return new WaitForSeconds(0.03f);
+            }
+
+            yield return new WaitForSeconds(0.5f);
+            
+            var progress = 1f;
+            while (progress > 0f)
+            {
+                progress -= Time.deltaTime * 1.2f;
+                _glow.color = Color.white.AlphaMultiplied(progress);
+                _modLogo.color = Color.white.AlphaMultiplied(progress);
+        
+                if (progress >= 0.75f)
+                    _loadText.color = green.AlphaMultiplied(progress - 0.75f);
+        
+                yield return null;
+            }
+            
+            Object.Destroy(_loadText.gameObject);
+            Object.Destroy(_processText.gameObject);
+            Object.Destroy(_modLogo.gameObject);
+            Object.Destroy(_modLogoBlurred.gameObject);
+            Object.Destroy(_teamLogo.gameObject);
+            Object.Destroy(_glow.gameObject);
+        }
+        
+        #endregion
+        
+        #endregion
+
+        #region Utility Methods
+        
+        private static void CheckForListResources(ref List<string> targetList, FileType fileType)
+        {
+            for (var i = targetList.Count - 1; i >= 0; i--)
+            {
+                var resource = targetList[i];
+                if (File.Exists(GetLocalFilePath(fileType, resource)))
+                    targetList.Remove(resource);
+                else
+                    Warn($"File does not exist: {GetLocalFilePath(fileType, resource)}", "Check");
+            }
+        }
+
+        private static IEnumerator DownloadResources(List<string> resources, FileType fileType, Action progressCallback = null, bool essential = false)
+        {
+            foreach (var resource in resources)
+            {
+                progressCallback?.Invoke();
+                var task = StartDownload(fileType, resource);
+                while (!task.IsCompleted)
+                    yield return null;
+
+                if (!task.IsFaulted && task.Result) continue;
+                
+                Error($"Download failed: {resource} - {task.Exception}", "Download Resource");
+                if (!essential) continue;
+                yield return HandleDownloadError();
+                Fatal("DOWNLOAD ESSENTIAL RESOURCES FAILED", "Download Resource");
+
+            }
+        }
+
+        private static IEnumerator HandleDownloadError()
+        {
+            yield return FadeText(_loadText, false);
+            _loadText.text = "Downloading essential resources failed, please restart the game\nRestart countdown: ";
+            _loadText.color = Color.red;
+            yield return FadeText(_loadText, true);
+
+            var countdown = 10f;
+            while (countdown > 0)
+            {
+                _loadText.text = $"Downloading essential resources failed, please restart the game\nRestart countdown: {countdown:F0}";
+                countdown -= Time.deltaTime;
+                yield return null;
+            }
+
+            Application.Quit();
+        }
+        
+        private static IEnumerator FadeText(TextMeshPro text, bool show, float duration = 2.8f)
+        {
+            var progress = 0.75f;
+            var originalColor = text.color;
+
+            while (progress > 0)
+            {
+                progress -= Time.deltaTime * duration;
+                var alpha = show ? 0.75f - progress : progress;
+                text.color = originalColor.AlphaMultiplied(alpha);
                 yield return null;
             }
         }
+
+        private static IEnumerator FadeSprite(SpriteRenderer sprite, float speed, bool fadeOut)
+        {
+            var progress = 1f;
+            while (progress > 0f)
+            {
+                progress -= Time.deltaTime * speed;
+                var alpha = fadeOut ? progress : 1 - progress;
+                sprite.color = Color.white.AlphaMultiplied(alpha);
+                yield return null;
+            }
+        }
+
+        private static void UpdateProcessText(string text, Color color)
+        {
+            _processText.text = text;
+            _processText.color = color;
+        }
+        
+        #endregion
 
         private static IEnumerator LoadAmongUsTranslation()
         {
@@ -512,30 +450,29 @@ public class LoadPatch
             }
             catch
             {
-                // ignored
+                 /* Ignored */
             }
         }
     }
+
+    #region Harmony Patches
     
     [HarmonyPatch(typeof(SplashManager), nameof(SplashManager.Update))]
     public class SplashLogoAnimatorPatch
     {
         public static void Prefix(SplashManager __instance)
         {
-            if (!SkipLoadAnima) return;
+            if (!_skipLoadAnimation) return;
             __instance.sceneChanger.AllowFinishLoadingScene();
             __instance.startedSceneLoad = true;
         }
     }
-    
+
     [HarmonyPatch(typeof(LoadingBarManager), nameof(LoadingBarManager.ToggleLoadingBar))]
     public class LoadingBarManagerPatch
     {
-        public static void Prefix(LoadingBarManager __instance, ref bool on)
-        {
-            on = false;
-            
-            //以后有用，暂时这样处理
-        }
+        public static void Prefix(ref bool on) => on = false;
     }
+    
+    #endregion
 }

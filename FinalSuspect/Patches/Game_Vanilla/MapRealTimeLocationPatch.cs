@@ -32,6 +32,7 @@ public class MapRealTimeLocationPatch
             data.Deadbodyrend.flipY = true;
         }
     }
+    
     [HarmonyPatch(typeof(MapBehaviour), nameof(MapBehaviour.FixedUpdate)), HarmonyPostfix]
     public static void FixedUpdateAfter(MapBehaviour __instance)
     {
@@ -43,10 +44,11 @@ public class MapRealTimeLocationPatch
     {
         foreach (var data in XtremePlayerData.AllPlayerData)
         {
-            if (data.IsDisconnected)continue;
+            if (data.IsDisconnected) continue;
             data.PreMeetingPosition = data.Player.GetTruePosition();
         }
     }
+    
     [HarmonyPatch(typeof(MapBehaviour), nameof(MapBehaviour.GenericShow)), HarmonyPostfix]
     public static void GenericShowAfter(MapBehaviour __instance)
     {

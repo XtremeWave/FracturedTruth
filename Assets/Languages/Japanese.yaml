@@ -305,7 +305,8 @@ Broken: "故障"
 LanguageFilesLoadingComplete: "翻訳の読み込みが完了しました！"
 CheckingForFiles: "リソースファイルの整合性を確認中..."
 DownloadingResources: "リソースファイルをダウンロード中..."
-Loading: "読み込み中..."
+Loading: "読み込み中"
+LoadingWithDot: "読み込み中..."
 LoadingComplete: "読み込みが完了しました！"
 
 # 身元 / Identity

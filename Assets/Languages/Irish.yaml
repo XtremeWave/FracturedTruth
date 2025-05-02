@@ -305,7 +305,8 @@ Broken: "Briseadh"
 LanguageFilesLoadingComplete: "Taispeáint na hAinmhithe Críochnaithe!"
 CheckingForFiles: "Seiceáil na Neartughaidh na n-Ábhar..."
 DownloadingResources: "Ag íoslódáil na n-ábhar..."
-Loading: "Ag luchtú..."
+Loading: "Ag luchtú"
+LoadingWithDot: "Ag luchtú..."
 LoadingComplete: "Tá an luchtú críochnaithe!"
 
 # 身份 / Identity

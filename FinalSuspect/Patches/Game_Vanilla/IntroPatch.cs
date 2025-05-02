@@ -7,24 +7,23 @@ using UnityEngine;
 namespace FinalSuspect.Patches.Game_Vanilla;
 
 [HarmonyPatch(typeof(IntroCutscene))]
-class IntroCutscenePatch
+internal class IntroCutscenePatch
 {
     [HarmonyPatch(nameof(IntroCutscene.ShowRole)), HarmonyPostfix]
     public static void ShowRole_Postfix(IntroCutscene __instance)
     {
         if (OtherModHost) return;
 
-        _ = new LateTask(() =>
+        _ = new MainThreadTask(() =>
         {
             var roleType = PlayerControl.LocalPlayer.Data.Role.Role;
-            var cr = roleType;
-            __instance.YouAreText.color = __instance.RoleText.color = __instance.RoleBlurbText.color = GetRoleColor(cr);
-            __instance.RoleText.text = GetRoleName(cr);
+            __instance.YouAreText.color = __instance.RoleText.color = __instance.RoleBlurbText.color = GetRoleColor(roleType);
+            __instance.RoleText.text = GetRoleName(roleType);
             __instance.RoleText.fontWeight = FontWeight.Thin;
-            __instance.RoleText.SetOutlineColor(GetRoleColor(cr).ShadeColor(0.1f).SetAlpha(0.38f));
+            __instance.RoleText.SetOutlineColor(GetRoleColor(roleType).ShadeColor(0.1f).SetAlpha(0.38f));
             __instance.RoleText.SetOutlineThickness(0.17f);
-            __instance.RoleBlurbText.text = cr.GetRoleInfoForVanilla();
-        }, 0.0001f, "Override Role Text");
+            __instance.RoleBlurbText.text = roleType.GetRoleInfoForVanilla();
+        }, "Override Role Text");
 
     }
     [HarmonyPatch(nameof(IntroCutscene.CoBegin)), HarmonyPrefix]

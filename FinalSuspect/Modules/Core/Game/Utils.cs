@@ -432,4 +432,20 @@ public static class Utils
             if (Log) Error(ex.ToString(), "Execute With Try Catch");
         }
     }
+
+    public static void FormatButtonColor(MainMenuManager __instance, PassiveButton button, Color inActiveColor, Color activeColor, Color inActiveTextColor, Color activeTextColor)
+    {
+        button.activeSprites.transform.FindChild("Shine")?.gameObject.SetActive(false);
+        button.inactiveSprites.transform.FindChild("Shine")?.gameObject.SetActive(false);
+        var activeRenderer = button.activeSprites.GetComponent<SpriteRenderer>();
+        var inActiveRenderer = button.inactiveSprites.GetComponent<SpriteRenderer>();
+        activeRenderer.sprite = __instance.quitButton.activeSprites.GetComponent<SpriteRenderer>().sprite;
+        inActiveRenderer.sprite = __instance.quitButton.activeSprites.GetComponent<SpriteRenderer>().sprite;
+        activeRenderer.color = activeColor.a == 0f 
+            ? new Color(inActiveColor.r, inActiveColor.g, inActiveColor.b, 1f) 
+            : activeColor;
+        inActiveRenderer.color = inActiveColor;
+        button.activeTextColor = activeTextColor;
+        button.inactiveTextColor = inActiveTextColor;
+    }
 }

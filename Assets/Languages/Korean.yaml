@@ -305,7 +305,8 @@ Broken: "고장"
 LanguageFilesLoadingComplete: "번역 로딩 완료!"
 CheckingForFiles: "리소스 파일의 무결성을 확인하고 있습니다..."
 DownloadingResources: "리소스 파일을 다운로드하고 있습니다..."
-Loading: "로딩 중..."
+Loading: "로딩 중"
+LoadingWithDot: "로딩 중..."
 LoadingComplete: "로딩 완료!"
 
 # 신원 / Identity

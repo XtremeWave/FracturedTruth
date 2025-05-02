@@ -305,7 +305,8 @@ Broken: "Roto"
 LanguageFilesLoadingComplete: "¡Carga de traducciones completa!"
 CheckingForFiles: "Verificando la integridad de los archivos de recursos..."
 DownloadingResources: "Descargando archivos de recursos..."
-Loading: "Cargando..."
+Loading: "Cargando"
+LoadingWithDot: "Cargando..."
 LoadingComplete: "¡Carga completa!"
 
 # 身份 / Identity

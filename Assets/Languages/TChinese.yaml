@@ -110,7 +110,8 @@ PleaseWait: "請稍候……"
 LanguageFilesLoadingComplete: "翻譯文本加載完成！"
 CheckingForFiles: "驗證資源文件完整性中..."
 DownloadingResources: "下載資源文件中..."
-Loading: "加載中..."
+Loading: "加載中"
+LoadingWithDot: "加載中..."
 LoadingComplete: "加載完成！"
 
 # 更新检查

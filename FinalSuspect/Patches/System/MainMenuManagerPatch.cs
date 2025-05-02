@@ -32,8 +32,14 @@ public class MainMenuManagerPatch
     [HarmonyPrefix, HarmonyPriority(Priority.Last)]
     public static void HideRightPanel()
     {
-        ShowingPanel = false;
-        AccountManager.Instance?.transform.FindChild("AccountTab/AccountWindow")?.gameObject.SetActive(false);
+        try
+        {
+            ShowingPanel = false;
+            AccountManager.Instance?.transform.FindChild("AccountTab/AccountWindow")?.gameObject.SetActive(false);
+        }
+        catch 
+        {
+        }
     }
 
     public static void ShowRightPanelImmediately()

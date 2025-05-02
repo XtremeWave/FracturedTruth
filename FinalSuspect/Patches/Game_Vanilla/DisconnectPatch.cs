@@ -7,7 +7,7 @@ internal class ShowDisconnectPopupPatch
     public static string StringReason;
     public static void Postfix(DisconnectPopup __instance)
     {
-        _ = new LateTask(() =>
+        _ = new MainThreadTask(() =>
         {
             if (__instance == null) return;
             try
@@ -17,6 +17,7 @@ internal class ShowDisconnectPopupPatch
                     if (__instance._textArea?.text != null)
                         __instance._textArea.text = text;
                 }
+  
                 switch (Reason)
                 {
                     case DisconnectReasons.Hacking:
@@ -53,6 +54,6 @@ internal class ShowDisconnectPopupPatch
             {
                 // ignored
             }
-        }, 0.01f, "Override Disconnect Text");
+        }, "Override Disconnect Text");
     }
 }

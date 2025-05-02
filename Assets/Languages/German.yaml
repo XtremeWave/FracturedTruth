@@ -305,7 +305,8 @@ Broken: "Defekt"
 LanguageFilesLoadingComplete: "Übersetzungen wurden erfolgreich geladen!"
 CheckingForFiles: "Überprüfe die Integrität der Ressourcendateien..."
 DownloadingResources: "Ressourcendateien werden heruntergeladen..."
-Loading: "Wird geladen..."
+Loading: "Wird geladen"
+LoadingWithDot: "Wird geladen..."
 LoadingComplete: "Laden abgeschlossen!"
 
 # 身份 / Identity

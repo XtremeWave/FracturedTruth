@@ -305,7 +305,8 @@ Broken: "Повреждено"
 LanguageFilesLoadingComplete: "Загрузка переводов завершена!"
 CheckingForFiles: "Проверка целостности файлов ресурсов..."
 DownloadingResources: "Загрузка файлов ресурсов..."
-Loading: "Загрузка..."
+Loading: "Загрузка"
+LoadingWithDot: "Загрузка..."
 LoadingComplete: "Загрузка завершена!"
 
 # 身份 / Identity

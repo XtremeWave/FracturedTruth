@@ -305,7 +305,8 @@ Broken: "Gebroken"
 LanguageFilesLoadingComplete: "Vertalingen laden voltooid!"
 CheckingForFiles: "Controleren op integriteit van bronbestanden..."
 DownloadingResources: "Bronbestanden downloaden..."
-Loading: "Laden..."
+Loading: "Laden"
+LoadingWithDot: "Laden..."
 LoadingComplete: "Laden voltooid!"
 
 # 身份 / Identity

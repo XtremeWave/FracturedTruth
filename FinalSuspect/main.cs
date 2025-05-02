@@ -12,6 +12,7 @@ using FinalSuspect;
 using FinalSuspect.Attributes;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Random;
+using HarmonyLib.Tools;
 using Il2CppInterop.Runtime.Injection;
 using UnityEngine;
 
@@ -74,8 +75,10 @@ public class Main : BasePlugin
     
     public static readonly string DisplayedVersion = 
         $"{DisplayedVersion_Head}_{DisplayedVersion_Date}" +
-        $"{(DisplayedVersion_Type != VersionTypes.Release ? 
-        $"_{DisplayedVersion_Type}_{DisplayedVersion_TestCreation}" : "")}";
+        $"{(DisplayedVersion_Type != VersionTypes.Release 
+                ? $"_{DisplayedVersion_Type}_{DisplayedVersion_TestCreation}" 
+                : "")
+        }";
 
     // == 链接相关设定 / Link Config ==
     //public static readonly string WebsiteUrl = IsChineseLanguageUser ? "https://www.xtreme.net.cn/project/FS/" : "https://www.xtreme.net.cn/en/project/FS/";
@@ -84,7 +87,7 @@ public class Main : BasePlugin
     public const string GithubRepoUrl = "https://github.com/XtremeWave/FinalSuspect/";
 
     // ==========
-    public Harmony Harmony { get; } = new (PluginGuid);
+    public Harmony Harmony { get; } = new(PluginGuid);
     public static readonly Version version = Version.Parse(PluginVersion);
     public static ManualLogSource Logger;
     public static bool hasArgumentException;
@@ -135,13 +138,14 @@ public class Main : BasePlugin
     public const float RoleTextSize = 2f;
 
     public static IEnumerable<PlayerControl> AllPlayerControls => 
-        PlayerControl.AllPlayerControls.ToArray().Where(p => p != null);
+        PlayerControl.AllPlayerControls.ToArray().Where(p => p != null); 
+    
     public static IEnumerable<PlayerControl> AllAlivePlayerControls => 
         PlayerControl.AllPlayerControls.ToArray().Where(p => p != null && p.IsAlive() && !p.Data.Disconnected);
 
     public static Main Instance;
 
-    public static bool NewLobby = false;
+    //public static bool NewLobby = false;
 
     public static readonly List<string> TName_Snacks_CN =
     [
