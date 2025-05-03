@@ -195,7 +195,7 @@ public static class XtremeLocalHandling
     {
         Main.EnableFinalSuspect.Value = !OtherModHost;
 
-        if (__instance == null) return;
+        //if (__instance == null) return;
 
         try
         {
@@ -230,8 +230,8 @@ public static class XtremeLocalHandling
         }
         catch
         {
-            var create = (__instance.GetRealName() == null && IsFreePlay ||
-                          __instance.GetRealName() != "Player(Clone)") 
+            var create = (IsFreePlay ||
+                          __instance.GetRealName() != "Player(Clone)" && IsLobby) 
                          && XtremePlayerData.AllPlayerData.All(data => data.PlayerId != __instance.PlayerId);
             if (create) XtremePlayerData.CreateDataFor(__instance);
         }
@@ -365,6 +365,7 @@ public static class XtremeLocalHandling
                 else
                 {
                     data.Player.SetPlayerMaterialColors(data.Rend);
+                    data.Player.SetPlayerMaterialColors(data.Deadbodyrend);
                     data.Rend.gameObject.SetActive(true);
                     UpdateMap();
                 }
@@ -391,15 +392,13 @@ public static class XtremeLocalHandling
         foreach (var data in XtremePlayerData.AllPlayerData)
         {
             var player = data.Player;
-            if (data.Deadbodyrend)
-                data.Deadbodyrend.gameObject.SetActive(CanSeeTargetRole(player, out _));
+            if (data.Deadbodyrend != null)
+                data.Deadbodyrend.gameObject.SetActive(CanSeeTargetRole(player, out _) && player.GetXtremeData().RealDeathReason is VanillaDeathReason.Kill);
             if (data.IsDisconnected || !CanSeeTargetRole(player, out _) || player.IsLocalPlayer())
             {
                 data.Rend.gameObject.SetActive(false);
                 continue;
             }
-            if (data.IsDead)
-                data.Rend.color = Color.white.AlphaMultiplied(0.6f);
            
             var vector = player.transform.position;
             if (MeetingHud.Instance && data.PreMeetingPosition != null)
@@ -416,6 +415,11 @@ public static class XtremeLocalHandling
             vector.z = -1f;
             data.Rend.transform.localPosition = vector;
             data.Rend.gameObject.SetActive(true);
+            
+            if (data.IsDead)
+                data.Rend.color = Color.white.AlphaMultiplied(0.6f);
+            else
+                data.Deadbodyrend.transform.localPosition = vector;
         }
     }
 

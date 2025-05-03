@@ -7,6 +7,7 @@ using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game;
 using UnityEngine;
 using static AmongUs.GameOptions.RoleTypes;
+using Object = UnityEngine.Object;
 
 namespace FinalSuspect.DataHandling;
 
@@ -155,8 +156,7 @@ public class XtremePlayerData : IDisposable
         SetDeathReason(VanillaDeathReason.Kill);
         killer.KillCount++;
         RealKiller = killer;
-
-        Info($"Set Real Killer For {Player.GetNameWithRole()}, Killer: {killer.Player.GetNameWithRole()}, DeathReason:", "Data");
+        Info($"Set Real Killer For {Player.GetNameWithRole()}, Killer: {killer.Player.GetNameWithRole()}", "Data");
     }
     
     public void SetTaskTotalCount(int count) => TotalTaskCount = count;
@@ -168,21 +168,28 @@ public class XtremePlayerData : IDisposable
     {
         DisposeAll();
         AllPlayerData = [];
-        foreach (var pc in PlayerControl.AllPlayerControls)
-        {
-            CreateDataFor(pc);
-        }
+        if (IsFreePlay)
+            foreach (var data in GameData.Instance.AllPlayers)
+            {
+                CreateDataFor(data.Object);
+            }
+        else
+            foreach (var pc in Main.AllPlayerControls)
+            {
+                CreateDataFor(pc);
+            }
     }
 
     public static void CreateDataFor(PlayerControl player, string playername = null)
     {
         try
         {
-            Info($"Creating XtremePlayerData For {player.GetClient().PlayerName}({player.GetClient().FriendCode})", "Data");
             var colorId = player.Data.DefaultOutfit.ColorId;
             playername ??= player.GetRealName();
            
             AllPlayerData.Add(new XtremePlayerData(player, playername, colorId));
+            Info($"Creating XtremePlayerData For {player.GetClient().PlayerName ?? "Playername null"}({player.GetClient().FriendCode ?? "Friendcode null"})", "Data");
+
         }
         catch
         {

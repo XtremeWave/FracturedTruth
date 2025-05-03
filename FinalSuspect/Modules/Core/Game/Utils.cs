@@ -401,6 +401,7 @@ public static class Utils
             _ => false,
         };
     }
+  
     public static bool CanSeeTargetRole(PlayerControl target, out bool bothImp)
     {
         var LocalDead = !PlayerControl.LocalPlayer.IsAlive();
@@ -411,8 +412,10 @@ public static class Utils
         return target.IsLocalPlayer() ||
                BothDeathCanSee ||
                bothImp && LocalDead || 
-               Main.GodMode.Value;
+               Main.GodMode.Value || 
+               IsFreePlay;
     }
+    
     public static bool CanSeeOthersRole()
     {
         if (!IsInGame) return true;
@@ -420,7 +423,9 @@ public static class Utils
         var LocalDead = !PlayerControl.LocalPlayer.IsAlive();
         var IsAngel = PlayerControl.LocalPlayer.GetRoleType() is GuardianAngel;
         
-        return !IsAngel && LocalDead || Main.GodMode.Value;
+        return !IsAngel && LocalDead || 
+               Main.GodMode.Value || 
+               IsFreePlay;
     }
     public static void ExecuteWithTryCatch(this Action action, bool Log = false)
     {

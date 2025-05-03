@@ -50,13 +50,16 @@ class PlayerStartPatch
         bottomText.enabled = false;
     }
 }
+
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.SetTasks))]
 class PlayerControlSetTasksPatch
 {
     public static void Postfix(PlayerControl __instance, [HarmonyArgument(0)] List<NetworkedPlayerInfo.TaskInfo> tasks)
     {
-        var pc = __instance;
-        pc.SetTaskTotalCount(tasks.Count);
+        // 自由模式假人处理
+        if (__instance.GetXtremeData() == null)
+            XtremePlayerData.CreateDataFor(__instance);
+        __instance.SetTaskTotalCount(tasks.Count);
     }
 }
 
