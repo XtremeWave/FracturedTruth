@@ -55,7 +55,7 @@ public class ErrorText : MonoBehaviour
         var errorDatas = ToRemove.ToList();
         if (errorDatas.Any())
         {
-            AllErrors.RemoveAll(err => errorDatas.Contains(err));
+            AllErrors.RemoveAll(errorDatas.Contains);
             UpdateText();
         }
     }

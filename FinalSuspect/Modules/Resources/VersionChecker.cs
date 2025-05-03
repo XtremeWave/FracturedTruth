@@ -124,8 +124,6 @@ public static class VersionChecker
                     CustomPopup.Show(GetString("updateCheckPopupTitle"), GetString("updateCheckFailedRetry"),
                         [(GetString("Retry"), Retry)]);
             }
-
-        
             ModUpdater.SetUpdateButtonStatus();
         }, "Check For Update");
     }

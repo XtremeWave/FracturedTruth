@@ -16,7 +16,7 @@ public static class ColorHelper
     
     public static Color HexToColor(string hex)
     {
-        ColorUtility.TryParseHtmlString(hex, out var color);
+        _ = ColorUtility.TryParseHtmlString(hex, out var color);
         return color;
     }
     

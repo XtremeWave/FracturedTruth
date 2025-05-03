@@ -38,9 +38,7 @@ public class MainThreadTask
                 TasksToRemove.Add(task);
             }
         }
-    
         // 安全移除已处理的任务
         TasksToRemove.ForEach(task => Tasks.Remove(task));
     }
-
 }

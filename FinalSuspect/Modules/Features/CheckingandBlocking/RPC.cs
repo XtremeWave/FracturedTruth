@@ -124,8 +124,7 @@ internal class RPCHandlerPatch
                 {
                     /* ignored */
                 }
-
-                break;
+            break;
         }
     }
 }

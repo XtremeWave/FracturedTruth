@@ -36,7 +36,6 @@ public static class ServerAddManager
         regionInfos.Add(CreateHttp("www.aumods.org", "Modded NA (MNA)", 443, true));
         regionInfos.Add(CreateHttp("au-eu.duikbo.at", "Modded EU (MEU)", 443, true));
 
-        
         var defaultRegion = serverManager.CurrentRegion;
         regionInfos.Where(x => !serverManager.AvailableRegions.Contains(x)).Do(serverManager.AddOrUpdateRegion);
         serverManager.SetRegion(defaultRegion);

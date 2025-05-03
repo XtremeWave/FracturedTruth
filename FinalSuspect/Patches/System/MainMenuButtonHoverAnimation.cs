@@ -8,7 +8,6 @@ namespace FinalSuspect.Patches.System;
 [HarmonyPatch]
 public class MainMenuButtonHoverAnimation
 {
-
     [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start)), HarmonyPostfix]
     [HarmonyPriority(Priority.Last)]
     private static void Start_Postfix(MainMenuManager __instance)
@@ -52,11 +51,7 @@ public class MainMenuButtonHoverAnimation
         if (GameObject.Find("MainUI") == null) return;
 
         if (!ModNewsHistory.AnnouncementLoadComplete)
-        {
-            
-            FormatButtonColor(__instance, __instance.newsButton, new Color(0.9f, 0.9f, 1f), new Color(0f, 0f, 0f, 0f), Color.white,
-                Color.white);
-        }
+            FormatButtonColor(__instance, __instance.newsButton, new Color(0.9f, 0.9f, 1f), new Color(0f, 0f, 0f, 0f), Color.white, Color.white);
         else 
             FormatButtonColor(__instance, __instance.newsButton, new Color( 0.5216f, 0.7765f, 1f, 0.8f), new Color(0f, 0f, 0f, 0f), Color.white, Color.white);
 

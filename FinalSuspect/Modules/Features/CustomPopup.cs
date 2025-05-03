@@ -96,7 +96,6 @@ public static class CustomPopup
                 index++;
             }
         }
-
         Fill.SetActive(true);
         InfoScreen.SetActive(true);
 

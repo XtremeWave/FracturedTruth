@@ -130,7 +130,6 @@ public static class PathManager
         "https://gitee.com/LezaiYa/FinalSuspectAssets/raw/main/",
         "http://121.62.28.59:1145/FinalSuspect/download/",
         $"file:///{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop))}/",
-
 #endif
     };
     

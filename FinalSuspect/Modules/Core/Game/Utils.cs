@@ -97,14 +97,14 @@ public static class Utils
             var t = DateTime.Now.ToString("yyyy-MM-dd_HH.mm.ss");
             if (popup) 
                 HudManager.Instance.ShowPopUp(string.Format(GetString("Message.DumpfileSaved"), $"FinalSuspect - v{Main.DisplayedVersion}-{t}.log"));
-            else AddChatMessage(string.Format(GetString("Message.DumpfileSaved"), $"FinalSuspect - v{Main.DisplayedVersion}-{t}.log"));
+            else 
+                AddChatMessage(string.Format(GetString("Message.DumpfileSaved"), $"FinalSuspect - v{Main.DisplayedVersion}-{t}.log"));
         }
     }
 
     public static void ClearAutoLogs()
     {
-        foreach (var f in Directory.GetFiles(GetLogFolder(true).FullName + "/Final Suspect-logs"))
-            File.Delete(f);
+        foreach (var f in Directory.GetFiles(GetLogFolder(true).FullName + "/Final Suspect-logs")) File.Delete(f);
     }
     
     public static void SaveNowLog()
@@ -124,10 +124,12 @@ public static class Utils
         var logFile = file.CopyTo(fileName);
         return logFile.FullName;
     }
+
     public static void OpenDirectory(string path)
     {
         Process.Start("Explorer.exe", $"/select,{path}");
     }
+
     public static string SummaryTexts(byte id)
     {
         var thisdata = XtremePlayerData.GetXtremeDataById(id);
@@ -277,10 +279,12 @@ public static class Utils
         var text = GetProgressText(pc.PlayerId, comms);
         return enable? text : "";
     }
+
     private static string GetProgressText(byte playerId, bool comms = false)
     {
         return GetTaskProgressText(playerId, comms);
     }
+    
     public static string GetTaskProgressText(byte playerId, bool comms = false)
     {
         var data = XtremePlayerData.GetXtremeDataById(playerId);

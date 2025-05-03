@@ -41,10 +41,7 @@ public class XtremePlayerData : IDisposable
         
     public FinalAntiCheat.PlayerCheatData CheatData { get; private set; }
 
-    private XtremePlayerData(
-        PlayerControl player,
-        string playername,
-        int colorid)
+    private XtremePlayerData(PlayerControl player, string playername, int colorid)
     {
         Player = player;
         Name = playername;
@@ -168,15 +165,19 @@ public class XtremePlayerData : IDisposable
         DisposeAll();
         AllPlayerData = [];
         if (IsFreePlay)
+        {
             foreach (var data in GameData.Instance.AllPlayers)
             {
                 CreateDataFor(data.Object);
             }
+        }
         else
+        {
             foreach (var pc in Main.AllPlayerControls)
             {
                 CreateDataFor(pc);
             }
+        }
     }
 
     public static void CreateDataFor(PlayerControl player, string playername = null)
@@ -188,7 +189,6 @@ public class XtremePlayerData : IDisposable
            
             AllPlayerData.Add(new XtremePlayerData(player, playername, colorId));
             Info($"Creating XtremePlayerData For {player.GetClient().PlayerName ?? "Playername null"}({player.GetClient().FriendCode ?? "Friendcode null"})", "Data");
-
         }
         catch
         {
