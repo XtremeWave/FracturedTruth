@@ -1,5 +1,4 @@
 using System.Linq;
-using AmongUs.GameOptions;
 using static AmongUs.GameOptions.RoleTypes;
 using Object = UnityEngine.Object;
 
@@ -41,7 +40,7 @@ public static class MeetingHudPatch
             }
             catch 
             {
-                /* Ignore */ 
+                /* ignored */
             }
         }
     }

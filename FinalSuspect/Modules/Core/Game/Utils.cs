@@ -169,7 +169,7 @@ public static class Utils
         {
             if (CachedSprites.TryGetValue(file + pixelsPerUnit, out var sprite)) return sprite;
             var texture = LoadTextureFromResources(file);
-            sprite = Sprite.Create(texture, new(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), pixelsPerUnit);
+            sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), pixelsPerUnit);
             sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
             return CachedSprites[file + pixelsPerUnit] = sprite;
         }

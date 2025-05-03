@@ -105,7 +105,7 @@ internal class RPCHandlerPatch
                         XtremeGameData.PlayerVersion.playerVersion[__instance.PlayerId] = XtremeGameData.PlayerVersion.playerVersion[0];
 
                     // Kick Unmached Player Start
-                    /*if (AmongUsClient.Instance.AmHost && tag != $"{ThisAssembly.Git.Commit}({ThisAssembly.Git.Branch})")
+                    /*if (AmongUsClient.Instance.AmHost && tag != $"{Main.GitCommit}({Main.GitBranch})")
                     {
                         if (forkId != Main.ForkId)
                             _ = new LateTask(() =>
@@ -122,7 +122,7 @@ internal class RPCHandlerPatch
                 }
                 catch
                 {
-                    // ignored
+                    /* ignored */
                 }
 
                 break;
@@ -141,16 +141,16 @@ internal static class RPC
             {
                 var writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)RpcCalls.CancelPet);
                 writer.Write(Main.PluginVersion);
-                writer.Write($"{ThisAssembly.Git.Commit}({ThisAssembly.Git.Branch})");
+                writer.Write($"{Main.GitCommit}({Main.GitBranch})");
                 writer.Write(Main.ForkId);
                 writer.EndMessage();
             }
             XtremeGameData.PlayerVersion.playerVersion[PlayerControl.LocalPlayer.PlayerId] = 
-                new XtremeGameData.PlayerVersion(Main.PluginVersion, $"{ThisAssembly.Git.Commit}({ThisAssembly.Git.Branch})", Main.ForkId);
+                new XtremeGameData.PlayerVersion(Main.PluginVersion, $"{Main.GitCommit}({Main.GitBranch})", Main.ForkId);
         }
         catch
         {
-            // ignored
+            /* ignored */
         }
     }
 
@@ -167,7 +167,7 @@ internal static class RPC
         }
         catch
         {
-            // ignored
+            /* ignored */
         }
 
         Info($"FromNetID:{targetNetId}({from}) TargetClientID:{targetClientId}({target}) CallID:{callId}({rpcName})", "SendRPC");

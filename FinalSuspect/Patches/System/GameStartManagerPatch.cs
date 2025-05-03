@@ -5,6 +5,7 @@ using FinalSuspect.Modules.Resources;
 using InnerNet;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Patches.System;
@@ -56,7 +57,7 @@ public class GameStartManagerPatch
 
             warningText = Object.Instantiate(__instance.GameStartText, __instance.transform);
             warningText.name = "WarningText";
-            warningText.transform.localPosition = new(0f, 0f - __instance.transform.localPosition.y, -1f);
+            warningText.transform.localPosition = new Vector3(0f, 0f - __instance.transform.localPosition.y, -1f);
             warningText.gameObject.SetActive(false);
 
             if (AmongUsClient.Instance.AmHost)
@@ -77,7 +78,7 @@ public class GameStartManagerPatch
             timerText.outlineWidth = 0.40f;
             timerText.hideFlags = HideFlags.None;
             timerText.transform.localPosition += new Vector3(-0.55f,  -0.4f, 0f);
-            timerText.transform.localScale = new(0.7f, 0.7f, 1f);
+            timerText.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
             timerText.gameObject.SetActive(AmongUsClient.Instance.NetworkMode == NetworkModes.OnlineGame && IsVanillaServer);
 
             cancelButton = Object.Instantiate(__instance.StartButton, __instance.transform);
@@ -85,7 +86,7 @@ public class GameStartManagerPatch
             cancelLabel.DestroyTranslator();
             cancelLabel.text = GetString("Cancel");
             var cancelButtonInactiveRenderer = cancelButton.inactiveSprites.GetComponent<SpriteRenderer>();
-            cancelButtonInactiveRenderer.color = new(0.8f, 0f, 0f, 1f);
+            cancelButtonInactiveRenderer.color = new Color(0.8f, 0f, 0f, 1f);
             var cancelButtonActiveRenderer = cancelButton.activeSprites.GetComponent<SpriteRenderer>();
             cancelButtonActiveRenderer.color = Color.red;
             var cancelButtonInactiveShine = cancelButton.inactiveSprites.transform.Find("Shine");
@@ -95,7 +96,7 @@ public class GameStartManagerPatch
             }
             cancelButton.activeTextColor = cancelButton.inactiveTextColor = Color.white;
             GameStartTextlocalPosition = __instance.GameStartText.transform.localPosition;
-            cancelButton.OnClick = new();
+            cancelButton.OnClick = new Button.ButtonClickedEvent();
             cancelButton.OnClick.AddListener((Action)(() =>
             {
                 __instance.ResetStartState();
@@ -120,12 +121,12 @@ public class GameStartManagerPatch
             // Lobby code
             if (DataManager.Settings.Gameplay.StreamerMode)
             {
-                __instance.GameRoomNameCode.color = new(__instance.GameRoomNameCode.color.r, __instance.GameRoomNameCode.color.g, __instance.GameRoomNameCode.color.b, 0); 
+                __instance.GameRoomNameCode.color = new Color(__instance.GameRoomNameCode.color.r, __instance.GameRoomNameCode.color.g, __instance.GameRoomNameCode.color.b, 0); 
                 HideName.enabled = !IsLocalGame;
             }
             else
             {
-                __instance.GameRoomNameCode.color = new(__instance.GameRoomNameCode.color.r, __instance.GameRoomNameCode.color.g, __instance.GameRoomNameCode.color.b, 255);
+                __instance.GameRoomNameCode.color = new Color(__instance.GameRoomNameCode.color.r, __instance.GameRoomNameCode.color.g, __instance.GameRoomNameCode.color.b, 255);
                 HideName.enabled = false;
             }
 
@@ -219,7 +220,7 @@ public class GameStartManagerPatch
             if (!XtremeGameData.PlayerVersion.playerVersion.TryGetValue(playerId, out var version)) return acceptVanilla;
             return Main.ForkId == version.forkId
                    && Main.version.CompareTo(version.version) == 0
-                   && version.tag == $"{ThisAssembly.Git.Commit}({ThisAssembly.Git.Branch})";
+                   && version.tag == $"{Main.GitCommit}({Main.GitBranch})";
         }
     }
 }

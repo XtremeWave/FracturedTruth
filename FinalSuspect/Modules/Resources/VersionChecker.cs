@@ -38,7 +38,7 @@ public static class VersionChecker
     public static bool forceUpdate;
     public static bool isBroken;
     public static bool isChecked;
-    public static bool DebugUnused = false;
+    public static bool DebugUnused;
     public static string versionInfoRaw = "";
 
     public static Version latestVersion;
@@ -158,20 +158,20 @@ public static class VersionChecker
 
             var data = JObject.Parse(result);
 
-            verHead = new(data["verHead"]?.ToString());
+            verHead = new string(data["verHead"]?.ToString());
 
-            DebugVer = new(data["DebugVer"]?.ToString() ?? string.Empty);
+            DebugVer = new Version(data["DebugVer"]?.ToString() ?? string.Empty);
 
-            CanUpdate = bool.Parse(new(data["CanUpdate"]?.ToString()));
+            CanUpdate = bool.Parse(new string(data["CanUpdate"]?.ToString()));
 
-            verDate = new(data["verDate"]?.ToString());
+            verDate = new string(data["verDate"]?.ToString());
             md5 = data["md5"]?.ToString();
-            latestVersion = new(data["version"]?.ToString() ?? string.Empty);
+            latestVersion = new Version(data["version"]?.ToString() ?? string.Empty);
 
             showVer = $"{verHead}_{verDate}";
 
             var minVer = data["minVer"]?.ToString();
-            if (minVer != null) minimumVersion = minVer?.ToLower() == "latest" ? latestVersion : new(minVer);
+            if (minVer != null) minimumVersion = minVer.ToLower() == "latest" ? latestVersion : new Version(minVer);
             creation = int.Parse(data["creation"]?.ToString() ?? string.Empty);
             isBroken = data["allowStart"]?.ToString().ToLower() != "true";
 

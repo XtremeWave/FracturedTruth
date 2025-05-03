@@ -54,7 +54,7 @@ class DisconnectInternalPatch
         }
         catch
         {
-            // ignored
+            /* ignored */
         }
     }
 }
@@ -137,7 +137,7 @@ class OnPlayerLeftPatch
         }
         catch
         {
-            // ignored
+            /* ignored */
         }
     }
 }

@@ -17,11 +17,11 @@ public static class CustomSoundsManager
             if (audio.CurrectAudioStates is AudiosStates.NotExist or AudiosStates.IsPlaying) return;
             if (!Constants.ShouldPlaySfx()) return;
         
-            _ = new LateTask(() =>
+            _ = new MainThreadTask(() =>
             {
                 StopPlayMod();
                 StopPlayVanilla();
-            }, 0.01F, "Playing Sfx");
+            }, "Playing Sfx");
         
             await LoadClip(audio.CurrectAudio);
         
@@ -41,7 +41,7 @@ public static class CustomSoundsManager
         }
         catch
         {
-            // ignored
+            /* ignored */
         }
     }
  
@@ -171,7 +171,7 @@ public class AudioManagementPlaySoundPatch
 
 [HarmonyPatch(typeof(global::SoundManager), nameof(global::SoundManager.PlayDynamicSound))]
 [HarmonyPatch(typeof(global::SoundManager), nameof(global::SoundManager.PlayNamedSound))]
-public class AudioManagementPlayDynamicandNamedSoundPatch
+public class AudioManagementPlayDynamicAndNamedSoundPatch
 {
     public static bool Prefix([HarmonyArgument(0)] string name, [HarmonyArgument(1)] AudioClip clip, [HarmonyArgument(2)] bool loop)
     {

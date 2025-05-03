@@ -118,7 +118,7 @@ public static class LoadPatch
 
         private static bool CheckFastBootCondition()
         {
-            var currentVersion = $"{Main.PluginVersion}|{Main.DisplayedVersion}|{ThisAssembly.Git.Commit}-{ThisAssembly.Git.Branch}";
+            var currentVersion = $"{Main.PluginVersion}|{Main.DisplayedVersion}|{Main.GitCommit}-{Main.GitBranch}";
             var bypassPathOnce = GetBypassFileType(FileType.Languages, BypassType.Once);
             var bypassPathLongTerm = GetBypassFileType(FileType.Languages, BypassType.Longterm);
 

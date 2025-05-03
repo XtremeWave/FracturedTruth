@@ -40,7 +40,7 @@ class RolesSettingsMenuPatch
         }
         catch
         {
-            // ignored
+            /* ignored */
         }
     }
 
@@ -249,7 +249,7 @@ class GameSettingMenuPatch
         }
         catch
         {
-            // ignored
+            /* ignored */
         }
     }
     static void SetColor(GameObject obj, Color bgcolor)

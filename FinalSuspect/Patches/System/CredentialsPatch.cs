@@ -7,6 +7,8 @@ using FinalSuspect.Templates;
 using Il2CppSystem;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 using ColorHelper = FinalSuspect.Helpers.ColorHelper;
 using Object = UnityEngine.Object;
 
@@ -19,6 +21,7 @@ internal class PingTrackerUpdatePatch
     public static string ServerName = "";
     private static TextMeshPro CreditTextCredential;
     private static AspectPosition CreditTextCredentialAspectPos;
+
     public static void Postfix(PingTracker __instance)
     {
         if (CreditTextCredential == null)
@@ -27,17 +30,20 @@ internal class PingTrackerUpdatePatch
             CreditTextCredential = uselessPingTracker.GetComponent<TextMeshPro>();
             Object.Destroy(uselessPingTracker);
             CreditTextCredential.alignment = TextAlignmentOptions.TopRight;
-            CreditTextCredential.color = new(1f, 1f, 1f, 0.7f);
-            CreditTextCredential.rectTransform.pivot = new(1f, 1f);  // 中心を右上角に設定
+            CreditTextCredential.color = new Color(1f, 1f, 1f, 0.7f);
+            CreditTextCredential.rectTransform.pivot = new Vector2(1f, 1f);  // 将中心点设定在右上角
             CreditTextCredentialAspectPos = CreditTextCredential.GetComponent<AspectPosition>();
             CreditTextCredentialAspectPos.Alignment = AspectPosition.EdgeAlignments.RightTop;
         }
+        
         if (CreditTextCredentialAspectPos)
         {
             CreditTextCredentialAspectPos.DistanceFromEdge = 
                 DestroyableSingleton<HudManager>.InstanceExists && DestroyableSingleton<HudManager>.Instance.Chat.chatButton.gameObject.active 
-                    ? new(2.5f, 0f, -800f) : new(1.8f, 0f, -800f);
+                    ? new Vector3(2.5f, 0f, -800f) 
+                    : new Vector3(1.8f, 0f, -800f);
         }
+
         StringBuilder sb = new();
         
         sb.Append(Main.CredentialsText);
@@ -51,11 +57,14 @@ internal class PingTrackerUpdatePatch
             CreditTextCredential.text = "";
 
         var ping = AmongUsClient.Instance.Ping;
-        var color = "#ff4500";
-        if (ping < 50) color = "#44dfcc";
-        else if (ping < 100) color = "#7bc690";
-        else if (ping < 200) color = "#f3920e";
-        else if (ping < 400) color = "#ff146e";
+        var color = ping switch
+        {
+            < 50 => "#44dfcc",
+            < 100 => "#7bc690",
+            < 200 => "#f3920e",
+            < 400 => "#ff146e",
+            _ => "#ff4500"
+        };
 
         deltaTime += (Time.deltaTime - deltaTime) * 0.1f;
         var fps = Mathf.Ceil(1.0f / deltaTime);
@@ -67,6 +76,7 @@ internal class PingTrackerUpdatePatch
             $"{"    <color=#FFDCB1>◈</color>" + (IsOnlineGame ? ServerName : GetString("Local"))}";
     }
 }
+
 [HarmonyPatch(typeof(VersionShower), nameof(VersionShower.Start))]
 public class VersionShowerStartPatch
 {
@@ -86,13 +96,6 @@ public class VersionShowerStartPatch
         Main.CredentialsText += "\r\n <color=#fffcbe> By </color><color=#cdfffd>XtremeWave</color></size>";
         Main.CredentialsText += $"\r\n<color=#C8FF78>v{Main.DisplayedVersion}</color>";
 
-#if DEBUG
-        Main.CredentialsText += $"\r\n<color={ColorHelper.ModColor}>{ThisAssembly.Git.Branch}</color> - {ThisAssembly.Git.Commit}";
-#endif
-
-#if CANARY
-        Main.CredentialsText += $"\r\n<color={ColorHelper.ModColor}>{ThisAssembly.Git.Branch}</color> - {ThisAssembly.Git.Commit}";
-#endif
 
 #if RELEASE
         var additionalCredentials = GetString("TextBelowVersionText");
@@ -100,6 +103,8 @@ public class VersionShowerStartPatch
         {
             Main.CredentialsText += $"\r\n{additionalCredentials}";
         }
+#else
+        Main.CredentialsText += $"\r\n<color={ColorHelper.ModColor}>{Main.GitBranch}</color> - {Main.GitCommit}";
 #endif
 
         ErrorText.Create(__instance.text);
@@ -117,12 +122,8 @@ public class VersionShowerStartPatch
             credentialsText += "\n";
             var versionText = $"<color={ColorHelper.ModColor}>FS</color> - <color=#C8FF78>v{Main.DisplayedVersion}</color>";
 
-#if DEBUG
-        versionText = $"<color={ColorHelper.ModColor}>{ThisAssembly.Git.Branch}</color> - {ThisAssembly.Git.Commit}";
-#endif
-
-#if CANARY
-        versionText = $"<color={ColorHelper.ModColor}>{ThisAssembly.Git.Branch}</color> - {ThisAssembly.Git.Commit}";
+#if !RELEASE
+            versionText = $"<color={ColorHelper.ModColor}>{Main.GitBranch}</color> - {Main.GitCommit}";
 #endif
             credentialsText += versionText;
 
@@ -142,7 +143,8 @@ public class VersionShowerStartPatch
             var ap2 = CreditTextCredential.GetComponent<AspectPosition>();
             if (ap2 != null) Object.Destroy(ap2);
         }
-        TeamLogo = new()
+        
+        TeamLogo = new GameObject
         {
             layer = 5,
             name = "Team Logo"
@@ -152,7 +154,7 @@ public class VersionShowerStartPatch
         TeamLogo.transform.SetParent(VisitText.transform.parent);
         TeamLogo.transform.localPosition = new Vector3(-4.72f, -2.5f, 0f);
         TeamLogo.SetActive(false);
-        ModLogo = new()
+        ModLogo = new GameObject
         {
             layer = 5,
             name = "Mod Logo"
@@ -164,6 +166,7 @@ public class VersionShowerStartPatch
     }
 
     private static VersionShower Instance;
+    
     public static void CreateVisitText(VersionShower __instance)
     {
         if (__instance == null)
@@ -172,6 +175,7 @@ public class VersionShowerStartPatch
         {
             Instance = __instance;
         }
+        
         VisitText = Object.Instantiate(__instance.text);
         VisitText.name = "FinalSuspect VisitText";
         VisitText.alignment = TextAlignmentOptions.Left;
@@ -191,6 +195,7 @@ public class VersionShowerStartPatch
         if (ap2 != null) Object.Destroy(ap2);
     }
 }
+
 [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start)), HarmonyPriority(Priority.First)]
 internal class TitleLogoPatch
 {
@@ -221,19 +226,19 @@ internal class TitleLogoPatch
         {
             {
                 [__instance.playButton, __instance.inventoryButton, __instance.shopButton],
-                (standardActiveSprite, new(0.5216f, 1f, 0.9490f, 0.8f), shade, Color.white, Color.white)
+                (standardActiveSprite, new Color(0.5216f, 1f, 0.9490f, 0.8f), shade, Color.white, Color.white)
             },
             {
                 [__instance.newsButton, __instance.myAccountButton, __instance.settingsButton],
-                (minorActiveSprite, new( 0.5216f, 0.7765f, 1f, 0.8f), shade, Color.white, Color.white)
+                (minorActiveSprite, new Color( 0.5216f, 0.7765f, 1f, 0.8f), shade, Color.white, Color.white)
             },
             {
                 [__instance.creditsButton, __instance.quitButton],
-                (minorActiveSprite, new(0.7294f, 0.6353f, 1.0f, 0.8f), shade, Color.white, Color.white)
+                (minorActiveSprite, new Color(0.7294f, 0.6353f, 1.0f, 0.8f), shade, Color.white, Color.white)
             },
             {
                 [friendsButton],
-                (minorActiveSprite, new(0.0235f, 0f, 0.8f, 0.8f), shade, Color.white, Color.white)
+                (minorActiveSprite, new Color(0.0235f, 0f, 0.8f, 0.8f), shade, Color.white, Color.white)
             },
         };
 
@@ -247,21 +252,27 @@ internal class TitleLogoPatch
                 FormatButtonColor(__instance, button, kvp.Value.Item2, kvp.Value.Item3, kvp.Value.Item4, kvp.Value.Item5);
             });
         }
+        
         try
         {
             mainButtons.Keys.Flatten()?.DoIf(x => x != null, x => x.buttonText.color = Color.white);
         }
         catch
         {
-            // ignored
+            /* ignored */
         }
 
         if (!(ModStamp = GameObject.Find("ModStamp"))) return;
         ModStamp.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
         ModStamp.GetComponent<SpriteRenderer>().sprite = LoadSprite("ModStamp.png", 100f);
 
-        FinalSuspect_Background = new GameObject("FinalSuspect Background");
-        FinalSuspect_Background.transform.position = new Vector3(0, 0, 520f);
+        FinalSuspect_Background = new GameObject("FinalSuspect Background")
+        {
+            transform =
+            {
+                position = new Vector3(0, 0, 520f)
+            }
+        };
         var bgRenderer = FinalSuspect_Background.AddComponent<SpriteRenderer>();
         bgRenderer.sprite = LoadSprite("FinalSuspect-BG-MiraHQ.jpg", 179f);
 
@@ -274,7 +285,6 @@ internal class TitleLogoPatch
 
         if (!(LeftPanel = GameObject.Find("LeftPanel"))) return;
         LeftPanel.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
-        static void ResetParent(GameObject obj) => obj.transform.SetParent(LeftPanel.transform.parent);
         LeftPanel.ForEachChild((Action<GameObject>)ResetParent);
         LeftPanel.SetActive(false);
 
@@ -285,23 +295,23 @@ internal class TitleLogoPatch
         if (rpap) Object.Destroy(rpap);
         RightPanelOp = RightPanel.transform.localPosition;
         RightPanel.transform.localPosition = RightPanelOp + new Vector3(10f, 0f, 0f);
-        RightPanel.GetComponent<SpriteRenderer>().color = new(1f, 0.78f, 0.9f, 1f);
+        RightPanel.GetComponent<SpriteRenderer>().color = new Color(1f, 0.78f, 0.9f, 1f);
 
         CloseRightButton = new GameObject("CloseRightPanelButton");
         CloseRightButton.transform.SetParent(RightPanel.transform);
         CloseRightButton.transform.localPosition = new Vector3(-4.78f, 1.3f, 1f);
-        CloseRightButton.transform.localScale = new(1f, 1f, 1f);
-        CloseRightButton.AddComponent<BoxCollider2D>().size = new(0.6f, 1.5f);
+        CloseRightButton.transform.localScale = new Vector3(1f, 1f, 1f);
+        CloseRightButton.AddComponent<BoxCollider2D>().size = new Vector2(0.6f, 1.5f);
         var closeRightSpriteRenderer = CloseRightButton.AddComponent<SpriteRenderer>();
         closeRightSpriteRenderer.sprite = LoadSprite("RightPanelCloseButton.png", 100f);
-        closeRightSpriteRenderer.color = new(1f, 0.78f, 0.9f, 1f);
+        closeRightSpriteRenderer.color = new Color(1f, 0.78f, 0.9f, 1f);
         var closeRightPassiveButton = CloseRightButton.AddComponent<PassiveButton>();
-        closeRightPassiveButton.OnClick = new();
+        closeRightPassiveButton.OnClick = new Button.ButtonClickedEvent();
         closeRightPassiveButton.OnClick.AddListener((global::System.Action)MainMenuManagerPatch.HideRightPanel);
-        closeRightPassiveButton.OnMouseOut = new();
-        closeRightPassiveButton.OnMouseOut.AddListener((global::System.Action)(() => closeRightSpriteRenderer.color = new(1f, 0.78f, 0.9f, 1f)));
-        closeRightPassiveButton.OnMouseOver = new();
-        closeRightPassiveButton.OnMouseOver.AddListener((global::System.Action)(() => closeRightSpriteRenderer.color = new(1f, 0.68f, 0.99f, 1f)));
+        closeRightPassiveButton.OnMouseOut = new UnityEvent();
+        closeRightPassiveButton.OnMouseOut.AddListener((global::System.Action)(() => closeRightSpriteRenderer.color = new Color(1f, 0.78f, 0.9f, 1f)));
+        closeRightPassiveButton.OnMouseOver = new UnityEvent();
+        closeRightPassiveButton.OnMouseOver.AddListener((global::System.Action)(() => closeRightSpriteRenderer.color = new Color(1f, 0.68f, 0.99f, 1f)));
 
         Tint = __instance.screenTint.gameObject;
         var ttap = Tint.GetComponent<AspectPosition>();
@@ -329,13 +339,16 @@ internal class TitleLogoPatch
 
         if (!(BottomButtonBounds = GameObject.Find("BottomButtonBounds"))) return;
         BottomButtonBounds.transform.localPosition -= new Vector3(0f, 0.1f, 0f);
+        return;
+        static void ResetParent(GameObject obj) => obj.transform.SetParent(LeftPanel.transform.parent);
     }
 }
 
 [HarmonyPatch(typeof(ModManager), nameof(ModManager.LateUpdate))]
 internal class ModManagerLateUpdatePatch
 {
-    static  bool firstRun;
+    private static bool firstRun;
+ 
     public static void Prefix(ModManager __instance)
     {
         __instance.ShowModStamp();
@@ -345,6 +358,7 @@ internal class ModManagerLateUpdatePatch
             __instance.ModStamp.sprite = LoadSprite("ModStamp.png", 100f);
             firstRun = true;
         }
+        
         LateTask.Update(Time.deltaTime);
         MainThreadTask.Update();
     }
@@ -357,6 +371,7 @@ internal class ModManagerLateUpdatePatch
             new Vector3(0.4f, offset_y, __instance.localCamera.nearClipPlane + 0.1f));
     }
 }
+
 [HarmonyPatch(typeof(CreditsScreenPopUp))]
 internal class CreditsScreenPopUpPatch
 {

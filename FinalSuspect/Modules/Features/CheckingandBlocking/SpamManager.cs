@@ -7,7 +7,6 @@ using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using FinalSuspect.Modules.Core.Game;
 using Newtonsoft.Json.Linq;
 
 namespace FinalSuspect.Modules.Features.CheckingandBlocking;
@@ -94,33 +93,8 @@ public static class SpamManager
                 sendList.Add(text.Replace("\\n", "\n").ToLower());
         return sendList;
     }
-
-    public static void CheckSpam(ref string text)
-    {
-        if (!Main.SpamDenyWord.Value) return;
-        try
-        {
-            var mt = text;
-            var banned = BanWords.Any(mt.ToLower().Contains);
-
-            if (banned)
-            {
-                foreach (var word in BanWords)
-                {
-                    if (text.ToLower().Contains(word.ToLower()))
-                    {
-                        text = text.Replace(word, $"<color=#E57373>{new string('*', word.Length)}</color>");
-                    }
-                }
-            }
-        }
-        catch
-        {
-            // ignored
-        }
-    }
-
-    public static async Task<bool> GetConfigs(string url, string name)
+    
+    private static async Task<bool> GetConfigs(string url, string name)
     {
         try
         {
@@ -283,5 +257,27 @@ public static class SpamManager
         return !Main.AllPlayerControls
             .Where(p => p.IsDev())
             .Any(p => line.Contains(p.FriendCode, StringComparison.OrdinalIgnoreCase));
+    }
+    
+    public static void CheckSpam(ref string text)
+    {
+        if (!Main.SpamDenyWord.Value || BanWords.Count == 0) return;
+
+        try
+        {
+            var lowerText = text.ToLowerInvariant();
+            var bannedWords = BanWords.Where(word => lowerText.Contains(word.ToLowerInvariant())).ToList();
+
+            if (bannedWords.Count == 0) return;
+            
+            var pattern = string.Join("|", bannedWords.Select(Regex.Escape));
+            text = Regex.Replace(text, pattern, match => 
+                    $"<color=#E57373>{new string('*', match.Value.Length)}</color>", 
+                RegexOptions.IgnoreCase);
+        }
+        catch 
+        {
+            /* ignored */
+        }
     }
 }

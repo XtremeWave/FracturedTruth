@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using FinalSuspect.Attributes;
-using FinalSuspect.Helpers;
 
 namespace FinalSuspect.Modules.Resources;
 
@@ -110,7 +109,7 @@ public static class PathManager
         }
         catch 
         {
-            /*Ignore*/
+            /* ignored */
         }
     }
     

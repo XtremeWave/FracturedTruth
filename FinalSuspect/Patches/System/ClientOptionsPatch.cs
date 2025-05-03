@@ -106,11 +106,11 @@ public static class OptionsMenuBehaviourStartPatch
 
         CreateFeatureItem(ref DumpLog, "DumpLog", () =>
         {
-            Utils.DumpLog();
+            DumpLog();
         }, __instance);
         CreateFeatureItem(ref ClearAutoLogs, "ClearAutoLogs", () =>
         {
-            Utils.ClearAutoLogs();
+            ClearAutoLogs();
             SetFeatureItemDisabled(ClearAutoLogs);
         }, __instance);
         CreateFeatureItem(ref UnloadMod, "UnloadMod", ModUnloaderScreen.Show, __instance);
@@ -180,6 +180,7 @@ public static class OptionsMenuBehaviourStartPatch
             Object.Destroy(item.ToggleButton.gameObject);
             item = null;
         }
+        
         if (item == null || item.ToggleButton == null)
         {
             item = ClientActionItem.Create(name, action, instance);
@@ -205,6 +206,7 @@ public static class OptionsMenuBehaviourStartPatch
         item.ToggleButton.GetComponent<PassiveButton>().enabled = true;
         item.ToggleButton.Background.color = ColorHelper.ClientFeatureColor;
     }
+
     private static void SetOptionItemDisabled(ClientOptionItem_Boolean item)
     {
         item.ToggleButton.Text.text += $"\n|{GetString("OnlyAvailableInMainMenu")}|";
@@ -301,7 +303,7 @@ public static class LanguageSetterSetLanguagePatch
         }
         catch
         {
-            // ignored
+            /* ignored */
         }
 
         VersionShowerStartPatch.VisitText = null;

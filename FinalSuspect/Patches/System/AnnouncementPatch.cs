@@ -111,7 +111,7 @@ public class ModNewsHistory
 		sr.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
 	}
 	
-	public static bool AnnouncementLoadComplete = false;
+	public static bool AnnouncementLoadComplete;
 
 	public static async Task LoadModAnnouncements()
 	{
@@ -140,7 +140,7 @@ public class ModNewsHistory
 						}
 						catch 
 						{
-							/*Ignore*/
+							/* ignored */
 						}
 						break;
 					}
@@ -159,7 +159,7 @@ public class ModNewsHistory
 		}
 		catch
 		{
-			/*Ignore*/
+			/* ignored */
 		}
 	
 		AnnouncementLoadComplete = true;

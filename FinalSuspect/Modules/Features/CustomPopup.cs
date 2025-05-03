@@ -4,6 +4,7 @@ using System.Linq;
 using FinalSuspect.Helpers;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Modules.Features;
@@ -69,7 +70,7 @@ public static class CustomPopup
                 if (tmp == null) continue;
 
                 tmp.text = text;
-                button.OnClick = new();
+                button.OnClick = new Button.ButtonClickedEvent();
                 button.OnClick.AddListener((Action)(() =>
                 {
                     InfoScreen.SetActive(false);
@@ -166,7 +167,7 @@ public static class CustomPopup
                 Debug.LogError("Failed to find TitleTMP.");
                 return;
             }
-            TitleTMP.transform.localPosition = new(0f, 2.3f, 3f);
+            TitleTMP.transform.localPosition = new Vector3(0f, 2.3f, 3f);
             TitleTMP.DestroyTranslator();
             TitleTMP.text = "";
         }
@@ -179,8 +180,8 @@ public static class CustomPopup
                 Debug.LogError("Failed to find InfoTMP.");
                 return;
             }
-            InfoTMP.GetComponent<RectTransform>().sizeDelta = new(7f, 1.3f);
-            InfoTMP.transform.localScale = new(1f, 1f, 1f);
+            InfoTMP.GetComponent<RectTransform>().sizeDelta = new Vector2(7f, 1.3f);
+            InfoTMP.transform.localScale = new Vector3(1f, 1f, 1f);
             InfoTMP.DestroyTranslator();
             InfoTMP.text = "";
         }
@@ -194,8 +195,8 @@ public static class CustomPopup
                 return;
             }
             ActionButtonPrefab.gameObject.name = "ActionButtonPrefab";
-            ActionButtonPrefab.transform.localScale = new(0.66f, 0.66f, 0.66f);
-            ActionButtonPrefab.transform.localPosition = new(0f, -0.65f, 3f);
+            ActionButtonPrefab.transform.localScale = new Vector3(0.66f, 0.66f, 0.66f);
+            ActionButtonPrefab.transform.localPosition = new Vector3(0f, -0.65f, 3f);
             ActionButtonPrefab.transform.FindChild("Text_TMP")?.GetComponent<TextMeshPro>()?.DestroyTranslator();
             ActionButtonPrefab.gameObject.SetActive(false);
         }

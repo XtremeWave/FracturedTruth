@@ -7,7 +7,6 @@ using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game;
 using UnityEngine;
 using static AmongUs.GameOptions.RoleTypes;
-using Object = UnityEngine.Object;
 
 namespace FinalSuspect.DataHandling;
 
@@ -132,7 +131,7 @@ public class XtremePlayerData : IDisposable
         if (!RoleAssgined)
         {
             RoleWhenAlive = role;
-            SetIsImp(Utils.IsImpostor(role));
+            SetIsImp(IsImpostor(role));
         }
         else
         {
@@ -193,7 +192,7 @@ public class XtremePlayerData : IDisposable
         }
         catch
         {
-            // ignored
+            /* ignored */
         }
     }
 #pragma warning disable CA1816
@@ -221,7 +220,7 @@ public class XtremePlayerData : IDisposable
         }
         catch
         {
-            // ignored
+            /* ignored */
         }
     }
 }

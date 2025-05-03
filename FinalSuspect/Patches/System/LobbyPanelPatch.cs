@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using AmongUs.GameOptions;
 using FinalSuspect.Helpers;
 using Il2CppSystem;
 using TMPro;
@@ -176,7 +175,7 @@ class LobbyViewSettingsPanePatch
         }
         catch
         {
-            // ignored
+            /* ignored */
         }
     }
     static void SetColorForRolesBanner(GameObject obj, Color iconcolor, Color bgcolor)

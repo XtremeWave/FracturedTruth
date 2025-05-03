@@ -63,7 +63,7 @@ static class ExtendedPlayerControl
         }
         catch
         {
-            // ignored
+            /* ignored */
         }
 
         var nullname = trynull;

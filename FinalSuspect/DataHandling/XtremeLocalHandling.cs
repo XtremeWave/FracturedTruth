@@ -63,12 +63,12 @@ public static class XtremeLocalHandling
                 toptext = toptext.CheckAndAppendText($"<size=1.5>{ver.forkId}</size>");
                 topcolor = ColorHelper.UnmatchedColor;
             }
-            else if (Main.version.CompareTo(ver.version) == 0 && ver.tag == $"{ThisAssembly.Git.Commit}({ThisAssembly.Git.Branch})")
+            else if (Main.version.CompareTo(ver.version) == 0 && ver.tag == $"{Main.GitCommit}({Main.GitBranch})")
             {
                 topcolor = ColorHelper.ModColor32;
             }
             else if (Main.version.CompareTo(ver.version) == 0 &&
-                     ver.tag != $"{ThisAssembly.Git.Commit}({ThisAssembly.Git.Branch})")
+                     ver.tag != $"{Main.GitCommit}({Main.GitBranch})")
             {
                 toptext = toptext.CheckAndAppendText($"<size=1.5>{ver.tag}</size>");
                 topcolor = Color.yellow;
@@ -300,7 +300,7 @@ public static class XtremeLocalHandling
             }
             catch
             {
-                // ignored
+                /* ignored */
             }
         }
     }
@@ -332,7 +332,7 @@ public static class XtremeLocalHandling
             }
             catch
             {
-                // ignored
+                /* ignored */
             }
         }
     }
@@ -456,7 +456,7 @@ public static class XtremeLocalHandling
         }
         catch
         {
-            // ignored
+            /* ignored */
         }
     }
 }

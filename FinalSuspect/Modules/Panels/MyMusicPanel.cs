@@ -5,6 +5,7 @@ using FinalSuspect.Helpers;
 using FinalSuspect.Modules.SoundInterface;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using static FinalSuspect.Modules.SoundInterface.CustomSoundsManager;
 using static FinalSuspect.Modules.SoundInterface.XtremeMusic;
 using Object = UnityEngine.Object;
@@ -40,17 +41,17 @@ public static class MyMusicPanel
             PlayMode = 0;
             CustomBackground = Object.Instantiate(optionsMenuBehaviour.Background, optionsMenuBehaviour.transform);
             CustomBackground.name = "My Music Panel Background";
-            CustomBackground.transform.localScale = new(0.9f, 0.9f, 1f);
+            CustomBackground.transform.localScale = new Vector3(0.9f, 0.9f, 1f);
             CustomBackground.transform.localPosition += Vector3.back * 18;
             CustomBackground.gameObject.SetActive(false);
 
             var closeButton = Object.Instantiate(mouseMoveToggle, CustomBackground.transform);
-            closeButton.transform.localPosition = new(1.3f, -2.43f, -16f);
+            closeButton.transform.localPosition = new Vector3(1.3f, -2.43f, -16f);
             closeButton.name = "Close";
             closeButton.Text.text = GetString("Close");
             closeButton.Background.color = Color.red;
             var closePassiveButton = closeButton.GetComponent<PassiveButton>();
-            closePassiveButton.OnClick = new();
+            closePassiveButton.OnClick = new Button.ButtonClickedEvent();
             closePassiveButton.OnClick.AddListener(new Action(() =>
             {
                 
@@ -58,7 +59,7 @@ public static class MyMusicPanel
             }));
 
             var stopButton = Object.Instantiate(mouseMoveToggle, CustomBackground.transform);
-            stopButton.transform.localPosition = new(1.3f, -1.88f, -16f);
+            stopButton.transform.localPosition = new Vector3(1.3f, -1.88f, -16f);
             var stopButtonScale = stopButton.transform.localScale;
             stopButton.transform.localScale = stopButtonScale;
             stopButton.name = "stopButton";
@@ -66,18 +67,18 @@ public static class MyMusicPanel
             stopButton.Background.color = Color.white;
 
             var stopPassiveButton = stopButton.GetComponent<PassiveButton>();
-            stopPassiveButton.OnClick = new();
+            stopPassiveButton.OnClick = new Button.ButtonClickedEvent();
             stopPassiveButton.OnClick.AddListener(new Action(StopPlayMod));
 
             AddPageNavigationButton(optionsMenuBehaviour);
 
             var helpText = Object.Instantiate(optionsMenuBehaviour.DisableMouseMovement.Text, CustomBackground.transform);
             helpText.name = "Help Text";
-            helpText.transform.localPosition = new(-1.25f, -2.15f, -15f);
-            helpText.transform.localScale = new(1f, 1f, 1f);
+            helpText.transform.localPosition = new Vector3(-1.25f, -2.15f, -15f);
+            helpText.transform.localScale = new Vector3(1f, 1f, 1f);
             var helpTextTMP = helpText.GetComponent<TextMeshPro>();
             helpTextTMP.text = GetString("CustomSoundHelp");
-            helpText.gameObject.GetComponent<RectTransform>().sizeDelta = new(2.45f, 1f);
+            helpText.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(2.45f, 1f);
 
             //AddChangePlayModeButton(optionsMenuBehaviour);
         }
@@ -95,7 +96,7 @@ public static class MyMusicPanel
         nextPageButton.Background.color = Color.white;
 
         var nextPagePassiveButton = nextPageButton.GetComponent<PassiveButton>();
-        nextPagePassiveButton.OnClick = new();
+        nextPagePassiveButton.OnClick = new Button.ButtonClickedEvent();
         nextPagePassiveButton.OnClick.AddListener(new Action(() =>
         {
             CurrentPage++;
@@ -221,7 +222,7 @@ public static class MyMusicPanel
             ToggleButton.GetComponent<PassiveButton>().enabled = enable;
 
             var passiveButton = ToggleButton.GetComponent<PassiveButton>();
-            passiveButton.OnClick = new();
+            passiveButton.OnClick = new Button.ButtonClickedEvent();
             passiveButton.OnClick.AddListener(new Action(OnClick));
             void OnClick()
             {

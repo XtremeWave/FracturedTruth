@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using FinalSuspect.Helpers;
-using FinalSuspect.Modules.Core.Game;
 using FinalSuspect.Modules.Features.CheckingandBlocking;
 using FinalSuspect.Modules.Resources;
 using FinalSuspect.Patches.Game_Vanilla;
@@ -136,7 +135,7 @@ internal class KickPlayerPatch
         }
         catch
         {
-            // ignored
+            /* ignored */
         }
 
         return true;

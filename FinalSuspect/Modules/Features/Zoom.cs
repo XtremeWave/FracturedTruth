@@ -45,7 +45,7 @@ public static class Zoom
         }
         catch
         {
-            // ignored
+            /* ignored */
         }
     }
 

@@ -5,56 +5,70 @@ namespace FinalSuspect.Modules.Core.Plugin;
 
 public class HashAuth(string hashValue, string salt = null, HashAlgorithm algorithm = null)
 {
-    public readonly string HashValue = hashValue;
+    private readonly HashAlgorithm algorithm = algorithm ?? SHA256.Create();
 
-    private readonly string salt = salt;
-    private HashAlgorithm algorithm = algorithm ?? SHA256.Create();
-
+    /// <summary>
+    /// 验证字符串是否匹配哈希值
+    /// </summary>
     public bool CheckString(string value)
     {
         var hash = CalculateHash(value);
-        return HashValue == hash;
+        return hashValue == hash;
     }
-    public string CalculateHash(string source)
+
+    /// <summary>
+    /// 计算字符串的哈希值
+    /// </summary>
+    private string CalculateHash(string source)
         => CalculateHash(source, salt, algorithm);
 
-    public static string CalculateHash(string source, string salt = null, HashAlgorithm algorithm = null)
+    /// <summary>
+    /// 计算带盐值的哈希值
+    /// </summary>
+    /// <param name="source">源字符串</param>
+    /// <param name="salt">盐值</param>
+    /// <param name="algorithm">哈希算法实例</param>
+    private static string CalculateHash(string source, string salt = null, HashAlgorithm algorithm = null)
     {
-        // 0.algorithmの初期化
+        // 初始化算法
         algorithm ??= SHA256.Create();
 
-        // 1.saltの適用
+        // 添加盐值
         if (salt != null) source += salt;
 
-        // 2.sourceをbyte配列に変換
+        // 字符串转字节数组
         var sourceBytes = Encoding.UTF8.GetBytes(source);
 
-        // 3.sourceBytesをハッシュ化
+        // 计算哈希值
         var hashBytes = algorithm.ComputeHash(sourceBytes);
 
-        // 4.hashBytesを文字列化
+        // 转换为十六进制字符串
         var sb = new StringBuilder();
         foreach (var b in hashBytes)
-            sb.Append(b.ToString("x2")); //1byteずつ2桁の16進法表記に変換する
+            sb.Append(b.ToString("x2")); // 每个字节转为2位十六进制
 
         return sb.ToString();
     }
 
-    // Hash値確認用 Hash化してからインスタンスを生成
-    // あくまでHash値の確認と動作テストを同時に行うためのものです。確認後は使用しないでください。
+    /// <summary>
+    /// 通过未哈希值创建验证器（仅用于测试）
+    /// </summary>
+    /// <param name="value">原始值</param>
+    /// <param name="salt">盐值</param>
+    /// <remarks>
+    /// 此方法会同时生成哈希值并输出日志，仅用于开发测试阶段
+    /// </remarks>
     public static HashAuth CreateByUnhashedValue(string value, string salt = null)
     {
-        // 1.ハッシュ値計算
+        // 计算哈希值
         var algorithm = SHA256.Create();
         var hashValue = CalculateHash(value, salt, algorithm);
 
-        // 2.ハッシュ値のログ出力
-        //  salt有: ハッシュ値算出結果:<value> => <hashValue> (salt: <saltValue>)
-        //  salt無: ハッシュ値算出結果:<value> => <hashValue>
-        Info($"ハッシュ値算出結果: {value} => {hashValue} {(salt == null ? "" : $"(salt: {salt})")}", "HashAuth");
-        Warn("以上の値をソースコード上にペーストしてください。", "HashAuth");
+        // 输出计算结果日志
+        Info($"哈希值计算结果: {value} => {hashValue} {(salt == null ? "" : $"(salt: {salt})")}", "HashAuth");
+        Warn("请将上方生成的值粘贴到源代码中", "HashAuth");
 
-        // 3.HashAuthインスタンスの生成・リターン
+        // 返回新实例
         return new HashAuth(hashValue, salt, algorithm);
     }
 }
