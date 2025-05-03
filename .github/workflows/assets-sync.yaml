@@ -1,4 +1,4 @@
-name: Sync Assets to FinalAssets
+name: Sync Assets To FinalAssets
 on:
   push:
     branches: [FinalSus]
