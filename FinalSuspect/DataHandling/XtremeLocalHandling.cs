@@ -392,8 +392,7 @@ public static class XtremeLocalHandling
         foreach (var data in XtremePlayerData.AllPlayerData)
         {
             var player = data.Player;
-            if (data.Deadbodyrend != null)
-                data.Deadbodyrend.gameObject.SetActive(CanSeeTargetRole(player, out _) && player.GetXtremeData().RealDeathReason is VanillaDeathReason.Kill);
+            data.Deadbodyrend?.gameObject.SetActive(CanSeeTargetRole(player, out _) && player.GetXtremeData().RealDeathReason is VanillaDeathReason.Kill);
             if (data.IsDisconnected || !CanSeeTargetRole(player, out _) || player.IsLocalPlayer())
             {
                 data.Rend.gameObject.SetActive(false);
@@ -418,7 +417,7 @@ public static class XtremeLocalHandling
             
             if (data.IsDead)
                 data.Rend.color = Color.white.AlphaMultiplied(0.6f);
-            else
+            else if (data.Deadbodyrend != null)
                 data.Deadbodyrend.transform.localPosition = vector;
         }
     }
