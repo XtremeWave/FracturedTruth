@@ -34,9 +34,7 @@ jobs:
 
       - name: Split and Flatten Assets Directory
         run: |
-          # 分离Assets目录到临时分支
           git subtree split --prefix=Assets -b temp-assets-branch
-          # 重写历史：将Assets/* 移动到根目录
           git filter-branch \
             --tree-filter 'mv Assets/* ./ && rmdir Assets 2>/dev/null || true' \
             --force \
