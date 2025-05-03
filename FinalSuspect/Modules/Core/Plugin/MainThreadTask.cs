@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FinalSuspect.Modules.Core.Plugin;
 
@@ -13,15 +14,16 @@ public class MainThreadTask
     {
         this.action = action;
         this.name = name;
-        Tasks.Add(this);
+        
         if (name != "")
             Info("\"" + name + "\" is created", "Main Thread Task");
+        Tasks.Add(this);
     }
-    
     public static void Update()
     {
         var TasksToRemove = new List<MainThreadTask>();
-        foreach (var task in Tasks)
+        // 创建原集合的副本用于遍历
+        foreach (var task in Tasks.ToList()) // 关键修复：.ToList() 创建副本
         {
             try
             {
@@ -36,7 +38,9 @@ public class MainThreadTask
                 TasksToRemove.Add(task);
             }
         }
-        
+    
+        // 安全移除已处理的任务
         TasksToRemove.ForEach(task => Tasks.Remove(task));
     }
+
 }

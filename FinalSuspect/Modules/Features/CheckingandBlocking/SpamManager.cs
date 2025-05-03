@@ -130,6 +130,7 @@ public static class SpamManager
                     Error($"服务器请求失败 [{url}]: {response.StatusCode}", "SpamManager");
                     return false;
                 }
+                
                 result = await response.Content.ReadAsStringAsync();
                 result = result.Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
             }

@@ -195,7 +195,7 @@ public static class MyMusicPanel
                     break;
                 case AudiosStates.IsDownLoading:
                     color = ColorHelper.DownloadYellow;
-                    preview = GetString("Downloading");
+                    preview = GetString("DownloadingAudios");
                     break;
                 case AudiosStates.IsLoading:
                     color = ColorHelper.ClientOptionColor;

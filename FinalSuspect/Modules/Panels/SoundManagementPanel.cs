@@ -194,12 +194,12 @@ public static class SoundManagementPanel
                             audio.CurrectAudioStates = audio.LastAudioStates = t.Result ? AudiosStates.DownLoadSucceedNotice : AudiosStates.DownLoadFailureNotice;
                             RefreshTagList();
 
-                            _ = new MainThreadTask(() =>
+                            _ = new LateTask(() =>
                             {
                                 CreateMusic(music: audio.CurrectAudio);
                                 RefreshTagList();
                                 MyMusicPanel.RefreshTagList();
-                            }, "Refresh Tag List");
+                            },3f, "Refresh Tag List");
                         }, "Download Notice");
                     });
                 }
