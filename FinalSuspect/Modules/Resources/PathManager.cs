@@ -32,7 +32,7 @@ public static class PathManager
         {
             RemoteType.Github => "github.com/XtremeWave/FinalSuspect/raw/FinalSus/Assets/",
             RemoteType.Gitee => "gitee.com/LezaiYa/FinalSuspectAssets/raw/main/Assets/",
-            RemoteType.XtremeApi => "api.xtreme.net.cn/download/FinalSuspect/Assets/",
+            RemoteType.XtremeApi => "api.xtreme.net.cn/FinalSuspect/download/Assets/",
             _ => "127.0.0.1"
         };
         return remoteBase;
