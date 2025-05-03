@@ -5,6 +5,7 @@ using FinalSuspect.Helpers;
 using Il2CppSystem;
 using TMPro;
 using UnityEngine;
+using static AmongUs.GameOptions.RoleTypes;
 
 namespace FinalSuspect.Patches.System;
 

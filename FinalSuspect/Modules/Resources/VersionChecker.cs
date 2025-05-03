@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Features;
 using FinalSuspect.Modules.Features.CheckingandBlocking;
+using FinalSuspect.Patches.System;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 
@@ -20,9 +21,12 @@ public static class VersionChecker
             CustomPopup.Init();
             if (firstStart)
             {
-                CheckForUpdate();
-                SpamManager.Init();
+                _ = CheckForUpdate();
+                _ = SpamManager.Init();
+                _ = ModNewsHistory.LoadModAnnouncements();
+                CustomPopup.Show(GetString("updateCheckPopupTitle"), GetString("LoadingWithDot"), null);
             }
+            
             ModUpdater.SetUpdateButtonStatus();
             firstStart = false;
         }
@@ -66,10 +70,10 @@ public static class VersionChecker
     {
         retried++;
         CustomPopup.Show(GetString("updateCheckPopupTitle"), GetString("PleaseWait"), null);
-        _ = new LateTask(CheckForUpdate, 0.3f, "Retry Check Update");
+        _ = new LateTask(() => _ = CheckForUpdate(), 0.3f, "Retry Check Update");
     }
 
-    private static void CheckForUpdate()
+    private static async Task CheckForUpdate()
     {
         ResolutionManager.SetResolution(1920, 1080, Screen.fullScreen);
         isChecked = false;
@@ -77,43 +81,53 @@ public static class VersionChecker
 
         foreach (var url in GetInfoFileUrlList(true))
         {
-            if (!GetVersionInfo(url + "fs_info.json").GetAwaiter().GetResult()) continue;
+            var task = GetVersionInfo(url + "fs_info.json");
+            await task;
+            if (!task.Result) continue;
             isChecked = true;
             break;
         }
 
-        Msg("Check For Update: " + isChecked, "CheckRelease");
-        isBroken = !isChecked;
-        if (isChecked)
+        _ = new MainThreadTask(() =>
         {
-            Info("Has Update: " + hasUpdate, "CheckRelease");
-            Info("Latest Version: " + latestVersion, "CheckRelease");
-            Info("Minimum Version: " + minimumVersion, "CheckRelease");
-            Info("Creation: " + creation, "CheckRelease");
-            Info("Force Update: " + forceUpdate, "CheckRelease");
-            Info("File MD5: " + md5, "CheckRelease");
-            Info("Github Url: " + downloadUrl_github, "CheckRelease");
-            Info("Gitee Url: " + downloadUrl_gitee, "CheckRelease");
-            //Info("Website Url: " + downloadUrl_xtremeapi, "CheckRelease");
-
-            if (firstLaunch || isBroken)
+            Msg("Check For Update: " + isChecked, "CheckRelease");
+            isBroken = !isChecked;
+            if (isChecked)
             {
-                firstLaunch = false;
-                var annos = ModUpdater.announcement[TranslationController.Instance.currentLanguage.languageID];
-                if (isBroken) CustomPopup.Show(GetString(StringNames.AnnouncementLabel), annos,
-                    [(GetString(StringNames.ExitGame), Application.Quit)]);
-                else CustomPopup.Show(GetString(StringNames.AnnouncementLabel), annos,
-                    [(GetString(StringNames.Okay), null)]);
+                Info("Has Update: " + hasUpdate, "CheckRelease");
+                Info("Latest Version: " + latestVersion, "CheckRelease");
+                Info("Minimum Version: " + minimumVersion, "CheckRelease");
+                Info("Creation: " + creation, "CheckRelease");
+                Info("Force Update: " + forceUpdate, "CheckRelease");
+                Info("File MD5: " + md5, "CheckRelease");
+                Info("Github Url: " + downloadUrl_github, "CheckRelease");
+                Info("Gitee Url: " + downloadUrl_gitee, "CheckRelease");
+                //Info("Website Url: " + downloadUrl_xtremeapi, "CheckRelease");
+
+                if (firstLaunch || isBroken)
+                {
+                    firstLaunch = false;
+                    var annos = ModUpdater.announcement[TranslationController.Instance.currentLanguage.languageID];
+                    if (isBroken) CustomPopup.Show(GetString(StringNames.AnnouncementLabel), annos,
+                        [(GetString(StringNames.ExitGame), Application.Quit)]);
+                    else
+                        CustomPopup.Show(GetString(StringNames.AnnouncementLabel), annos,
+                            [(GetString(StringNames.Okay), null)]);
+                }
             }
-        }
-        else
-        {
-            if (retried >= 2) CustomPopup.Show(GetString("updateCheckPopupTitle"), GetString("updateCheckFailedExit"),
-                [(GetString(StringNames.Okay), null)]);
-            else CustomPopup.Show(GetString("updateCheckPopupTitle"), GetString("updateCheckFailedRetry"),
-                [(GetString("Retry"), Retry)]);
-        }
-        ModUpdater.SetUpdateButtonStatus();
+            else
+            {
+                if (retried >= 2) 
+                    CustomPopup.Show(GetString("updateCheckPopupTitle"), GetString("updateCheckFailedExit"),
+                        [(GetString(StringNames.Okay), null)]);
+                else
+                    CustomPopup.Show(GetString("updateCheckPopupTitle"), GetString("updateCheckFailedRetry"),
+                        [(GetString("Retry"), Retry)]);
+            }
+
+        
+            ModUpdater.SetUpdateButtonStatus();
+        }, "Check For Update");
     }
 
     private static async Task<bool> GetVersionInfo(string url)
@@ -163,7 +177,7 @@ public static class VersionChecker
 
             var announcement = data["announcement"].Cast<JObject>();
             foreach (var langid in EnumHelper.GetAllValues<SupportedLangs>())
-            ModUpdater.announcement[langid] = announcement[langid.ToString()]?.ToString();
+                ModUpdater.announcement[langid] = announcement[langid.ToString()]?.ToString();
             downloadUrl_gitee = downloadUrl_gitee.Replace("{showVer}", showVer);
             hasUpdate = Main.version < latestVersion && creation > Main.PluginCreation;
             forceUpdate = Main.version < minimumVersion || creation > Main.PluginCreation;

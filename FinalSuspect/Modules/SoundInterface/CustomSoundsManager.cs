@@ -21,11 +21,11 @@ public static class CustomSoundsManager
             {
                 StopPlayMod();
                 StopPlayVanilla();
-            }, 0.01F, "");
+            }, 0.01F, "Playing Sfx");
         
             await LoadClip(audio.CurrectAudio);
         
-            _ = new LateTask(() =>
+            _ = new MainThreadTask(() =>
             {
                 foreach (var file in musics.Where(file => file.FileName == audio.FileName))
                 {
@@ -37,7 +37,7 @@ public static class CustomSoundsManager
                 SoundManagementPanel.RefreshTagList();
                 global::SoundManager.Instance.CrossFadeSound(audio.FileName, audio.Clip, 1f);
                 Msg($"播放声音：{audio.Name}", "CustomSounds");
-            }, 0.01F, "");
+            }, "Playing Sfx");
         }
         catch
         {
@@ -54,11 +54,11 @@ public static class CustomSoundsManager
             global::SoundManager.Instance.StopNamedSound(x.FileName);
         });
 
-        _ = new LateTask(() =>
+        _ = new MainThreadTask(() =>
         {
             MyMusicPanel.RefreshTagList();
             SoundManagementPanel.RefreshTagList();
-        }, 0.01f, "Refresh");
+        }, "Refresh Tag List");
         if (Main.DisableVanillaSound.Value)
         {
             StopPlayVanilla();
@@ -226,6 +226,7 @@ public class AudioManagementStopAllSoundPatch
         {
             __instance.allSources.Remove(key);
         }
+        
         return false;
     }
 }

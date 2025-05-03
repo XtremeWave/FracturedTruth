@@ -5,6 +5,7 @@ using System.Linq;
 using FinalSuspect.Modules.Features;
 using FinalSuspect.Modules.Resources;
 using FinalSuspect.Modules.SoundInterface;
+using Sentry.Unity;
 using TMPro;
 using UnityEngine;
 using static FinalSuspect.Modules.SoundInterface.SoundManager;
@@ -183,18 +184,18 @@ public static class SoundManagementPanel
                     var task = ResourcesDownloader.StartDownload(FileType.Sounds, filename + ".wav");
                     task.ContinueWith(t => 
                     {
-                        _ = new LateTask(() =>
+                        _ = new MainThreadTask(() =>
                         {
                             audio.CurrectAudioStates = audio.LastAudioStates = t.Result ? AudiosStates.DownLoadSucceedNotice : AudiosStates.DownLoadFailureNotice;
                             RefreshTagList();
 
-                            _ = new LateTask(() =>
+                            _ = new MainThreadTask(() =>
                             {
                                 CreateMusic(music: audio.CurrectAudio);
                                 RefreshTagList();
                                 MyMusicPanel.RefreshTagList();
-                            }, 3f, "Refresh Tag List");
-                        }, 0.01f, "Download Notice");
+                            }, "Refresh Tag List");
+                        }, "Download Notice");
                     });
                 }
             }));

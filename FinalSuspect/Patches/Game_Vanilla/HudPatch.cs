@@ -13,6 +13,7 @@ using FinalSuspect.Templates;
 using InnerNet;
 using TMPro;
 using UnityEngine;
+using static AmongUs.GameOptions.RoleTypes;
 using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Patches.Game_Vanilla;

@@ -21,29 +21,25 @@ public class ResourcesDownloader
                 filePath = GetResourceFilesPath(fileType, file);
                 break;
             case FileType.Depends:
-                filePath = GetLocalPath(LocalType.BepInEx) +file;
+                filePath = GetLocalPath(LocalType.BepInEx) + file;
                 break;
             default:
                 return false;
         }
+        
         var DownloadFileTempPath = filePath + ".xwr";
 
         var retrytimes = 0;
         var remoteType = RemoteType.Github; 
         retry:
         if (IsChineseLanguageUser)
-            switch (retrytimes)
+            remoteType = retrytimes switch
             {
-                //case 0:
-                //    remoteType = RemoteType.XtremeApi;
-                //    break;
-                case 1:
-                    remoteType = RemoteType.Gitee;
-                    break;
-                case 2:
-                    remoteType = RemoteType.Github;
-                    break;
-            }
+                //0 => RemoteType.XtremeApi,
+                1 => RemoteType.Gitee,
+                2 => RemoteType.Github,
+                _ => remoteType
+            };
 
         var url = GetFile(fileType, remoteType, file);
 
@@ -63,9 +59,9 @@ public class ResourcesDownloader
             using var client = new HttpClientDownloadWithProgress(url, DownloadFileTempPath);
             await client.StartDownload();
             Thread.Sleep(100);
-            Info($"Succeed in {url}", "Download Resources");
             File.Delete(filePath);
             File.Move(DownloadFileTempPath, filePath);
+            Warn($"Succeed in {url}", "Download Resources");
             return true;
         }
         catch (Exception ex)

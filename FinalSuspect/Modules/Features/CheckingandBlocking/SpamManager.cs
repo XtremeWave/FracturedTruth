@@ -25,7 +25,7 @@ public static class SpamManager
     ];
     
     //[PluginModuleInitializer]
-    public static void Init()
+    public static async Task Init()
     {
         try
         {
@@ -35,7 +35,9 @@ public static class SpamManager
             {
                 foreach (var url in GetInfoFileUrlList())
                 {
-                    if (!GetConfigInfo(url + "Assets/Configs/" + target, target).GetAwaiter().GetResult()) continue;
+                    var task = GetConfigs(url + "Assets/Configs/" + target, target);
+                    await task;
+                    if (!task.Result) continue;
                     break;
                 }
             }
@@ -80,15 +82,15 @@ public static class SpamManager
         }
     }
 
-    public static List<string> ReturnAllNewLinesInFile(string filename)
+    private static List<string> ReturnAllNewLinesInFile(string filename)
     {
         if (!File.Exists(filename)) return [];
         using StreamReader sr = new(filename, Encoding.GetEncoding("UTF-8"));
         string text;
         List<string> sendList = [];
         while ((text = sr.ReadLine()) != null)
-        if (text.Length >= 1 && text != "")
-        sendList.Add(text.Replace("\\n", "\n").ToLower());
+            if (text.Length >= 1 && text != "")
+                sendList.Add(text.Replace("\\n", "\n").ToLower());
         return sendList;
     }
 
@@ -117,7 +119,7 @@ public static class SpamManager
         }
     }
 
-    public static async Task<bool> GetConfigInfo(string url, string name)
+    public static async Task<bool> GetConfigs(string url, string name)
     {
         try
         {
@@ -127,7 +129,7 @@ public static class SpamManager
                 try
                 {
                     // Windows 格式
-                    string filePath = url[8..].Replace('/', '\\');
+                    var filePath = url[8..].Replace('/', '\\');
                     result = await File.ReadAllTextAsync(filePath);
                 }
                 catch (FileNotFoundException)
@@ -150,7 +152,7 @@ public static class SpamManager
                 using var response = await client.GetAsync(new Uri(url), HttpCompletionOption.ResponseContentRead);
                 if (!response.IsSuccessStatusCode)
                 {
-                    Error($"服务器请求失败 [{url}]: {response.StatusCode}", "CheckRelease");
+                    Error($"服务器请求失败 [{url}]: {response.StatusCode}", "SpamManager");
                     return false;
                 }
                 result = await response.Content.ReadAsStringAsync();

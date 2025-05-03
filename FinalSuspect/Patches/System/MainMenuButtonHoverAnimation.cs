@@ -51,6 +51,16 @@ public class MainMenuButtonHoverAnimation
 
         if (GameObject.Find("MainUI") == null) return;
 
+        if (!ModNewsHistory.AnnouncementLoadComplete)
+        {
+            
+            FormatButtonColor(__instance, __instance.newsButton, new(0.9f, 0.9f, 1f), new(0f, 0f, 0f, 0f), Color.white,
+                Color.white);
+        }
+        else 
+            FormatButtonColor(__instance, __instance.newsButton, new( 0.5216f, 0.7765f, 1f, 0.8f), new(0f, 0f, 0f, 0f), Color.white, Color.white);
+
+        __instance.newsButton.enabled = ModNewsHistory.AnnouncementLoadComplete;
         foreach (var kvp in AllButtons.Where(x => x.Key != null && x.Key.active))
         {
             var button = kvp.Key;

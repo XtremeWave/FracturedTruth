@@ -29,7 +29,7 @@ class OnGameJoinedPatch
         if (AmongUsClient.Instance.AmHost) 
         {
             GameStartManagerPatch.GameStartManagerUpdatePatch.exitTimer = -1;
-            Main.NewLobby = true;
+            //Main.NewLobby = true;
         }
     }
 }

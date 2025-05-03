@@ -1,4 +1,4 @@
-#Number:100004
+#Number:100006
 #Title:终极嫌疑 v1.1
 #SubTitle:★★★★下载修复★★★★
 #ShortTitle:★下载修复v1.1
@@ -19,22 +19,29 @@
 - 重制: 0
 - 删除: 1
 
+## 团队参与者
+- [QingFeng]("https://github.com/QingFeng-awa/")
+
+## 贡献者
+- [LezaiYa]("https://github.com/NewLezaiYa")
+(PR#54), etc.
+
 ## 修正
 - 修复了资源下载时出现的问题
 修复: LezaiYa
-反馈：警长小蓝
+反馈: 警长小蓝
 - 修复了SM缺少检测RPC的问题
 - 修复了反作弊不检测RPC55的问题
 修复: LezaiYa
 
 ## 优化
 - 优化远程未检测到文件时的框架报错信息
-制作：LezaiYa
+制作: LezaiYa
 
 ## 更改
 - 将国内Gitee镜像源改接新的资源镜像源
-制作：LezaiYa
+制作: LezaiYa
 
 ## 删除
 - 删除API检查更新及下载资源
-制作：LezaiYa
+决定: QingFeng

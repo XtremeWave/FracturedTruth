@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -11,9 +12,12 @@ using BepInEx.Unity.IL2CPP;
 using FinalSuspect;
 using FinalSuspect.Attributes;
 using FinalSuspect.Helpers;
+using FinalSuspect.Internal;
 using FinalSuspect.Modules.Random;
+using HarmonyLib.Tools;
 using Il2CppInterop.Runtime.Injection;
 using UnityEngine;
+using static AmongUs.GameOptions.RoleTypes;
 
 [assembly: AssemblyFileVersion(Main.PluginVersion)]
 [assembly: AssemblyInformationalVersion(Main.PluginVersion)]
@@ -28,7 +32,7 @@ public class Main : BasePlugin
     // == 程序基本设定 / Program Config ==
     public const string ModName = "Final Suspect";
     public const string ForkId = "Final Suspect";
-    public const string PluginVersion = "1.1.2";
+    public const string PluginVersion = "1.1.3";
     public const string PluginGuid = "cn.finalsuspect.xtremewave";
     public const int PluginCreation = 0;
 
@@ -41,21 +45,8 @@ public class Main : BasePlugin
     public const string LowestSupportedVersion = "2025.3.31"; // 16.0.2
 
     public const string DisplayedVersion_Head = "1.1";
-    private static string DisplayedVersion_Date
-    {
-        get
-        {
-#if DEBUG
-            var currentDate = DateTime.Now;
-            var year = currentDate.Year.ToString();
-            var month = currentDate.Month.ToString("D2");  
-            var day = currentDate.Day.ToString("D2");    
-            return $"{year}{month}{day}";
-#else
-            return "20250501";
-#endif
-        }
-    }
+ 
+    private static string DisplayedVersion_Date => BuildTime.Date;
 
     /// <summary>
     /// 测试信息；
@@ -68,14 +59,16 @@ public class Main : BasePlugin
     /// Preview: 预览/预发行版
     /// Scrapter: 废弃版
     /// </summary>
-    private const VersionTypes DisplayedVersion_Type = VersionTypes.Release;
+    private const VersionTypes DisplayedVersion_Type = VersionTypes.Alpha;
 
-    private const int DisplayedVersion_TestCreation = 0;
+    private const int DisplayedVersion_TestCreation = 1;
     
     public static readonly string DisplayedVersion = 
         $"{DisplayedVersion_Head}_{DisplayedVersion_Date}" +
-        $"{(DisplayedVersion_Type != VersionTypes.Release ? 
-        $"_{DisplayedVersion_Type}_{DisplayedVersion_TestCreation}" : "")}";
+        $"{(DisplayedVersion_Type != VersionTypes.Release 
+                ? $"_{DisplayedVersion_Type}_{DisplayedVersion_TestCreation}" 
+                : "")
+        }";
 
     // == 链接相关设定 / Link Config ==
     //public static readonly string WebsiteUrl = IsChineseLanguageUser ? "https://www.xtreme.net.cn/project/FS/" : "https://www.xtreme.net.cn/en/project/FS/";
@@ -84,7 +77,7 @@ public class Main : BasePlugin
     public const string GithubRepoUrl = "https://github.com/XtremeWave/FinalSuspect/";
 
     // ==========
-    public Harmony Harmony { get; } = new (PluginGuid);
+    public Harmony Harmony { get; } = new(PluginGuid);
     public static readonly Version version = Version.Parse(PluginVersion);
     public static ManualLogSource Logger;
     public static bool hasArgumentException;
@@ -135,13 +128,14 @@ public class Main : BasePlugin
     public const float RoleTextSize = 2f;
 
     public static IEnumerable<PlayerControl> AllPlayerControls => 
-        PlayerControl.AllPlayerControls.ToArray().Where(p => p != null);
+        PlayerControl.AllPlayerControls.ToArray().Where(p => p != null); 
+    
     public static IEnumerable<PlayerControl> AllAlivePlayerControls => 
         PlayerControl.AllPlayerControls.ToArray().Where(p => p != null && p.IsAlive() && !p.Data.Disconnected);
 
     public static Main Instance;
 
-    public static bool NewLobby = false;
+    //public static bool NewLobby = false;
 
     public static readonly List<string> TName_Snacks_CN =
     [
@@ -204,6 +198,8 @@ public class Main : BasePlugin
         if (!DebugModeManager.AmDebugger)
         {
             Disable("Download Resources");
+            Disable("GetAnnouncements");
+            Disable("GetConfigs");
         }
         
         isDetail = true;

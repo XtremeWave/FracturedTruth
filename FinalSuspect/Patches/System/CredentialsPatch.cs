@@ -238,27 +238,13 @@ internal class TitleLogoPatch
         };
 
         // ReSharper disable once UnusedParameter.Local
-        void FormatButtonColor(PassiveButton button, Sprite borderType, Color inActiveColor, Color activeColor, Color inActiveTextColor, Color activeTextColor)
-        {
-            button.activeSprites.transform.FindChild("Shine")?.gameObject.SetActive(false);
-            button.inactiveSprites.transform.FindChild("Shine")?.gameObject.SetActive(false);
-            var activeRenderer = button.activeSprites.GetComponent<SpriteRenderer>();
-            var inActiveRenderer = button.inactiveSprites.GetComponent<SpriteRenderer>();
-            activeRenderer.sprite = minorActiveSprite;
-            inActiveRenderer.sprite = minorActiveSprite;
-            activeRenderer.color = activeColor.a == 0f 
-                ? new Color(inActiveColor.r, inActiveColor.g, inActiveColor.b, 1f) 
-                : activeColor;
-            inActiveRenderer.color = inActiveColor;
-            button.activeTextColor = activeTextColor;
-            button.inactiveTextColor = inActiveTextColor;
-        }
+        
 
         foreach (var kvp in mainButtons)
         {
             kvp.Key.Do(button =>
             {
-                FormatButtonColor(button, kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3, kvp.Value.Item4, kvp.Value.Item5);
+                FormatButtonColor(__instance, button, kvp.Value.Item2, kvp.Value.Item3, kvp.Value.Item4, kvp.Value.Item5);
             });
         }
         try
@@ -345,6 +331,7 @@ internal class TitleLogoPatch
         BottomButtonBounds.transform.localPosition -= new Vector3(0f, 0.1f, 0f);
     }
 }
+
 [HarmonyPatch(typeof(ModManager), nameof(ModManager.LateUpdate))]
 internal class ModManagerLateUpdatePatch
 {
@@ -359,6 +346,7 @@ internal class ModManagerLateUpdatePatch
             firstRun = true;
         }
         LateTask.Update(Time.deltaTime);
+        MainThreadTask.Update();
     }
 
     public static void Postfix(ModManager __instance)

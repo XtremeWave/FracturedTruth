@@ -6,6 +6,7 @@ using FinalSuspect.Attributes;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game;
 using UnityEngine;
+using static AmongUs.GameOptions.RoleTypes;
 
 namespace FinalSuspect.DataHandling;
 

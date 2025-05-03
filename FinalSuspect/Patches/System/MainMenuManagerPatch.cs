@@ -32,8 +32,12 @@ public class MainMenuManagerPatch
     [HarmonyPrefix, HarmonyPriority(Priority.Last)]
     public static void HideRightPanel()
     {
-        ShowingPanel = false;
-        AccountManager.Instance?.transform.FindChild("AccountTab/AccountWindow")?.gameObject.SetActive(false);
+        try
+        {
+            ShowingPanel = false;
+            AccountManager.Instance?.transform.FindChild("AccountTab/AccountWindow")?.gameObject.SetActive(false);
+        }
+        catch { }
     }
 
     public static void ShowRightPanelImmediately()
@@ -65,7 +69,6 @@ public class MainMenuManagerPatch
                     : TitleLogoPatch.RightPanel.transform.localPosition.x < TitleLogoPatch.RightPanelOp.x + 9f
                ) TitleLogoPatch.RightPanel.transform.localPosition = lerp1;
         }
-
         if (ShowedBak || !isOnline) return;
         var bak = GameObject.Find("BackgroundTexture");
         if (bak == null || !bak.active) return;
@@ -73,7 +76,6 @@ public class MainMenuManagerPatch
         var lerp2 = Vector3.Lerp(pos2, new Vector3(pos2.x, 7.1f, pos2.z), Time.deltaTime * 1.4f);
         bak.transform.position = lerp2;
         if (pos2.y > 7f) ShowedBak = true;
-
     }
 
     [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start)), HarmonyPostfix]

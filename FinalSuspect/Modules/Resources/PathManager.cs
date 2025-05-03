@@ -10,9 +10,10 @@ namespace FinalSuspect.Modules.Resources;
 public static class PathManager
 {
     public const string LocalPath_Data = "Final Suspect_Data/";
-    public static string DependsSavePath = "BepInEx/core/";
-    public static string DownloadFileTempPath = "BepInEx/plugins/FinalSuspect.dll.temp";
-    public static string downloadUrl_github = "https://github.com/XtremeWave/FinalSuspect/releases/latest/download/FinalSuspect.dll";
+    private const string DependsSavePath = "BepInEx/core/";
+    public const string DownloadFileTempPath = "BepInEx/plugins/FinalSuspect.dll.temp";
+    public const string downloadUrl_github = "https://github.com/XtremeWave/FinalSuspect/releases/latest/download/FinalSuspect.dll";
+
     public static string downloadUrl_gitee = "https://gitee.com/LezaiYa/FinalSuspectAssets/releases/download/v{showVer}/FinalSuspect.dll";
     //public static string downloadUrl_xtremeapi = "https://api.xtreme.net.cn/download/FinalSuspect/FinalSuspect.dll";
     
@@ -20,6 +21,7 @@ public static class PathManager
     {
         return GetRemoteUrl(fileType, remoteType) + file;
     }
+
     public static string GetRemoteUrl(FileType fileType, RemoteType remoteType)
     {
         return "https://" + GetRemoteBase(remoteType) + fileType + "/";
@@ -56,7 +58,7 @@ public static class PathManager
     {
         if (localType == LocalType.BepInEx)
             return DependsSavePath;
-        return  LocalPath_Data + localType + "/";
+        return LocalPath_Data + localType + "/";
     }
     
     public static string GetResourceFilesPath(FileType fileType, string file)
@@ -75,14 +77,14 @@ public static class PathManager
         CheckAndCreate(GetLocalPath(LocalType.Resources), false);
         CheckAndCreate(GetLocalPath(LocalType.Resources) + "Sounds", false);
         CheckAndCreate(GetLocalPath(LocalType.Resources) + "Images");
-        CheckAndCreate(GetLocalPath(LocalType.Resources) + "ModNews");
-        foreach (var lang in EnumHelper.GetAllNames<SupportedLangs>())
-        {
-            CheckAndCreate(GetLocalPath(LocalType.Resources) + $"ModNews/{lang}");
-        }
+        
         CheckAndCreate(GetLocalPath(LocalType.Resources) + "Languages");
         CheckAndCreate(GetLocalPath(LocalType.Ban));
         CheckAndCreate(GetLocalPath(LocalType.Bypass), false);
+
+        // 防止崩溃的必要措施
+        CheckAndDelete(LocalPath_Data);
+        CheckAndDelete(DependsSavePath);
     }
 
     private static void CheckAndCreate(string path, bool hidden = true)
@@ -99,28 +101,42 @@ public static class PathManager
             ? attributes | FileAttributes.Hidden 
             : attributes & ~FileAttributes.Hidden);
     }
+
+    private static void CheckAndDelete(string targetFolder)
+    {
+        if (!Directory.Exists(targetFolder)) return;
+        try
+        {
+            var filesToDelete = Directory.GetFiles(targetFolder, "*.xwr", SearchOption.AllDirectories);
+                
+            foreach (var file in filesToDelete)
+            {
+                File.Delete(file);
+            }
+        }
+        catch 
+        {
+            /*Ignore*/
+        }
+    }
     
     public static string GetBypassFileType(FileType fileType, BypassType bypassType)
     {
-        return GetLocalPath(LocalType.Bypass) + $"BypassCheck_{fileType}_{bypassType}.xwr";
+        return GetLocalPath(LocalType.Bypass) + $"BypassCheck_{fileType}_{bypassType}.xwc";
     }
     
     private static IReadOnlyList<string> URLs => new List<string>
     {
-#if DEBUG
-        "https://raw.githubusercontent.com/XtremeWave/FinalSuspect_Dev/FS_Dev/",
-        //"https://api.xtreme.net.cn/download/FinalSuspect/",
-        $"file:///{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop))}/",
-#endif
-
-#if CANARY
-        "https://raw.githubusercontent.com/XtremeWave/FinalSuspect_Dev/FS_Dev/",
-        //"https://api.xtreme.net.cn/download/FinalSuspect/",
-        $"file:///{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop))}/",
-#else        
+#if RELEASE
         "https://raw.githubusercontent.com/XtremeWave/FinalSuspect/FinalSus/",
-        "https://gitee.com/LezaiYa/FinalSuspectAssets/raw/main",
+        "https://gitee.com/LezaiYa/FinalSuspectAssets/raw/main/",
         //"https://api.xtreme.net.cn/download/FinalSuspect/",
+#else
+        "https://raw.githubusercontent.com/XtremeWave/FinalSuspect_Dev/FS_Dev/",
+        "https://gitee.com/LezaiYa/FinalSuspectAssets/raw/main/",
+        //"https://api.xtreme.net.cn/download/FinalSuspect/",
+        $"file:///{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop))}/",
+
 #endif
     };
     
@@ -148,6 +164,7 @@ public enum RemoteType
     Gitee,
     //XtremeApi
 }
+
 public enum LocalType
 {
     Ban,

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using AmongUs.GameOptions;
 using FinalSuspect.Helpers;
 using TMPro;
 using UnityEngine;
+using static AmongUs.GameOptions.RoleTypes;
 
 namespace FinalSuspect.Patches.System;
 
