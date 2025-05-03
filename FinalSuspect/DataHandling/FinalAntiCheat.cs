@@ -46,13 +46,12 @@ public static class FinalAntiCheat
                 {
                     NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.SetName"), name));
                     WarnHost();
-                    return true;
                 }
-                if (!OtherModHost)
+                else if (!OtherModHost)
                 {
                     NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.SetName_NotHost"), name));
-                    return true;
                 }
+                return true;
             }
             return false;
         }
@@ -68,15 +67,13 @@ public static class FinalAntiCheat
                     if (AmongUsClient.Instance.AmHost)
                     {
                         NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.SendQuickChat"), name));
-                        WarnHost();
-                        return true;
+                        WarnHost();   
                     }
-
-                    if (!OtherModHost)
+                    else if (!OtherModHost)
                     {
                         NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.SendQuickChat_NotHost"), name));
-                        return true;
                     }
+                    return true;
                 }
             }
             _lastSendTime = GetTimeStamp();
@@ -102,9 +99,9 @@ public static class FinalAntiCheat
                 if (posXOutOfRange || posYOutOfRange)
                     MarkAsCheater();
             }
-            //else
-            //{
-                /*List<PlainShipRoom> rooms = [];
+            /*else
+            {
+                List<PlainShipRoom> rooms = [];
                 foreach (var room in ShipStatus.Instance.FastRooms)
                 {
                     rooms.Add(room.Value);
@@ -115,8 +112,8 @@ public static class FinalAntiCheat
                     || rooms.Any(room => room.roomArea.OverlapPoint(Player.GetTruePosition())) 
                     || rooms.Any(room => room.roomArea.IsTouching(Player.Collider)) 
                     || !Player.IsAlive()) return;
-                MarkAsCheater();*/
-            //}
+                MarkAsCheater();
+            }*/
         }
         public void HandleSuspectCheater()
         {
@@ -130,7 +127,6 @@ public static class FinalAntiCheat
     }
     internal class FAC
     {
-
         public static int DeNum;
         public static long _lastHandleCheater = -1;
         private static List<byte> LobbyDeadBodies = [];
@@ -149,8 +145,7 @@ public static class FinalAntiCheat
                 ErrorText.Instance.CheatDetected = DeNum > 3;
                 ErrorText.Instance.SBDetected = DeNum > 10;
                 if (ErrorText.Instance.CheatDetected)
-                    ErrorText.Instance.AddError(
-                        ErrorText.Instance.SBDetected ? ErrorCode.SBDetected : ErrorCode.CheatDetected);
+                    ErrorText.Instance.AddError(ErrorText.Instance.SBDetected ? ErrorCode.SBDetected : ErrorCode.CheatDetected);
                 else
                     ErrorText.Instance.Clear();
             }
@@ -292,16 +287,15 @@ public static class FinalAntiCheat
                 Exception(e, "FAC");
                 throw;
             }
-
             WarnHost(-1);
             return false;
         }
 
         //public static void Report(PlayerControl pc, string reason)
         //{
-        //    //string msg = $"{pc.GetClientId()}|{pc.FriendCode}|{pc.Data.PlayerName}|{reason}";
-        //    //Cloud.SendData(msg);
-        //    //Logger.Warn($"FAC报告：{pc.GetRealName()}: {reason}", "FAC Cloud");
+        //    string msg = $"{pc.GetClientId()}|{pc.FriendCode}|{pc.Data.PlayerName}|{reason}";
+        //    Cloud.SendData(msg);
+        //    Logger.Warn($"FAC报告：{pc.GetRealName()}: {reason}", "FAC Cloud");
         //}
         private static bool CheckForInvalidRpc(PlayerControl player, byte callId)
         {
@@ -312,14 +306,11 @@ public static class FinalAntiCheat
                 if (AmongUsClient.Instance.AmHost)
                 {
                     Warn($"收到来自 {player.Data?.PlayerName} 的不受信用的RPC，因此将其踢出。", "Kick");
-                    NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.InvalidRpc"),
-                        player.Data?.PlayerName, callId));
+                    NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.InvalidRpc"), player.Data?.PlayerName, callId));
                     return true;
                 }
-
                 Warn($"收到来自 {player.Data?.PlayerName} 的不受信用的RPC", "Kick?");
-                NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.InvalidRpc_NotHost"),
-                    player.Data?.PlayerName, callId));
+                NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.InvalidRpc_NotHost"), player.Data?.PlayerName, callId));
                 return true;
             }
             return false;

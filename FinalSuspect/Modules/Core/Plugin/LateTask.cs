@@ -46,7 +46,6 @@ internal class LateTask
                 TasksToRemove.Add(task);
             }
         }
-  
         TasksToRemove.ForEach(task => Tasks.Remove(task));
     }
 }

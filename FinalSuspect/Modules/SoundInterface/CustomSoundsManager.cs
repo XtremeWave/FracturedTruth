@@ -31,7 +31,6 @@ public static class CustomSoundsManager
                 {
                     file.CurrectAudioStates = AudiosStates.IsPlaying;
                 }
-        
                 ReloadTag();
                 MyMusicPanel.RefreshTagList();
                 SoundManagementPanel.RefreshTagList();
@@ -53,7 +52,6 @@ public static class CustomSoundsManager
             x.CurrectAudioStates = x.LastAudioStates;
             global::SoundManager.Instance.StopNamedSound(x.FileName);
         });
-
         _ = new MainThreadTask(() =>
         {
             MyMusicPanel.RefreshTagList();
@@ -154,8 +152,7 @@ public static class CustomSoundsManager
         {
             AudioManagementPanel.Delete(audio);
         }
-    }
-    */
+    }*/
 }
 [HarmonyPatch(typeof(global::SoundManager), nameof(global::SoundManager.PlaySoundImmediate))]
 [HarmonyPatch(typeof(global::SoundManager), nameof(global::SoundManager.PlaySound))]

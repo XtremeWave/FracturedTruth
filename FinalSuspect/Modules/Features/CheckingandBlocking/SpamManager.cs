@@ -130,11 +130,9 @@ public static class SpamManager
                     Error($"服务器请求失败 [{url}]: {response.StatusCode}", "SpamManager");
                     return false;
                 }
-                
                 result = await response.Content.ReadAsStringAsync();
                 result = result.Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
             }
-            
             try
             {
                 var data = JObject.Parse(result);
@@ -147,7 +145,6 @@ public static class SpamManager
                 Error($"JSON 解析失败: {ex.Message}", "SpamManager");
                 return false;
             }
-
             await Task.Delay(100);
             return true;
         }

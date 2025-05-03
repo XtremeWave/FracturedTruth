@@ -3,7 +3,6 @@ using System.IO;
 using BepInEx.Configuration;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.ClientOptions;
-using FinalSuspect.Modules.Core.Game;
 using FinalSuspect.Modules.Panels;
 using FinalSuspect.Modules.SoundInterface;
 using UnityEngine;

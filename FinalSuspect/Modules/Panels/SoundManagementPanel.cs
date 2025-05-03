@@ -85,7 +85,6 @@ public static class SoundManagementPanel
                 mask.transform.localScale = new Vector3(4.9f, 3.92f, 1f);
             }
         }
-        
         RefreshTagList();
     }
   
@@ -161,7 +160,6 @@ public static class SoundManagementPanel
                         buttontext = !audio.UnOfficial ? GetString("download") : GetString("NoFound");
                         buttonColor = !audio.UnOfficial ? Color.green : Color.black;
                     }
-
                     break;
                 }
             }
