@@ -59,7 +59,7 @@ public class Main : BasePlugin
     /// </summary>
     private const VersionTypes DisplayedVersion_Type = VersionTypes.Alpha;
 
-    private const int DisplayedVersion_TestCreation = 1;
+    private const int DisplayedVersion_TestCreation = 2;
     
     public static readonly string DisplayedVersion = 
         $"{DisplayedVersion_Head}_{DisplayedVersion_Date}" +
