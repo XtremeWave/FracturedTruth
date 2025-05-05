@@ -81,7 +81,7 @@ public class OnPlayerJoinedPatch
             KickPlayer(client.Id, true, "BanList");
             Info($"已封锁的玩家 {client.PlayerName} ({client.FriendCode}) 已被封禁。", "BAN");
         }
-        if (AmongUsClient.Instance.AmHost && !ValidFormatRegex.IsMatch(client.FriendCode))
+        if (AmongUsClient.Instance.AmHost && !ValidFormatRegex.IsMatch(client.FriendCode) && client.FriendCode != "")
         {
             KickPlayer(client.Id, false, "NotLogin");
             NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.Cheater"), client.PlayerName));

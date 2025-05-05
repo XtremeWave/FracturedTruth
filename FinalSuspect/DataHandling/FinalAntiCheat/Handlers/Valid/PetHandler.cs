@@ -18,6 +18,6 @@ public class PetHandler : IRpcHandler
     public bool HandleAll(PlayerControl sender, MessageReader reader,
         ref bool notify, ref string reason, ref bool ban)
     {
-        return !sender.cosmetics.HasPetEquipped() || reader.Length < 4;
+        return false;
     }
 }
