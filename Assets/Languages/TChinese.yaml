@@ -234,7 +234,7 @@ ErrorLevel3: "未發布版本"
 # 反作弊 / FAC
 FAC.CheatDetected.HighLevel: "警告：FAC正在抵禦炸房外掛"
 FAC.CheatDetected.LowLevel: "警告：FAC檢測到可能存在作弊玩家"
-FAC.CheatDetected.FAC: "使用作弊程序（例如AUM、YuMenu、SM等）"
+FAC.CheatDetected.FAC: "使用作弊程序"
 
 # 模組信息 / Mod Infos
 Contributors: "貢獻者"

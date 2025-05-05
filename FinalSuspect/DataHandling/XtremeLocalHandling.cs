@@ -195,7 +195,7 @@ public static class XtremeLocalHandling
     {
         Main.EnableFinalSuspect.Value = !OtherModHost;
 
-        //if (__instance == null) return;
+        if (__instance == null) return;
 
         try
         {
@@ -205,10 +205,6 @@ public static class XtremeLocalHandling
                 DisconnectSync(__instance);
                 DeathSync(__instance);
             }
-            
-            __instance.GetCheatData().HandleBan();
-            __instance.GetCheatData().HandleLobbyPosition();
-            __instance.GetCheatData().HandleSuspectCheater();
             
             var topTextTransform = __instance.cosmetics.nameText.transform.Find("TopText");
             var topText = topTextTransform.GetComponent<TextMeshPro>();
@@ -227,6 +223,8 @@ public static class XtremeLocalHandling
 
             __instance.cosmetics.nameText.text = name;
             __instance.cosmetics.nameText.color = topcolor;
+            
+            __instance.GetCheatData().HandleCheatData();
         }
         catch
         {

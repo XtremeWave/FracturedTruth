@@ -15,7 +15,6 @@ using FinalSuspect.Internal;
 using FinalSuspect.Modules.Random;
 using Il2CppInterop.Runtime.Injection;
 using UnityEngine;
-using static AmongUs.GameOptions.RoleTypes;
 
 [assembly: AssemblyFileVersion(Main.PluginVersion)]
 [assembly: AssemblyInformationalVersion(Main.PluginVersion)]
@@ -57,9 +56,9 @@ public class Main : BasePlugin
     /// Preview: 预览/预发行版
     /// Scrapter: 废弃版
     /// </summary>
-    private const VersionTypes DisplayedVersion_Type = VersionTypes.Alpha;
+    private const VersionTypes DisplayedVersion_Type = VersionTypes.Canary;
 
-    private const int DisplayedVersion_TestCreation = 2;
+    private const int DisplayedVersion_TestCreation = 1;
     
     public static readonly string DisplayedVersion = 
         $"{DisplayedVersion_Head}_{DisplayedVersion_Date}" +
@@ -92,7 +91,7 @@ public class Main : BasePlugin
     public const bool GitIsDirty = ThisAssembly.Git.IsDirty;
     public const string GitSha = ThisAssembly.Git.Sha;
     public const string GitTag = ThisAssembly.Git.Tag;
-#pragma warning restore CS0618 // 类型或成员已过时
+#pragma warning restore CS0618 
     public static NormalGameOptionsV09 NormalOptions => GameOptionsManager.Instance.currentNormalGameOptions;
     public static HideNSeekGameOptionsV09 HideNSeekOptions => GameOptionsManager.Instance.currentHideNSeekGameOptions;
 
@@ -227,17 +226,17 @@ public class Main : BasePlugin
         {
             roleColors = new Dictionary<RoleTypes, string>
             {
-                { CrewmateGhost, "#8CFFFF" },
-                { GuardianAngel, "#8CFFDB" },
-                { Crewmate, "#8CFFFF" },
-                { Scientist, "#F8FF8C" },
-                { Engineer, "#A5A8FF" },
-                { Noisemaker, "#FFC08C" },
-                { Tracker, "#93FF8C" },
-                { ImpostorGhost, "#FF1919" },
-                { Impostor, "#FF1919" },
-                { Shapeshifter, "#FF819E" },
-                { Phantom, "#CA8AFF" },
+                { RoleTypes.CrewmateGhost, "#8CFFFF" },
+                { RoleTypes.GuardianAngel, "#8CFFDB" },
+                { RoleTypes.Crewmate, "#8CFFFF" },
+                { RoleTypes.Scientist, "#F8FF8C" },
+                { RoleTypes.Engineer, "#A5A8FF" },
+                { RoleTypes.Noisemaker, "#FFC08C" },
+                { RoleTypes.Tracker, "#93FF8C" },
+                { RoleTypes.ImpostorGhost, "#FF1919" },
+                { RoleTypes.Impostor, "#FF1919" },
+                { RoleTypes.Shapeshifter, "#FF819E" },
+                { RoleTypes.Phantom, "#CA8AFF" },
             };
         }
         catch (ArgumentException ex)

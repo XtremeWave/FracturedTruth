@@ -8,8 +8,6 @@ using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Resources;
 using TMPro;
 using UnityEngine;
-using static FinalSuspect.Helpers.ResourcesHelper;
-using static FinalSuspect.Modules.Resources.ResourcesDownloader;
 using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Patches.System;
@@ -94,8 +92,8 @@ public static class LoadPatch
             var logoAnimator = GameObject.Find("LogoAnimator");
             logoAnimator.SetActive(false);
 
-            CheckForListResources(ref PreReadyRemoteImageList, FileType.Images);
-            yield return DownloadResources(PreReadyRemoteImageList, FileType.Images, HandleFirstLaunchText, true);
+            CheckForListResources(ref ResourcesHelper.PreReadyRemoteImageList, FileType.Images);
+            yield return DownloadResources(ResourcesHelper.PreReadyRemoteImageList, FileType.Images, HandleFirstLaunchText, true);
             if (string.IsNullOrEmpty(_loadText.text)) yield break;
             _loadText.text = string.Empty;
             _firstLaunch = true;
@@ -233,8 +231,8 @@ public static class LoadPatch
         private static IEnumerator LoadEssentialResources()
         {
             yield return LoadAmongUsTranslation();
-            CheckForListResources(ref RemoteDependList, FileType.Depends);
-            yield return DownloadResources(RemoteDependList, FileType.Depends, null, true);
+            CheckForListResources(ref ResourcesHelper.RemoteDependList, FileType.Depends);
+            yield return DownloadResources(ResourcesHelper.RemoteDependList, FileType.Depends, null, true);
 
             List<string> RemoteLanguageList = [];
             RemoteLanguageList.AddRange(EnumHelper.GetAllNames<SupportedLangs>().Select(lang => lang + ".yaml"));
@@ -269,9 +267,9 @@ public static class LoadPatch
             UpdateProcessText(GetString("CheckingForFiles"), Color.blue.AlphaMultiplied(0.75f));
             yield return FadeText(_processText, true);
 
-            CheckForListResources(ref RemoteImageList, FileType.Images);
+            CheckForListResources(ref ResourcesHelper.RemoteImageList, FileType.Images);
 
-            if (RemoteImageList.Count > 0)
+            if (ResourcesHelper.RemoteImageList.Count > 0)
                 yield return HandleResourceDownloads();
             else
                 yield return FadeText(_processText, false);
@@ -280,7 +278,7 @@ public static class LoadPatch
 
         private static IEnumerator HandleResourceDownloads()
         {
-            var downloadCount = RemoteImageList.Count;
+            var downloadCount = ResourcesHelper.RemoteImageList.Count;
             var progress = 0;
 
             UpdateProcessText($"{GetString("DownloadingResources")}({progress}/{downloadCount})", 
@@ -293,7 +291,7 @@ public static class LoadPatch
                 _processText.text = $"{GetString("DownloadingResources")}({progress}/{downloadCount})";
             });
 
-            yield return DownloadResources(RemoteImageList, FileType.Images, updateProgress);
+            yield return DownloadResources(ResourcesHelper.RemoteImageList, FileType.Images, updateProgress);
             yield return ShowDownloadCompletion();
         }
 
@@ -368,7 +366,7 @@ public static class LoadPatch
             foreach (var resource in resources)
             {
                 progressCallback?.Invoke();
-                var task = StartDownload(fileType, resource);
+                var task = ResourcesDownloader.StartDownload(fileType, resource);
                 while (!task.IsCompleted) yield return null;
 
                 if (!task.IsFaulted && task.Result) continue;

@@ -127,8 +127,8 @@ public static class PathManager
 #else
         "https://raw.githubusercontent.com/XtremeWave/FinalSuspect/FinalSus/",
         "https://raw.githubusercontent.com/XtremeWave/FinalSuspect_Dev/FS_Dev/",
-        "https://gitee.com/LezaiYa/FinalSuspectAssets/raw/main/",
         "http://121.62.28.59:1145/FinalSuspect/download/",
+        "https://gitee.com/LezaiYa/FinalSuspectAssets/raw/main/",
         $"file:///{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop))}/",
 #endif
     };

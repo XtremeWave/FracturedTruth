@@ -6,8 +6,6 @@ using FinalSuspect.Modules.SoundInterface;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static FinalSuspect.Modules.SoundInterface.CustomSoundsManager;
-using static FinalSuspect.Modules.SoundInterface.XtremeMusic;
 using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Modules.Panels;
@@ -20,7 +18,7 @@ public static class MyMusicPanel
 
     public static int CurrentPage { get; private set; } = 1;
     public static int ItemsPerPage => 7;
-    public static int TotalPageCount => (musics.Count + ItemsPerPage - 1) / ItemsPerPage;
+    public static int TotalPageCount => (XtremeMusic.musics.Count + ItemsPerPage - 1) / ItemsPerPage;
 
     private static int numItems;
     public static int PlayMode;
@@ -68,7 +66,7 @@ public static class MyMusicPanel
 
             var stopPassiveButton = stopButton.GetComponent<PassiveButton>();
             stopPassiveButton.OnClick = new Button.ButtonClickedEvent();
-            stopPassiveButton.OnClick.AddListener(new Action(StopPlayMod));
+            stopPassiveButton.OnClick.AddListener(new Action(CustomSoundsManager.StopPlayMod));
 
             AddPageNavigationButton(optionsMenuBehaviour);
 
@@ -142,7 +140,7 @@ public static class MyMusicPanel
         var startIndex = (CurrentPage - 1) * ItemsPerPage;
 
         var count = 0;
-        foreach (var audio in musics.Skip(startIndex))
+        foreach (var audio in XtremeMusic.musics.Skip(startIndex))
         {
             if (count >= ItemsPerPage)
             {
@@ -227,7 +225,7 @@ public static class MyMusicPanel
             void OnClick()
             {
                 Info($"Try To Play {filename}:{path}", "MyMusicPanel");
-                Play(audio);
+                CustomSoundsManager.Play(audio);
             }
             Items.Add(ToggleButton.gameObject);
             Items.Add(previewText.gameObject);

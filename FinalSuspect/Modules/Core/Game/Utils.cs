@@ -5,13 +5,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using AmongUs.GameOptions;
+using FinalSuspect.DataHandling.FinalAntiCheat;
+using FinalSuspect.DataHandling.FinalAntiCheat.Core;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Resources;
 using FinalSuspect.Patches.System;
 using Il2CppInterop.Runtime.InteropTypes;
 using InnerNet;
 using UnityEngine;
-using static AmongUs.GameOptions.RoleTypes;
 
 namespace FinalSuspect.Modules.Core.Game;
 
@@ -49,7 +50,7 @@ public static class Utils
     }
     public static string GetRoleInfoForVanilla(this RoleTypes role, bool InfoLong = false)
     {
-        if (role is Crewmate or Impostor)
+        if (role is RoleTypes.Crewmate or RoleTypes.Impostor)
             InfoLong = false;
 
         var text = role.ToString();
@@ -64,12 +65,27 @@ public static class Utils
     public static void KickPlayer(int clientId, bool ban, string reason = "")
     {
         Info($"try to kick {GetClientById(clientId)?.Character?.GetRealName()}", "Kick");
-        OnPlayerLeftPatch.Add(clientId);
-        AmongUsClient.Instance.KickPlayer(clientId, ban);
+        try
+        {
+            OnPlayerLeftPatch.Add(clientId);
+            AmongUsClient.Instance.KickPlayer(clientId, ban);
+        }
+        catch 
+        {
+            /* ignored */
+        }
     }
     public static void KickPlayer(byte playerId, bool ban, string reason = "")
     {
-        KickPlayer(GetPlayerById(playerId).GetClient().Id, ban, reason);
+        try
+        {
+            KickPlayer(GetPlayerById(playerId).GetClient().Id, ban, reason);
+        }
+        catch 
+        {
+            /* ignored */
+        }
+        
     }
     public static string PadRightV2(this object text, int num)
     {
@@ -150,8 +166,8 @@ public static class Utils
 
         builder.AppendFormat("<pos={0}em>", pos);
 
-        var oldrole = thisdata.RoleWhenAlive ?? Crewmate;
-        var newrole = thisdata.RoleAfterDeath ?? (thisdata.IsImpostor? ImpostorGhost : CrewmateGhost);
+        var oldrole = thisdata.RoleWhenAlive ?? RoleTypes.Crewmate;
+        var newrole = thisdata.RoleAfterDeath ?? (thisdata.IsImpostor? RoleTypes.ImpostorGhost : RoleTypes.CrewmateGhost);
         builder.Append(StringHelper.ColorString(GetRoleColor(oldrole), GetString($"{oldrole}")));
 
         if (thisdata.IsDead  && newrole != oldrole)
@@ -401,7 +417,15 @@ public static class Utils
     {
         return role switch
         {
-            Impostor or Shapeshifter or Phantom or ImpostorGhost => true,
+            RoleTypes.Impostor or RoleTypes.Shapeshifter or RoleTypes.Phantom or RoleTypes.ImpostorGhost => true,
+            _ => false,
+        };
+    }
+    public static bool IsGhost(RoleTypes role)
+    {
+        return role switch
+        {
+            RoleTypes.ImpostorGhost or RoleTypes.CrewmateGhost or RoleTypes.GuardianAngel => true,
             _ => false,
         };
     }
@@ -409,7 +433,7 @@ public static class Utils
     public static bool CanSeeTargetRole(PlayerControl target, out bool bothImp)
     {
         var LocalDead = !PlayerControl.LocalPlayer.IsAlive();
-        var IsAngel = PlayerControl.LocalPlayer.GetRoleType() is GuardianAngel;
+        var IsAngel = PlayerControl.LocalPlayer.GetRoleType() is RoleTypes.GuardianAngel;
         var BothDeathCanSee = LocalDead && ((!target.IsAlive() && IsAngel) || !IsAngel);
         bothImp = PlayerControl.LocalPlayer.IsImpostor() && target.IsImpostor();
 
@@ -425,7 +449,7 @@ public static class Utils
         if (!IsInGame) return true;
         if (IsFreePlay) return true;
         var LocalDead = !PlayerControl.LocalPlayer.IsAlive();
-        var IsAngel = PlayerControl.LocalPlayer.GetRoleType() is GuardianAngel;
+        var IsAngel = PlayerControl.LocalPlayer.GetRoleType() is RoleTypes.GuardianAngel;
         
         return !IsAngel && LocalDead || 
                Main.GodMode.Value || 
@@ -457,5 +481,22 @@ public static class Utils
         inActiveRenderer.color = inActiveColor;
         button.activeTextColor = activeTextColor;
         button.inactiveTextColor = inActiveTextColor;
+    }
+
+    public static void MarkAsCheater(this PlayerControl pc)
+    {
+        pc.GetXtremeData().CheatData.MarkAsCheater();
+    }
+
+    public static PlayerCheatData GetCheatDataById(byte id)
+    {
+        try
+        {
+            return XtremePlayerData.GetXtremeDataById(id)?.CheatData;
+        }
+        catch
+        {
+            return null;
+        }
     }
 }
