@@ -67,8 +67,7 @@ public class ModUpdater
         {
             foreach (var path in Directory.EnumerateFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty, "*.*"))
             {
-                if (path.EndsWith(Path.GetFileName(Assembly.GetExecutingAssembly().Location))) continue;
-                if (path.EndsWith("FinalSuspect.dll") || path.EndsWith("Downloader.dll")) continue;
+                if (!Path.GetExtension(path).Equals(".bak", StringComparison.OrdinalIgnoreCase)) continue;
 
                 Info($"{Path.GetFileName(path)} Deleted", "DeleteOldFiles");
                 File.Delete(path);
@@ -77,6 +76,40 @@ public class ModUpdater
         catch (Exception e)
         {
             Error($"清除更新残留失败\n{e}", "DeleteOldFiles");
+        }
+    }
+    
+    public static void MoveOtherFiles()
+    {
+        try
+        {
+            var currentDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
+            var targetDir = Path.Combine(currentDir, "OtherFiles");
+            
+            Directory.CreateDirectory(targetDir);
+
+            var currentFileName = Path.GetFileName(Assembly.GetExecutingAssembly().Location);
+
+            foreach (var path in Directory.EnumerateFiles(currentDir, "*.*"))
+            {
+                var fileName = Path.GetFileName(path);
+                
+                if (fileName.Equals(currentFileName, StringComparison.OrdinalIgnoreCase)) continue;
+                
+                var destPath = Path.Combine(targetDir, fileName);
+                
+                if (File.Exists(destPath))
+                {
+                    File.Delete(destPath);
+                }
+            
+                File.Move(path, destPath);
+                Info($"{fileName} 已移动到 OldFiles 文件夹", "MoveOldFiles");
+            }
+        }
+        catch (Exception e)
+        {
+            Error($"移动冗余文件失败\n{e}", "MoveOldFiles");
         }
     }
     public static async Task<(bool, string)> DownloadDLL(string url)
