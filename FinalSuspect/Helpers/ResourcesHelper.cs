@@ -52,7 +52,8 @@ public static class ResourcesHelper
         "FeaturesIntroduction.v1.1.txt",
         "FS.v1.1_20250216.txt", 
         "FS.v1.1_20250412.txt",
-        "FS.v1.1_20250501.txt"
+        "FS.v1.1_20250501.txt",
+        "FS.v1.1_20250505.txt"
     ];
 
     #endregion
