@@ -8,7 +8,6 @@ public class BetterAmongUs: IRpcHandler
 {
     public List<byte> TargetRpcs =>
     [
-        150,
         151
     ];
     

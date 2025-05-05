@@ -85,6 +85,7 @@ public class PlayerCheatData
             if (timeDiff > 1000)
             {
                 record.Count = 1;
+                record.LastReceivedTime = currentTime;
             }
             else
             {
@@ -98,7 +99,7 @@ public class PlayerCheatData
                 }
             }
             
-            record.LastReceivedTime = currentTime;
+            
             _rpcRecords[rpcId] = record;
         }
         else
