@@ -3,7 +3,6 @@ using System.Collections;
 using System.Linq;
 using System.Text;
 using AmongUs.Data;
-using AmongUs.GameOptions;
 using BepInEx.Unity.IL2CPP.Utils;
 using FinalSuspect.Attributes;
 using FinalSuspect.Helpers;
@@ -13,6 +12,7 @@ using FinalSuspect.Templates;
 using InnerNet;
 using TMPro;
 using UnityEngine;
+using static AmongUs.GameOptions.RoleTypes;
 using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Patches.Game_Vanilla;
@@ -228,7 +228,7 @@ public static class HudManagerPatch
             }
             else
             {
-                color = GetRoleColor(RoleTypes.Crewmate);
+                color = GetRoleColor(Crewmate);
             }
         }
         else
@@ -343,7 +343,7 @@ public static class HudManagerPatch
             IsInGame ? new Vector3(0.2f, 2.685f, -14f) : new Vector3(-4.5f, 2.6f, -1f);
         if (IsInGame)
             showHideButton.Button.gameObject.SetActive
-            (PlayerControl.LocalPlayer.GetRoleType() is RoleTypes.CrewmateGhost or RoleTypes.ImpostorGhost &&
+            (PlayerControl.LocalPlayer.GetRoleType() is CrewmateGhost or ImpostorGhost &&
              !IsMeeting);
         else
             showHideButton.Button.gameObject.SetActive(true);

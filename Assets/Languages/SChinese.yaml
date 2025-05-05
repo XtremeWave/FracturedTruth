@@ -233,8 +233,7 @@ ErrorLevel3: "未发布版本"
 # 反作弊 / FAC
 FAC.CheatDetected.HighLevel: "警告：FAC正在抵御炸房外挂"
 FAC.CheatDetected.LowLevel: "警告：FAC检测到可能存在作弊玩家"
-FAC.CheatDetected.UsingCheat: "{0}使用作弊程序【{1}】"
-FAC.CheatDetected.MayUseCheat: "{0}疑似使用模组【{1}】或作弊程序"
+FAC.CheatDetected.FAC: "使用作弊程序（例如AUM、YuMenu、SM等）"
 
 # 模组信息 / Mod Infos
 Contributors: "贡献者"
@@ -306,7 +305,6 @@ HongKong: "香港"
 FPSSetTo: "帧数上限设置为: {0}"
 BrowsingMode: "浏览模式"
 Broken: "损坏"
-Unknown: "未知"
 
 # 身份 / Identity
 Host: "房主"

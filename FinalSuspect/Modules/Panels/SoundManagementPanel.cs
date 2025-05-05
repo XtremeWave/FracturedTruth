@@ -8,6 +8,8 @@ using FinalSuspect.Modules.SoundInterface;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static FinalSuspect.Modules.SoundInterface.SoundManager;
+using static FinalSuspect.Modules.SoundInterface.XtremeMusic;
 using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Modules.Panels;
@@ -98,7 +100,7 @@ public static class SoundManagementPanel
 
         Items?.Values.Do(Object.Destroy);
         Items = new Dictionary<string, GameObject>();
-        foreach (var audio in XtremeMusic.musics)
+        foreach (var audio in musics)
         {
             numItems++;
             var filename = audio.FileName;
@@ -123,7 +125,7 @@ public static class SoundManagementPanel
             Color buttonColor;
             var enable = true;
 
-            var audioExist = audio.CurrectAudioStates is not AudiosStates.NotExist || SoundInterface.SoundManager.CustomAudios.Contains(filename);
+            var audioExist = audio.CurrectAudioStates is not AudiosStates.NotExist || CustomAudios.Contains(filename);
             var unpublished = audio.unpublished;
             
             switch (audio.CurrectAudioStates)
@@ -192,7 +194,7 @@ public static class SoundManagementPanel
 
                             _ = new LateTask(() =>
                             {
-                                XtremeMusic.CreateMusic(music: audio.CurrectAudio);
+                                CreateMusic(music: audio.CurrectAudio);
                                 RefreshTagList();
                                 MyMusicPanel.RefreshTagList();
                             },3f, "Refresh Tag List");
@@ -224,14 +226,15 @@ public static class SoundManagementPanel
         if (audio.UnOfficial)
             DeleteSoundInName(sound);
         DeleteSoundInFile(sound);
-        if (!audio.UnOfficial) XtremeMusic.CreateMusic(music: audio.CurrectAudio);
+        if (!audio.UnOfficial)
+            CreateMusic(music: audio.CurrectAudio);
         RefreshTagList();
         MyMusicPanel.RefreshTagList();
     }
 
     private static void DeleteSoundInName(string name)
     {
-        using StreamReader sr = new(SoundInterface.SoundManager.TAGS_PATH);
+        using StreamReader sr = new(TAGS_PATH);
 
         List<string> update = [];
         while (sr.ReadLine() is { } line)
@@ -245,21 +248,21 @@ public static class SoundManagementPanel
         
         sr.Dispose();
 
-        File.Delete(SoundInterface.SoundManager.TAGS_PATH);
-        File.Create(SoundInterface.SoundManager.TAGS_PATH).Close();
+        File.Delete(TAGS_PATH);
+        File.Create(TAGS_PATH).Close();
 
-        var attributes = File.GetAttributes(SoundInterface.SoundManager.TAGS_PATH);
-        File.SetAttributes(SoundInterface.SoundManager.TAGS_PATH, attributes | FileAttributes.Hidden);
+        var attributes = File.GetAttributes(TAGS_PATH);
+        File.SetAttributes(TAGS_PATH, attributes | FileAttributes.Hidden);
 
-        using StreamWriter sw = new(SoundInterface.SoundManager.TAGS_PATH, true);
+        using StreamWriter sw = new(TAGS_PATH, true);
 
         foreach (var updateline in update)
         {
             sw.WriteLine(updateline);
         }
         
-        var item = XtremeMusic.musics.FirstOrDefault(x => x.Name == name);
-        XtremeMusic.musics.Remove(item);
+        var item = musics.FirstOrDefault(x => x.Name == name);
+        musics.Remove(item);
     }
 
     private static void DeleteSoundInFile(string sound)

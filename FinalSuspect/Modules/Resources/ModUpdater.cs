@@ -10,6 +10,7 @@ using FinalSuspect.Modules.Features;
 using FinalSuspect.Patches.System;
 using TMPro;
 using UnityEngine;
+using static FinalSuspect.Modules.Resources.VersionChecker;
 
 namespace FinalSuspect.Modules.Resources;
 
@@ -20,10 +21,10 @@ public class ModUpdater
 
     public static void SetUpdateButtonStatus()
     {
-        MainMenuManagerPatch.UpdateButton.SetActive(VersionChecker.isChecked && VersionChecker.hasUpdate && (VersionChecker.firstStart || VersionChecker.forceUpdate));
+        MainMenuManagerPatch.UpdateButton.SetActive(isChecked && hasUpdate && (firstStart || forceUpdate));
         MainMenuManagerPatch.PlayButton.SetActive(!MainMenuManagerPatch.UpdateButton.activeSelf);
         var buttonText = MainMenuManagerPatch.UpdateButton.transform.FindChild("FontPlacer").GetChild(0).GetComponent<TextMeshPro>();
-        buttonText.text = $"{(VersionChecker.CanUpdate ? GetString("updateButton") : GetString("updateNotice"))}\nv{VersionChecker.showVer ?? " ???"}";
+        buttonText.text = $"{(CanUpdate ? GetString("updateButton") : GetString("updateNotice"))}\nv{showVer ?? " ???"}";
     }
     
     public static void StartUpdate(string url = "waitToSelect")
@@ -92,7 +93,7 @@ public class ModUpdater
             client.ProgressChanged += OnDownloadProgressChanged;
             await client.StartDownload();
             Thread.Sleep(100);
-            if (GetMD5HashFromFile(DownloadFileTempPath) != VersionChecker.md5)
+            if (GetMD5HashFromFile(DownloadFileTempPath) != md5)
             {
                 File.Delete(DownloadFileTempPath);
                 return (false, GetString("updateFileMd5Incorrect"));

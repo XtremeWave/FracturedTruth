@@ -39,7 +39,7 @@ public class SwitchShipCostumeButtonPatch
         Costume++;
         if (Costume > 2)
             Costume = 0;
-        ShipStatus.Instance.gameObject.transform.FindChild("HelloweenDecorSkeld")?.gameObject.SetActive(Costume == 1);
+        ShipStatus.Instance.gameObject.transform.FindChild("Helloween")?.gameObject.SetActive(Costume == 1);
         ShipStatus.Instance.gameObject.transform.FindChild("BirthdayDecorSkeld")?.gameObject.SetActive(Costume == 2);
         var sounds = Sounds.TaskComplete;
         if (Costume == 0) sounds = Sounds.KillSound; 

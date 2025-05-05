@@ -6,6 +6,7 @@ using FinalSuspect.Helpers;
 using FinalSuspect.Templates;
 using TMPro;
 using UnityEngine;
+using static FinalSuspect.Patches.Game_Vanilla.HudManagerPatch;
 
 namespace FinalSuspect.Patches.Game_Vanilla;
 
@@ -76,12 +77,12 @@ class SetEverythingUpPatch
                 FontSize = 2f,
             };
         var lastgameresult = DidHumansWin ? GetString("CrewsWin") : GetString("ImpsWin");
-        HudManagerPatch.LastGameResult = lastgameresult;
+        LastGameResult = lastgameresult;
         StringBuilder sb = new($"{GetString("RoleSummaryText")}{lastgameresult}");
         var gamecode =  StringHelper.ColorString(
             ColorHelper.ModColor32, 
-            DataManager.Settings.Gameplay.StreamerMode?  new string('*', HudManagerPatch.LastRoomCode.Length): HudManagerPatch.LastRoomCode);
-        sb.Append("\n"+ HudManagerPatch.LastServer +"  "+gamecode);
+            DataManager.Settings.Gameplay.StreamerMode?  new string('*', LastRoomCode.Length): LastRoomCode);
+        sb.Append("\n"+ LastServer +"  "+gamecode);
         sb.Append("\n" + GetString("HideSummaryTextToShowWinText"));
 
         StringBuilder sb2 = new();
@@ -94,7 +95,7 @@ class SetEverythingUpPatch
             sb2.Append("\n\u3000 ").Append(AmongUsClientEndGamePatch.SummaryText[data.PlayerId]);
         }
 
-        HudManagerPatch.LastGameData = sb2.ToString();
+        LastGameData = sb2.ToString();
         sb.Append(sb2);
         HudManagerPatch.Init();
         roleSummary = TMPTemplate.Create(

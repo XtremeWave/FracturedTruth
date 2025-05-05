@@ -8,6 +8,7 @@ using FinalSuspect.Modules.Features.CheckingandBlocking;
 using FinalSuspect.Modules.Panels;
 using FinalSuspect.Modules.Resources;
 using UnityEngine;
+using static FinalSuspect.Modules.SoundInterface.SoundManager;
 
 namespace FinalSuspect.Modules.SoundInterface;
 
@@ -165,7 +166,7 @@ public class XtremeMusic
         var soundnum = 0;
         try
         {
-            using StreamReader sr = new(SoundManager.TAGS_PATH);
+            using StreamReader sr = new(TAGS_PATH);
             string line;
             while ((line = sr.ReadLine()) != null)
             {
@@ -227,8 +228,8 @@ public class XtremeMusic
         }
         else
         {
-            SoundManager.CustomAudios.Remove(name);
-            SoundManager.CustomAudios.Add(name);
+            CustomAudios.Remove(name);
+            CustomAudios.Add(name);
             FileName = Name = name;
             Author = "";
         }
@@ -236,7 +237,7 @@ public class XtremeMusic
         UnOfficial = music == SupportedMusics.UnOfficial;
         CurrectAudio = music;
         Path = GetResourceFilesPath(FileType.Sounds, FileName + ".wav");
-        CurrectAudioStates = LastAudioStates = SoundManager.ConvertExtension(ref Path) ? AudiosStates.Exist : AudiosStates.NotExist;
+        CurrectAudioStates = LastAudioStates = ConvertExtension(ref Path) ? AudiosStates.Exist : AudiosStates.NotExist;
         
         lock (finalMusicsLock)
         {

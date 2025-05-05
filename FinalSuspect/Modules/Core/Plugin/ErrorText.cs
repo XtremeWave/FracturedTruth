@@ -73,8 +73,8 @@ public class ErrorText : MonoBehaviour
     public void AddError(ErrorCode code)
     {
         var error = new ErrorData(code);
-        //if (0 < error.ErrorLevel)
-        //    Error($"エラー発生: {error}: {error.Message}", "ErrorText");
+        if (0 < error.ErrorLevel)
+            Error($"エラー発生: {error}: {error.Message}", "ErrorText");
 
         if (!AllErrors.Any(e => e.Code == code))
         {

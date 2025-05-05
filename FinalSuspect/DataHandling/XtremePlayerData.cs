@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using AmongUs.GameOptions;
 using FinalSuspect.Attributes;
-using FinalSuspect.DataHandling.FinalAntiCheat;
-using FinalSuspect.DataHandling.FinalAntiCheat.Core;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game;
 using UnityEngine;
+using static AmongUs.GameOptions.RoleTypes;
 
 namespace FinalSuspect.DataHandling;
 
@@ -40,14 +39,14 @@ public class XtremePlayerData : IDisposable
     public bool TaskCompleted => TotalTaskCount == CompleteTaskCount;
     public int KillCount { get; private set; }
         
-    public PlayerCheatData CheatData { get; private set; }
+    public FinalAntiCheat.PlayerCheatData CheatData { get; private set; }
 
     private XtremePlayerData(PlayerControl player, string playername, int colorid)
     {
         Player = player;
         Name = playername;
         ColorId = colorid;
-        CheatData = new PlayerCheatData(player);
+        CheatData = new FinalAntiCheat.PlayerCheatData(player);
         PlayerId = player.PlayerId;
         IsImpostor = IsDead = RoleAssgined = false;
         CompleteTaskCount = KillCount = TotalTaskCount = 0;
@@ -87,7 +86,7 @@ public class XtremePlayerData : IDisposable
 
         if (dead && !IsFreePlay)
         {
-            nullrole = data.IsImpostor ? RoleTypes.ImpostorGhost : RoleTypes.CrewmateGhost;
+            nullrole = data.IsImpostor ? ImpostorGhost : CrewmateGhost;
         }
         else
         {
@@ -174,7 +173,7 @@ public class XtremePlayerData : IDisposable
         }
         else
         {
-            foreach (var pc in PlayerControl.AllPlayerControls)
+            foreach (var pc in Main.AllPlayerControls)
             {
                 CreateDataFor(pc);
             }
@@ -248,11 +247,11 @@ public static class XtremePlayerDataExtensions
         }
     }
     
-    public static PlayerCheatData GetCheatData(this PlayerControl pc)
+    public static FinalAntiCheat.PlayerCheatData GetCheatData(this PlayerControl pc)
     {
         try
         {
-            return GetCheatDataById(pc.PlayerId);
+            return FinalAntiCheat.GetCheatDataById(pc.PlayerId);
         }
         catch
         {
