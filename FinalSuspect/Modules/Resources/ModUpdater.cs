@@ -102,9 +102,16 @@ public class ModUpdater
                 {
                     File.Delete(destPath);
                 }
-            
-                File.Move(path, destPath);
-                Info($"{fileName} 已移动到 OldFiles 文件夹", "MoveOldFiles");
+
+                try
+                {
+                    File.Move(path, destPath);
+                    Info($"{fileName} 已移动到 OldFiles 文件夹", "MoveOldFiles");
+                }
+                catch
+                {
+                    /* ignored */
+                }
             }
         }
         catch (Exception e)
