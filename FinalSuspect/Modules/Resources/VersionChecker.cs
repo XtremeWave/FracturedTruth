@@ -28,6 +28,7 @@ public static class VersionChecker
             }
             
             ModUpdater.SetUpdateButtonStatus();
+            ResolutionManager.SetResolution(1920, 1080, Screen.fullScreen);
             firstStart = false;
         }
     }
@@ -75,7 +76,6 @@ public static class VersionChecker
 
     private static async Task CheckForUpdate()
     {
-        ResolutionManager.SetResolution(1920, 1080, Screen.fullScreen);
         isChecked = false;
         ModUpdater.DeleteOldFiles();
 

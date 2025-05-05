@@ -4,7 +4,7 @@ using Hazel;
 
 namespace FinalSuspect.DataHandling.FinalAntiCheat.Handlers.Invalid;
 
-public class BetterAmongUs: IRpcHandler
+public class BetterAmongUs : IRpcHandler
 {
     public List<byte> TargetRpcs =>
     [
