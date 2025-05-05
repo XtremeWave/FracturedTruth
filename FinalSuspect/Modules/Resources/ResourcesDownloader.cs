@@ -35,7 +35,7 @@ public class ResourcesDownloader
         if (IsChineseLanguageUser)
             remoteType = retrytimes switch
             {
-                //0 => RemoteType.XtremeApi,
+                0 => RemoteType.XtremeApi,
                 1 => RemoteType.Gitee,
                 2 => RemoteType.Github,
                 _ => remoteType

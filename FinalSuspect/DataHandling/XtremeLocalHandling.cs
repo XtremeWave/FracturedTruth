@@ -63,12 +63,12 @@ public static class XtremeLocalHandling
                 toptext = toptext.CheckAndAppendText($"<size=1.5>{ver.forkId}</size>");
                 topcolor = ColorHelper.UnmatchedColor;
             }
-            else if (Main.version.CompareTo(ver.version) == 0 && ver.tag == $"{ThisAssembly.Git.Commit}({ThisAssembly.Git.Branch})")
+            else if (Main.version.CompareTo(ver.version) == 0 && ver.tag == $"{Main.GitCommit}({Main.GitBranch})")
             {
                 topcolor = ColorHelper.ModColor32;
             }
             else if (Main.version.CompareTo(ver.version) == 0 &&
-                     ver.tag != $"{ThisAssembly.Git.Commit}({ThisAssembly.Git.Branch})")
+                     ver.tag != $"{Main.GitCommit}({Main.GitBranch})")
             {
                 toptext = toptext.CheckAndAppendText($"<size=1.5>{ver.tag}</size>");
                 topcolor = Color.yellow;
@@ -206,10 +206,6 @@ public static class XtremeLocalHandling
                 DeathSync(__instance);
             }
             
-            __instance.GetCheatData().HandleBan();
-            __instance.GetCheatData().HandleLobbyPosition();
-            __instance.GetCheatData().HandleSuspectCheater();
-            
             var topTextTransform = __instance.cosmetics.nameText.transform.Find("TopText");
             var topText = topTextTransform.GetComponent<TextMeshPro>();
             topText.enabled = true;
@@ -227,11 +223,13 @@ public static class XtremeLocalHandling
 
             __instance.cosmetics.nameText.text = name;
             __instance.cosmetics.nameText.color = topcolor;
+            
+            __instance.GetCheatData().HandleCheatData();
         }
         catch
         {
-            var create = (__instance.GetRealName() == null && IsFreePlay ||
-                          __instance.GetRealName() != "Player(Clone)") 
+            var create = (IsFreePlay ||
+                          __instance.GetRealName() != "Player(Clone)" && IsLobby) 
                          && XtremePlayerData.AllPlayerData.All(data => data.PlayerId != __instance.PlayerId);
             if (create) XtremePlayerData.CreateDataFor(__instance);
         }
@@ -300,7 +298,7 @@ public static class XtremeLocalHandling
             }
             catch
             {
-                // ignored
+                /* ignored */
             }
         }
     }
@@ -332,7 +330,7 @@ public static class XtremeLocalHandling
             }
             catch
             {
-                // ignored
+                /* ignored */
             }
         }
     }
@@ -365,6 +363,7 @@ public static class XtremeLocalHandling
                 else
                 {
                     data.Player.SetPlayerMaterialColors(data.Rend);
+                    data.Player.SetPlayerMaterialColors(data.Deadbodyrend);
                     data.Rend.gameObject.SetActive(true);
                     UpdateMap();
                 }
@@ -391,15 +390,12 @@ public static class XtremeLocalHandling
         foreach (var data in XtremePlayerData.AllPlayerData)
         {
             var player = data.Player;
-            if (data.Deadbodyrend)
-                data.Deadbodyrend.gameObject.SetActive(CanSeeTargetRole(player, out _));
+            data.Deadbodyrend?.gameObject.SetActive(CanSeeTargetRole(player, out _) && player.GetXtremeData().RealDeathReason is VanillaDeathReason.Kill);
             if (data.IsDisconnected || !CanSeeTargetRole(player, out _) || player.IsLocalPlayer())
             {
                 data.Rend.gameObject.SetActive(false);
                 continue;
             }
-            if (data.IsDead)
-                data.Rend.color = Color.white.AlphaMultiplied(0.6f);
            
             var vector = player.transform.position;
             if (MeetingHud.Instance && data.PreMeetingPosition != null)
@@ -416,6 +412,11 @@ public static class XtremeLocalHandling
             vector.z = -1f;
             data.Rend.transform.localPosition = vector;
             data.Rend.gameObject.SetActive(true);
+            
+            if (data.IsDead)
+                data.Rend.color = Color.white.AlphaMultiplied(0.6f);
+            else if (data.Deadbodyrend != null)
+                data.Deadbodyrend.transform.localPosition = vector;
         }
     }
 
@@ -452,7 +453,7 @@ public static class XtremeLocalHandling
         }
         catch
         {
-            // ignored
+            /* ignored */
         }
     }
 }

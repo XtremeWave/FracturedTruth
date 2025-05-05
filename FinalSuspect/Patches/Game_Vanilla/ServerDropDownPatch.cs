@@ -4,6 +4,7 @@ using System.Linq;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Object = Il2CppSystem.Object;
 
 namespace FinalSuspect.Patches.Game_Vanilla;
 
@@ -35,7 +36,7 @@ public static class ServerDropDownPatch
             if (DestroyableSingleton<ServerManager>.Instance.CurrentRegion.Name == regionInfo.Name)
             {
                 __instance.defaultButtonSelected = __instance.firstOption;
-                __instance.firstOption.ChangeButtonText(DestroyableSingleton<TranslationController>.Instance.GetStringWithDefault(regionInfo.TranslateName, regionInfo.Name, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
+                __instance.firstOption.ChangeButtonText(DestroyableSingleton<TranslationController>.Instance.GetStringWithDefault(regionInfo.TranslateName, regionInfo.Name, new Il2CppReferenceArray<Object>(0)));
                 continue;
             }
 
@@ -55,7 +56,7 @@ public static class ServerDropDownPatch
             serverListButton.Text.text = DestroyableSingleton<TranslationController>.Instance.GetStringWithDefault(
                 regionInfo.TranslateName,
                 regionInfo.Name,
-                new Il2CppReferenceArray<Il2CppSystem.Object>(0));
+                new Il2CppReferenceArray<Object>(0));
             serverListButton.Text.ForceMeshUpdate();
             serverListButton.Button.OnClick.RemoveAllListeners();
             serverListButton.Button.OnClick.AddListener((Action)(() => __instance.ChooseOption(region)));

@@ -13,7 +13,6 @@ using FinalSuspect.Templates;
 using InnerNet;
 using TMPro;
 using UnityEngine;
-using static AmongUs.GameOptions.RoleTypes;
 using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Patches.Game_Vanilla;
@@ -145,7 +144,7 @@ public static class HudManagerPatch
             }
             catch
             {
-                // ignored
+                /* ignored */
             }
         }
     }
@@ -210,7 +209,7 @@ public static class HudManagerPatch
         }
         catch
         {
-            // ignored
+            /* ignored */
         }
 
         showHideButton = null;
@@ -229,7 +228,7 @@ public static class HudManagerPatch
             }
             else
             {
-                color = GetRoleColor(Crewmate);
+                color = GetRoleColor(RoleTypes.Crewmate);
             }
         }
         else
@@ -276,9 +275,9 @@ public static class HudManagerPatch
             new SimpleButton(
                 __instance.transform,
                 "ShowHideResultsButton",
-                IsInGame? new(0.2f, 2.685f, -14f) : new(-4.5f, 2.6f, -14f),  // 比 BackgroundLayer(z = -13) 更靠前
-                new(209, 190, 255, byte.MaxValue),
-                new(208, 222, 255, byte.MaxValue),
+                IsInGame? new Vector3(0.2f, 2.685f, -14f) : new Vector3(-4.5f, 2.6f, -14f),  // 比 BackgroundLayer(z = -13) 更靠前
+                new Color32(209, 190, 255, byte.MaxValue),
+                new Color32(208, 222, 255, byte.MaxValue),
                 () =>
                 {
                     var setToActive = !roleSummary.gameObject.activeSelf;
@@ -288,7 +287,7 @@ public static class HudManagerPatch
                 },
                 GetString(showInitially ? "HideResults" : "ShowResults"))
             {
-                Scale = new(1.5f, 0.5f),
+                Scale = new Vector2(1.5f, 0.5f),
                 FontSize = 2f,
             };
 
@@ -337,14 +336,14 @@ public static class HudManagerPatch
             backgroundObject.transform.SetParent(roleSummary.transform); 
             backgroundRenderer = backgroundObject.AddComponent<SpriteRenderer>();
             backgroundRenderer.sprite = LoadSprite("LastResult-BG.png",200f);
-            backgroundRenderer.color = new(0.5f,0.5f,0.5f,1f); 
+            backgroundRenderer.color = new Color(0.5f,0.5f,0.5f,1f); 
         }
         
         showHideButton.Button.transform.localPosition =
-            IsInGame ? new(0.2f, 2.685f, -14f) : new(-4.5f, 2.6f, -1f);
+            IsInGame ? new Vector3(0.2f, 2.685f, -14f) : new Vector3(-4.5f, 2.6f, -1f);
         if (IsInGame)
             showHideButton.Button.gameObject.SetActive
-            (PlayerControl.LocalPlayer.GetRoleType() is CrewmateGhost or ImpostorGhost &&
+            (PlayerControl.LocalPlayer.GetRoleType() is RoleTypes.CrewmateGhost or RoleTypes.ImpostorGhost &&
              !IsMeeting);
         else
             showHideButton.Button.gameObject.SetActive(true);

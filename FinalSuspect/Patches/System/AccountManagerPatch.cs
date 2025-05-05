@@ -89,7 +89,7 @@ public static class AwakeAccountManager
         }
         catch
         {
-            // ignored
+            /* ignored */
         }
     }
     public static IEnumerator SwitchRoleIllustration(SpriteRenderer spriter)

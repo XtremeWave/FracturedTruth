@@ -2,28 +2,8 @@ using System;
 using FinalSuspect.Helpers;
 using InnerNet;
 using TMPro;
-using UnityEngine;
 
 namespace FinalSuspect.Patches.System;
-
-[HarmonyPatch(typeof(FindAGameManager), nameof(FindAGameManager.Update))]
-public static class FindAGameManagerUpdatePatch
-{
-    private static int buffer = 600;
-    private static GameObject RefreshButton;
-    private static GameObject InputDisplayGlyph;
-
-    public static void Postfix(FindAGameManager __instance)
-    {
-        if ((RefreshButton = GameObject.Find("RefreshButton")) != null)
-            RefreshButton.transform.localPosition = new Vector3(100f, 100f, 100f);
-        if ((InputDisplayGlyph = GameObject.Find("InputDisplayGlyph")) != null)
-            InputDisplayGlyph.transform.localPosition = new Vector3(100f, 100f, 100f);
-
-        buffer--; if (buffer > 0) return; buffer = 600;
-        //__instance.RefreshList();
-    }
-}
 
 [HarmonyPatch(typeof(MatchMakerGameButton), nameof(MatchMakerGameButton.SetGame))]
 public static class MatchMakerGameButtonSetGamePatch

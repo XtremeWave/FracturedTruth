@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using FinalSuspect.Attributes;
-using FinalSuspect.Helpers;
 
 namespace FinalSuspect.Modules.Resources;
 
@@ -15,7 +14,7 @@ public static class PathManager
     public const string downloadUrl_github = "https://github.com/XtremeWave/FinalSuspect/releases/latest/download/FinalSuspect.dll";
 
     public static string downloadUrl_gitee = "https://gitee.com/LezaiYa/FinalSuspectAssets/releases/download/v{showVer}/FinalSuspect.dll";
-    //public static string downloadUrl_xtremeapi = "https://api.xtreme.net.cn/download/FinalSuspect/FinalSuspect.dll";
+    public const string downloadUrl_xtremeapi = "http://121.62.28.59:1145/download/FinalSuspect/FinalSuspect.dll";
     
     public static string GetFile(FileType fileType, RemoteType remoteType, string file)
     {
@@ -27,21 +26,15 @@ public static class PathManager
         return "https://" + GetRemoteBase(remoteType) + fileType + "/";
     }
 
-    public static string GetRemoteBase(RemoteType remoteType)
+    private static string GetRemoteBase(RemoteType remoteType)
     {
-        var remoteBase = "127.0.0.1";
-        switch (remoteType)
+        var remoteBase = remoteType switch
         {
-            case RemoteType.Github:
-                remoteBase = "github.com/XtremeWave/FinalSuspect/raw/FinalSus/Assets/";
-                break;
-            case RemoteType.Gitee:
-                remoteBase = "gitee.com/LezaiYa/FinalSuspectAssets/raw/main/Assets/";
-                break;
-            //case RemoteType.XtremeApi:
-            //    remoteBase = "api.xtreme.net.cn/download/FinalSuspect/Assets/";
-            //    break;
-        }
+            RemoteType.Github => "github.com/XtremeWave/FinalSuspect/raw/FinalSus/Assets/",
+            RemoteType.Gitee => "gitee.com/LezaiYa/FinalSuspectAssets/raw/main/Assets/",
+            RemoteType.XtremeApi => "api.xtreme.net.cn/FinalSuspect/download/Assets/",
+            _ => "127.0.0.1"
+        };
         return remoteBase;
     }
 
@@ -116,7 +109,7 @@ public static class PathManager
         }
         catch 
         {
-            /*Ignore*/
+            /* ignored */
         }
     }
     
@@ -130,20 +123,21 @@ public static class PathManager
 #if RELEASE
         "https://raw.githubusercontent.com/XtremeWave/FinalSuspect/FinalSus/",
         "https://gitee.com/LezaiYa/FinalSuspectAssets/raw/main/",
-        //"https://api.xtreme.net.cn/download/FinalSuspect/",
+        "http://121.62.28.59:1145/FinalSuspect/download/",
 #else
+        "https://raw.githubusercontent.com/XtremeWave/FinalSuspect/FinalSus/",
         "https://raw.githubusercontent.com/XtremeWave/FinalSuspect_Dev/FS_Dev/",
+        "http://121.62.28.59:1145/FinalSuspect/download/",
         "https://gitee.com/LezaiYa/FinalSuspectAssets/raw/main/",
-        //"https://api.xtreme.net.cn/download/FinalSuspect/",
         $"file:///{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop))}/",
-
 #endif
     };
     
     public static IReadOnlyList<string> GetInfoFileUrlList(bool allowDesktop = false)
     {
         var list = URLs.ToList();
-        if (!allowDesktop && DebugModeManager.AmDebugger) list.RemoveAt(2);
+        if (!allowDesktop && DebugModeManager.AmDebugger) 
+            list.RemoveAt(3);
         if (IsChineseUser) list.Reverse();
         return list;
     }
@@ -162,7 +156,7 @@ public enum RemoteType
 {
     Github,
     Gitee,
-    //XtremeApi
+    XtremeApi
 }
 
 public enum LocalType

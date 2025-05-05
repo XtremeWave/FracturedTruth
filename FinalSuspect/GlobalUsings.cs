@@ -5,7 +5,7 @@
 global using FinalSuspect.DataHandling;
 global using FinalSuspect.Modules.Core.Plugin;
 global using HarmonyLib;
-global using static FinalSuspect.DataHandling.FinalAntiCheat.FAC;
+global using static FinalSuspect.DataHandling.FinalAntiCheat.Core.FAC;
 global using static FinalSuspect.DataHandling.XtremeGameData.GameStates;
 global using static FinalSuspect.Modules.Core.Game.Utils;
 global using static FinalSuspect.Modules.Core.Plugin.Translator;

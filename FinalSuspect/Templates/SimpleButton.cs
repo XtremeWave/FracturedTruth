@@ -2,6 +2,7 @@
 using FinalSuspect.Helpers;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Templates;
@@ -93,8 +94,8 @@ public class SimpleButton
         label.text = "FinalSuspect SIMPLE BUTTON BASE";
         // 当たり判定がズレてるのを直す
         var buttonCollider = baseButton.GetComponent<BoxCollider2D>();
-        buttonCollider.offset = new(0f, 0f);
-        baseButton.OnClick = new();
+        buttonCollider.offset = new Vector2(0f, 0f);
+        baseButton.OnClick = new Button.ButtonClickedEvent();
     }
     
     public static bool IsNullOrDestroyed(SimpleButton button) => button == null || button.Button == null;

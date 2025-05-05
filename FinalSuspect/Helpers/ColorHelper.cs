@@ -13,11 +13,13 @@ public static class ColorHelper
         var markingColor = Color.HSVToRGB(h, MarkerSat, bright ? MarkerVal : v).SetAlpha(MarkerAlpha);
         return markingColor;
     }
+    
     public static Color HexToColor(string hex)
     {
-        ColorUtility.TryParseHtmlString(hex, out var color);
+        _ = ColorUtility.TryParseHtmlString(hex, out var color);
         return color;
     }
+    
     public static string ColorToHex(Color color)
     {
         Color32 color32 = color;
@@ -52,13 +54,13 @@ public static class ColorHelper
     public static readonly Color32 ImpostorRedPale = new(255, 90, 90, 255);
 
     /// <summary>
-    /// Darkness:１の比率で黒色と元の色を混ぜる。マイナスだと白色と混ぜる。
+    /// Darkness: 按1的比例混合黑色与原色。负值则与白色混合。
     /// </summary>
     public static Color ShadeColor(this Color color, float Darkness = 0)
     {
-        var IsDarker = Darkness >= 0; //黒と混ぜる
+        var IsDarker = Darkness >= 0; //与黑色混合
         if (!IsDarker) Darkness = -Darkness;
-        var Weight = IsDarker ? 0 : Darkness; //黒/白の比率
+        var Weight = IsDarker ? 0 : Darkness; //黑/白的混合比例
         var R = (color.r + Weight) / (Darkness + 1);
         var G = (color.g + Weight) / (Darkness + 1);
         var B = (color.b + Weight) / (Darkness + 1);

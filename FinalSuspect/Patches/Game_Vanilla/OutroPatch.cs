@@ -6,7 +6,6 @@ using FinalSuspect.Helpers;
 using FinalSuspect.Templates;
 using TMPro;
 using UnityEngine;
-using static FinalSuspect.Patches.Game_Vanilla.HudManagerPatch;
 
 namespace FinalSuspect.Patches.Game_Vanilla;
 
@@ -16,7 +15,7 @@ class AmongUsClientEndGamePatch
     public static Dictionary<byte, string> SummaryText = new();
     public static void Postfix(AmongUsClient __instance, [HarmonyArgument(0)] ref EndGameResult endGameResult)
     {
-        SummaryText = new();
+        SummaryText = new Dictionary<byte, string>();
         foreach (var data in XtremePlayerData.AllPlayerData)
             SummaryText[data.PlayerId] = SummaryTexts(data.PlayerId);
     }
@@ -59,9 +58,9 @@ class SetEverythingUpPatch
             new SimpleButton(
                 __instance.transform,
                 "ShowHideResultsButton",
-                new(-4.5f, 2.6f, -14f),  // 比 BackgroundLayer(z = -13) 更靠前
-                new(209, 190, 0, byte.MaxValue),
-                new(byte.MaxValue, byte.MaxValue, 0, byte.MaxValue),
+                new Vector3(-4.5f, 2.6f, -14f),  // 比 BackgroundLayer(z = -13) 更靠前
+                new Color32(209, 190, 0, byte.MaxValue),
+                new Color32(byte.MaxValue, byte.MaxValue, 0, byte.MaxValue),
                 () =>
                 {
                     var setToActive = !roleSummary.gameObject.activeSelf;
@@ -73,16 +72,16 @@ class SetEverythingUpPatch
                 },
                 GetString(showInitially ? "HideResults" : "ShowResults"))
             {
-                Scale = new(1.5f, 0.5f),
+                Scale = new Vector2(1.5f, 0.5f),
                 FontSize = 2f,
             };
         var lastgameresult = DidHumansWin ? GetString("CrewsWin") : GetString("ImpsWin");
-        LastGameResult = lastgameresult;
+        HudManagerPatch.LastGameResult = lastgameresult;
         StringBuilder sb = new($"{GetString("RoleSummaryText")}{lastgameresult}");
         var gamecode =  StringHelper.ColorString(
             ColorHelper.ModColor32, 
-            DataManager.Settings.Gameplay.StreamerMode?  new string('*', LastRoomCode.Length): LastRoomCode);
-        sb.Append("\n"+ LastServer +"  "+gamecode);
+            DataManager.Settings.Gameplay.StreamerMode?  new string('*', HudManagerPatch.LastRoomCode.Length): HudManagerPatch.LastRoomCode);
+        sb.Append("\n"+ HudManagerPatch.LastServer +"  "+gamecode);
         sb.Append("\n" + GetString("HideSummaryTextToShowWinText"));
 
         StringBuilder sb2 = new();
@@ -95,7 +94,7 @@ class SetEverythingUpPatch
             sb2.Append("\n\u3000 ").Append(AmongUsClientEndGamePatch.SummaryText[data.PlayerId]);
         }
 
-        LastGameData = sb2.ToString();
+        HudManagerPatch.LastGameData = sb2.ToString();
         sb.Append(sb2);
         HudManagerPatch.Init();
         roleSummary = TMPTemplate.Create(

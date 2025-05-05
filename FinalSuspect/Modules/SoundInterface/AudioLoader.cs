@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Modules.SoundInterface;
 
@@ -20,7 +21,7 @@ public class AudioLoader
         
         var warmupClip = AudioClip.Create("Warmup", 1, 1, 44100, false);
         warmupClip.SetData(new float[] { 0 }, 0);
-        UnityEngine.Object.Destroy(warmupClip);
+        Object.Destroy(warmupClip);
     }
 
     public static async Task<AudioClip> LoadAudioClipAsync(string filePath)

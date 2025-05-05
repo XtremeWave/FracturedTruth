@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using AmongUs.GameOptions;
 using FinalSuspect.Attributes;
+using FinalSuspect.DataHandling.FinalAntiCheat;
+using FinalSuspect.DataHandling.FinalAntiCheat.Core;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game;
 using UnityEngine;
-using static AmongUs.GameOptions.RoleTypes;
 
 namespace FinalSuspect.DataHandling;
 
@@ -39,17 +40,14 @@ public class XtremePlayerData : IDisposable
     public bool TaskCompleted => TotalTaskCount == CompleteTaskCount;
     public int KillCount { get; private set; }
         
-    public FinalAntiCheat.PlayerCheatData CheatData { get; private set; }
+    public PlayerCheatData CheatData { get; private set; }
 
-    private XtremePlayerData(
-        PlayerControl player,
-        string playername,
-        int colorid)
+    private XtremePlayerData(PlayerControl player, string playername, int colorid)
     {
         Player = player;
         Name = playername;
         ColorId = colorid;
-        CheatData = new FinalAntiCheat.PlayerCheatData(player);
+        CheatData = new PlayerCheatData(player);
         PlayerId = player.PlayerId;
         IsImpostor = IsDead = RoleAssgined = false;
         CompleteTaskCount = KillCount = TotalTaskCount = 0;
@@ -89,7 +87,7 @@ public class XtremePlayerData : IDisposable
 
         if (dead && !IsFreePlay)
         {
-            nullrole = data.IsImpostor ? ImpostorGhost : CrewmateGhost;
+            nullrole = data.IsImpostor ? RoleTypes.ImpostorGhost : RoleTypes.CrewmateGhost;
         }
         else
         {
@@ -131,7 +129,7 @@ public class XtremePlayerData : IDisposable
         if (!RoleAssgined)
         {
             RoleWhenAlive = role;
-            SetIsImp(Utils.IsImpostor(role));
+            SetIsImp(IsImpostor(role));
         }
         else
         {
@@ -155,8 +153,7 @@ public class XtremePlayerData : IDisposable
         SetDeathReason(VanillaDeathReason.Kill);
         killer.KillCount++;
         RealKiller = killer;
-
-        Info($"Set Real Killer For {Player.GetNameWithRole()}, Killer: {killer.Player.GetNameWithRole()}, DeathReason:", "Data");
+        Info($"Set Real Killer For {Player.GetNameWithRole()}, Killer: {killer.Player.GetNameWithRole()}", "Data");
     }
     
     public void SetTaskTotalCount(int count) => TotalTaskCount = count;
@@ -168,9 +165,19 @@ public class XtremePlayerData : IDisposable
     {
         DisposeAll();
         AllPlayerData = [];
-        foreach (var pc in PlayerControl.AllPlayerControls)
+        if (IsFreePlay)
         {
-            CreateDataFor(pc);
+            foreach (var data in GameData.Instance.AllPlayers)
+            {
+                CreateDataFor(data.Object);
+            }
+        }
+        else
+        {
+            foreach (var pc in PlayerControl.AllPlayerControls)
+            {
+                CreateDataFor(pc);
+            }
         }
     }
 
@@ -178,15 +185,15 @@ public class XtremePlayerData : IDisposable
     {
         try
         {
-            Info($"Creating XtremePlayerData For {player.GetClient().PlayerName}({player.GetClient().FriendCode})", "Data");
             var colorId = player.Data.DefaultOutfit.ColorId;
             playername ??= player.GetRealName();
            
             AllPlayerData.Add(new XtremePlayerData(player, playername, colorId));
+            Info($"Creating XtremePlayerData For {player.GetClient().PlayerName ?? "Playername null"}({player.GetClient().FriendCode ?? "Friendcode null"})", "Data");
         }
         catch
         {
-            // ignored
+            /* ignored */
         }
     }
 #pragma warning disable CA1816
@@ -214,7 +221,7 @@ public class XtremePlayerData : IDisposable
         }
         catch
         {
-            // ignored
+            /* ignored */
         }
     }
 }
@@ -241,11 +248,11 @@ public static class XtremePlayerDataExtensions
         }
     }
     
-    public static FinalAntiCheat.PlayerCheatData GetCheatData(this PlayerControl pc)
+    public static PlayerCheatData GetCheatData(this PlayerControl pc)
     {
         try
         {
-            return FinalAntiCheat.GetCheatDataById(pc.PlayerId);
+            return GetCheatDataById(pc.PlayerId);
         }
         catch
         {

@@ -11,7 +11,6 @@ public static partial class XtremeGameData
     public static class GameStates
     {
         public static bool InGame { private get; set; }
-
         public static bool OtherModHost
         {
             get
@@ -81,7 +80,6 @@ public static partial class XtremeGameData
     public static bool ModClient(byte id) => PlayerVersion.playerVersion.ContainsKey(id);
     
     public static bool IsFinalSuspect(this PlayerControl pc)  => IsFinalSuspect(pc.PlayerId);
-
     public static bool IsFinalSuspect(byte id) => PlayerVersion.playerVersion.TryGetValue(id, out var ver) && Main.ForkId == ver.forkId;
 }
 

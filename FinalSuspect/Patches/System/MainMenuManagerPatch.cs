@@ -5,6 +5,7 @@ using FinalSuspect.Modules.Resources;
 using FinalSuspect.Templates;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Patches.System;
@@ -37,7 +38,10 @@ public class MainMenuManagerPatch
             ShowingPanel = false;
             AccountManager.Instance?.transform.FindChild("AccountTab/AccountWindow")?.gameObject.SetActive(false);
         }
-        catch { }
+        catch
+        {
+            /* ignored */
+        }
     }
 
     public static void ShowRightPanelImmediately()
@@ -86,21 +90,6 @@ public class MainMenuManagerPatch
         SimpleButton.SetBase(__instance.quitButton);
 
         var row = 1; var col = 0;
-        GameObject CreatButton(string text, Action action)
-        {
-            col++; if (col > 2) { col = 1; row++; }
-            var template = col == 1 ? __instance.creditsButton.gameObject : __instance.quitButton.gameObject;
-            var button = Object.Instantiate(template, template.transform.parent);
-            button.transform.transform.FindChild("FontPlacer").GetChild(0).gameObject.DestroyTranslator();
-            var buttonText = button.transform.FindChild("FontPlacer").GetChild(0).GetComponent<TextMeshPro>();
-            buttonText.text = text;
-            var passiveButton = button.GetComponent<PassiveButton>();
-            passiveButton.OnClick = new();
-            passiveButton.OnClick.AddListener(action);
-            var aspectPosition = button.GetComponent<AspectPosition>();
-            aspectPosition.anchorPoint = new Vector2(col == 1 ? 0.415f : 0.583f, 0.5f - 0.08f * row);
-            return button;
-        }
 
         var extraLinkName = IsChineseUser ? "QQ群" : "Discord";
         var extraLinkUrl = IsChineseUser ? Main.QQInviteUrl : Main.DiscordInviteUrl;
@@ -126,7 +115,7 @@ public class MainMenuManagerPatch
             var passiveButton = UpdateButton.GetComponent<PassiveButton>();
             passiveButton.inactiveSprites.GetComponent<SpriteRenderer>().color = new Color(0.49f, 0.34f, 0.62f, 0.8f);
             passiveButton.activeSprites.GetComponent<SpriteRenderer>().color = new Color(0.49f, 0.34f, 0.62f, 1f);
-            passiveButton.OnClick = new();
+            passiveButton.OnClick = new Button.ButtonClickedEvent();
             passiveButton.OnClick.AddListener((Action)(() =>
             {
                 PlayButton.SetActive(true);
@@ -147,5 +136,22 @@ public class MainMenuManagerPatch
             UpdateButton.transform.transform.FindChild("FontPlacer").GetChild(0).gameObject.DestroyTranslator();
         }
         Application.targetFrameRate = Main.UnlockFPS.Value ? 165 : 60;
+        return;
+
+        GameObject CreatButton(string text, Action action)
+        {
+            col++; if (col > 2) { col = 1; row++; }
+            var template = col == 1 ? __instance.creditsButton.gameObject : __instance.quitButton.gameObject;
+            var button = Object.Instantiate(template, template.transform.parent);
+            button.transform.transform.FindChild("FontPlacer").GetChild(0).gameObject.DestroyTranslator();
+            var buttonText = button.transform.FindChild("FontPlacer").GetChild(0).GetComponent<TextMeshPro>();
+            buttonText.text = text;
+            var passiveButton = button.GetComponent<PassiveButton>();
+            passiveButton.OnClick = new Button.ButtonClickedEvent();
+            passiveButton.OnClick.AddListener(action);
+            var aspectPosition = button.GetComponent<AspectPosition>();
+            aspectPosition.anchorPoint = new Vector2(col == 1 ? 0.415f : 0.583f, 0.5f - 0.08f * row);
+            return button;
+        }
     }
 }

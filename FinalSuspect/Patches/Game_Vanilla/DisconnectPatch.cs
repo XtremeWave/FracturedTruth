@@ -52,7 +52,7 @@ internal class ShowDisconnectPopupPatch
             }
             catch
             {
-                // ignored
+                /* ignored */
             }
         }, "Override Disconnect Text");
     }

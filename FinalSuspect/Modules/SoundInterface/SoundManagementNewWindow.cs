@@ -5,8 +5,7 @@ using System.Text.RegularExpressions;
 using FinalSuspect.Modules.Panels;
 using TMPro;
 using UnityEngine;
-using static FinalSuspect.Modules.SoundInterface.SoundManager;
-using static FinalSuspect.Modules.SoundInterface.XtremeMusic;
+using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Modules.SoundInterface;
@@ -35,7 +34,7 @@ public static class SoundManagementNewWindow
         var closeButton = Object.Instantiate(Window.transform.parent.FindChild("CloseButton"), Window.transform);
         closeButton.transform.localPosition = new Vector3(2.4f, 1.2f, -21f);
         closeButton.transform.localScale = new Vector3(1f, 1f, 1f);
-        closeButton.GetComponent<PassiveButton>().OnClick = new();
+        closeButton.GetComponent<PassiveButton>().OnClick = new Button.ButtonClickedEvent();
         closeButton.GetComponent<PassiveButton>().OnClick.AddListener((Action)(() =>
         {
             Window.SetActive(false);
@@ -49,7 +48,7 @@ public static class SoundManagementNewWindow
         infoPrefab.transform.localPosition += Vector3.back * 10;
         var buttonPrefab = Window.transform.FindChild("Button1").gameObject;
         buttonPrefab.name = "Button Prefab";
-        buttonPrefab.GetComponent<PassiveButton>().OnClick = new();
+        buttonPrefab.GetComponent<PassiveButton>().OnClick = new Button.ButtonClickedEvent();
         buttonPrefab.transform.localPosition += Vector3.back * 10;
         var enterPrefab = Object.Instantiate(AccountManager.Instance.transform.FindChild("PremissionRequestWindow/GuardianEmailConfirm").gameObject, Window.transform);
         enterPrefab.name = "Enter Box Prefab";
@@ -79,7 +78,7 @@ public static class SoundManagementNewWindow
             var code = EnterBox.GetComponent<TextBoxTMP>().text;
             var reg = new Regex(@"^(\s{1}|)$");
 
-            if (musics.Any(x => x.Name == code))
+            if (XtremeMusic.musics.Any(x => x.Name == code))
             {
                 ConfirmButton.SetActive(false);
                 colorInfoTmp.text = GetString("AudioManagementAlreadyExist");
@@ -95,7 +94,7 @@ public static class SoundManagementNewWindow
             {
                 Window.SetActive(false);
                 SaveToFile(code);
-                ReloadTag(false);
+                SoundManager.ReloadTag(false);
                 SoundManagementPanel.RefreshTagList();
                 MyMusicPanel.RefreshTagList();
                 return;
@@ -118,7 +117,7 @@ public static class SoundManagementNewWindow
     }
     private static void SaveToFile(string name)
     {
-        using StreamWriter sr = new(TAGS_PATH, true);
+        using StreamWriter sr = new(SoundManager.TAGS_PATH, true);
         sr.WriteLine(name);
     }
 }

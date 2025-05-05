@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using AmongUs.Data;
+using FinalSuspect.DataHandling.FinalAntiCheat.Core;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game;
 using FinalSuspect.Modules.Features.CheckingandBlocking;
@@ -54,13 +56,17 @@ class DisconnectInternalPatch
         }
         catch
         {
-            // ignored
+            /* ignored */
         }
     }
 }
 [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerJoined))]
 public class OnPlayerJoinedPatch
 {
+    private static readonly Regex ValidFormatRegex = new(
+        @"^[A-Za-z]+#\d{4}$", 
+        RegexOptions.Compiled
+    );
     public static void Postfix(AmongUsClient __instance, [HarmonyArgument(0)] ClientData client)
     {
         Info($"{client.PlayerName}(ClientID:{client.Id}/FriendCode:{client.FriendCode}) 加入房间", "Session");
@@ -74,6 +80,18 @@ public class OnPlayerJoinedPatch
         {
             KickPlayer(client.Id, true, "BanList");
             Info($"已封锁的玩家 {client.PlayerName} ({client.FriendCode}) 已被封禁。", "BAN");
+        }
+        if (AmongUsClient.Instance.AmHost && !ValidFormatRegex.IsMatch(client.FriendCode))
+        {
+            KickPlayer(client.Id, false, "NotLogin");
+            NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.Cheater"), client.PlayerName));
+            Info($"没有好友代码的玩家 {client.PlayerName} 已被踢出。", "Kick");
+        }
+        if (client.PlayerName.Contains("1337"))
+        {
+            KickPlayer(client.Id, false, "NotLogin");
+            NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.Cheater"), client.PlayerName));
+            Info($"Kami玩家 {client.PlayerName} 已被踢出。", "Kick");
         }
         BanManager.CheckBanPlayer(client);
         BanManager.CheckDenyNamePlayer(client);
@@ -131,13 +149,16 @@ class OnPlayerLeftPatch
                         NotificationPopperPatch.NotificationPop(string.Format(GetString("PlayerLeft"), name));
                     break;
             }
+            
+            Dispose(data.Character?.PlayerId ?? 255);
+            
             XtremeGameData.PlayerVersion.playerVersion.Remove(data.Character?.PlayerId ?? 255);
             ClientsProcessed.Remove(data.Id);
             XtremePlayerData.AllPlayerData.Do(_data => _data.AdjustPlayerId());
         }
         catch
         {
-            // ignored
+            /* ignored */
         }
     }
 }

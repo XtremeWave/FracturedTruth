@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -14,10 +13,8 @@ using FinalSuspect.Attributes;
 using FinalSuspect.Helpers;
 using FinalSuspect.Internal;
 using FinalSuspect.Modules.Random;
-using HarmonyLib.Tools;
 using Il2CppInterop.Runtime.Injection;
 using UnityEngine;
-using static AmongUs.GameOptions.RoleTypes;
 
 [assembly: AssemblyFileVersion(Main.PluginVersion)]
 [assembly: AssemblyInformationalVersion(Main.PluginVersion)]
@@ -59,7 +56,7 @@ public class Main : BasePlugin
     /// Preview: 预览/预发行版
     /// Scrapter: 废弃版
     /// </summary>
-    private const VersionTypes DisplayedVersion_Type = VersionTypes.Alpha;
+    private const VersionTypes DisplayedVersion_Type = VersionTypes.Canary;
 
     private const int DisplayedVersion_TestCreation = 1;
     
@@ -84,6 +81,17 @@ public class Main : BasePlugin
     public static string ExceptionMessage;
     public static bool ExceptionMessageIsShown;
     public static string CredentialsText;
+
+#pragma warning disable CS0618 // 类型或成员已过时
+    public const string GitBaseTag = ThisAssembly.Git.BaseTag;
+
+    public const string GitCommit = ThisAssembly.Git.Commit;
+    public const string GitCommits = ThisAssembly.Git.Commits;
+    public const string GitBranch = ThisAssembly.Git.Branch;
+    public const bool GitIsDirty = ThisAssembly.Git.IsDirty;
+    public const string GitSha = ThisAssembly.Git.Sha;
+    public const string GitTag = ThisAssembly.Git.Tag;
+#pragma warning restore CS0618 
     public static NormalGameOptionsV09 NormalOptions => GameOptionsManager.Instance.currentNormalGameOptions;
     public static HideNSeekGameOptionsV09 HideNSeekOptions => GameOptionsManager.Instance.currentHideNSeekGameOptions;
 
@@ -98,7 +106,7 @@ public class Main : BasePlugin
     public static ConfigEntry<bool> AutoEndGame { get; private set; }
     public static ConfigEntry<bool> DisableVanillaSound { get; private set; }
     public static ConfigEntry<bool> DisableFAC { get; private set; }
-    public static ConfigEntry<bool> PrunkMode { get; private set; }
+    //public static ConfigEntry<bool> PrunkMode { get; private set; }
     public static ConfigEntry<bool> ShowPlayerInfo { get; private set; }
     public static ConfigEntry<bool> UseModCursor { get; private set; }
     public static ConfigEntry<bool> FastBoot { get; private set; }
@@ -182,7 +190,7 @@ public class Main : BasePlugin
         AutoEndGame = Config.Bind("Client Options", "Auto End Game", false);
         DisableVanillaSound = Config.Bind("Client Options", "Disable Vanilla Sound", false);
         DisableFAC = Config.Bind("Client Options", "Disable FAC", false);
-        PrunkMode = Config.Bind("Client Options", "Prunk Mode", false);
+        //PrunkMode = Config.Bind("Client Options", "Prunk Mode", false);
         ShowPlayerInfo = Config.Bind("Client Options", "Show Player Info", true);
         UseModCursor = Config.Bind("Client Options", "Use Mod Cursor", true);
         FastBoot = Config.Bind("Client Options", "Fast Boot", false);
@@ -218,17 +226,17 @@ public class Main : BasePlugin
         {
             roleColors = new Dictionary<RoleTypes, string>
             {
-                { CrewmateGhost, "#8CFFFF" },
-                { GuardianAngel, "#8CFFDB" },
-                { Crewmate, "#8CFFFF" },
-                { Scientist, "#F8FF8C" },
-                { Engineer, "#A5A8FF" },
-                { Noisemaker, "#FFC08C" },
-                { Tracker, "#93FF8C" },
-                { ImpostorGhost, "#FF1919" },
-                { Impostor, "#FF1919" },
-                { Shapeshifter, "#FF819E" },
-                { Phantom, "#CA8AFF" },
+                { RoleTypes.CrewmateGhost, "#8CFFFF" },
+                { RoleTypes.GuardianAngel, "#8CFFDB" },
+                { RoleTypes.Crewmate, "#8CFFFF" },
+                { RoleTypes.Scientist, "#F8FF8C" },
+                { RoleTypes.Engineer, "#A5A8FF" },
+                { RoleTypes.Noisemaker, "#FFC08C" },
+                { RoleTypes.Tracker, "#93FF8C" },
+                { RoleTypes.ImpostorGhost, "#FF1919" },
+                { RoleTypes.Impostor, "#FF1919" },
+                { RoleTypes.Shapeshifter, "#FF819E" },
+                { RoleTypes.Phantom, "#CA8AFF" },
             };
         }
         catch (ArgumentException ex)
@@ -249,12 +257,12 @@ public class Main : BasePlugin
         Info($"{Application.version}", "AmongUs Version");
 
         var handler = Handler("GitVersion");
-        handler.Info($"{nameof(ThisAssembly.Git.BaseTag)}: {ThisAssembly.Git.BaseTag}");
-        handler.Info($"{nameof(ThisAssembly.Git.Commit)}: {ThisAssembly.Git.Commit}");
-        handler.Info($"{nameof(ThisAssembly.Git.Commits)}: {ThisAssembly.Git.Commits}");
-        handler.Info($"{nameof(ThisAssembly.Git.IsDirty)}: {ThisAssembly.Git.IsDirty}");
-        handler.Info($"{nameof(ThisAssembly.Git.Sha)}: {ThisAssembly.Git.Sha}");
-        handler.Info($"{nameof(ThisAssembly.Git.Tag)}: {ThisAssembly.Git.Tag}");
+        handler.Info($"{nameof(GitBaseTag)}: {GitBaseTag}");
+        handler.Info($"{nameof(GitCommit)}: {GitCommit}");
+        handler.Info($"{nameof(GitCommits)}: {GitCommits}");
+        handler.Info($"{nameof(GitIsDirty)}: {GitIsDirty}");
+        handler.Info($"{nameof(GitSha)}: {GitSha}");
+        handler.Info($"{nameof(GitTag)}: {GitTag}");
 
         ClassInjector.RegisterTypeInIl2Cpp<ErrorText>();
 

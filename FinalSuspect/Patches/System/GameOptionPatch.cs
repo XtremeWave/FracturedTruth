@@ -1,8 +1,8 @@
 using System.Collections.Generic;
+using AmongUs.GameOptions;
 using FinalSuspect.Helpers;
 using TMPro;
 using UnityEngine;
-using static AmongUs.GameOptions.RoleTypes;
 
 namespace FinalSuspect.Patches.System;
 
@@ -21,13 +21,13 @@ class RolesSettingsMenuPatch
 {
     private static readonly List<Color32> rolecolors =
     [
-        GetRoleColor(Engineer),
-        GetRoleColor(GuardianAngel),
-        GetRoleColor(Scientist),
-        GetRoleColor(Tracker),
-        GetRoleColor(Noisemaker),
-        GetRoleColor(Shapeshifter),
-        GetRoleColor(Phantom)
+        GetRoleColor(RoleTypes.Engineer),
+        GetRoleColor(RoleTypes.GuardianAngel),
+        GetRoleColor(RoleTypes.Scientist),
+        GetRoleColor(RoleTypes.Tracker),
+        GetRoleColor(RoleTypes.Noisemaker),
+        GetRoleColor(RoleTypes.Shapeshifter),
+        GetRoleColor(RoleTypes.Phantom)
     ];
 
     public static void Postfix()
@@ -40,7 +40,7 @@ class RolesSettingsMenuPatch
         }
         catch
         {
-            // ignored
+            /* ignored */
         }
     }
 
@@ -57,7 +57,7 @@ class RolesSettingsMenuPatch
         var index = 0;
         foreach (var button in headerbuttons)
         {
-            var roleColor = index <= 4 ? GetRoleColor(Crewmate) : GetRoleColor(Impostor);
+            var roleColor = index <= 4 ? GetRoleColor(RoleTypes.Crewmate) : GetRoleColor(RoleTypes.Impostor);
             SetColor(button, rolecolors[index], roleColor);
             index++;
         }
@@ -103,15 +103,15 @@ internal class GameOptionsMenuPatch
 {
     private static readonly List<Color32> Normalbannercolors =
     [
-        GetRoleColor(Impostor),
-        GetRoleColor(Crewmate),
+        GetRoleColor(RoleTypes.Impostor),
+        GetRoleColor(RoleTypes.Crewmate),
         Color.yellow,
         Color.green
     ];
     private static readonly List<Color32> HnSbannercolors =
     [
-        GetRoleColor(Crewmate),
-        GetRoleColor(Impostor),
+        GetRoleColor(RoleTypes.Crewmate),
+        GetRoleColor(RoleTypes.Impostor),
         Palette.Purple,
         Color.green
     ];
@@ -249,7 +249,7 @@ class GameSettingMenuPatch
         }
         catch
         {
-            // ignored
+            /* ignored */
         }
     }
     static void SetColor(GameObject obj, Color bgcolor)

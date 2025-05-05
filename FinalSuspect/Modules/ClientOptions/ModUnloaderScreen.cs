@@ -3,6 +3,7 @@ using FinalSuspect.Patches.System;
 using InnerNet;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Modules.ClientOptions;
@@ -18,32 +19,32 @@ public static class ModUnloaderScreen
     {
         Popup = Object.Instantiate(optionsMenuBehaviour.Background, ClientFeatureItem.CustomBackground.transform);
         Popup.name = "UnloadModPopup";
-        Popup.transform.localPosition = new(0f, 0f, -8f);
-        Popup.transform.localScale = new(0.8f, 0.8f, 1f);
+        Popup.transform.localPosition = new Vector3(0f, 0f, -8f);
+        Popup.transform.localScale = new Vector3(0.8f, 0.8f, 1f);
         Popup.gameObject.SetActive(false);
 
         WarnText = Object.Instantiate(optionsMenuBehaviour.DisableMouseMovement.Text, Popup.transform);
         WarnText.name = "Warning";
-        WarnText.transform.localPosition = new(0f, 1f, -1f);
-        WarnText.transform.localScale = new(2.5f, 2.5f, 1f);
+        WarnText.transform.localPosition = new Vector3(0f, 1f, -1f);
+        WarnText.transform.localScale = new Vector3(2.5f, 2.5f, 1f);
         WarnText.gameObject.SetActive(true);
 
         CancelButton = Object.Instantiate(optionsMenuBehaviour.DisableMouseMovement, Popup.transform);
         CancelButton.name = "Cancel";
-        CancelButton.transform.localPosition = new(-1.2f, -1f, -2f);
+        CancelButton.transform.localPosition = new Vector3(-1.2f, -1f, -2f);
         CancelButton.Text.text = GetString("Cancel");
         var cancelPassiveButton = CancelButton.GetComponent<PassiveButton>();
-        cancelPassiveButton.OnClick = new();
+        cancelPassiveButton.OnClick = new Button.ButtonClickedEvent();
         cancelPassiveButton.OnClick.AddListener((Action)Hide);
         CancelButton.gameObject.SetActive(true);
 
         UnloadButton = Object.Instantiate(optionsMenuBehaviour.DisableMouseMovement, Popup.transform);
         UnloadButton.name = "Unload";
-        UnloadButton.transform.localPosition = new(1.2f, -1f, -2f);
+        UnloadButton.transform.localPosition = new Vector3(1.2f, -1f, -2f);
         UnloadButton.Background.color = UnloadButton.Text.color = Color.red;
         UnloadButton.Text.text = GetString("Unload");
         var unloadPassiveButton = UnloadButton.GetComponent<PassiveButton>();
-        unloadPassiveButton.OnClick = new();
+        unloadPassiveButton.OnClick = new Button.ButtonClickedEvent();
         unloadPassiveButton.OnClick.AddListener(new Action(() =>
         {
             ClientActionItem.CustomBackground.gameObject.SetActive(false);
@@ -57,7 +58,7 @@ public static class ModUnloaderScreen
             }
             catch
             {
-                // ignored
+                /* ignored */
             }
 
             _ = new LateTask(() =>

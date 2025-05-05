@@ -43,7 +43,7 @@ public class CreditsControllerPatch
         }
         void AddTitleToCredits(string title)
         {
-            credits.Add(new()
+            credits.Add(new CreditsController.CreditStruct
             {
                 format = "title",
                 columns = new[] { title },
@@ -55,7 +55,7 @@ public class CreditsControllerPatch
             {
                 var cols = line.Split(" - ").ToList();
                 if (cols.Count < 2) cols.Add(string.Empty);
-                credits.Add(new()
+                credits.Add(new CreditsController.CreditStruct
                 {
                     format = "person",
                     columns = cols.ToArray(),

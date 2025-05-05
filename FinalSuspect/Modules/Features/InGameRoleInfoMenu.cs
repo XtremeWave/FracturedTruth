@@ -25,12 +25,12 @@ public static class InGameRoleInfoMenu
     {
         var DOBScreen = AccountManager.Instance.transform.FindChild("DOBEnterScreen");
 
-        Fill = new("FinalSuspect Role Info Menu Fill") { layer = 5 };
+        Fill = new GameObject("FinalSuspect Role Info Menu Fill") { layer = 5 };
         Fill.transform.SetParent(HudManager.Instance.transform.parent, true);
-        Fill.transform.localPosition = new(0f, 0f, -980f);
-        Fill.transform.localScale = new(20f, 10f, 1f);
+        Fill.transform.localPosition = new Vector3(0f, 0f, -980f);
+        Fill.transform.localScale = new Vector3(20f, 10f, 1f);
         Fill.AddComponent<SpriteRenderer>().sprite = DOBScreen.FindChild("Fill").GetComponent<SpriteRenderer>().sprite;
-        FillSP.color = new(0f, 0f, 0f, 0.75f);
+        FillSP.color = new Color(0f, 0f, 0f, 0.75f);
 
         Menu = Object.Instantiate(DOBScreen.FindChild("InfoPage").gameObject, HudManager.Instance.transform.parent);
         Menu.name = "FinalSuspect Role Info Menu Page";
@@ -43,15 +43,15 @@ public static class InGameRoleInfoMenu
         RoleInfo = Menu.transform.FindChild("InfoText_TMP").gameObject;
         RoleInfo.name = "Role Info";
         RoleInfo.DestroyTranslator();
-        RoleInfo.transform.localPosition = new(-2.3f, 0.8f, 4f);
-        RoleInfo.GetComponent<RectTransform>().sizeDelta = new(4.5f, 10f);
+        RoleInfo.transform.localPosition = new Vector3(-2.3f, 0.8f, 4f);
+        RoleInfo.GetComponent<RectTransform>().sizeDelta = new Vector2(4.5f, 10f);
         RoleInfoTMP.alignment = TextAlignmentOptions.Left;
         RoleInfoTMP.fontSize = 2f;
 
         RoleRoleIllustration = new GameObject("Character Illustration") { layer = 5 };
         RoleRoleIllustration.transform.SetParent(Menu.transform);
         RoleRoleIllustration.AddComponent<SpriteRenderer>();
-        RoleRoleIllustration.transform.localPosition = new(2.3f, 0.8f, 4f);
+        RoleRoleIllustration.transform.localPosition = new Vector3(2.3f, 0.8f, 4f);
     }
 
     public static void SetRoleInfoRef(PlayerControl player)

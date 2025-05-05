@@ -1,6 +1,7 @@
 using System;
 using FinalSuspect.Helpers;
 using UnityEngine;
+using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Modules.ClientOptions;
@@ -26,17 +27,17 @@ public class ClientFeatureItem
                 numItems = 0;
                 CustomBackground = Object.Instantiate(optionsMenuBehaviour.Background, optionsMenuBehaviour.transform);
                 CustomBackground.name = "More Options Background";
-                CustomBackground.transform.localScale = new(0.9f, 0.9f, 1f);
+                CustomBackground.transform.localScale = new Vector3(0.9f, 0.9f, 1f);
                 CustomBackground.transform.localPosition += Vector3.back * 8;
                 CustomBackground.gameObject.SetActive(false);
 
                 var closeButton = Object.Instantiate(mouseMoveToggle, CustomBackground.transform);
-                closeButton.transform.localPosition = new(1.3f, -2.3f, -6f);
+                closeButton.transform.localPosition = new Vector3(1.3f, -2.3f, -6f);
                 closeButton.name = "Close";
                 closeButton.Text.text = GetString("Close");
                 closeButton.Background.color = Color.red;
                 var closePassiveButton = closeButton.GetComponent<PassiveButton>();
-                closePassiveButton.OnClick = new();
+                closePassiveButton.OnClick = new Button.ButtonClickedEvent();
                 closePassiveButton.OnClick.AddListener(new Action(() =>
                 {
                     CustomBackground.gameObject.SetActive(false);
@@ -66,12 +67,12 @@ public class ClientFeatureItem
 
                 ModOptionsButton = Object.Instantiate(mouseMoveToggle, generalTab);
                 var pos = leaveButton?.transform.localPosition;
-                ModOptionsButton.transform.localPosition = pos != null ? pos.Value - new Vector3(1.3f, 0f, 0f) : new(-1.3f, -2.4f, 1f);
+                ModOptionsButton.transform.localPosition = pos != null ? pos.Value - new Vector3(1.3f, 0f, 0f) : new Vector3(-1.3f, -2.4f, 1f);
                 ModOptionsButton.name = "FinalSuspectFeatures Options";
                 ModOptionsButton.Text.text = GetString("FinalSuspectFeatures");
                 ModOptionsButton.Background.color = ColorHelper.ClientFeatureColor;
                 var modOptionsPassiveButton = ModOptionsButton.GetComponent<PassiveButton>();
-                modOptionsPassiveButton.OnClick = new();
+                modOptionsPassiveButton.OnClick = new Button.ButtonClickedEvent();
                 modOptionsPassiveButton.OnClick.AddListener(new Action(() =>
                 {
                     CustomBackground.gameObject.SetActive(true);
@@ -79,11 +80,11 @@ public class ClientFeatureItem
 
                 if (leaveButton != null)
                 {
-                    leaveButton.transform.localPosition = new(-1.35f, -2.411f, -1f);
+                    leaveButton.transform.localPosition = new Vector3(-1.35f, -2.411f, -1f);
                 }
                 if (returnButton != null)
                 {
-                    returnButton.transform.localPosition = new(1.35f, -2.411f, -1f);
+                    returnButton.transform.localPosition = new Vector3(1.35f, -2.411f, -1f);
                 }
             }
 
@@ -98,7 +99,7 @@ public class ClientFeatureItem
             ToggleButton.Text.text = GetString(name);
             ToggleButton.Background.color = ColorHelper.ClientFeatureColor_ClickType;
             var passiveButton = ToggleButton.GetComponent<PassiveButton>();
-            passiveButton.OnClick = new();
+            passiveButton.OnClick = new Button.ButtonClickedEvent();
             passiveButton.OnClick.AddListener((Action)OnClick);
         }
         finally
@@ -119,7 +120,7 @@ public class ClientFeatureItem
         Action onClickAction,
         OptionsMenuBehaviour optionsMenuBehaviour)
     {
-        return new(name, optionsMenuBehaviour)
+        return new ClientFeatureItem(name, optionsMenuBehaviour)
         {
             OnClickAction = onClickAction
         };

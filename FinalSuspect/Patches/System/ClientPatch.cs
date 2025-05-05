@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using FinalSuspect.Helpers;
-using FinalSuspect.Modules.Core.Game;
 using FinalSuspect.Modules.Features.CheckingandBlocking;
 using FinalSuspect.Modules.Resources;
 using FinalSuspect.Patches.Game_Vanilla;
@@ -76,9 +75,7 @@ internal class RunLoginPatch
         // 如果您修改了代码，请在房间公告内表明这是修改版本，并给出修改作者
         // If you wish to make your lobby public in a debug build, please use it only for testing purposes
         // If you modify the code, please indicate in the lobby announcement that this is a modified version and provide the author of the modification
-        canOnline = Environment.UserName == "Slok7";
-        //canOnline = Environment.UserName == "LezaiYa";
-        canOnline = Environment.UserName == "Administrator";
+        canOnline = Environment.UserName is "Slok7" or "Administrator";
 #endif
     }
 }
@@ -136,7 +133,7 @@ internal class KickPlayerPatch
         }
         catch
         {
-            // ignored
+            /* ignored */
         }
 
         return true;

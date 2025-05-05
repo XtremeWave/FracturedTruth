@@ -24,7 +24,7 @@ class CoSetRolePatch
         }
         catch
         {
-            // ignored
+            /* ignored */
         }
     }
 }
@@ -36,27 +36,30 @@ class PlayerStartPatch
     {
         var topText = Object.Instantiate(__instance.cosmetics.nameText, __instance.cosmetics.nameText.transform, true);
         topText.transform.localPosition = new Vector3(0f, 0.2f, 0f);
-        topText.transform.localScale = new(1f, 1f, 1f);
+        topText.transform.localScale = new Vector3(1f, 1f, 1f);
         topText.fontSize = Main.RoleTextSize;
         topText.text = "TopText";
         topText.gameObject.name = "TopText";
         topText.enabled = false;
         var bottomText = Object.Instantiate(__instance.cosmetics.nameText, __instance.cosmetics.nameText.transform, true);
         bottomText.transform.localPosition = new Vector3(0f, 0.2f, 0f);
-        bottomText.transform.localScale = new(1f, 1f, 1f);
+        bottomText.transform.localScale = new Vector3(1f, 1f, 1f);
         bottomText.fontSize = Main.RoleTextSize;
         bottomText.text = "BottomText";
         bottomText.gameObject.name = "BottomText";
         bottomText.enabled = false;
     }
 }
+
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.SetTasks))]
 class PlayerControlSetTasksPatch
 {
     public static void Postfix(PlayerControl __instance, [HarmonyArgument(0)] List<NetworkedPlayerInfo.TaskInfo> tasks)
     {
-        var pc = __instance;
-        pc.SetTaskTotalCount(tasks.Count);
+        // 自由模式假人处理
+        if (__instance.GetXtremeData() == null)
+            XtremePlayerData.CreateDataFor(__instance);
+        __instance.SetTaskTotalCount(tasks.Count);
     }
 }
 

@@ -5,8 +5,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using FinalSuspect.Modules.Core.Game;
 using Newtonsoft.Json.Linq;
 
 namespace FinalSuspect.Modules.Features.CheckingandBlocking;
@@ -93,33 +93,8 @@ public static class SpamManager
                 sendList.Add(text.Replace("\\n", "\n").ToLower());
         return sendList;
     }
-
-    public static void CheckSpam(ref string text)
-    {
-        if (!Main.SpamDenyWord.Value) return;
-        try
-        {
-            var mt = text;
-            var banned = BanWords.Any(mt.ToLower().Contains);
-
-            if (banned)
-            {
-                foreach (var word in BanWords)
-                {
-                    if (text.ToLower().Contains(word.ToLower()))
-                    {
-                        text = text.Replace(word, $"<color=#E57373>{new string('*', word.Length)}</color>");
-                    }
-                }
-            }
-        }
-        catch
-        {
-            // ignored
-        }
-    }
-
-    public static async Task<bool> GetConfigs(string url, string name)
+    
+    private static async Task<bool> GetConfigs(string url, string name)
     {
         try
         {
@@ -158,8 +133,6 @@ public static class SpamManager
                 result = await response.Content.ReadAsStringAsync();
                 result = result.Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
             }
-
-            // 增强JSON解析
             try
             {
                 var data = JObject.Parse(result);
@@ -172,7 +145,6 @@ public static class SpamManager
                 Error($"JSON 解析失败: {ex.Message}", "SpamManager");
                 return false;
             }
-
             await Task.Delay(100);
             return true;
         }
@@ -186,6 +158,8 @@ public static class SpamManager
     private static void ProcessBanWords(JObject data)
     {
         var newWords = GetTokens(data["words"])
+            .Select(DecryptBase64)
+            .Select(DecodeUnicodeEscapes)
             .Except(BanWords, StringComparer.OrdinalIgnoreCase)
             .ToList();
 
@@ -196,6 +170,8 @@ public static class SpamManager
     {
         var existingNames = ReturnAllNewLinesInFile(DENY_NAME_LIST_PATH);
         var newNames = GetTokens(data["denynames"])
+            .Select(DecryptBase64)
+            .Select(DecodeUnicodeEscapes)
             .Except(existingNames, StringComparer.OrdinalIgnoreCase)
             .ToList();
 
@@ -209,6 +185,8 @@ public static class SpamManager
     {
         var facList = GetTokens(data["Cheats"])
             .Concat(GetTokens(data["Griefer"]))
+            .Select(DecryptBase64)
+            .Select(DecodeUnicodeEscapes)
             .Where(ShouldAddToFacList)
             .ToList();
 
@@ -217,8 +195,7 @@ public static class SpamManager
 
     private static List<string> GetTokens(JToken token)
     {
-        // 处理空值或非数组类型
-        if (token == null || token.Type != JTokenType.Array)
+        if (token is not { Type: JTokenType.Array })
         {
             return [];
         }
@@ -230,11 +207,41 @@ public static class SpamManager
             tokens.Add(jarray[i].ToString());
         }
  
-        return [.. tokens
-            .Select(item => item?.ToString())
-            .Where(str => !string.IsNullOrEmpty(str))];
+        return
+        [
+            .. tokens
+                .Select(item => item?.ToString())
+                .Where(str => !string.IsNullOrEmpty(str))];
     }
-   
+    
+    private static string DecodeUnicodeEscapes(string input)
+    {
+        return Regex.Replace(input, @"\\u([0-9A-Fa-f]{4})", match => 
+        {
+            try
+            {
+                return ((char)Convert.ToInt32(match.Groups[1].Value, 16)).ToString();
+            }
+            catch
+            {
+                return match.Value;
+            }
+        });
+    }
+    
+    private static string DecryptBase64(string cipherText)
+    {
+        try
+        {
+            var bytes = Convert.FromBase64String(cipherText);
+            return Encoding.UTF8.GetString(bytes);
+        }
+        catch
+        {
+            return cipherText; 
+        }
+    }
+    
     private static void UpdateBanWords(List<string> newWords)
     {
         if (newWords.Count == 0) return;
@@ -248,5 +255,27 @@ public static class SpamManager
         return !Main.AllPlayerControls
             .Where(p => p.IsDev())
             .Any(p => line.Contains(p.FriendCode, StringComparison.OrdinalIgnoreCase));
+    }
+    
+    public static void CheckSpam(ref string text)
+    {
+        if (!Main.SpamDenyWord.Value || BanWords.Count == 0) return;
+
+        try
+        {
+            var lowerText = text.ToLowerInvariant();
+            var bannedWords = BanWords.Where(word => lowerText.Contains(word.ToLowerInvariant())).ToList();
+
+            if (bannedWords.Count == 0) return;
+            
+            var pattern = string.Join("|", bannedWords.Select(Regex.Escape));
+            text = Regex.Replace(text, pattern, match => 
+                    $"<color=#E57373>{new string('*', match.Value.Length)}</color>", 
+                RegexOptions.IgnoreCase);
+        }
+        catch 
+        {
+            /* ignored */
+        }
     }
 }
