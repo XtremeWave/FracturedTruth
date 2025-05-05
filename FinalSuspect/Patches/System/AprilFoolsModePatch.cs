@@ -1,6 +1,5 @@
 ﻿using FinalSuspect.Modules.Core.Game;
 using Il2CppSystem;
-using static CosmeticsLayer;
 
 namespace FinalSuspect.Patches.System;
 
@@ -100,7 +99,7 @@ public static class LongBoiPatches
         //Fixes base-game layer issues
         __instance.cosmeticLayer.OnSetBodyAsGhost += (Action)__instance.SetPoolableGhost;
         __instance.cosmeticLayer.OnColorChange += (Action<int>)__instance.SetHeightFromColor;
-        __instance.cosmeticLayer.OnCosmeticSet += (Action<string, int, CosmeticKind>)__instance.OnCosmeticSet;
+        __instance.cosmeticLayer.OnCosmeticSet += (Action<string, int, CosmeticsLayer.CosmeticKind>)__instance.OnCosmeticSet;
         __instance.gameObject.layer = 8;
         return false;
     }

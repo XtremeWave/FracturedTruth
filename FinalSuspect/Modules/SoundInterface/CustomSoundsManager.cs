@@ -2,8 +2,6 @@
 using System.Linq;
 using FinalSuspect.Modules.Panels;
 using UnityEngine;
-using static FinalSuspect.Modules.SoundInterface.SoundManager;
-using static FinalSuspect.Modules.SoundInterface.XtremeMusic;
 using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Modules.SoundInterface;
@@ -23,15 +21,16 @@ public static class CustomSoundsManager
                 StopPlayVanilla();
             }, "Playing Sfx");
         
-            await LoadClip(audio.CurrectAudio);
+            await XtremeMusic.LoadClip(audio.CurrectAudio);
         
             _ = new MainThreadTask(() =>
             {
-                foreach (var file in musics.Where(file => file.FileName == audio.FileName))
+                foreach (var file in XtremeMusic.musics.Where(file => file.FileName == audio.FileName))
                 {
                     file.CurrectAudioStates = AudiosStates.IsPlaying;
                 }
-                ReloadTag();
+
+                SoundManager.ReloadTag();
                 MyMusicPanel.RefreshTagList();
                 SoundManagementPanel.RefreshTagList();
                 global::SoundManager.Instance.CrossFadeSound(audio.FileName, audio.Clip, 1f);
@@ -46,7 +45,7 @@ public static class CustomSoundsManager
  
     public static void StopPlayMod()
     {
-        musics.Do(x =>
+        XtremeMusic.musics.Do(x =>
         {
             x.Clip = null;
             x.CurrectAudioStates = x.LastAudioStates;
@@ -75,7 +74,7 @@ public static class CustomSoundsManager
 
     public static void StartPlayVanilla()
     {
-        var isPlaying = musics.Any(x => x.CurrectAudioStates == AudiosStates.IsPlaying);
+        var isPlaying = XtremeMusic.musics.Any(x => x.CurrectAudioStates == AudiosStates.IsPlaying);
         if (isPlaying) return;
         if (IsLobby)
             global::SoundManager.Instance.CrossFadeSound("MapTheme", LobbyBehaviour.Instance.MapTheme, 0.07f);
@@ -160,7 +159,7 @@ public class AudioManagementPlaySoundPatch
 {
     public static bool Prefix(global::SoundManager __instance, [HarmonyArgument(0)] AudioClip clip, [HarmonyArgument(1)] bool loop)
     {
-        var isPlaying = musics.Any(x => x.CurrectAudioStates == AudiosStates.IsPlaying);
+        var isPlaying = XtremeMusic.musics.Any(x => x.CurrectAudioStates == AudiosStates.IsPlaying);
         var disableVanilla = Main.DisableVanillaSound.Value;
         return !(isPlaying || disableVanilla) || !loop;
     }
@@ -172,8 +171,8 @@ public class AudioManagementPlayDynamicAndNamedSoundPatch
 {
     public static bool Prefix([HarmonyArgument(0)] string name, [HarmonyArgument(1)] AudioClip clip, [HarmonyArgument(2)] bool loop)
     {
-        var isPlaying = musics.Any(x => x.CurrectAudioStates == AudiosStates.IsPlaying);
-        var isModMusic = musics.Any(x => x.FileName == name);
+        var isPlaying = XtremeMusic.musics.Any(x => x.CurrectAudioStates == AudiosStates.IsPlaying);
+        var isModMusic = XtremeMusic.musics.Any(x => x.FileName == name);
         var disableVanilla = Main.DisableVanillaSound.Value;
         return !(isPlaying || disableVanilla) || !loop || isModMusic;
     }
@@ -184,8 +183,8 @@ public class AudioManagementCrossFadeSoundPatch
 {
     public static bool Prefix([HarmonyArgument(0)] string name)
     {
-        var isPlaying = musics.Any(x => x.CurrectAudioStates == AudiosStates.IsPlaying);
-        var isModMusic = musics.Any(x => x.FileName == name);
+        var isPlaying = XtremeMusic.musics.Any(x => x.CurrectAudioStates == AudiosStates.IsPlaying);
+        var isModMusic = XtremeMusic.musics.Any(x => x.FileName == name);
         var disableVanilla = Main.DisableVanillaSound.Value;
         return !(isPlaying || disableVanilla) || isModMusic;
     }
@@ -198,7 +197,7 @@ public class AudioManagementStopAllSoundPatch
     {
         for (var i = __instance.soundPlayers.Count - 1; i >= 0; i--)
         {
-            if (musics.Any(x => x.Clip == __instance.soundPlayers[i].Player.clip)) 
+            if (XtremeMusic.musics.Any(x => x.Clip == __instance.soundPlayers[i].Player.clip)) 
                 continue;
             
             Object.Destroy(__instance.soundPlayers[i].Player);
@@ -208,7 +207,7 @@ public class AudioManagementStopAllSoundPatch
         var keysToRemove = new List<AudioClip>();
         foreach (var (key, value) in __instance.allSources)
         {
-            if (musics.Any(x => x.Clip == key)) 
+            if (XtremeMusic.musics.Any(x => x.Clip == key)) 
             {
                 continue; 
             }

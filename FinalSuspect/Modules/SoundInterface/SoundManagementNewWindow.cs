@@ -6,8 +6,6 @@ using FinalSuspect.Modules.Panels;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static FinalSuspect.Modules.SoundInterface.SoundManager;
-using static FinalSuspect.Modules.SoundInterface.XtremeMusic;
 using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Modules.SoundInterface;
@@ -80,7 +78,7 @@ public static class SoundManagementNewWindow
             var code = EnterBox.GetComponent<TextBoxTMP>().text;
             var reg = new Regex(@"^(\s{1}|)$");
 
-            if (musics.Any(x => x.Name == code))
+            if (XtremeMusic.musics.Any(x => x.Name == code))
             {
                 ConfirmButton.SetActive(false);
                 colorInfoTmp.text = GetString("AudioManagementAlreadyExist");
@@ -96,7 +94,7 @@ public static class SoundManagementNewWindow
             {
                 Window.SetActive(false);
                 SaveToFile(code);
-                ReloadTag(false);
+                SoundManager.ReloadTag(false);
                 SoundManagementPanel.RefreshTagList();
                 MyMusicPanel.RefreshTagList();
                 return;
@@ -119,7 +117,7 @@ public static class SoundManagementNewWindow
     }
     private static void SaveToFile(string name)
     {
-        using StreamWriter sr = new(TAGS_PATH, true);
+        using StreamWriter sr = new(SoundManager.TAGS_PATH, true);
         sr.WriteLine(name);
     }
 }

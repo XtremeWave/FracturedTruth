@@ -3,7 +3,6 @@ using AmongUs.GameOptions;
 using FinalSuspect.Helpers;
 using InnerNet;
 using UnityEngine;
-using static AmongUs.GameOptions.RoleTypes;
 
 namespace FinalSuspect.Modules.Core.Game;
 
@@ -40,7 +39,7 @@ static class ExtendedPlayerControl
         if (IsLobby) return false;
         return pc.GetRoleType() switch
         {
-            Impostor or Shapeshifter or Phantom or ImpostorGhost => true,
+            RoleTypes.Impostor or RoleTypes.Shapeshifter or RoleTypes.Phantom or RoleTypes.ImpostorGhost => true,
             _ => false,
         };
     }

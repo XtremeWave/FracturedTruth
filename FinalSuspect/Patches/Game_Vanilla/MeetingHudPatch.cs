@@ -1,5 +1,5 @@
 using System.Linq;
-using static AmongUs.GameOptions.RoleTypes;
+using AmongUs.GameOptions;
 using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Patches.Game_Vanilla;
@@ -33,7 +33,7 @@ public static class MeetingHudPatch
                         if (flag == playerVoteArea.AmDead) continue;
                         var isReporter = __instance.reporterId == playerById.PlayerId; 
                         playerVoteArea.SetDead(isReporter, flag, 
-                            playerById.Role?.Role == GuardianAngel);
+                            playerById.Role?.Role == RoleTypes.GuardianAngel);
                         __instance.SetDirtyBit(1U);
                     }
                 }
