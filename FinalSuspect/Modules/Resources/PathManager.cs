@@ -14,7 +14,7 @@ public static class PathManager
     public const string downloadUrl_github = "https://github.com/XtremeWave/FinalSuspect/releases/latest/download/FinalSuspect.dll";
 
     public static string downloadUrl_gitee = "https://gitee.com/LezaiYa/FinalSuspectAssets/releases/download/v{showVer}/FinalSuspect.dll";
-    public const string downloadUrl_xtremeapi = "http://121.62.28.59:1145/download/FinalSuspect/FinalSuspect.dll";
+    public const string downloadUrl_xtremeapi = "https://api.xtreme.net.cn/download/FinalSuspect/FinalSuspect.dll";
     
     public static string GetFile(FileType fileType, RemoteType remoteType, string file)
     {
@@ -123,11 +123,11 @@ public static class PathManager
 #if RELEASE
         "https://raw.githubusercontent.com/XtremeWave/FinalSuspect/FinalSus/",
         "https://gitee.com/LezaiYa/FinalSuspectAssets/raw/main/",
-        "http://121.62.28.59:1145/FinalSuspect/download/",
+        "https://api.xtreme.net.cn/FinalSuspect/download/",
 #else
         "https://raw.githubusercontent.com/XtremeWave/FinalSuspect/FinalSus/",
         "https://raw.githubusercontent.com/XtremeWave/FinalSuspect_Dev/FS_Dev/",
-        "http://121.62.28.59:1145/FinalSuspect/download/",
+        "https://api.xtreme.net.cn/FinalSuspect/download/",
         "https://gitee.com/LezaiYa/FinalSuspectAssets/raw/main/",
         $"file:///{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop))}/",
 #endif
