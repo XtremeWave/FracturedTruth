@@ -8,7 +8,8 @@ public class BetterAmongUs : IRpcHandler
 {
     public List<byte> TargetRpcs =>
     [
-        151
+        151,
+        152
     ];
     
     public bool HandleInvalidRPC(PlayerControl sender, MessageReader reader,
