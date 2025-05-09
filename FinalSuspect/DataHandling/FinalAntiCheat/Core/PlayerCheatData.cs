@@ -98,8 +98,7 @@ public class PlayerCheatData
                     return true;
                 }
             }
-            
-            
+
             _rpcRecords[rpcId] = record;
         }
         else

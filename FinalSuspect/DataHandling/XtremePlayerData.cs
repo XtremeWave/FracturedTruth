@@ -93,6 +93,7 @@ public class XtremePlayerData : IDisposable
         {
             nullrole = GetPlayerById(id).Data.Role.Role;
         }
+
         var role = (dead ? data.RoleAfterDeath : data?.RoleWhenAlive) ?? nullrole;            
         return role;
     }
@@ -118,6 +119,7 @@ public class XtremePlayerData : IDisposable
             AllPlayerData.Remove(this);
             return;
         }
+
         Info($"Set Disconnect For {Player.GetNameWithRole()}", "Data");
         IsDisconnected = true;
         SetDead();
@@ -136,6 +138,7 @@ public class XtremePlayerData : IDisposable
             SetDead();
             RoleAfterDeath = role;
         }
+
         RoleAssgined = !IsFreePlay;
         Info("Set Role For Player: " + Name + " => " + role, "SetRole");
     }

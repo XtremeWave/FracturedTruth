@@ -1,5 +1,3 @@
-using QRCoder;
-
 namespace FinalSuspect.Patches.System;
 
 [HarmonyPatch]

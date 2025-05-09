@@ -67,8 +67,7 @@ public static class XtremeLocalHandling
             {
                 topcolor = ColorHelper.ModColor32;
             }
-            else if (Main.version.CompareTo(ver.version) == 0 &&
-                     ver.tag != $"{Main.GitCommit}({Main.GitBranch})")
+            else if (Main.version.CompareTo(ver.version) == 0 && ver.tag != $"{Main.GitCommit}({Main.GitBranch})")
             {
                 toptext = toptext.CheckAndAppendText($"<size=1.5>{ver.tag}</size>");
                 topcolor = Color.yellow;

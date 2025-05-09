@@ -88,6 +88,7 @@ internal class PlayerControlRPCHandlerPatch
                 Info($"{__instance.GetNameWithRole()} => {p?.GetNameWithRole() ?? "null"}", "StartMeeting");
                 break;
         }
+
         return true;
     }
     

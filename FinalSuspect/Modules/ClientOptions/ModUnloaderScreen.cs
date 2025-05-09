@@ -88,6 +88,7 @@ public static class ModUnloaderScreen
             }
         }
     }
+
     public static void Hide()
     {
         Popup?.gameObject.SetActive(false);

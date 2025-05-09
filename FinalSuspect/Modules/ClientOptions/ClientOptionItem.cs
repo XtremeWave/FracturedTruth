@@ -122,6 +122,7 @@ public sealed class ClientOptionItem_String : ClientActionItem
         ToggleButton.Background.color = color;
         ToggleButton.Rollover?.ChangeOutColor(color);
     }
+
     public void UpdateName(string name)
     {
         if (ToggleButton == null) return;

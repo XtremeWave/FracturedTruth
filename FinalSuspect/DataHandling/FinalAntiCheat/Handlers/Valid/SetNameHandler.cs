@@ -29,6 +29,7 @@ public class SetNameHandler : IRpcHandler
         {
             HandleCheat(sender, GetString("Warning.SetName_NotHost"));
         }
+
         ban = true;
         notify = false;
         return true;
