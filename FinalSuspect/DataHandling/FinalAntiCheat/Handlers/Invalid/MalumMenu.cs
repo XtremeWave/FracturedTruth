@@ -8,6 +8,7 @@ public class MalumMenu : IRpcHandler
 {
     public List<byte> TargetRpcs =>
     [
+        // Noting
     ];
     
     public bool HandleInvalidRPC(PlayerControl sender, MessageReader reader,
