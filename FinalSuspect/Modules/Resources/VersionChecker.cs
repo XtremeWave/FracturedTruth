@@ -28,7 +28,7 @@ public static class VersionChecker
             }
             
             ModUpdater.SetUpdateButtonStatus();
-            ResolutionManager.SetResolution(1920, 1080, Screen.fullScreen);
+            //ResolutionManager.SetResolution(1920, 1080, Screen.fullScreen);
             firstStart = false;
         }
     }
