@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using FinalSuspect.DataHandling.FinalAntiCheat.Interfaces;
-using Hazel;
 using FinalSuspect.Patches.Game_Vanilla;
+using Hazel;
 
 namespace FinalSuspect.DataHandling.FinalAntiCheat.Core;
 
@@ -13,7 +13,7 @@ public static class FAC
     public static int DeNum;
     public static long _lastHandleCheater = -1;
     private static List<byte> LobbyDeadBodies = [];
-    private static readonly List<RpcHandlers> _handlers = new();
+    private static readonly List<RpcHandlers> _handlers = [];
 
     static FAC()
     {
@@ -38,7 +38,7 @@ public static class FAC
     public static void WarnHost(int denum = 1)
     {
         DeNum += denum;
-        if (ErrorText.Instance == null) return;
+        if (!ErrorText.Instance) return;
         ErrorText.Instance.CheatDetected = DeNum > 3;
         ErrorText.Instance.SBDetected = DeNum > 10;
         if (ErrorText.Instance.CheatDetected)
@@ -53,7 +53,7 @@ public static class FAC
         reason = "Hacking";
         ban = false;
         
-        if (Main.DisableFAC.Value || pc == null || reader == null || pc.AmOwner) 
+        if (Main.DisableFAC.Value || !pc || reader == null || pc.AmOwner) 
             return false;
 
         try
@@ -82,11 +82,14 @@ public static class FAC
                             NotificationPopperPatch.NotificationPop(string.Format(GetString("FAC.CheatDetected.UsingCheat"), pc.GetDataName(), reason));
                             return true;
                         }
+                        
                         NotificationPopperPatch.NotificationPop(string.Format(GetString("FAC.CheatDetected.MayUseCheat"), pc.GetDataName(), reason));
                         return false;
                     }
+                    
                     if (handler.HandleAll(pc, sr, ref notify, ref reason, ref ban))
                         return true;
+                    
                     if (IsLobby && handler.HandleLobby(pc, sr, ref notify, ref reason, ref ban))
                     {
                         if (AmongUsClient.Instance.AmHost) return true;
@@ -94,6 +97,7 @@ public static class FAC
                         notify = false;
                         return true;
                     }
+                    
                     return (IsInGame && handler.HandleGame_All(pc, sr, ref notify, ref reason, ref ban))
                            || (IsInTask && handler.HandleGame_InTask(pc, sr, ref notify, ref reason, ref ban))
                            || (IsMeeting && handler.HandleGame_InMeeting(pc, sr, ref notify, ref reason, ref ban));
@@ -103,6 +107,7 @@ public static class FAC
         {
             Fatal(e.ToString(), "FAC");
         }
+        
         WarnHost(-1);
         return false;
     }
