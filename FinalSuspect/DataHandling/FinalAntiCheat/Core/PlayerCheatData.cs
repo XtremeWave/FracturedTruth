@@ -65,7 +65,7 @@ public class PlayerCheatData
         if (!ValidFormatRegex.IsMatch(FriendCode) && Main.KickPlayerWhoFriendCodeNotExist.Value)
             MarkAsCheater();
     }
-    
+
     private readonly Dictionary<byte, RpcRecord> _rpcRecords = new();
     
     private struct RpcRecord

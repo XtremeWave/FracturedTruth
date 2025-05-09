@@ -52,7 +52,7 @@ public static class FAC
         notify = true;
         reason = "Hacking";
         ban = false;
-        
+
         if (Main.DisableFAC.Value || !pc || reader == null || pc.AmOwner) 
             return false;
 
@@ -86,10 +86,10 @@ public static class FAC
                         NotificationPopperPatch.NotificationPop(string.Format(GetString("FAC.CheatDetected.MayUseCheat"), pc.GetDataName(), reason));
                         return false;
                     }
-                    
+
                     if (handler.HandleAll(pc, sr, ref notify, ref reason, ref ban))
                         return true;
-                    
+
                     if (IsLobby && handler.HandleLobby(pc, sr, ref notify, ref reason, ref ban))
                     {
                         if (AmongUsClient.Instance.AmHost) return true;
@@ -97,7 +97,7 @@ public static class FAC
                         notify = false;
                         return true;
                     }
-                    
+
                     return (IsInGame && handler.HandleGame_All(pc, sr, ref notify, ref reason, ref ban))
                            || (IsInTask && handler.HandleGame_InTask(pc, sr, ref notify, ref reason, ref ban))
                            || (IsMeeting && handler.HandleGame_InMeeting(pc, sr, ref notify, ref reason, ref ban));
@@ -107,7 +107,7 @@ public static class FAC
         {
             Fatal(e.ToString(), "FAC");
         }
-        
+
         WarnHost(-1);
         return false;
     }
