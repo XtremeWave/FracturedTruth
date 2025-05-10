@@ -26,7 +26,8 @@ public static class VersionChecker
                 _ = ModNewsHistory.LoadModAnnouncements();
                 CustomPopup.Show(GetString("updateCheckPopupTitle"), GetString("LoadingWithDot"), null);
             }
-            
+
+            ModUpdater.SetUpdateButtonStatus();
             firstStart = false;
         }
     }
