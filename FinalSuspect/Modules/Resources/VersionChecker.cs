@@ -27,8 +27,6 @@ public static class VersionChecker
                 CustomPopup.Show(GetString("updateCheckPopupTitle"), GetString("LoadingWithDot"), null);
             }
             
-            ModUpdater.SetUpdateButtonStatus();
-            //ResolutionManager.SetResolution(1920, 1080, Screen.fullScreen);
             firstStart = false;
         }
     }
