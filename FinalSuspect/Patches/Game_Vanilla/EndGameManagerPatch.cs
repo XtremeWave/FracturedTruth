@@ -10,6 +10,7 @@ public class EndGameManagerPatch
         _ = new LateTask(__instance.Navigation.NextGame, 2f, "Auto End Game");
     }
 }
+
 [HarmonyPatch]
 public class ControllerNavMenuPatch
 {
@@ -17,9 +18,10 @@ public class ControllerNavMenuPatch
     public static void Start_Postfix(ControllerNavMenu __instance)
     {
         if (!Main.AutoEndGame.Value) return;
-        __instance.gameObject.SetActive(false);  
+        __instance.gameObject.SetActive(false);
     }
 }
+
 [HarmonyPatch(typeof(LogicGameFlowNormal), nameof(LogicGameFlowNormal.CheckEndCriteria))]
 class GameEndChecker
 {

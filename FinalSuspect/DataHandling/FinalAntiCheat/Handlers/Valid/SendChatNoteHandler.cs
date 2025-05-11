@@ -11,13 +11,13 @@ public class SendChatNoteHandler : IRpcHandler
     [
         (byte)RpcCalls.SendChatNote
     ];
-    
+
     public bool HandleLobby(PlayerControl sender, MessageReader reader,
         ref bool notify, ref string reason, ref bool ban)
     {
         return true;
     }
-    
+
     public bool HandleGame_InTask(PlayerControl sender, MessageReader reader,
         ref bool notify, ref string reason, ref bool ban)
     {

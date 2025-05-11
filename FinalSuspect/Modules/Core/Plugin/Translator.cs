@@ -17,13 +17,14 @@ public static class Translator
 {
     public static Dictionary<int, Dictionary<string, string>> TranslateMaps = new();
     public const string LANGUAGE_FOLDER_NAME = LocalPath_Data + "Language";
-    
+
     public static void TranslatorInit()
     {
         Info("加载语言文件...", "Translator");
         LoadLangs();
         Info("加载语言文件成功", "Translator");
     }
+
     public static void LoadLangs()
     {
         var fileNames = Directory.GetFiles(GetLocalPath(LocalType.Resources) + "Languages");
@@ -73,6 +74,7 @@ public static class Translator
     }
 
     // ReSharper restore Unity.ExpensiveCode
+
     public static string GetString(string s, Dictionary<string, string> replacementDic = null, bool console = false)
     {
         var langId = TranslationController.Instance?.currentLanguage?.languageID ?? GetUserLangByRegion();
@@ -87,20 +89,23 @@ public static class Translator
     public static string GetString(string str, SupportedLangs langId)
     {
         var res = $"<STRMISS:{str}>";
-        
+
         try
         {
             // 在当前语言中寻找翻译
             if (TranslateMaps[(int)langId].TryGetValue(str, out var trans))
                 res = trans;
             // 繁中用户寻找简中翻译替代
-            else if (langId is SupportedLangs.TChinese && TranslateMaps[(int)SupportedLangs.SChinese].TryGetValue(str, out trans))
+            else if (langId is SupportedLangs.TChinese &&
+                     TranslateMaps[(int)SupportedLangs.SChinese].TryGetValue(str, out trans))
                 res = "*" + trans;
             // 非中文用户寻找英语翻译替代
-            else if (langId is not SupportedLangs.English and not SupportedLangs.TChinese && TranslateMaps[(int)SupportedLangs.English].TryGetValue(str, out trans))
+            else if (langId is not SupportedLangs.English and not SupportedLangs.TChinese &&
+                     TranslateMaps[(int)SupportedLangs.English].TryGetValue(str, out trans))
                 res = "*" + trans;
             // 非中文用户寻找中文（原生）字符串替代
-            else if (langId is not SupportedLangs.SChinese && TranslateMaps[(int)SupportedLangs.SChinese].TryGetValue(str, out trans))
+            else if (langId is not SupportedLangs.SChinese &&
+                     TranslateMaps[(int)SupportedLangs.SChinese].TryGetValue(str, out trans))
                 res = "*" + trans;
             // 在游戏自带的字符串中寻找
             else
@@ -121,8 +126,11 @@ public static class Translator
             res = res.Replace("死", "寄");
         return res;
     }
+
     public static string GetString(StringNames stringName)
-        => DestroyableSingleton<TranslationController>.Instance.GetString(stringName, new Il2CppReferenceArray<Object>(0));
+        => DestroyableSingleton<TranslationController>.Instance.GetString(stringName,
+            new Il2CppReferenceArray<Object>(0));
+
     public static string GetRoleString(string str, bool forUser = true)
     {
         var CurrentLanguage = TranslationController.Instance?.currentLanguage?.languageID ?? SupportedLangs.English;
@@ -130,6 +138,7 @@ public static class Translator
 
         return GetString(str, lang);
     }
+
     public static SupportedLangs GetUserLangByRegion()
     {
         try
@@ -149,8 +158,12 @@ public static class Translator
             return SupportedLangs.English;
         }
     }
+
     public static bool IsChineseUser => GetUserLangByRegion() == SupportedLangs.SChinese;
-    public static bool IsChineseLanguageUser => GetUserLangByRegion() is SupportedLangs.SChinese or SupportedLangs.TChinese;
+
+    public static bool IsChineseLanguageUser =>
+        GetUserLangByRegion() is SupportedLangs.SChinese or SupportedLangs.TChinese;
+
     public static void LoadCustomTranslation(string filename, SupportedLangs lang)
     {
         var path = @$"./{LANGUAGE_FOLDER_NAME}/{filename}";
@@ -166,7 +179,8 @@ public static class Translator
                 {
                     try
                     {
-                        TranslateMaps[(int)lang][tmp[0]] = tmp.Skip(1).Join(delimiter: ":").Replace("\\n", "\n").Replace("\\r", "\r");
+                        TranslateMaps[(int)lang][tmp[0]] =
+                            tmp.Skip(1).Join(delimiter: ":").Replace("\\n", "\n").Replace("\\r", "\r");
                     }
                     catch (KeyNotFoundException)
                     {
@@ -187,6 +201,7 @@ public static class Translator
         foreach (var title in TranslateMaps) sb.Append($"{title.Key}:\n");
         File.WriteAllText(@$"./{LANGUAGE_FOLDER_NAME}/template.dat", sb.ToString());
     }
+
     public static void ExportCustomTranslation()
     {
         LoadLangs();
@@ -198,6 +213,7 @@ public static class Translator
             if (!TranslateMaps.ContainsKey((int)lang)) text = "";
             sb.Append($"{kvp.Key}:{text}\n");
         }
+
         File.WriteAllText(@$"./{LANGUAGE_FOLDER_NAME}/export_{lang}.dat", sb.ToString());
     }
 }

@@ -51,7 +51,7 @@ internal class Cloud
             if (!AmongUsClient.Instance.AmHost || !GameData.Instance || AmongUsClient.Instance.NetworkMode == NetworkModes.LocalGame) return false;
 
             if (IP == null || LOBBY_PORT == 0) throw new("Has no ip or port");
-            
+
             var msg = $"{GameStartManager.Instance.GameRoomNameCode.text}|{Main.DisplayedVersion_Head}|{GameData.Instance.PlayerCount}|{TranslationController.Instance.currentLanguage.languageID}|{ServerName}|{DataManager.player.customization.name}";
             if (msg.Length <= 60)
             {
@@ -61,7 +61,7 @@ internal class Cloud
                 ClientSocket.Send(buffer);
                 ClientSocket.Close();
             }
-            Main.NewLobby = false; 
+            Main.NewLobby = false;
 
         }
         catch (Exception e)
@@ -130,3 +130,4 @@ internal class Cloud
     }
 }
  */
+

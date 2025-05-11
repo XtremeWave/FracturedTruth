@@ -15,13 +15,13 @@ public class ShapeShifterHandler : IRpcHandler
         (byte)RpcCalls.CheckShapeshift,
         (byte)RpcCalls.RejectShapeshift,
     ];
-    
+
     public bool HandleLobby(PlayerControl sender, MessageReader reader,
         ref bool notify, ref string reason, ref bool ban)
     {
         return true;
     }
-    
+
     public bool HandleGame_All(PlayerControl sender, MessageReader reader,
         ref bool notify, ref string reason, ref bool ban)
     {

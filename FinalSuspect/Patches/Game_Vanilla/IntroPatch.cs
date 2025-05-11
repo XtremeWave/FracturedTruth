@@ -17,21 +17,23 @@ internal class IntroCutscenePatch
         _ = new MainThreadTask(() =>
         {
             var roleType = PlayerControl.LocalPlayer.Data.Role.Role;
-            __instance.YouAreText.color = __instance.RoleText.color = __instance.RoleBlurbText.color = GetRoleColor(roleType);
+            __instance.YouAreText.color =
+                __instance.RoleText.color = __instance.RoleBlurbText.color = GetRoleColor(roleType);
             __instance.RoleText.text = GetRoleName(roleType);
             __instance.RoleText.fontWeight = FontWeight.Thin;
             __instance.RoleText.SetOutlineColor(GetRoleColor(roleType).ShadeColor(0.1f).SetAlpha(0.38f));
             __instance.RoleText.SetOutlineThickness(0.17f);
             __instance.RoleBlurbText.text = roleType.GetRoleInfoForVanilla();
         }, "Override Role Text");
-
     }
+
     [HarmonyPatch(nameof(IntroCutscene.CoBegin)), HarmonyPrefix]
     public static void CoBegin_Prefix()
     {
         InGame = true;
         Info("Game Start", "IntroCutscene");
     }
+
     [HarmonyPatch(nameof(IntroCutscene.BeginImpostor)), HarmonyPostfix]
     public static void BeginImpostor_Postfix(IntroCutscene __instance)
     {
@@ -41,9 +43,11 @@ internal class IntroCutscenePatch
         var onlyimp = GameManager.Instance.LogicOptions.GetAdjustedNumImpostors(GameData.Instance.PlayerCount) == 1;
 
         var color = Palette.ImpostorRed;
-        var colorcode = onlyimp ? ColorHelper.ColorToHex(Palette.DisabledGrey) : ColorHelper.ColorToHex(Palette.ImpostorRed);
-        __instance.TeamTitle.text = onlyimp 
-            ? GetString("TeamImpostorOnly") 
+        var colorcode = onlyimp
+            ? ColorHelper.ColorToHex(Palette.DisabledGrey)
+            : ColorHelper.ColorToHex(Palette.ImpostorRed);
+        __instance.TeamTitle.text = onlyimp
+            ? GetString("TeamImpostorOnly")
             : GetString("TeamImpostor");
 
         __instance.TeamTitle.color = color;
@@ -67,7 +71,7 @@ internal class IntroCutscenePatch
         if (OtherModHost) return;
 
         __instance.TeamTitle.text = $"{GetString("TeamCrewmate")}";
-        __instance.ImpostorText.text = 
+        __instance.ImpostorText.text =
             $"{string.Format(GetString("ImpostorNumCrew"), GameManager.Instance.LogicOptions.GetAdjustedNumImpostors(GameData.Instance.PlayerCount))}";
         __instance.ImpostorText.text += "\n" + GetString("CrewmateIntroText");
         __instance.TeamTitle.color = new Color32(140, 255, 255, byte.MaxValue);
@@ -95,11 +99,12 @@ internal class IntroCutscenePatch
             milliseconds += 20;
             var time = milliseconds / (float)500;
             var LerpingColor = Color.Lerp(start, end, time);
-            if (__instance == null || milliseconds > 500)
+            if (!__instance || milliseconds > 500)
             {
                 Info("break", "StartFadeIntro");
                 break;
             }
+
             __instance.BackgroundBar.material.color = LerpingColor;
         }
     }

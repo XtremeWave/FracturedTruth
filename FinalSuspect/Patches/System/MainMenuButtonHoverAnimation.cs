@@ -15,6 +15,7 @@ public class MainMenuButtonHoverAnimation
         var mainButtons = GameObject.Find("Main Buttons");
 
         mainButtons.ForEachChild((Action<GameObject>)Init);
+
         static void Init(GameObject obj)
         {
             if (obj.name is "BottomButtonBounds" or "Divider") return;
@@ -27,12 +28,15 @@ public class MainMenuButtonHoverAnimation
     }
 
     private static Dictionary<GameObject, (Vector3, bool)> AllButtons = new();
+
     private static void SetButtonStatus(GameObject obj, bool active)
     {
         AllButtons.TryAdd(obj, (obj.transform.position, active));
         AllButtons[obj] = (AllButtons[obj].Item1, active);
     }
+
     public static bool Active = true;
+
     [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.LateUpdate)), HarmonyPostfix]
     private static void Update_Postfix(MainMenuManager __instance)
     {
@@ -48,12 +52,12 @@ public class MainMenuButtonHoverAnimation
             TitleLogoPatch.ModStamp.SetActive(Active);
         }
 
-        if (GameObject.Find("MainUI") == null) return;
+        if (!GameObject.Find("MainUI")) return;
 
-        if (!ModNewsHistory.AnnouncementLoadComplete)
-            FormatButtonColor(__instance, __instance.newsButton, new Color(0.9f, 0.9f, 1f), new Color(0f, 0f, 0f, 0f), Color.white, Color.white);
-        else 
-            FormatButtonColor(__instance, __instance.newsButton, new Color( 0.5216f, 0.7765f, 1f, 0.8f), new Color(0f, 0f, 0f, 0f), Color.white, Color.white);
+        FormatButtonColor(__instance, __instance.newsButton,
+            !ModNewsHistory.AnnouncementLoadComplete
+                ? new Color(0.9f, 0.9f, 1f)
+                : new Color(0.5216f, 0.7765f, 1f, 0.8f), new Color(0f, 0f, 0f, 0f), Color.white, Color.white);
 
         __instance.newsButton.enabled = ModNewsHistory.AnnouncementLoadComplete;
         foreach (var kvp in AllButtons.Where(x => x.Key != null && x.Key.active))

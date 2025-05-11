@@ -11,7 +11,7 @@ public class ExiledHandler : IRpcHandler
     [
         (byte)RpcCalls.Exiled
     ];
-    
+
     public bool HandleLobby(PlayerControl sender, MessageReader reader,
         ref bool notify, ref string reason, ref bool ban)
     {

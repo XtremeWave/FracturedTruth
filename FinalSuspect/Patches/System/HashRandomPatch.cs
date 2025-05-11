@@ -14,6 +14,7 @@ class HashRandomPatch
 
         return false;
     }
+
     [HarmonyPatch(nameof(HashRandom.Next), typeof(int)), HarmonyPrefix]
     static bool MaxNext([HarmonyArgument(0)] int maxInt, ref int __result)
     {
@@ -23,6 +24,7 @@ class HashRandomPatch
 
         return false;
     }
+
     [HarmonyPatch(nameof(HashRandom.Next), typeof(int), typeof(int)), HarmonyPrefix]
     static bool MinMaxNext([HarmonyArgument(0)] int minInt, [HarmonyArgument(1)] int maxInt, ref int __result)
     {

@@ -16,6 +16,7 @@ class RoleOptionSettingPatch
         __instance.titleText.color = Color.white;
     }
 }
+
 [HarmonyPatch(typeof(RolesSettingsMenu), nameof(RolesSettingsMenu.Update))]
 class RolesSettingsMenuPatch
 {
@@ -61,6 +62,7 @@ class RolesSettingsMenuPatch
             SetColor(button, rolecolors[index], roleColor);
             index++;
         }
+
         ConfigureAllButtonColors();
     }
 
@@ -86,8 +88,10 @@ class RolesSettingsMenuPatch
     private static void SetRoleAreaColors()
     {
         var RoleArea = GameObject.Find("ROLES TAB").transform.FindChild("Scroller").FindChild("SliderInner");
-        GameOptionsMenuPatch.SetColorForCat(RoleArea.FindChild("ChancesTab").FindChild("CategoryHeaderMasked").gameObject, Color.green);
-        GameOptionsMenuPatch.SetColorForCat(RoleArea.FindChild("AdvancedTab").FindChild("CategoryHeaderMasked").gameObject, Color.blue);
+        GameOptionsMenuPatch.SetColorForCat(
+            RoleArea.FindChild("ChancesTab").FindChild("CategoryHeaderMasked").gameObject, Color.green);
+        GameOptionsMenuPatch.SetColorForCat(
+            RoleArea.FindChild("AdvancedTab").FindChild("CategoryHeaderMasked").gameObject, Color.blue);
     }
 
     private static void SetColor(GameObject obj, Color iconcolor, Color bgcolor)
@@ -98,6 +102,7 @@ class RolesSettingsMenuPatch
         obj.transform.FindChild("RoleIcon").gameObject.GetComponent<SpriteRenderer>().color = iconcolor;
     }
 }
+
 [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Update))]
 internal class GameOptionsMenuPatch
 {
@@ -108,6 +113,7 @@ internal class GameOptionsMenuPatch
         Color.yellow,
         Color.green
     ];
+
     private static readonly List<Color32> HnSbannercolors =
     [
         GetRoleColor(RoleTypes.Crewmate),
@@ -115,6 +121,7 @@ internal class GameOptionsMenuPatch
         Palette.Purple,
         Color.green
     ];
+
     public static void Postfix()
     {
         var setArea = GameObject.Find("GAME SETTINGS TAB").transform.FindChild("Scroller").FindChild("SliderInner");
@@ -169,7 +176,7 @@ internal class GameOptionsMenuPatch
                     SetColorForCat(banner.gameObject, HnSbannercolors[headerindex]);
                     headerindex++;
                 }
-                else if (banner.name.Contains("Num") || banner.name.Contains("Str")|| banner.name.Contains("Play"))
+                else if (banner.name.Contains("Num") || banner.name.Contains("Str") || banner.name.Contains("Play"))
                 {
                     Color color;
                     if (numindex <= 5)
@@ -178,9 +185,9 @@ internal class GameOptionsMenuPatch
                         color = HnSbannercolors[1];
                     else if (numindex <= 11)
                         color = HnSbannercolors[2];
-                    else 
+                    else
                         color = HnSbannercolors[3];
-                    SetColorForSettingsOpt_StringAndNumber(banner.gameObject, color); 
+                    SetColorForSettingsOpt_StringAndNumber(banner.gameObject, color);
                     numindex++;
                 }
                 else if (banner.name.Contains("Checkbox"))
@@ -188,29 +195,37 @@ internal class GameOptionsMenuPatch
                     Color color;
                     if (boxindex <= 1)
                         color = HnSbannercolors[0];
-                    else 
+                    else
                         color = HnSbannercolors[2];
-                    SetColorForSettingsOpt_Checkbox(banner.gameObject, color); 
+                    SetColorForSettingsOpt_Checkbox(banner.gameObject, color);
                     boxindex++;
                 }
             }
         }
     }
+
     internal static void SetColorForCat(GameObject obj, Color color)
     {
-        if (obj == null) return;
-        obj.transform.FindChild("LabelSprite").gameObject.GetComponent<SpriteRenderer>().color = color.ShadeColor(0.18f);
-        obj.transform.FindChild("DividerImage").gameObject.GetComponent<SpriteRenderer>().color = color.ShadeColor(0.18f);
+        if (!obj) return;
+        obj.transform.FindChild("LabelSprite").gameObject.GetComponent<SpriteRenderer>().color =
+            color.ShadeColor(0.18f);
+        obj.transform.FindChild("DividerImage").gameObject.GetComponent<SpriteRenderer>().color =
+            color.ShadeColor(0.18f);
     }
+
     static void SetColorForSettingsOpt_StringAndNumber(GameObject obj, Color color)
     {
-        obj.transform.FindChild("LabelBackground").gameObject.GetComponent<SpriteRenderer>().color = color.ShadeColor(0.38f);
+        obj.transform.FindChild("LabelBackground").gameObject.GetComponent<SpriteRenderer>().color =
+            color.ShadeColor(0.38f);
         obj.transform.FindChild("ValueBox").gameObject.GetComponent<SpriteRenderer>().color = color;
     }
+
     static void SetColorForSettingsOpt_Checkbox(GameObject obj, Color color)
     {
-        obj.transform.FindChild("LabelBackground").gameObject.GetComponent<SpriteRenderer>().color = color.ShadeColor(0.38f);
-        obj.transform.FindChild("Toggle").FindChild("InactiveSprite").gameObject.GetComponent<SpriteRenderer>().color = color;
+        obj.transform.FindChild("LabelBackground").gameObject.GetComponent<SpriteRenderer>().color =
+            color.ShadeColor(0.38f);
+        obj.transform.FindChild("Toggle").FindChild("InactiveSprite").gameObject.GetComponent<SpriteRenderer>().color =
+            color;
     }
 }
 
@@ -220,21 +235,24 @@ class GameSettingMenuPatch
     static GameObject GamePresetButton;
     static GameObject GameSettingsButton;
     static GameObject RoleSettingsButton;
+
     public static void Postfix()
     {
         try
         {
             var Panel = GameObject.Find("LeftPanel");
 
-            if (GamePresetButton == null)
+            if (!GamePresetButton)
             {
                 GamePresetButton = Panel.transform.FindChild("GamePresetButton").gameObject;
             }
-            if (GameSettingsButton == null)
+
+            if (!GameSettingsButton)
             {
                 GameSettingsButton = Panel.transform.FindChild("GameSettingsButton").gameObject;
             }
-            if (RoleSettingsButton == null && IsNormalGame)
+
+            if (!RoleSettingsButton && IsNormalGame)
             {
                 RoleSettingsButton = Panel.transform.FindChild("RoleSettingsButton").gameObject;
             }
@@ -245,16 +263,18 @@ class GameSettingMenuPatch
 
             var ps = GameObject.Find("PanelSprite");
             ps.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.4f);
-            ps.transform.FindChild("LeftSideTint").gameObject.GetComponent<SpriteRenderer>().color = new Color(0.1176f, 0.1176f, 0.1176f, 0.8f);
+            ps.transform.FindChild("LeftSideTint").gameObject.GetComponent<SpriteRenderer>().color =
+                new Color(0.1176f, 0.1176f, 0.1176f, 0.8f);
         }
         catch
         {
             /* ignored */
         }
     }
+
     static void SetColor(GameObject obj, Color bgcolor)
     {
-        if (obj == null) return;
+        if (!obj) return;
         obj.transform.FindChild("Highlight").gameObject.GetComponent<SpriteRenderer>().color = bgcolor;
         obj.transform.FindChild("Selected").gameObject.GetComponent<SpriteRenderer>().color = bgcolor;
         obj.transform.FindChild("Inactive").gameObject.GetComponent<SpriteRenderer>().color = bgcolor;

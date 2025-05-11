@@ -10,7 +10,7 @@ public class YuMenu : IRpcHandler
     [
         unchecked((byte)520)
     ];
-    
+
     public bool HandleInvalidRPC(PlayerControl sender, MessageReader reader,
         ref bool notify, ref string reason, ref bool ban)
     {

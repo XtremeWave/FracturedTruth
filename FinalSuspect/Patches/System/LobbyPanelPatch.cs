@@ -14,9 +14,11 @@ class LobbyInfoPanePatch
     public static void Postfix()
     {
         var AspectSize = GameObject.Find("AspectSize");
-        AspectSize.transform.FindChild("Background").gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.4f);
+        AspectSize.transform.FindChild("Background").gameObject.GetComponent<SpriteRenderer>().color =
+            new Color(1, 1, 1, 0.4f);
         if (MapIsActive(MapNames.Dleks))
-            AspectSize.transform.FindChild("MapImage").gameObject.GetComponent<SpriteRenderer>().sprite = LoadSprite("DleksBanner-Wordart.png", 160f);
+            AspectSize.transform.FindChild("MapImage").gameObject.GetComponent<SpriteRenderer>().sprite =
+                LoadSprite("DleksBanner-Wordart.png", 160f);
     }
 }
 
@@ -28,6 +30,7 @@ class LobbyViewSettingsPanePatch
     {
         GameObject.Find("RulesPopOutWindow").transform.localPosition += Vector3.left * 0.4f;
     }
+
     private static readonly List<Color32> Normalbannercolors =
     [
         GetRoleColor(RoleTypes.Impostor),
@@ -35,6 +38,7 @@ class LobbyViewSettingsPanePatch
         Color.yellow,
         Color.green
     ];
+
     private static readonly List<Color32> HnSbannercolors =
     [
         GetRoleColor(RoleTypes.Crewmate),
@@ -42,6 +46,7 @@ class LobbyViewSettingsPanePatch
         Palette.Purple,
         Color.green
     ];
+
     private static readonly List<Color32> rolecolors =
     [
         GetRoleColor(RoleTypes.Engineer),
@@ -52,6 +57,7 @@ class LobbyViewSettingsPanePatch
         GetRoleColor(RoleTypes.Shapeshifter),
         GetRoleColor(RoleTypes.Phantom)
     ];
+
     private static readonly List<Color32> rolecatcolors =
     [
         Color.green,
@@ -63,12 +69,14 @@ class LobbyViewSettingsPanePatch
     {
         try
         {
-            var Area = GameObject.Find("MainArea").transform.FindChild("Scaler").FindChild("Scroller").FindChild("SliderInner");
+            var Area = GameObject.Find("MainArea").transform.FindChild("Scaler").FindChild("Scroller")
+                .FindChild("SliderInner");
             Transform[] banners = Area.GetComponentsInChildren<Transform>(true);
-        
+
             if (IsNormalGame)
             {
                 #region 游戏设置
+
                 if (Area.childCount == 21)
                 {
                     var catindex = 0;
@@ -99,6 +107,7 @@ class LobbyViewSettingsPanePatch
                 }
 
                 #endregion
+
                 #region 职业详细设定
 
                 else
@@ -125,9 +134,11 @@ class LobbyViewSettingsPanePatch
                             {
                                 enableroleindex.Add(bannerindex);
                             }
+
                             bannerindex++;
                         }
                     }
+
                     foreach (var banner in banners)
                     {
                         if (banner.name == "AdvancedRoleViewPanel(Clone)")
@@ -141,11 +152,13 @@ class LobbyViewSettingsPanePatch
                         }
                     }
                 }
+
                 #endregion
             }
             else
             {
                 #region 游戏设置
+
                 var catindex = 0;
                 var bannerindex = 0;
                 foreach (var banner in banners)
@@ -155,6 +168,7 @@ class LobbyViewSettingsPanePatch
                         SetColorForCat(banner.gameObject, HnSbannercolors[catindex]);
                         catindex++;
                     }
+
                     if (banner.name == "ViewSettingsInfoPanel(Clone)")
                     {
                         Color color;
@@ -164,12 +178,13 @@ class LobbyViewSettingsPanePatch
                             color = HnSbannercolors[1];
                         else if (bannerindex <= 15)
                             color = HnSbannercolors[2];
-                        else 
+                        else
                             color = HnSbannercolors[3];
                         SetColorForSettingsBanner(banner.gameObject, color);
                         bannerindex++;
                     }
                 }
+
                 #endregion
             }
         }
@@ -178,17 +193,20 @@ class LobbyViewSettingsPanePatch
             /* ignored */
         }
     }
+
     static void SetColorForRolesBanner(GameObject obj, Color iconcolor, Color bgcolor)
     {
-        if (obj == null) return;
-        if (obj.transform.FindChild("LabelBackground").gameObject.GetComponent<SpriteRenderer>().color == new Color(0.3f, 0.3f, 0.3f, 1)) return;
-        obj.transform.FindChild("LabelBackground").gameObject.GetComponent<SpriteRenderer>().color = bgcolor.ShadeColor(0.32f);
+        if (!obj) return;
+        if (obj.transform.FindChild("LabelBackground").gameObject.GetComponent<SpriteRenderer>().color ==
+            new Color(0.3f, 0.3f, 0.3f, 1)) return;
+        obj.transform.FindChild("LabelBackground").gameObject.GetComponent<SpriteRenderer>().color =
+            bgcolor.ShadeColor(0.32f);
         obj.transform.FindChild("RoleIcon").gameObject.GetComponent<SpriteRenderer>().color = iconcolor;
     }
 
     static void SetColorForIcon(GameObject obj, Color iconcolor, Color bgcolor)
     {
-        if (obj == null) return;
+        if (!obj) return;
         var cat = obj.transform.FindChild("CategoryHeaderRoleVariant");
         cat.FindChild("LabelSprite").gameObject.GetComponent<SpriteRenderer>().color = bgcolor.ShadeColor(0.32f);
         cat.FindChild("Divider").gameObject.GetComponent<SpriteRenderer>().color = bgcolor.ShadeColor(0.32f);
@@ -200,21 +218,28 @@ class LobbyViewSettingsPanePatch
         {
             if (_obj.name == "ViewSettingsInfoPanel(Clone)")
             {
-                _obj.transform.FindChild("Value").FindChild("Sprite").gameObject.GetComponent<SpriteRenderer>().color = iconcolor;
-                _obj.transform.FindChild("LabelBackground").gameObject.GetComponent<SpriteRenderer>().color = bgcolor.ShadeColor(0.38f);
+                _obj.transform.FindChild("Value").FindChild("Sprite").gameObject.GetComponent<SpriteRenderer>().color =
+                    iconcolor;
+                _obj.transform.FindChild("LabelBackground").gameObject.GetComponent<SpriteRenderer>().color =
+                    bgcolor.ShadeColor(0.38f);
             }
         }
     }
+
     static void SetColorForSettingsBanner(GameObject obj, Color color)
     {
-        if (obj == null) return;
-        obj.transform.FindChild("LabelBackground").gameObject.GetComponent<SpriteRenderer>().color = color.ShadeColor(0.38f);
+        if (!obj) return;
+        obj.transform.FindChild("LabelBackground").gameObject.GetComponent<SpriteRenderer>().color =
+            color.ShadeColor(0.38f);
         obj.transform.FindChild("Value").FindChild("Sprite").gameObject.GetComponent<SpriteRenderer>().color = color;
     }
+
     static void SetColorForCat(GameObject obj, Color color)
     {
-        if (obj == null) return;
-        obj.transform.FindChild("LabelSprite").gameObject.GetComponent<SpriteRenderer>().color = color.ShadeColor(0.18f);
-        obj.transform.FindChild("DividerImage").gameObject.GetComponent<SpriteRenderer>().color = color.ShadeColor(0.18f);
+        if (!obj) return;
+        obj.transform.FindChild("LabelSprite").gameObject.GetComponent<SpriteRenderer>().color =
+            color.ShadeColor(0.18f);
+        obj.transform.FindChild("DividerImage").gameObject.GetComponent<SpriteRenderer>().color =
+            color.ShadeColor(0.18f);
     }
 }

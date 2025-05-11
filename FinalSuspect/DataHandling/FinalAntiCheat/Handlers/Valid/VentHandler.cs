@@ -15,7 +15,7 @@ public class VentHandler : IRpcHandler
         (byte)RpcCalls.ExitVent,
     ];
 
-    public bool HandleAll(PlayerControl sender, MessageReader reader, 
+    public bool HandleAll(PlayerControl sender, MessageReader reader,
         ref bool notify, ref string reason, ref bool ban)
     {
         return !sender.IsImpostor() && sender.GetRoleType() != RoleTypes.Engineer;

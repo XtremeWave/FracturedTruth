@@ -22,7 +22,7 @@ public static class LoadPatch
     private static SpriteRenderer _modLogo = null!;
     private static SpriteRenderer _modLogoBlurred = null!;
     private static SpriteRenderer _glow = null!;
-    
+
     #endregion
 
     private static bool _reloadLanguage;
@@ -71,11 +71,13 @@ public static class LoadPatch
         {
             _teamLogo = CreateSpriteRenderer("Team_Logo", "TeamLogo.png", 120f, new Vector3(0, 0f, -5f));
             _modLogo = CreateSpriteRenderer("Mod_Logo", "FinalSuspect-Logo.png", 150f, new Vector3(0, 0.3f, -5f));
-            _modLogoBlurred = CreateSpriteRenderer("Mod_Logo_Blurred", "FinalSuspect-Logo-Blurred.png", 150f, new Vector3(0, 0.3f, -5f));
+            _modLogoBlurred = CreateSpriteRenderer("Mod_Logo_Blurred", "FinalSuspect-Logo-Blurred.png", 150f,
+                new Vector3(0, 0.3f, -5f));
             _glow = CreateSpriteRenderer("Glow", "FinalSuspect-Logo.png", 1f, new Vector3(0, 0.3f, -5f));
         }
 
-        private static SpriteRenderer CreateSpriteRenderer(string name, string spriteName, float pixelsPerUnit, Vector3 position)
+        private static SpriteRenderer CreateSpriteRenderer(string name, string spriteName, float pixelsPerUnit,
+            Vector3 position)
         {
             var renderer = ObjectHelper.CreateObject<SpriteRenderer>(name, null, position);
             renderer.sprite = LoadSprite(spriteName, pixelsPerUnit);
@@ -86,14 +88,15 @@ public static class LoadPatch
         #endregion
 
         #region Loading Process
- 
+
         private static IEnumerator HandleFirstLaunch()
         {
             var logoAnimator = GameObject.Find("LogoAnimator");
             logoAnimator.SetActive(false);
 
             CheckForListResources(ref ResourcesHelper.PreReadyRemoteImageList, FileType.Images);
-            yield return DownloadResources(ResourcesHelper.PreReadyRemoteImageList, FileType.Images, HandleFirstLaunchText, true);
+            yield return DownloadResources(ResourcesHelper.PreReadyRemoteImageList, FileType.Images,
+                HandleFirstLaunchText, true);
             if (string.IsNullOrEmpty(_loadText.text)) yield break;
             _loadText.text = string.Empty;
             _firstLaunch = true;
@@ -120,7 +123,8 @@ public static class LoadPatch
             var bypassPathOnce = GetBypassFileType(FileType.Languages, BypassType.Once);
             var bypassPathLongTerm = GetBypassFileType(FileType.Languages, BypassType.Longterm);
 
-            _reloadLanguage = currentVersion != Main.LastStartVersion.Value && !(File.Exists(bypassPathOnce) || File.Exists(bypassPathLongTerm));
+            _reloadLanguage = currentVersion != Main.LastStartVersion.Value &&
+                              !(File.Exists(bypassPathOnce) || File.Exists(bypassPathLongTerm));
 
             if (File.Exists(bypassPathOnce) || File.Exists(bypassPathLongTerm))
             {
@@ -133,6 +137,7 @@ public static class LoadPatch
             {
                 Main.LastStartVersion.Value = currentVersion;
             }
+
             return Main.FastBoot.Value && !_reloadLanguage;
         }
 
@@ -273,7 +278,6 @@ public static class LoadPatch
                 yield return HandleResourceDownloads();
             else
                 yield return FadeText(_processText, false);
-
         }
 
         private static IEnumerator HandleResourceDownloads()
@@ -281,11 +285,11 @@ public static class LoadPatch
             var downloadCount = ResourcesHelper.RemoteImageList.Count;
             var progress = 0;
 
-            UpdateProcessText($"{GetString("DownloadingResources")}({progress}/{downloadCount})", 
+            UpdateProcessText($"{GetString("DownloadingResources")}({progress}/{downloadCount})",
                 ColorHelper.DownloadYellow);
             yield return FadeText(_processText, true);
 
-            var updateProgress = new Action(() => 
+            var updateProgress = new Action(() =>
             {
                 progress++;
                 _processText.text = $"{GetString("DownloadingResources")}({progress}/{downloadCount})";
@@ -321,6 +325,7 @@ public static class LoadPatch
                 _loadText.gameObject.SetActive(true);
                 yield return new WaitForSeconds(0.03f);
             }
+
             yield return new WaitForSeconds(0.5f);
 
             var progress = 1f;
@@ -329,12 +334,13 @@ public static class LoadPatch
                 progress -= Time.deltaTime * 1.2f;
                 _glow.color = Color.white.AlphaMultiplied(progress);
                 _modLogo.color = Color.white.AlphaMultiplied(progress);
-        
+
                 if (progress >= 0.75f)
                     _loadText.color = green.AlphaMultiplied(progress - 0.75f);
-        
+
                 yield return null;
             }
+
             Object.Destroy(_loadText.gameObject);
             Object.Destroy(_processText.gameObject);
             Object.Destroy(_modLogo.gameObject);
@@ -342,13 +348,13 @@ public static class LoadPatch
             Object.Destroy(_teamLogo.gameObject);
             Object.Destroy(_glow.gameObject);
         }
-        
+
         #endregion
-        
+
         #endregion
 
         #region Utility Methods
-        
+
         private static void CheckForListResources(ref List<string> targetList, FileType fileType)
         {
             for (var i = targetList.Count - 1; i >= 0; i--)
@@ -361,7 +367,8 @@ public static class LoadPatch
             }
         }
 
-        private static IEnumerator DownloadResources(List<string> resources, FileType fileType, Action progressCallback = null, bool essential = false)
+        private static IEnumerator DownloadResources(List<string> resources, FileType fileType,
+            Action progressCallback = null, bool essential = false)
         {
             foreach (var resource in resources)
             {
@@ -370,7 +377,7 @@ public static class LoadPatch
                 while (!task.IsCompleted) yield return null;
 
                 if (!task.IsFaulted && task.Result) continue;
-                
+
                 Error($"Download failed: {resource} - {task.Exception}", "Download Resource");
                 if (!essential) continue;
                 yield return HandleDownloadError();
@@ -388,13 +395,15 @@ public static class LoadPatch
             var countdown = 10f;
             while (countdown > 0)
             {
-                _loadText.text = $"Downloading essential resources failed, please restart the game\nRestart countdown: {countdown:F0}";
+                _loadText.text =
+                    $"Downloading essential resources failed, please restart the game\nRestart countdown: {countdown:F0}";
                 countdown -= Time.deltaTime;
                 yield return null;
             }
+
             Application.Quit();
         }
-        
+
         private static IEnumerator FadeText(TextMeshPro text, bool show, float duration = 2.8f)
         {
             var progress = 0.75f;
@@ -426,7 +435,7 @@ public static class LoadPatch
             _processText.text = text;
             _processText.color = color;
         }
-        
+
         #endregion
 
         private static IEnumerator LoadAmongUsTranslation()
@@ -438,7 +447,7 @@ public static class LoadPatch
             }
             catch
             {
-                 /* Ignored */
+                /* Ignored */
             }
         }
     }
@@ -461,5 +470,6 @@ public static class LoadPatch
     {
         public static void Prefix(ref bool on) => on = false;
     }
+
     #endregion
 }

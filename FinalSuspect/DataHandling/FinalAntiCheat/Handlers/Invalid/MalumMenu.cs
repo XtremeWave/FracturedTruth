@@ -10,7 +10,7 @@ public class MalumMenu : IRpcHandler
     [
         // Noting
     ];
-    
+
     public bool HandleInvalidRPC(PlayerControl sender, MessageReader reader,
         ref bool notify, ref string reason, ref bool ban)
     {

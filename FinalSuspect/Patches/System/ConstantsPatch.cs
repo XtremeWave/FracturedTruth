@@ -9,6 +9,7 @@ public class ConstantsPatch
         {
             Info($"IsLocalGame: {__result}", "VersionServer");
         }
+
         if (IsOnlineGame)
         {
             Info($"IsOnlineGame: {__result}", "VersionServer");

@@ -9,16 +9,17 @@ public class MainThreadTask
     private readonly string name;
     private readonly Action action;
     private static readonly List<MainThreadTask> Tasks = [];
-    
+
     public MainThreadTask(Action action, string name = "No Name Task")
     {
         this.action = action;
         this.name = name;
-        
+
         if (name != "")
             Info("\"" + name + "\" is created", "Main Thread Task");
         Tasks.Add(this);
     }
+
     public static void Update()
     {
         var TasksToRemove = new List<MainThreadTask>();
@@ -34,10 +35,12 @@ public class MainThreadTask
             }
             catch (Exception ex)
             {
-                Error($"{ex.GetType()}: {ex.Message}  in \"{task.name}\"\n{ex.StackTrace}", "Main Thread Task.Error", false);
+                Error($"{ex.GetType()}: {ex.Message}  in \"{task.name}\"\n{ex.StackTrace}", "Main Thread Task.Error",
+                    false);
                 TasksToRemove.Add(task);
             }
         }
+
         // 安全移除已处理的任务
         TasksToRemove.ForEach(task => Tasks.Remove(task));
     }

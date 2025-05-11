@@ -72,7 +72,7 @@ public static class ModUnloaderScreen
 
     public static void Show()
     {
-        if (Popup != null)
+        if (Popup)
         {
             Popup.gameObject.SetActive(true);
 

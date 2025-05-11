@@ -14,15 +14,15 @@ public static class CustomSoundsManager
         {
             if (audio.CurrectAudioStates is AudiosStates.NotExist or AudiosStates.IsPlaying) return;
             if (!Constants.ShouldPlaySfx()) return;
-        
+
             _ = new MainThreadTask(() =>
             {
                 StopPlayMod();
                 StopPlayVanilla();
             }, "Playing Sfx");
-        
+
             await XtremeMusic.LoadClip(audio.CurrectAudio);
-        
+
             _ = new MainThreadTask(() =>
             {
                 foreach (var file in XtremeMusic.musics.Where(file => file.FileName == audio.FileName))
@@ -42,7 +42,7 @@ public static class CustomSoundsManager
             /* ignored */
         }
     }
- 
+
     public static void StopPlayMod()
     {
         XtremeMusic.musics.Do(x =>
@@ -79,7 +79,8 @@ public static class CustomSoundsManager
         if (IsLobby)
             global::SoundManager.Instance.CrossFadeSound("MapTheme", LobbyBehaviour.Instance.MapTheme, 0.07f);
         else if (IsNotJoined)
-            global::SoundManager.Instance.CrossFadeSound("MainBG", DestroyableSingleton<JoinGameButton>.Instance.IntroMusic, 1f);
+            global::SoundManager.Instance.CrossFadeSound("MainBG",
+                DestroyableSingleton<JoinGameButton>.Instance.IntroMusic, 1f);
     }
     /*
     public static void AutoPlay(string sound, string name)
@@ -153,11 +154,13 @@ public static class CustomSoundsManager
         }
     }*/
 }
+
 [HarmonyPatch(typeof(global::SoundManager), nameof(global::SoundManager.PlaySoundImmediate))]
 [HarmonyPatch(typeof(global::SoundManager), nameof(global::SoundManager.PlaySound))]
 public class AudioManagementPlaySoundPatch
 {
-    public static bool Prefix(global::SoundManager __instance, [HarmonyArgument(0)] AudioClip clip, [HarmonyArgument(1)] bool loop)
+    public static bool Prefix(global::SoundManager __instance, [HarmonyArgument(0)] AudioClip clip,
+        [HarmonyArgument(1)] bool loop)
     {
         var isPlaying = XtremeMusic.musics.Any(x => x.CurrectAudioStates == AudiosStates.IsPlaying);
         var disableVanilla = Main.DisableVanillaSound.Value;
@@ -169,7 +172,8 @@ public class AudioManagementPlaySoundPatch
 [HarmonyPatch(typeof(global::SoundManager), nameof(global::SoundManager.PlayNamedSound))]
 public class AudioManagementPlayDynamicAndNamedSoundPatch
 {
-    public static bool Prefix([HarmonyArgument(0)] string name, [HarmonyArgument(1)] AudioClip clip, [HarmonyArgument(2)] bool loop)
+    public static bool Prefix([HarmonyArgument(0)] string name, [HarmonyArgument(1)] AudioClip clip,
+        [HarmonyArgument(2)] bool loop)
     {
         var isPlaying = XtremeMusic.musics.Any(x => x.CurrectAudioStates == AudiosStates.IsPlaying);
         var isModMusic = XtremeMusic.musics.Any(x => x.FileName == name);
@@ -197,19 +201,19 @@ public class AudioManagementStopAllSoundPatch
     {
         for (var i = __instance.soundPlayers.Count - 1; i >= 0; i--)
         {
-            if (XtremeMusic.musics.Any(x => x.Clip == __instance.soundPlayers[i].Player.clip)) 
+            if (XtremeMusic.musics.Any(x => x.Clip == __instance.soundPlayers[i].Player.clip))
                 continue;
-            
+
             Object.Destroy(__instance.soundPlayers[i].Player);
             __instance.soundPlayers.RemoveAt(i);
         }
-        
+
         var keysToRemove = new List<AudioClip>();
         foreach (var (key, value) in __instance.allSources)
         {
-            if (XtremeMusic.musics.Any(x => x.Clip == key)) 
+            if (XtremeMusic.musics.Any(x => x.Clip == key))
             {
-                continue; 
+                continue;
             }
 
             value.volume = 0f;
@@ -217,12 +221,12 @@ public class AudioManagementStopAllSoundPatch
             Object.Destroy(value);
             keysToRemove.Add(key);
         }
-        
+
         foreach (var key in keysToRemove)
         {
             __instance.allSources.Remove(key);
         }
-        
+
         return false;
     }
 }

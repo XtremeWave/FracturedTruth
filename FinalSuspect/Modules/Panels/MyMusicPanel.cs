@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.SoundInterface;
@@ -10,6 +11,7 @@ using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Modules.Panels;
 
+[SuppressMessage("ReSharper", "PossibleLossOfFraction")]
 public static class MyMusicPanel
 {
     public static SpriteRenderer CustomBackground { get; set; }
@@ -21,18 +23,21 @@ public static class MyMusicPanel
     public static int TotalPageCount => (XtremeMusic.musics.Count + ItemsPerPage - 1) / ItemsPerPage;
 
     private static int numItems;
+
     public static int PlayMode;
+
     //public static ToggleButtonBehaviour ChangePlayMode { get; private set; }
     public static void Hide()
     {
-        if (CustomBackground != null)
+        if (CustomBackground)
             CustomBackground?.gameObject.SetActive(false);
     }
+
     public static void Init(OptionsMenuBehaviour optionsMenuBehaviour)
     {
-        var mouseMoveToggle = optionsMenuBehaviour.DisableMouseMovement; 
+        var mouseMoveToggle = optionsMenuBehaviour.DisableMouseMovement;
         OptionsMenuBehaviourNow = optionsMenuBehaviour;
-        if (CustomBackground == null)
+        if (!CustomBackground)
         {
             CurrentPage = 1;
             numItems = 0;
@@ -50,11 +55,7 @@ public static class MyMusicPanel
             closeButton.Background.color = Color.red;
             var closePassiveButton = closeButton.GetComponent<PassiveButton>();
             closePassiveButton.OnClick = new Button.ButtonClickedEvent();
-            closePassiveButton.OnClick.AddListener(new Action(() =>
-            {
-                
-                CustomBackground.gameObject.SetActive(false);
-            }));
+            closePassiveButton.OnClick.AddListener(new Action(() => { CustomBackground.gameObject.SetActive(false); }));
 
             var stopButton = Object.Instantiate(mouseMoveToggle, CustomBackground.transform);
             stopButton.transform.localPosition = new Vector3(1.3f, -1.88f, -16f);
@@ -70,7 +71,8 @@ public static class MyMusicPanel
 
             AddPageNavigationButton(optionsMenuBehaviour);
 
-            var helpText = Object.Instantiate(optionsMenuBehaviour.DisableMouseMovement.Text, CustomBackground.transform);
+            var helpText =
+                Object.Instantiate(optionsMenuBehaviour.DisableMouseMovement.Text, CustomBackground.transform);
             helpText.name = "Help Text";
             helpText.transform.localPosition = new Vector3(-1.25f, -2.15f, -15f);
             helpText.transform.localScale = new Vector3(1f, 1f, 1f);
@@ -80,8 +82,10 @@ public static class MyMusicPanel
 
             //AddChangePlayModeButton(optionsMenuBehaviour);
         }
+
         RefreshTagList();
     }
+
     static void AddPageNavigationButton(OptionsMenuBehaviour optionsMenuBehaviour)
     {
         var mouseMoveToggle = optionsMenuBehaviour.DisableMouseMovement;
@@ -103,10 +107,11 @@ public static class MyMusicPanel
             {
                 CurrentPage = 1;
             }
-            
-            RefreshTagList() ;
+
+            RefreshTagList();
         }));
     }
+
     /*static void AddChangePlayModeButton(OptionsMenuBehaviour optionsMenuBehaviour)
     {
         //var mouseMoveToggle = optionsMenuBehaviour.DisableMouseMovement;
@@ -144,13 +149,14 @@ public static class MyMusicPanel
         {
             if (count >= ItemsPerPage)
             {
-                break; 
+                break;
             }
 
-            RefreshTags(optionsMenuBehaviour, audio); 
-            count++; 
+            RefreshTags(optionsMenuBehaviour, audio);
+            count++;
         }
     }
+
     public static void RefreshTags(OptionsMenuBehaviour optionsMenuBehaviour, XtremeMusic audio)
     {
         try
@@ -170,13 +176,14 @@ public static class MyMusicPanel
             ToggleButton.name = "Btn-" + filename;
             ToggleButton.Text.text = $"{name}{(author != string.Empty ? $" -{author}" : "")}";
             ToggleButton.Background.color = Color.white;
-            numItems++; 
+            numItems++;
 
             offsetX = numItems % 2 == 0 ? -1.3f : 1.3f;
             offsetY = 2.2f - 0.5f * (numItems / 2);
             offsetZ = -6f;
 
-            var previewText = Object.Instantiate(optionsMenuBehaviour.DisableMouseMovement.Text, CustomBackground.transform);
+            var previewText =
+                Object.Instantiate(optionsMenuBehaviour.DisableMouseMovement.Text, CustomBackground.transform);
             previewText.transform.localPosition = new Vector3(offsetX, offsetY, offsetZ);
             previewText.fontSize = ToggleButton.Text.fontSize;
             previewText.name = "PreText-" + filename;
@@ -222,11 +229,13 @@ public static class MyMusicPanel
             var passiveButton = ToggleButton.GetComponent<PassiveButton>();
             passiveButton.OnClick = new Button.ButtonClickedEvent();
             passiveButton.OnClick.AddListener(new Action(OnClick));
+
             void OnClick()
             {
                 Info($"Try To Play {filename}:{path}", "MyMusicPanel");
                 CustomSoundsManager.Play(audio);
             }
+
             Items.Add(ToggleButton.gameObject);
             Items.Add(previewText.gameObject);
         }

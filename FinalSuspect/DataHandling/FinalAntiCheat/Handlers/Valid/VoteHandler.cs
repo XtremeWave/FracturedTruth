@@ -14,7 +14,7 @@ public class VoteHandler : IRpcHandler
         (byte)RpcCalls.ClearVote,
         (byte)RpcCalls.AddVote,
     ];
-    
+
     public bool HandleLobby(PlayerControl sender, MessageReader reader,
         ref bool notify, ref string reason, ref bool ban)
     {

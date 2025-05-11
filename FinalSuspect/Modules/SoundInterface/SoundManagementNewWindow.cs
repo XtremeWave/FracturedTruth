@@ -16,16 +16,19 @@ public static class SoundManagementNewWindow
     public static GameObject Info { get; private set; }
     public static GameObject EnterBox { get; private set; }
     public static GameObject ConfirmButton { get; private set; }
+
     public static void Open()
     {
-        if (Window == null) Init();
-        if (Window == null) return;
+        if (!Window) Init();
+        if (!Window) return;
         Window.SetActive(true);
         EnterBox.GetComponent<TextBoxTMP>().Clear();
     }
+
     public static void Init()
     {
-        Window = Object.Instantiate(AccountManager.Instance.transform.FindChild("InfoTextBox").gameObject, SoundManagementPanel.CustomBackground.transform.parent);
+        Window = Object.Instantiate(AccountManager.Instance.transform.FindChild("InfoTextBox").gameObject,
+            SoundManagementPanel.CustomBackground.transform.parent);
         Window.name = "New Music Window";
         Window.transform.FindChild("Background").localScale *= 0.7f;
         Window.transform.localPosition += Vector3.back * 21;
@@ -35,10 +38,7 @@ public static class SoundManagementNewWindow
         closeButton.transform.localPosition = new Vector3(2.4f, 1.2f, -21f);
         closeButton.transform.localScale = new Vector3(1f, 1f, 1f);
         closeButton.GetComponent<PassiveButton>().OnClick = new Button.ButtonClickedEvent();
-        closeButton.GetComponent<PassiveButton>().OnClick.AddListener((Action)(() =>
-        {
-            Window.SetActive(false);
-        }));
+        closeButton.GetComponent<PassiveButton>().OnClick.AddListener((Action)(() => { Window.SetActive(false); }));
 
         var titlePrefab = Window.transform.FindChild("TitleText_TMP").gameObject;
         titlePrefab.name = "Title Prefab";
@@ -50,7 +50,10 @@ public static class SoundManagementNewWindow
         buttonPrefab.name = "Button Prefab";
         buttonPrefab.GetComponent<PassiveButton>().OnClick = new Button.ButtonClickedEvent();
         buttonPrefab.transform.localPosition += Vector3.back * 10;
-        var enterPrefab = Object.Instantiate(AccountManager.Instance.transform.FindChild("PremissionRequestWindow/GuardianEmailConfirm").gameObject, Window.transform);
+        var enterPrefab =
+            Object.Instantiate(
+                AccountManager.Instance.transform.FindChild("PremissionRequestWindow/GuardianEmailConfirm").gameObject,
+                Window.transform);
         enterPrefab.name = "Enter Box Prefab";
         enterPrefab.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
         enterPrefab.transform.localPosition += Vector3.back * 10;
@@ -115,6 +118,7 @@ public static class SoundManagementNewWindow
         buttonPrefab.SetActive(false);
         enterPrefab.SetActive(false);
     }
+
     private static void SaveToFile(string name)
     {
         using StreamWriter sr = new(SoundManager.TAGS_PATH, true);

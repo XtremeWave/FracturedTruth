@@ -8,14 +8,14 @@ namespace FinalSuspect.DataHandling.FinalAntiCheat.Handlers.Valid;
 public class SetNameHandler : IRpcHandler
 {
     private static readonly Dictionary<byte, int> _counters = new();
-    
+
     public List<byte> TargetRpcs =>
     [
         (byte)RpcCalls.CheckName,
         (byte)RpcCalls.SetName,
     ];
 
-    public bool HandleAll(PlayerControl sender, MessageReader reader, 
+    public bool HandleAll(PlayerControl sender, MessageReader reader,
         ref bool notify, ref string reason, ref bool ban)
     {
         _counters.TryAdd(sender.PlayerId, 0);
@@ -34,13 +34,13 @@ public class SetNameHandler : IRpcHandler
         notify = false;
         return true;
     }
-    
-    public bool HandleGame_All(PlayerControl sender, MessageReader reader, 
+
+    public bool HandleGame_All(PlayerControl sender, MessageReader reader,
         ref bool notify, ref string reason, ref bool ban)
     {
         return true;
     }
-    
+
     public void Dispose(byte id)
     {
         _counters.Remove(id);

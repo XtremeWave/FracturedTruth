@@ -8,11 +8,10 @@ class JoinGameButtonPatch
 {
     public static void Prefix(JoinGameButton __instance)
     {
-        if (__instance.GameIdText == null) return;
-        if (__instance.GameIdText.text == "" && Regex.IsMatch(GUIUtility.systemCopyBuffer.Trim('\r', '\n'), @"^[A-Z]{6}$"))
-        {
-            Info($"{GUIUtility.systemCopyBuffer}", "ClipBoard");
-            __instance.GameIdText.SetText(GUIUtility.systemCopyBuffer.Trim('\r', '\n'));
-        }
+        if (!__instance.GameIdText) return;
+        if (__instance.GameIdText.text != "" ||
+            !Regex.IsMatch(GUIUtility.systemCopyBuffer.Trim('\r', '\n'), @"^[A-Z]{6}$")) return;
+        Info($"{GUIUtility.systemCopyBuffer}", "ClipBoard");
+        __instance.GameIdText.SetText(GUIUtility.systemCopyBuffer.Trim('\r', '\n'));
     }
 }

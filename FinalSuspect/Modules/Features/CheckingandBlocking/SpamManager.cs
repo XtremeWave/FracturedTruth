@@ -23,7 +23,7 @@ public static class SpamManager
         "FACList.json",
         $"BanWords/{GetUserLangByRegion()}.json"
     ];
-    
+
     //[PluginModuleInitializer]
     public static async Task Init()
     {
@@ -54,7 +54,7 @@ public static class SpamManager
         {
             try
             {
-                if (File.Exists(@"./BanWords.json")) 
+                if (File.Exists(@"./BanWords.json"))
                     File.Move(@"./BanWords.json", BANEDWORDS_FILE_PATH);
                 else
                 {
@@ -72,7 +72,7 @@ public static class SpamManager
         {
             try
             {
-                if (File.Exists(@"./DenyName.json")) 
+                if (File.Exists(@"./DenyName.json"))
                     File.Move(@"./DenyName.json", DENY_NAME_LIST_PATH);
             }
             catch (Exception ex)
@@ -93,7 +93,7 @@ public static class SpamManager
                 sendList.Add(text.Replace("\\n", "\n").ToLower());
         return sendList;
     }
-    
+
     private static async Task<bool> GetConfigs(string url, string name)
     {
         try
@@ -123,16 +123,18 @@ public static class SpamManager
                 using HttpClient client = new();
                 client.DefaultRequestHeaders.Add("User-Agent", "FinalSuspect" + name);
                 client.DefaultRequestHeaders.Add("Referer", "gitee.com");
-                
+
                 using var response = await client.GetAsync(new Uri(url), HttpCompletionOption.ResponseContentRead);
                 if (!response.IsSuccessStatusCode)
                 {
                     Error($"服务器请求失败 [{url}]: {response.StatusCode}", "SpamManager");
                     return false;
                 }
+
                 result = await response.Content.ReadAsStringAsync();
                 result = result.Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
             }
+
             try
             {
                 var data = JObject.Parse(result);
@@ -145,6 +147,7 @@ public static class SpamManager
                 Error($"JSON 解析失败: {ex.Message}", "SpamManager");
                 return false;
             }
+
             await Task.Delay(100);
             return true;
         }
@@ -199,24 +202,25 @@ public static class SpamManager
         {
             return [];
         }
-        
+
         var jarray = token.Cast<JArray>();
         var tokens = new List<string>();
         for (var i = 0; i < jarray.Count; i++)
         {
             tokens.Add(jarray[i].ToString());
         }
- 
+
         return
         [
             .. tokens
                 .Select(item => item?.ToString())
-                .Where(str => !string.IsNullOrEmpty(str))];
+                .Where(str => !string.IsNullOrEmpty(str))
+        ];
     }
-    
+
     private static string DecodeUnicodeEscapes(string input)
     {
-        return Regex.Replace(input, @"\\u([0-9A-Fa-f]{4})", match => 
+        return Regex.Replace(input, @"\\u([0-9A-Fa-f]{4})", match =>
         {
             try
             {
@@ -228,7 +232,7 @@ public static class SpamManager
             }
         });
     }
-    
+
     private static string DecryptBase64(string cipherText)
     {
         try
@@ -238,10 +242,10 @@ public static class SpamManager
         }
         catch
         {
-            return cipherText; 
+            return cipherText;
         }
     }
-    
+
     private static void UpdateBanWords(List<string> newWords)
     {
         if (newWords.Count == 0) return;
@@ -256,7 +260,7 @@ public static class SpamManager
             .Where(p => p.IsDev())
             .Any(p => line.Contains(p.FriendCode, StringComparison.OrdinalIgnoreCase));
     }
-    
+
     public static void CheckSpam(ref string text)
     {
         if (!Main.SpamDenyWord.Value || BanWords.Count == 0) return;
@@ -267,13 +271,13 @@ public static class SpamManager
             var bannedWords = BanWords.Where(word => lowerText.Contains(word.ToLowerInvariant())).ToList();
 
             if (bannedWords.Count == 0) return;
-            
+
             var pattern = string.Join("|", bannedWords.Select(Regex.Escape));
-            text = Regex.Replace(text, pattern, match => 
-                    $"<color=#E57373>{new string('*', match.Value.Length)}</color>", 
+            text = Regex.Replace(text, pattern, match =>
+                    $"<color=#E57373>{new string('*', match.Value.Length)}</color>",
                 RegexOptions.IgnoreCase);
         }
-        catch 
+        catch
         {
             /* ignored */
         }

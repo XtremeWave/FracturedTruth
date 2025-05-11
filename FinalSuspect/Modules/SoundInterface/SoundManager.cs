@@ -17,7 +17,7 @@ public static class SoundManager
     public static readonly string TAGS_PATH = GetResourceFilesPath(FileType.Sounds, "SoundsName.txt");
 
     public static List<string> CustomAudios = [];
- 
+
     public static void ReloadTag(bool official = true)
     {
         CustomAudios = [];
@@ -27,6 +27,7 @@ public static class SoundManager
             Init();
             return;
         }
+
         try
         {
             using StreamReader sr = new(TAGS_PATH);
@@ -42,7 +43,7 @@ public static class SoundManager
             Error("Load Audios Failed\n" + ex, "AudioManager", false);
         }
     }
-    
+
     public static void Init()
     {
         if (!File.Exists(TAGS_PATH)) File.Create(TAGS_PATH).Close();
@@ -50,7 +51,7 @@ public static class SoundManager
         File.SetAttributes(TAGS_PATH, attributes | FileAttributes.Hidden);
         XtremeMusic.InitializeAll();
     }
-    
+
     public static bool ConvertExtension(ref string path)
     {
         if (path == null) return false;
@@ -68,13 +69,15 @@ public static class SoundManager
             {
                 return false;
             }
+
             var nextIndex = (currentIndex + 1) % extensionsArray.Length;
             path = path.Replace(matchingKey, extensionsArray[nextIndex]);
             extensions.Remove(matchingKey);
         }
+
         return true;
     }
-    
+
     public static void PlaySound(byte playerID, Sounds sound)
     {
         if (PlayerControl.LocalPlayer.PlayerId == playerID)
@@ -85,16 +88,20 @@ public static class SoundManager
                     global::SoundManager.Instance.PlaySound(PlayerControl.LocalPlayer.KillSfx, false);
                     break;
                 case Sounds.TaskComplete:
-                    global::SoundManager.Instance.PlaySound(DestroyableSingleton<HudManager>.Instance.TaskCompleteSound, false);
+                    global::SoundManager.Instance.PlaySound(DestroyableSingleton<HudManager>.Instance.TaskCompleteSound,
+                        false);
                     break;
                 case Sounds.TaskUpdateSound:
-                    global::SoundManager.Instance.PlaySound(DestroyableSingleton<HudManager>.Instance.TaskUpdateSound, false);
+                    global::SoundManager.Instance.PlaySound(DestroyableSingleton<HudManager>.Instance.TaskUpdateSound,
+                        false);
                     break;
                 case Sounds.ImpTransform:
-                    global::SoundManager.Instance.PlaySound(DestroyableSingleton<HnSImpostorScreamSfx>.Instance.HnSOtherImpostorTransformSfx, false, 0.8f);
+                    global::SoundManager.Instance.PlaySound(
+                        DestroyableSingleton<HnSImpostorScreamSfx>.Instance.HnSOtherImpostorTransformSfx, false, 0.8f);
                     break;
                 case Sounds.Yeehawfrom:
-                    global::SoundManager.Instance.PlaySound(DestroyableSingleton<HnSImpostorScreamSfx>.Instance.HnSLocalYeehawSfx, false, 0.8f);
+                    global::SoundManager.Instance.PlaySound(
+                        DestroyableSingleton<HnSImpostorScreamSfx>.Instance.HnSLocalYeehawSfx, false, 0.8f);
                     break;
             }
         }
@@ -104,28 +111,28 @@ public static class SoundManager
 public enum SupportedMusics
 {
     UnOfficial,
-    
+
     // ## World Music
     GongXiFaCai__Andy_Lau,
     NeverGonnaGiveYouUp__Rick_Astley,
     CountingStars__One_Republic,
-    
+
     //20250214
-    
+
     // ## Mod Music
     TidalSurge__Slok,
-    TrailOfTruth__Slok, 
-    Interlude__Slok, 
-    Fractured__Slok, 
-    ElegyOfFracturedVow__Slok, 
+    TrailOfTruth__Slok,
+    Interlude__Slok,
+    Fractured__Slok,
+    ElegyOfFracturedVow__Slok,
     VestigiumSplendoris__Slok,
     ReturnToSimplicity__Slok,
 
     //20250214
     Affinity__Slok,
     Inceps_Plus_InProgress__Slok
-    
 }
+
 public enum AudiosStates
 {
     NotExist,
@@ -150,7 +157,7 @@ public class XtremeMusic
     public SupportedMusics CurrectAudio;
     public AudiosStates CurrectAudioStates;
     public AudiosStates LastAudioStates;
-    
+
     public bool UnOfficial;
     public bool unpublished;
 
@@ -161,7 +168,7 @@ public class XtremeMusic
         {
             CreateMusic(music: file);
         }
-        
+
         var soundnum = 0;
         try
         {
@@ -179,9 +186,10 @@ public class XtremeMusic
         {
             Error("Load Audio Failed\n" + ex, "AudioManager", false);
         }
+
         Msg($"{soundnum} Custom Sounds Loaded", "AudioManager");
     }
-    
+
     private static readonly object finalMusicsLock = new();
 
     public static void CreateMusic(string name = "", SupportedMusics music = SupportedMusics.UnOfficial)
@@ -209,9 +217,9 @@ public class XtremeMusic
         await task;
         _ = new MainThreadTask(() =>
         {
-            if (task.Result != null)
+            if (task.Result)
                 Clip = task.Result;
-            LastAudioStates = CurrectAudioStates = Clip != null ? AudiosStates.Exist : AudiosStates.NotExist;
+            LastAudioStates = CurrectAudioStates = Clip ? AudiosStates.Exist : AudiosStates.NotExist;
             MyMusicPanel.RefreshTagList();
         }, "Update Audio States");
     }
@@ -236,22 +244,23 @@ public class XtremeMusic
         UnOfficial = music == SupportedMusics.UnOfficial;
         CurrectAudio = music;
         Path = GetResourceFilesPath(FileType.Sounds, FileName + ".wav");
-        CurrectAudioStates = LastAudioStates = SoundManager.ConvertExtension(ref Path) ? AudiosStates.Exist : AudiosStates.NotExist;
-        
+        CurrectAudioStates = LastAudioStates =
+            SoundManager.ConvertExtension(ref Path) ? AudiosStates.Exist : AudiosStates.NotExist;
+
         lock (finalMusicsLock)
         {
             var file = musics.Find(x => x.FileName == FileName);
             if (file != null)
             {
                 file.Path = Path;
-                if (file.CurrectAudioStates is AudiosStates.DownLoadFailureNotice or AudiosStates.DownLoadSucceedNotice 
+                if (file.CurrectAudioStates is AudiosStates.DownLoadFailureNotice or AudiosStates.DownLoadSucceedNotice
                     || CurrectAudioStates is AudiosStates.NotExist)
                 {
                     file.CurrectAudioStates = file.LastAudioStates = CurrectAudioStates;
                 }
             }
             else if (Name != string.Empty)
-            musics.Add(this);
+                musics.Add(this);
         }
     }
 }

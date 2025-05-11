@@ -19,19 +19,19 @@ public static class SoundManagementPanel
     public static Dictionary<string, GameObject> Items { get; private set; }
 
     private static int numItems;
-    
+
     public static void Hide()
     {
-        if (CustomBackground != null)
+        if (CustomBackground)
             CustomBackground?.gameObject.SetActive(false);
     }
-    
+
     public static void Init(OptionsMenuBehaviour optionsMenuBehaviour)
     {
         var mouseMoveToggle = optionsMenuBehaviour.DisableMouseMovement;
         if (!IsNotJoined) return;
 
-        if (CustomBackground == null)
+        if (!CustomBackground)
         {
             numItems = 0;
             CustomBackground = Object.Instantiate(optionsMenuBehaviour.Background, optionsMenuBehaviour.transform);
@@ -47,10 +47,7 @@ public static class SoundManagementPanel
             closeButton.Background.color = Color.red;
             var closePassiveButton = closeButton.GetComponent<PassiveButton>();
             closePassiveButton.OnClick = new Button.ButtonClickedEvent();
-            closePassiveButton.OnClick.AddListener(new Action(() =>
-            {
-                CustomBackground.gameObject.SetActive(false);
-            }));
+            closePassiveButton.OnClick.AddListener(new Action(() => { CustomBackground.gameObject.SetActive(false); }));
 
             var newButton = Object.Instantiate(mouseMoveToggle, CustomBackground.transform);
             newButton.transform.localPosition = new Vector3(1.3f, -1.88f, -16f);
@@ -69,8 +66,9 @@ public static class SoundManagementPanel
             helpTextTMP.text = GetString("CustomAudioManagementHelp");
             helpText.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(2.45f, 1f);
 
-            var sliderTemplate = AccountManager.Instance.transform.FindChild("MainSignInWindow/SignIn/AccountsMenu/Accounts/Slider").gameObject;
-            if (sliderTemplate != null && Slider == null)
+            var sliderTemplate = AccountManager.Instance.transform
+                .FindChild("MainSignInWindow/SignIn/AccountsMenu/Accounts/Slider").gameObject;
+            if (sliderTemplate && !Slider)
             {
                 Slider = Object.Instantiate(sliderTemplate, CustomBackground.transform);
                 Slider.name = "Audio Management Slider";
@@ -83,9 +81,10 @@ public static class SoundManagementPanel
                 mask.transform.localScale = new Vector3(4.9f, 3.92f, 1f);
             }
         }
+
         RefreshTagList();
     }
-  
+
     public static void RefreshTagList()
     {
         if (!IsNotJoined) return;
@@ -93,7 +92,8 @@ public static class SoundManagementPanel
         var scroller = Slider.GetComponent<Scroller>();
         scroller.Inner.gameObject.ForEachChild((Action<GameObject>)DestroyObj);
 
-        var numberSetter = AccountManager.Instance.transform.FindChild("DOBEnterScreen/EnterAgePage/MonthMenu/Months").GetComponent<NumberSetter>();
+        var numberSetter = AccountManager.Instance.transform.FindChild("DOBEnterScreen/EnterAgePage/MonthMenu/Months")
+            .GetComponent<NumberSetter>();
         var buttonPrefab = numberSetter.ButtonPrefab.gameObject;
 
         Items?.Values.Do(Object.Destroy);
@@ -111,7 +111,8 @@ public static class SoundManagementPanel
             var renderer = button.GetComponent<SpriteRenderer>();
             var rollover = button.GetComponent<ButtonRolloverHandler>();
 
-            var previewText = Object.Instantiate(button.transform.GetChild(0).GetComponent<TextMeshPro>(), button.transform);
+            var previewText =
+                Object.Instantiate(button.transform.GetChild(0).GetComponent<TextMeshPro>(), button.transform);
             previewText.transform.SetLocalX(1.9f);
             previewText.fontSize = 1f;
             previewText.name = "PreText-" + filename;
@@ -123,9 +124,10 @@ public static class SoundManagementPanel
             Color buttonColor;
             var enable = true;
 
-            var audioExist = audio.CurrectAudioStates is not AudiosStates.NotExist || SoundInterface.SoundManager.CustomAudios.Contains(filename);
+            var audioExist = audio.CurrectAudioStates is not AudiosStates.NotExist ||
+                             SoundInterface.SoundManager.CustomAudios.Contains(filename);
             var unpublished = audio.unpublished;
-            
+
             switch (audio.CurrectAudioStates)
             {
                 case AudiosStates.IsDownLoading:
@@ -158,10 +160,11 @@ public static class SoundManagementPanel
                         buttontext = !audio.UnOfficial ? GetString("download") : GetString("NoFound");
                         buttonColor = !audio.UnOfficial ? Color.green : Color.black;
                     }
+
                     break;
                 }
             }
-            
+
             if (unpublished)
             {
                 buttonColor = Palette.DisabledGrey;
@@ -183,11 +186,13 @@ public static class SoundManagementPanel
                     audio.CurrectAudioStates = audio.LastAudioStates = AudiosStates.IsDownLoading;
                     RefreshTagList();
                     var task = ResourcesDownloader.StartDownload(FileType.Sounds, filename + ".wav");
-                    task.ContinueWith(t => 
+                    task.ContinueWith(t =>
                     {
                         _ = new MainThreadTask(() =>
                         {
-                            audio.CurrectAudioStates = audio.LastAudioStates = t.Result ? AudiosStates.DownLoadSucceedNotice : AudiosStates.DownLoadFailureNotice;
+                            audio.CurrectAudioStates = audio.LastAudioStates = t.Result
+                                ? AudiosStates.DownLoadSucceedNotice
+                                : AudiosStates.DownLoadFailureNotice;
                             RefreshTagList();
 
                             _ = new LateTask(() =>
@@ -195,7 +200,7 @@ public static class SoundManagementPanel
                                 XtremeMusic.CreateMusic(music: audio.CurrectAudio);
                                 RefreshTagList();
                                 MyMusicPanel.RefreshTagList();
-                            },3f, "Refresh Tag List");
+                            }, 3f, "Refresh Tag List");
                         }, "Download Notice");
                     });
                 }
@@ -207,7 +212,7 @@ public static class SoundManagementPanel
             previewText.text = preview;
             Items.Add(filename, button);
         }
-        
+
         scroller.SetYBoundsMin(0f);
         scroller.SetYBoundsMax(0.6f * numItems);
         return;
@@ -242,7 +247,8 @@ public static class SoundManagementPanel
                 update.Add(line);
             }
         }
-        
+
+        // ReSharper disable once DisposeOnUsingVariable
         sr.Dispose();
 
         File.Delete(SoundInterface.SoundManager.TAGS_PATH);
@@ -257,7 +263,7 @@ public static class SoundManagementPanel
         {
             sw.WriteLine(updateline);
         }
-        
+
         var item = XtremeMusic.musics.FirstOrDefault(x => x.Name == name);
         XtremeMusic.musics.Remove(item);
     }

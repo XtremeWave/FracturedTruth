@@ -11,7 +11,7 @@ public class BetterAmongUs : IRpcHandler
         151,
         152
     ];
-    
+
     public bool HandleInvalidRPC(PlayerControl sender, MessageReader reader,
         ref bool notify, ref string reason, ref bool ban)
     {

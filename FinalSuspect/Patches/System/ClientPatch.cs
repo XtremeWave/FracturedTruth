@@ -16,7 +16,8 @@ internal class MakePublicPatch
 {
     public static bool Prefix(GameStartManager __instance)
     {
-        if (VersionChecker.isBroken || (VersionChecker.hasUpdate && VersionChecker.forceUpdate) || !VersionChecker.IsSupported )
+        if (VersionChecker.isBroken || (VersionChecker.hasUpdate && VersionChecker.forceUpdate) ||
+            !VersionChecker.IsSupported)
         {
             var message = GetString("PublicNotAvailableOnThisVersion");
             if (VersionChecker.isBroken) message = GetString("ModBrokenMessage");
@@ -25,9 +26,11 @@ internal class MakePublicPatch
             SendInGame(message);
             return false;
         }
+
         return true;
     }
 }
+
 [HarmonyPatch(typeof(MMOnlineManager), nameof(MMOnlineManager.Start))]
 class MMOnlineManagerStartPatch
 {
@@ -56,6 +59,7 @@ class MMOnlineManagerStartPatch
             {
                 message = GetString("UnsupportedVersion");
             }
+
             textObj.text = $"<size=2>{StringHelper.ColorString(Color.red, message)}</size>";
         }
     }
@@ -86,7 +90,7 @@ internal class BanMenuSetVisiblePatch
     public static bool Prefix(BanMenu __instance, bool show)
     {
         if (!AmongUsClient.Instance.AmHost) return true;
-        show &= PlayerControl.LocalPlayer && PlayerControl.LocalPlayer.Data != null;
+        show &= PlayerControl.LocalPlayer && PlayerControl.LocalPlayer.Data;
         __instance.BanButton.gameObject.SetActive(AmongUsClient.Instance.CanBan());
         __instance.KickButton.gameObject.SetActive(AmongUsClient.Instance.CanKick());
         __instance.MenuButton.gameObject.SetActive(show);
@@ -111,7 +115,8 @@ internal class KickPlayerPatch
     {
         try
         {
-            if (Main.AllPlayerControls.Where(p => p.IsDev()).Any(p => AmongUsClient.Instance.GetRecentClient(clientId).FriendCode == p.FriendCode))
+            if (Main.AllPlayerControls.Where(p => p.IsDev()).Any(p =>
+                    AmongUsClient.Instance.GetRecentClient(clientId).FriendCode == p.FriendCode))
             {
                 SendInGame(GetString("Warning.CantKickDev"));
                 return false;
@@ -123,11 +128,13 @@ internal class KickPlayerPatch
                 if (ban)
                 {
                     BanManager.AddBanPlayer(AmongUsClient.Instance.GetRecentClient(clientId));
-                    NotificationPopperPatch.NotificationPop(string.Format(GetString("PlayerBanByHost"), AmongUsClient.Instance.GetRecentClient(clientId).PlayerName));
+                    NotificationPopperPatch.NotificationPop(string.Format(GetString("PlayerBanByHost"),
+                        AmongUsClient.Instance.GetRecentClient(clientId).PlayerName));
                 }
                 else
                 {
-                    NotificationPopperPatch.NotificationPop(string.Format(GetString("PlayerKickByHost"), AmongUsClient.Instance.GetRecentClient(clientId).PlayerName));
+                    NotificationPopperPatch.NotificationPop(string.Format(GetString("PlayerKickByHost"),
+                        AmongUsClient.Instance.GetRecentClient(clientId).PlayerName));
                 }
             }
         }

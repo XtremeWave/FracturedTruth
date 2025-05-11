@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using FinalSuspect.Modules.Core.Game;
 using FinalSuspect.Modules.Features.CheckingandBlocking;
 using FinalSuspect.Patches.Game_Vanilla;
@@ -14,7 +13,7 @@ public class PlayerCheatData
     public ClientData ClientData { get; }
     public string FriendCode => ClientData.FriendCode;
     public string Puid => ClientData.GetHashedPuid();
-    
+
     private readonly PlayerControl _player;
 
     public PlayerCheatData(PlayerControl player)
@@ -38,10 +37,11 @@ public class PlayerCheatData
         if (ClientData.IsFACPlayer() || ClientData.IsBannedPlayer())
             MarkAsCheater();
     }
-    
+
     public void HandleSuspectCheater()
     {
-        if (Main.DisableFAC.Value || !IsSuspectCheater || _lastHandleCheater != -1 && _lastHandleCheater + 1 >= GetTimeStamp()) return;
+        if (Main.DisableFAC.Value || !IsSuspectCheater ||
+            _lastHandleCheater != -1 && _lastHandleCheater + 1 >= GetTimeStamp()) return;
         _lastHandleCheater = GetTimeStamp();
         if (!AmongUsClient.Instance.AmHost)
         {
@@ -49,39 +49,28 @@ public class PlayerCheatData
                 _player.GetDataName()));
             return;
         }
-        
+
         NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.Cheater"),
             _player.GetDataName()));
         KickPlayer(_player.PlayerId, false, "Suspect Cheater");
     }
-    
-    private static readonly Regex ValidFormatRegex = new(
-        @"^[A-Za-z]+#\d{4}$", 
-        RegexOptions.Compiled
-    );
-
-    private void HandleFriendCode()
-    {
-        if (!ValidFormatRegex.IsMatch(FriendCode) && Main.KickPlayerWhoFriendCodeNotExist.Value)
-            MarkAsCheater();
-    }
 
     private readonly Dictionary<byte, RpcRecord> _rpcRecords = new();
-    
+
     private struct RpcRecord
     {
-        public long LastReceivedTime; 
+        public long LastReceivedTime;
         public int Count;
     }
-    
+
     public bool HandleIncomingRpc(byte rpcId)
     {
         var currentTime = GetCurrentTimestamp();
-        
+
         if (_rpcRecords.TryGetValue(rpcId, out var record))
         {
             var timeDiff = currentTime - record.LastReceivedTime;
-            
+
             if (timeDiff > 1000)
             {
                 record.Count = 1;
@@ -90,7 +79,7 @@ public class PlayerCheatData
             else
             {
                 record.Count++;
-                
+
                 if (record.Count > 10)
                 {
                     MarkAsCheater();
@@ -109,9 +98,10 @@ public class PlayerCheatData
                 Count = 1
             };
         }
+
         return false;
     }
-    
+
     private static long GetCurrentTimestamp()
     {
         return DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
@@ -125,7 +115,7 @@ public class PlayerCheatData
             HandleLobbyPosition();
             HandleSuspectCheater();
         }
-        catch 
+        catch
         {
             /* ignored */
         }

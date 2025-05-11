@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace FinalSuspect.Modules.Resources;
+
 // 来源：Town Of Next
 public class HttpClientDownloadWithProgress(string downloadUrl, string destinationFilePath) : IDisposable
 {
@@ -12,7 +13,8 @@ public class HttpClientDownloadWithProgress(string downloadUrl, string destinati
 
     private HttpClient _httpClient;
 
-    public delegate void ProgressChangedHandler(long? totalFileSize, long totalBytesDownloaded, double? progressPercentage);
+    public delegate void ProgressChangedHandler(long? totalFileSize, long totalBytesDownloaded,
+        double? progressPercentage);
 
     public event ProgressChangedHandler ProgressChanged;
 
@@ -41,7 +43,8 @@ public class HttpClientDownloadWithProgress(string downloadUrl, string destinati
         var buffer = new byte[8192];
         var isMoreToRead = true;
 
-        using var fileStream = new FileStream(_destinationFilePath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true);
+        using var fileStream = new FileStream(_destinationFilePath, FileMode.Create, FileAccess.Write, FileShare.None,
+            8192, true);
         do
         {
             var bytesRead = await contentStream.ReadAsync(buffer);
@@ -59,8 +62,7 @@ public class HttpClientDownloadWithProgress(string downloadUrl, string destinati
 
             if (readCount % 100 == 0)
                 TriggerProgressChanged(totalDownloadSize, totalBytesRead);
-        }
-        while (isMoreToRead);
+        } while (isMoreToRead);
     }
 
     private void TriggerProgressChanged(long? totalDownloadSize, long totalBytesRead)

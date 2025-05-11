@@ -28,6 +28,7 @@ public static class GameStartManagerUpdatePatch
         //}
     }
 }
+
 public class GameStartManagerPatch
 {
     private static float timer = 600f;
@@ -68,6 +69,7 @@ public class GameStartManagerPatch
             {
                 timerText = Object.Instantiate(__instance.PlayerCounter, __instance.StartButtonClient.transform.parent);
             }
+
             timerText.fontSize = 6.2f;
             timerText.autoSizeTextContainer = true;
             timerText.name = "Timer";
@@ -77,9 +79,10 @@ public class GameStartManagerPatch
             timerText.outlineColor = Color.black;
             timerText.outlineWidth = 0.40f;
             timerText.hideFlags = HideFlags.None;
-            timerText.transform.localPosition += new Vector3(-0.55f,  -0.4f, 0f);
+            timerText.transform.localPosition += new Vector3(-0.55f, -0.4f, 0f);
             timerText.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
-            timerText.gameObject.SetActive(AmongUsClient.Instance.NetworkMode == NetworkModes.OnlineGame && IsVanillaServer);
+            timerText.gameObject.SetActive(AmongUsClient.Instance.NetworkMode == NetworkModes.OnlineGame &&
+                                           IsVanillaServer);
 
             cancelButton = Object.Instantiate(__instance.StartButton, __instance.transform);
             var cancelLabel = cancelButton.GetComponentInChildren<TextMeshPro>();
@@ -94,16 +97,16 @@ public class GameStartManagerPatch
             {
                 cancelButtonInactiveShine.gameObject.SetActive(false);
             }
+
             cancelButton.activeTextColor = cancelButton.inactiveTextColor = Color.white;
             GameStartTextlocalPosition = __instance.GameStartText.transform.localPosition;
             cancelButton.OnClick = new Button.ButtonClickedEvent();
-            cancelButton.OnClick.AddListener((Action)(() =>
-            {
-                __instance.ResetStartState();
-            }));
+            cancelButton.OnClick.AddListener((Action)(() => { __instance.ResetStartState(); }));
             cancelButton.gameObject.SetActive(false);
 
-            if (AmongUsClient.Instance.AmHost && (VersionChecker.isBroken || (VersionChecker.hasUpdate && VersionChecker.forceUpdate)  || !VersionChecker.IsSupported))
+            if (AmongUsClient.Instance.AmHost && (VersionChecker.isBroken ||
+                                                  (VersionChecker.hasUpdate && VersionChecker.forceUpdate) ||
+                                                  !VersionChecker.IsSupported))
             {
                 __instance.HostPrivateButton.inactiveTextColor = Palette.DisabledClear;
                 __instance.HostPrivateButton.activeTextColor = Palette.DisabledClear;
@@ -116,17 +119,20 @@ public class GameStartManagerPatch
     {
         private static int updateTimer;
         public static float exitTimer = -1f;
+
         public static void Prefix(GameStartManager __instance)
         {
             // Lobby code
             if (DataManager.Settings.Gameplay.StreamerMode)
             {
-                __instance.GameRoomNameCode.color = new Color(__instance.GameRoomNameCode.color.r, __instance.GameRoomNameCode.color.g, __instance.GameRoomNameCode.color.b, 0); 
+                __instance.GameRoomNameCode.color = new Color(__instance.GameRoomNameCode.color.r,
+                    __instance.GameRoomNameCode.color.g, __instance.GameRoomNameCode.color.b, 0);
                 HideName.enabled = !IsLocalGame;
             }
             else
             {
-                __instance.GameRoomNameCode.color = new Color(__instance.GameRoomNameCode.color.r, __instance.GameRoomNameCode.color.g, __instance.GameRoomNameCode.color.b, 255);
+                __instance.GameRoomNameCode.color = new Color(__instance.GameRoomNameCode.color.r,
+                    __instance.GameRoomNameCode.color.g, __instance.GameRoomNameCode.color.b, 255);
                 HideName.enabled = false;
             }
 
@@ -145,9 +151,10 @@ public class GameStartManagerPatch
                 }
             }
         }
+
         public static void Postfix(GameStartManager __instance)
         {
-            if (!AmongUsClient.Instance) return; 
+            if (!AmongUsClient.Instance) return;
             if (AmongUsClient.Instance.AmHost)
             {
                 /*bool canStartGame = true;
@@ -172,20 +179,21 @@ public class GameStartManagerPatch
                 cancelButton.gameObject.SetActive(__instance.startState == GameStartManager.StartingStates.Countdown);
                 __instance.StartButton.gameObject.SetActive(!cancelButton.gameObject.active);
             }
-                /*if (MatchVersions(0, true) || Main.VersionCheat.Value)
-                    exitTimer = 0;
-                else
+
+            /*if (MatchVersions(0, true) || Main.VersionCheat.Value)
+                exitTimer = 0;
+            else
+            {
+                exitTimer += Time.deltaTime;
+                if (exitTimer >= 5)
                 {
-                    exitTimer += Time.deltaTime;
-                    if (exitTimer >= 5)
-                    {
-                        exitTimer = 0;
-                        AmongUsClient.Instance.ExitGame(DisconnectReasons.ExitGame);
-                        SceneChanger.ChangeScene("MainMenu");
-                    }
-                    if (exitTimer != 0)
-                        warningMessage = StringHelper.ColorString(Color.red, string.Format(GetString("Warning.AutoExitAtMismatchedVersion"), $"<color={ColorHelper.ModColor}>{Main.ModName}</color>", Math.Round(5 - exitTimer).ToString()));
-                }*/
+                    exitTimer = 0;
+                    AmongUsClient.Instance.ExitGame(DisconnectReasons.ExitGame);
+                    SceneChanger.ChangeScene("MainMenu");
+                }
+                if (exitTimer != 0)
+                    warningMessage = StringHelper.ColorString(Color.red, string.Format(GetString("Warning.AutoExitAtMismatchedVersion"), $"<color={ColorHelper.ModColor}>{Main.ModName}</color>", Math.Round(5 - exitTimer).ToString()));
+            }*/
             var warningMessage = "";
             if (warningMessage == "")
             {
@@ -196,17 +204,22 @@ public class GameStartManagerPatch
                 warningText.text = warningMessage;
                 warningText.gameObject.SetActive(true);
             }
+
             if (AmongUsClient.Instance.AmHost)
             {
-                __instance.GameStartText.transform.localPosition = new Vector3(__instance.GameStartText.transform.localPosition.x, 2f, __instance.GameStartText.transform.localPosition.z);
+                __instance.GameStartText.transform.localPosition = new Vector3(
+                    __instance.GameStartText.transform.localPosition.x, 2f,
+                    __instance.GameStartText.transform.localPosition.z);
             }
             else
             {
                 __instance.GameStartText.transform.localPosition = GameStartTextlocalPosition;
             }
+
             timerText.text = "";
             // Lobby timer
-            if (!GameData.Instance || AmongUsClient.Instance.NetworkMode == NetworkModes.LocalGame || !IsVanillaServer || !AmongUsClient.Instance.AmHost) return;
+            if (!GameData.Instance || AmongUsClient.Instance.NetworkMode == NetworkModes.LocalGame ||
+                !IsVanillaServer || !AmongUsClient.Instance.AmHost) return;
 
             timer = Mathf.Max(0f, timer -= Time.deltaTime);
             var minutes = (int)timer / 60;
@@ -215,6 +228,7 @@ public class GameStartManagerPatch
             if (timer <= 60) countDown = StringHelper.ColorString(Color.red, countDown);
             timerText.text = countDown;
         }
+/*
         private static bool MatchVersions(byte playerId, bool acceptVanilla = false)
         {
             if (!XtremeGameData.PlayerVersion.playerVersion.TryGetValue(playerId, out var version)) return acceptVanilla;
@@ -222,6 +236,7 @@ public class GameStartManagerPatch
                    && Main.version.CompareTo(version.version) == 0
                    && version.tag == $"{Main.GitCommit}({Main.GitBranch})";
         }
+*/
     }
 }
 
@@ -233,6 +248,7 @@ public static class HiddenTextPatch
         if (__instance.name == "GameIdText") __instance.outputText.text = new string('*', __instance.text.Length);
     }
 }
+
 [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.ResetStartState))]
 class ResetStartStatePatch
 {
@@ -244,6 +260,7 @@ class ResetStartStatePatch
         }
     }
 }
+
 [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.FinallyBegin))]
 class FinallyBeginPatch
 {

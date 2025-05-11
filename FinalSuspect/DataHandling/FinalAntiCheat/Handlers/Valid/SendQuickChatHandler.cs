@@ -9,13 +9,13 @@ namespace FinalSuspect.DataHandling.FinalAntiCheat.Handlers.Valid;
 public class SendQuickChatHandler : IRpcHandler
 {
     private static readonly Dictionary<byte, (long timestamp, int count)> _records = new();
-    
+
     public List<byte> TargetRpcs =>
     [
         (byte)RpcCalls.SendQuickChat,
     ];
 
-    public bool HandleAll(PlayerControl sender, MessageReader reader, 
+    public bool HandleAll(PlayerControl sender, MessageReader reader,
         ref bool notify, ref string reason, ref bool ban)
     {
         var current = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
@@ -37,7 +37,10 @@ public class SendQuickChatHandler : IRpcHandler
                 {
                     HandleCheat(sender, GetString("Warning.SendQuickChat_NotHost"));
                 }
-                Warn($"{sender.GetDataName()}({sender.GetCheatData().FriendCode})({sender.GetCheatData().Puid})一秒内多次发送快捷消息", "FAC");
+
+                Warn(
+                    $"{sender.GetDataName()}({sender.GetCheatData().FriendCode})({sender.GetCheatData().Puid})一秒内多次发送快捷消息",
+                    "FAC");
                 ban = true;
                 notify = false;
                 return true;
@@ -51,8 +54,8 @@ public class SendQuickChatHandler : IRpcHandler
         _records[sender.PlayerId] = record;
         return false;
     }
-    
-    public bool HandleGame_InTask(PlayerControl sender, MessageReader reader, 
+
+    public bool HandleGame_InTask(PlayerControl sender, MessageReader reader,
         ref bool notify, ref string reason, ref bool ban)
     {
         return sender.IsAlive();

@@ -20,12 +20,15 @@ public class ModUpdater
 
     public static void SetUpdateButtonStatus()
     {
-        MainMenuManagerPatch.UpdateButton.SetActive(VersionChecker.isChecked && VersionChecker.hasUpdate && (VersionChecker.firstStart || VersionChecker.forceUpdate));
+        MainMenuManagerPatch.UpdateButton.SetActive(VersionChecker.isChecked && VersionChecker.hasUpdate &&
+                                                    (VersionChecker.firstStart || VersionChecker.forceUpdate));
         MainMenuManagerPatch.PlayButton.SetActive(!MainMenuManagerPatch.UpdateButton.activeSelf);
-        var buttonText = MainMenuManagerPatch.UpdateButton.transform.FindChild("FontPlacer").GetChild(0).GetComponent<TextMeshPro>();
-        buttonText.text = $"{(VersionChecker.CanUpdate ? GetString("updateButton") : GetString("updateNotice"))}\nv{VersionChecker.showVer ?? " ???"}";
+        var buttonText = MainMenuManagerPatch.UpdateButton.transform.FindChild("FontPlacer").GetChild(0)
+            .GetComponent<TextMeshPro>();
+        buttonText.text =
+            $"{(VersionChecker.CanUpdate ? GetString("updateButton") : GetString("updateNotice"))}\nv{VersionChecker.showVer ?? " ???"}";
     }
-    
+
     public static void StartUpdate(string url = "waitToSelect")
     {
         if (url == "waitToSelect")
@@ -40,10 +43,12 @@ public class ModUpdater
             return;
         }
 
-        var r = new Regex(@"^(http|https|ftp)\://([a-zA-Z0-9\.\-]+(\:[a-zA-Z0-9\.&%\$\-]+)*@)?((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\.[a-zA-Z]{2,4})(\:[0-9]+)?(/[^/][a-zA-Z0-9\.\,\?\'\\/\+&%\$#\=~_\-@]*)*$");
+        var r = new Regex(
+            @"^(http|https|ftp)\://([a-zA-Z0-9\.\-]+(\:[a-zA-Z0-9\.&%\$\-]+)*@)?((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\.[a-zA-Z]{2,4})(\:[0-9]+)?(/[^/][a-zA-Z0-9\.\,\?\'\\/\+&%\$#\=~_\-@]*)*$");
         if (!r.IsMatch(url))
         {
-            CustomPopup.ShowLater(GetString("updatePopupTitleFailed"), string.Format(GetString("updatePingFialed"), "404 Not Found"),
+            CustomPopup.ShowLater(GetString("updatePopupTitleFailed"),
+                string.Format(GetString("updatePingFialed"), "404 Not Found"),
                 [(GetString(StringNames.Okay), SetUpdateButtonStatus)]);
             return;
         }
@@ -61,11 +66,13 @@ public class ModUpdater
             SetUpdateButtonStatus();
         });
     }
+
     public static void DeleteOldFiles()
     {
         try
         {
-            foreach (var path in Directory.EnumerateFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty, "*.*"))
+            foreach (var path in Directory.EnumerateFiles(
+                         Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty, "*.*"))
             {
                 if (!Path.GetExtension(path).Equals(".bak", StringComparison.OrdinalIgnoreCase)) continue;
 
@@ -78,14 +85,14 @@ public class ModUpdater
             Error($"清除更新残留失败\n{e}", "DeleteOldFiles");
         }
     }
-    
+
     public static void MoveOtherFiles()
     {
         try
         {
             var currentDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
             var targetDir = Path.Combine(currentDir, "OtherFiles");
-            
+
             Directory.CreateDirectory(targetDir);
 
             var currentFileName = Path.GetFileName(Assembly.GetExecutingAssembly().Location);
@@ -93,11 +100,11 @@ public class ModUpdater
             foreach (var path in Directory.EnumerateFiles(currentDir, "*.*"))
             {
                 var fileName = Path.GetFileName(path);
-                
+
                 if (fileName.Equals(currentFileName, StringComparison.OrdinalIgnoreCase)) continue;
-                
+
                 var destPath = Path.Combine(targetDir, fileName);
-                
+
                 if (File.Exists(destPath))
                 {
                     File.Delete(destPath);
@@ -119,6 +126,7 @@ public class ModUpdater
             Error($"移动冗余文件失败\n{e}", "MoveOldFiles");
         }
     }
+
     public static async Task<(bool, string)> DownloadDLL(string url)
     {
         File.Delete(DownloadFileTempPath);
@@ -137,6 +145,7 @@ public class ModUpdater
                 File.Delete(DownloadFileTempPath);
                 return (false, GetString("updateFileMd5Incorrect"));
             }
+
             var fileName = Assembly.GetExecutingAssembly().Location;
             File.Move(fileName, fileName + ".bak");
             File.Move(DownloadFileTempPath, fileName);
@@ -149,15 +158,19 @@ public class ModUpdater
             return (false, GetString("downloadFailed"));
         }
     }
-    private static void OnDownloadProgressChanged(long? totalFileSize, long totalBytesDownloaded, double? progressPercentage)
+
+    private static void OnDownloadProgressChanged(long? totalFileSize, long totalBytesDownloaded,
+        double? progressPercentage)
     {
         if (progressPercentage != null)
         {
-            var msg = $"{GetString("updateInProgress")}\n{totalFileSize / 1000}KB / {totalBytesDownloaded / 1000}KB  -  {(int)progressPercentage}%";
+            var msg =
+                $"{GetString("updateInProgress")}\n{totalFileSize / 1000}KB / {totalBytesDownloaded / 1000}KB  -  {(int)progressPercentage}%";
             Info(msg, "DownloadDLL");
             CustomPopup.UpdateTextLater(msg);
         }
     }
+
     public static string GetMD5HashFromFile(string fileName)
     {
         try

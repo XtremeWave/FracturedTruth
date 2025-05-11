@@ -26,12 +26,16 @@ public static class ServerAddManager
         {
             regionInfos.Add(CreateHttp("au-cn.niko233.me", "Niko233(CN)", 443, true));
 
-            regionInfos.Add(CreateHttp("nb.8w.fan", "<color=#00FF00>新猫服</color><color=#ffff00>[宁波]</color>", 443, true));
-            regionInfos.Add(CreateHttp("bj.8w.fan", "<color=#9900CC>新猫服</color><color=#ffff00>[北京]</color>", 443, true));
-            regionInfos.Add(CreateHttp("player.fangkuai.fun", "<color=#00ffff>方块</color><color=#FF44FF>宿迁私服</color>", 443, true));
-            regionInfos.Add(CreateHttp("auhk.fangkuai.fun", "<color=#00ffff>方块</color><color=#FFC0CB>香港私服</color>", 443, true));
-
+            regionInfos.Add(CreateHttp("nb.8w.fan", "<color=#00FF00>新猫服</color><color=#ffff00>[宁波]</color>", 443,
+                true));
+            regionInfos.Add(CreateHttp("bj.8w.fan", "<color=#9900CC>新猫服</color><color=#ffff00>[北京]</color>", 443,
+                true));
+            regionInfos.Add(CreateHttp("player.fangkuai.fun", "<color=#00ffff>方块</color><color=#FF44FF>宿迁私服</color>",
+                443, true));
+            regionInfos.Add(CreateHttp("auhk.fangkuai.fun", "<color=#00ffff>方块</color><color=#FFC0CB>香港私服</color>", 443,
+                true));
         }
+
         regionInfos.Add(CreateHttp("au-as.duikbo.at", "Modded Asia (MAS)", 443, true));
         regionInfos.Add(CreateHttp("www.aumods.org", "Modded NA (MNA)", 443, true));
         regionInfos.Add(CreateHttp("au-eu.duikbo.at", "Modded EU (MEU)", 443, true));
@@ -42,6 +46,7 @@ public static class ServerAddManager
 
         SetServerName(defaultRegion.Name);
     }
+
     public static void SetServerName(string serverName = "")
     {
         if (serverName == "") serverName = ServerManager.Instance.CurrentRegion.Name;
@@ -63,7 +68,8 @@ public static class ServerAddManager
             _ => serverName,
         };
 
-        if ((TranslationController.Instance?.currentLanguage?.languageID ?? SupportedLangs.SChinese) is SupportedLangs.SChinese or SupportedLangs.TChinese)
+        if ((TranslationController.Instance?.currentLanguage?.languageID ?? SupportedLangs.SChinese) is
+            SupportedLangs.SChinese or SupportedLangs.TChinese)
         {
             name = name switch
             {
@@ -105,6 +111,7 @@ public static class ServerAddManager
         };
         return color;
     }
+
     public static IRegionInfo CreateHttp(string ip, string name, ushort port, bool ishttps)
     {
         var serverIp = (ishttps ? "https://" : "http://") + ip;

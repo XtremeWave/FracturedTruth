@@ -41,6 +41,7 @@ public class CreditsControllerPatch
         {
             AddTitleToCredits(string.Empty);
         }
+
         void AddTitleToCredits(string title)
         {
             credits.Add(new CreditsController.CreditStruct
@@ -49,6 +50,7 @@ public class CreditsControllerPatch
                 columns = new[] { title },
             });
         }
+
         void AddPersonToCredits(List<string> list)
         {
             foreach (var line in list)
@@ -65,7 +67,8 @@ public class CreditsControllerPatch
     }
 
     [HarmonyPatch(nameof(CreditsController.AddCredit)), HarmonyPrefix]
-    public static void AddCreditPrefix(CreditsController __instance, [HarmonyArgument(0)] CreditsController.CreditStruct originalCredit)
+    public static void AddCreditPrefix(CreditsController __instance,
+        [HarmonyArgument(0)] CreditsController.CreditStruct originalCredit)
     {
         if (originalCredit.columns[0] != "logoImage") return;
 

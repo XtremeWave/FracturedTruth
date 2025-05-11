@@ -16,6 +16,8 @@ using FinalSuspect.Modules.Random;
 using Il2CppInterop.Runtime.Injection;
 using UnityEngine;
 
+// ReSharper disable MemberCanBePrivate.Global
+
 [assembly: AssemblyFileVersion(Main.PluginVersion)]
 [assembly: AssemblyInformationalVersion(Main.PluginVersion)]
 [assembly: AssemblyVersion(Main.PluginVersion)]
@@ -38,12 +40,13 @@ public class Main : BasePlugin
     public const string DebugKeyHash = "c0fd562955ba56af3ae20d7ec9e64c664f0facecef4b3e366e109306adeae29d";
     public const string DebugKeySalt = "59687b";
     public static ConfigEntry<string> DebugKeyInput { get; private set; }
+
     // == 版本相关设定 / Version Config ==
     public const string LowestSupportedVersion = "2025.3.31"; // 16.0.2
 
-    public const string DisplayedVersion_Head = "1.1";
- 
-    private static string DisplayedVersion_Date => BuildTime.Date;
+    private const string DisplayedVersion_Head = "1.1";
+
+    private const string DisplayedVersion_Date = BuildTime.Date;
 
     /// <summary>
     /// 测试信息；
@@ -59,13 +62,14 @@ public class Main : BasePlugin
     private const VersionTypes DisplayedVersion_Type = VersionTypes.Canary;
 
     private const int DisplayedVersion_TestCreation = 4;
-    
-    public static readonly string DisplayedVersion = 
-        $"{DisplayedVersion_Head}_{DisplayedVersion_Date}" +
-        $"{(DisplayedVersion_Type != VersionTypes.Release 
-                ? $"_{DisplayedVersion_Type}_{DisplayedVersion_TestCreation}" 
-                : "")
-        }";
+
+    public static readonly string DisplayedVersion =
+#if RELEASE
+        $"{DisplayedVersion_Head}_{DisplayedVersion_Date}";
+#else
+        $"{DisplayedVersion_Head}_{DisplayedVersion_Date}_{DisplayedVersion_Type}_{DisplayedVersion_TestCreation}";
+#endif
+
 
     // == 链接相关设定 / Link Config ==
     //public static readonly string WebsiteUrl = IsChineseLanguageUser ? "https://www.xtreme.net.cn/project/FS/" : "https://www.xtreme.net.cn/en/project/FS/";
@@ -84,14 +88,13 @@ public class Main : BasePlugin
 
 #pragma warning disable CS0618 // 类型或成员已过时
     public const string GitBaseTag = ThisAssembly.Git.BaseTag;
-
     public const string GitCommit = ThisAssembly.Git.Commit;
     public const string GitCommits = ThisAssembly.Git.Commits;
     public const string GitBranch = ThisAssembly.Git.Branch;
     public const bool GitIsDirty = ThisAssembly.Git.IsDirty;
     public const string GitSha = ThisAssembly.Git.Sha;
     public const string GitTag = ThisAssembly.Git.Tag;
-#pragma warning restore CS0618 
+#pragma warning restore CS0618
     public static NormalGameOptionsV09 NormalOptions => GameOptionsManager.Instance.currentNormalGameOptions;
     public static HideNSeekGameOptionsV09 HideNSeekOptions => GameOptionsManager.Instance.currentHideNSeekGameOptions;
 
@@ -106,19 +109,18 @@ public class Main : BasePlugin
     public static ConfigEntry<bool> AutoEndGame { get; private set; }
     public static ConfigEntry<bool> DisableVanillaSound { get; private set; }
     public static ConfigEntry<bool> DisableFAC { get; private set; }
-    //public static ConfigEntry<bool> PrunkMode { get; private set; }
     public static ConfigEntry<bool> ShowPlayerInfo { get; private set; }
     public static ConfigEntry<bool> UseModCursor { get; private set; }
     public static ConfigEntry<bool> FastBoot { get; private set; }
     public static ConfigEntry<bool> VersionCheat { get; private set; }
     public static ConfigEntry<bool> GodMode { get; private set; }
     public static ConfigEntry<bool> NoGameEnd { get; private set; }
-    
+
     public static readonly string[] OutfitType =
     [
         "BeanMode", "HorseMode", "LongMode"
     ];
-    
+
     //Other Configs
     public static ConfigEntry<string> HideName { get; private set; }
     public static ConfigEntry<string> HideColor { get; private set; }
@@ -135,11 +137,11 @@ public class Main : BasePlugin
     public static bool IsAprilFools = DateTime.Now.Month == 4 && DateTime.Now.Day is 1;
     public const float RoleTextSize = 2f;
 
-    public static IEnumerable<PlayerControl> AllPlayerControls => 
-        PlayerControl.AllPlayerControls.ToArray().Where(p => p != null); 
-    
-    public static IEnumerable<PlayerControl> AllAlivePlayerControls => 
-        PlayerControl.AllPlayerControls.ToArray().Where(p => p != null && p.IsAlive() && !p.Data.Disconnected);
+    public static IEnumerable<PlayerControl> AllPlayerControls =>
+        PlayerControl.AllPlayerControls.ToArray().Where(p => p);
+
+    public static IEnumerable<PlayerControl> AllAlivePlayerControls =>
+        PlayerControl.AllPlayerControls.ToArray().Where(p => p && p.IsAlive() && !p.Data.Disconnected);
 
     public static Main Instance;
 
@@ -163,9 +165,10 @@ public class Main : BasePlugin
         "toffee"
     ];
 
-    public static string Get_TName_Snacks => TranslationController.Instance.currentLanguage.languageID is SupportedLangs.SChinese or SupportedLangs.TChinese 
-        ? TName_Snacks_CN[IRandom.Instance.Next(0, TName_Snacks_CN.Count)] 
-        : TName_Snacks_EN[IRandom.Instance.Next(0, TName_Snacks_EN.Count)];
+    public static string Get_TName_Snacks =>
+        TranslationController.Instance.currentLanguage.languageID is SupportedLangs.SChinese or SupportedLangs.TChinese
+            ? TName_Snacks_CN[IRandom.Instance.Next(0, TName_Snacks_CN.Count)]
+            : TName_Snacks_EN[IRandom.Instance.Next(0, TName_Snacks_EN.Count)];
 
     public override void Load()
     {
@@ -177,7 +180,7 @@ public class Main : BasePlugin
         EnableFinalSuspect = Config.Bind("Xtreme System", "Enable Final Suspect", true);
         ShowResults = Config.Bind("Xtreme System", "Show Results", true);
         LastStartVersion = Config.Bind("Xtreme System", "Last Start Version", "0.0.0");
-        
+
         DebugKeyInput = Config.Bind("Authentication", "Debug Key", "");
 
         UnlockFPS = Config.Bind("Client Options", "Unlock FPS", false);
@@ -209,7 +212,7 @@ public class Main : BasePlugin
             Disable("GetAnnouncements");
             Disable("GetConfigs");
         }
-        
+
         isDetail = true;
 
         // 認証関連-初期化
@@ -269,7 +272,7 @@ public class Main : BasePlugin
         Task.Run(SystemEnvironment.SetEnvironmentVariablesAsync);
 
         Harmony.PatchAll();
-        
+
         if (DebugModeManager.AmDebugger) ConsoleManager.CreateConsole();
         else ConsoleManager.DetachConsole();
 

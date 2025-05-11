@@ -28,7 +28,7 @@ public class SimpleButton
         string label,
         bool isActive = true)
     {
-        if (baseButton == null)
+        if (!baseButton)
         {
             throw new InvalidOperationException("baseButtonが未設定");
         }
@@ -54,18 +54,22 @@ public class SimpleButton
         Label.text = label;
         Button.gameObject.SetActive(isActive);
     }
+
     public PassiveButton Button { get; }
     public TextMeshPro Label { get; }
-    public SpriteRenderer NormalSprite { get; }
-    public SpriteRenderer HoverSprite { get; }
+    private SpriteRenderer NormalSprite { get; }
+    private SpriteRenderer HoverSprite { get; }
     private readonly BoxCollider2D buttonCollider;
     private Vector2 _scale;
+
     public Vector2 Scale
     {
         get => _scale;
         set => _scale = NormalSprite.size = HoverSprite.size = buttonCollider.size = value;
     }
+
     private float _fontSize;
+
     public float FontSize
     {
         get => _fontSize;
@@ -73,12 +77,14 @@ public class SimpleButton
     }
 
     private static PassiveButton baseButton;
+
     public static void SetBase(PassiveButton passiveButton)
     {
-        if (baseButton != null || passiveButton == null)
+        if (baseButton || !passiveButton)
         {
             return;
         }
+
         // 複製
         baseButton = Object.Instantiate(passiveButton);
         var label = baseButton.transform.Find("FontPlacer/Text_TMP").GetComponent<TextMeshPro>();
@@ -97,6 +103,6 @@ public class SimpleButton
         buttonCollider.offset = new Vector2(0f, 0f);
         baseButton.OnClick = new Button.ButtonClickedEvent();
     }
-    
-    public static bool IsNullOrDestroyed(SimpleButton button) => button == null || button.Button == null;
+
+    public static bool IsNullOrDestroyed(SimpleButton button) => button == null || !button.Button;
 }

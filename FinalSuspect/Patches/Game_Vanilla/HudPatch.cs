@@ -48,14 +48,17 @@ class TaskPanelBehaviourPatch
         foreach (var eachLine in lines)
         {
             var line = eachLine.Trim();
-            if ((line.StartsWith("<color=#FF1919FF>") || line.StartsWith("<color=#FF0000FF>")) && sb.Length < 1 && !line.Contains('(')) continue;
+            if ((line.StartsWith("<color=#FF1919FF>") || line.StartsWith("<color=#FF0000FF>")) && sb.Length < 1 &&
+                !line.Contains('(')) continue;
             sb.Append(line + "\r\n");
         }
+
         if (sb.Length > 1)
         {
             var text = sb.ToString().TrimEnd('\n').TrimEnd('\r');
             if (player.IsImpostor() && sb.ToString().Count(s => s == '\n') >= 2)
-                text = $"{StringHelper.ColorString(new Color32(255, 20, 147, byte.MaxValue), GetString("FakeTask"))}\r\n{text}";
+                text =
+                    $"{StringHelper.ColorString(new Color32(255, 20, 147, byte.MaxValue), GetString("FakeTask"))}\r\n{text}";
             AllText += $"\r\n\r\n<size=85%>{text}</size>";
         }
 
@@ -70,12 +73,13 @@ public static class HudManagerPatch
     static GameObject ModLoading;
 
     private static int currentIndex;
+
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     public static class Update
     {
         public static void Prefix(HudManager __instance)
         {
-            if (ModLoading == null && !IsFreePlay)
+            if (!ModLoading && !IsFreePlay)
             {
                 ModLoading = new GameObject("ModLoading") { layer = 5 };
                 ModLoading.transform.SetParent(__instance.GameLoadAnimation.transform.parent);
@@ -148,6 +152,7 @@ public static class HudManagerPatch
             }
         }
     }
+
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.CoFadeFullScreen))]
     public static class CoFadeFullScreen
     {
@@ -157,6 +162,7 @@ public static class HudManagerPatch
             showLoader = false;
         }
     }
+
     public static IEnumerator SwitchRoleIllustration(SpriteRenderer spriter)
     {
         while (true)
@@ -172,6 +178,7 @@ public static class HudManagerPatch
                 spriter.color = Color.white.AlphaMultiplied(alpha);
                 yield return null;
             }
+
             currentIndex = (currentIndex + 1) % AwakeAccountManager.AllRoleRoleIllustration.Length;
 
             yield return new WaitForSeconds(1f);
@@ -205,7 +212,7 @@ public static class HudManagerPatch
         {
             Object.Destroy(showHideButton.Button.gameObject);
             Object.Destroy(roleSummary.gameObject);
-            Object.Destroy(backgroundRenderer.gameObject);  //销毁背景
+            Object.Destroy(backgroundRenderer.gameObject); //销毁背景
         }
         catch
         {
@@ -239,14 +246,16 @@ public static class HudManagerPatch
         __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("Background").gameObject
             .GetComponent<SpriteRenderer>().color = color;
     }
+
     public static void SetAbilityButtonColor(HudManager __instance)
     {
         if (!IsInGame) return;
         var color = GetRoleColor(PlayerControl.LocalPlayer.GetRoleType());
         __instance.AbilityButton.buttonLabelText.SetOutlineColor(color);
         __instance.AbilityButton.cooldownTimerText.color = Color.green;
-        __instance.KillButton.cooldownTimerText.color = ColorHelper. ImpostorRedPale;
+        __instance.KillButton.cooldownTimerText.color = ColorHelper.ImpostorRedPale;
     }
+
     public static int GetLineCount(string text)
     {
         if (string.IsNullOrEmpty(text))
@@ -254,6 +263,7 @@ public static class HudManagerPatch
         var lines = text.Split(["\r\n", "\n"], StringSplitOptions.None);
         return lines.Length;
     }
+
     public static string LastResultText;
     public static string LastGameData;
     public static string LastGameResult;
@@ -265,17 +275,20 @@ public static class HudManagerPatch
     {
         LastResultText = LastGameData = LastGameResult = LastRoomCode = LastServer = "";
     }
+
     public static void UpdateResult(HudManager __instance)
     {
-        if (IsFreePlay || !IsInGame && GetLineCount(LastResultText) < 6 )
+        if (IsFreePlay || !IsInGame && GetLineCount(LastResultText) < 6)
             return;
         var showInitially = Main.ShowResults.Value;
-       
+
         showHideButton ??=
             new SimpleButton(
                 __instance.transform,
                 "ShowHideResultsButton",
-                IsInGame? new Vector3(0.2f, 2.685f, -14f) : new Vector3(-4.5f, 2.6f, -14f),  // 比 BackgroundLayer(z = -13) 更靠前
+                IsInGame
+                    ? new Vector3(0.2f, 2.685f, -14f)
+                    : new Vector3(-4.5f, 2.6f, -14f), // 比 BackgroundLayer(z = -13) 更靠前
                 new Color32(209, 190, 255, byte.MaxValue),
                 new Color32(208, 222, 255, byte.MaxValue),
                 () =>
@@ -299,11 +312,11 @@ public static class HudManagerPatch
                 ? PingTrackerUpdatePatch.ServerName
                 : GetString("Local");
         }
-            
-        var gamecode =  StringHelper.ColorString(
-            ColorHelper.ModColor32, 
-            DataManager.Settings.Gameplay.StreamerMode?  new string('*', LastRoomCode.Length): LastRoomCode);
-        sb.Append("\n"+ LastServer +"  "+gamecode);
+
+        var gamecode = StringHelper.ColorString(
+            ColorHelper.ModColor32,
+            DataManager.Settings.Gameplay.StreamerMode ? new string('*', LastRoomCode.Length) : LastRoomCode);
+        sb.Append("\n" + LastServer + "  " + gamecode);
         if (IsInGame)
         {
             StringBuilder sb2 = new();
@@ -311,12 +324,13 @@ public static class HudManagerPatch
             {
                 sb2.Append("\n\u3000 ").Append(SummaryTexts(data.PlayerId));
             }
+
             LastGameData = sb2.ToString();
         }
 
         sb.Append(LastGameData);
         LastResultText = sb.ToString();
-        if (roleSummary == null)
+        if (!roleSummary)
         {
             roleSummary = TMPTemplate.Create(
                 "RoleSummaryText",
@@ -331,14 +345,14 @@ public static class HudManagerPatch
             roleSummary.fontStyle = FontStyles.Bold;
             roleSummary.SetOutlineColor(Color.black);
             roleSummary.SetOutlineThickness(0.15f);
- 
+
             var backgroundObject = new GameObject("RoleSummaryBackground");
-            backgroundObject.transform.SetParent(roleSummary.transform); 
+            backgroundObject.transform.SetParent(roleSummary.transform);
             backgroundRenderer = backgroundObject.AddComponent<SpriteRenderer>();
-            backgroundRenderer.sprite = LoadSprite("LastResult-BG.png",200f);
-            backgroundRenderer.color = new Color(0.5f,0.5f,0.5f,1f); 
+            backgroundRenderer.sprite = LoadSprite("LastResult-BG.png", 200f);
+            backgroundRenderer.color = new Color(0.5f, 0.5f, 0.5f, 1f);
         }
-        
+
         showHideButton.Button.transform.localPosition =
             IsInGame ? new Vector3(0.2f, 2.685f, -14f) : new Vector3(-4.5f, 2.6f, -1f);
         if (IsInGame)
@@ -354,18 +368,18 @@ public static class HudManagerPatch
 
     private static void AdjustBackgroundSize()
     {
-        if (roleSummary != null && backgroundRenderer != null)
+        if (roleSummary && backgroundRenderer)
         {
             var textBounds = roleSummary.textBounds;
 
             var backgroundSprite = backgroundRenderer.sprite;
-            if (backgroundSprite != null)
+            if (backgroundSprite)
             {
                 var scaleX = (textBounds.size.x + 0.4f) / backgroundSprite.bounds.size.x;
                 var scaleY = (textBounds.size.y + 0.5f) / backgroundSprite.bounds.size.y;
-                
+
                 backgroundRenderer.transform.localScale = new Vector3(scaleX, scaleY, 1f);
-                backgroundRenderer.transform.localPosition = new Vector3(textBounds.center.x, textBounds.center.y,2f);
+                backgroundRenderer.transform.localPosition = new Vector3(textBounds.center.x, textBounds.center.y, 2f);
             }
         }
     }

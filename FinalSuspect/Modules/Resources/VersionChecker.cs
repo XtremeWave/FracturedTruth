@@ -108,8 +108,9 @@ public static class VersionChecker
                 {
                     firstLaunch = false;
                     var annos = ModUpdater.announcement[TranslationController.Instance.currentLanguage.languageID];
-                    if (isBroken) CustomPopup.Show(GetString(StringNames.AnnouncementLabel), annos,
-                        [(GetString(StringNames.ExitGame), Application.Quit)]);
+                    if (isBroken)
+                        CustomPopup.Show(GetString(StringNames.AnnouncementLabel), annos,
+                            [(GetString(StringNames.ExitGame), Application.Quit)]);
                     else
                         CustomPopup.Show(GetString(StringNames.AnnouncementLabel), annos,
                             [(GetString(StringNames.Okay), null)]);
@@ -117,13 +118,14 @@ public static class VersionChecker
             }
             else
             {
-                if (retried >= 2) 
+                if (retried >= 2)
                     CustomPopup.Show(GetString("updateCheckPopupTitle"), GetString("updateCheckFailedExit"),
                         [(GetString(StringNames.Okay), null)]);
                 else
                     CustomPopup.Show(GetString("updateCheckPopupTitle"), GetString("updateCheckFailedRetry"),
                         [(GetString("Retry"), Retry)]);
             }
+
             ModUpdater.SetUpdateButtonStatus();
         }, "Check For Update");
     }
@@ -149,7 +151,7 @@ public static class VersionChecker
                     Error($"Failed: {response.StatusCode}", "CheckRelease");
                     return false;
                 }
-                
+
                 result = await response.Content.ReadAsStringAsync();
                 result = result.Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
             }
