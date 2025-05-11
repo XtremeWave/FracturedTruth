@@ -24,6 +24,7 @@
 
 ## 贡献者
 - [LezaiYa]("https://github.com/NewLezaiYa")
+- [Nonalus]("https://github.com/Reborn5537/")
 
 ## 修正
 - 修复了快速启动模式失效的问题
@@ -48,7 +49,7 @@
 - 模组公告不再下载至本地，而是在启动游戏时读取
 - 不再删除冗余模组文件，而是移动到新文件夹
 制作: Slok
-- 对BAU添加了RPC 152检测
+- 对BAU添加了RPC152检测
 制作: LezaiYa
 
 ## 新增
@@ -57,3 +58,6 @@
 想法: QingFeng
 - 部分作弊程序或模组能够被识别
 制作: Slok
+- 增加对好友代码的检测
+- 增加对NonalusAC的RPC检测
+制作: Nonalus
