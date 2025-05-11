@@ -14,7 +14,7 @@ public static class ChatBubblePatch
         if (__instance.TextArea.color == Color.red) return;
         var bgcolor = ColorHelper.HalfModColor32;
         var sr = __instance.Background;
-        Color namecolor= ColorHelper.FaultColor;
+        Color namecolor = ColorHelper.FaultColor;
         string name = null;
         var modded = IsModdedMsg(__instance.playerInfo.PlayerName);
         if (__instance.playerInfo?.PlayerId == null)
@@ -38,10 +38,11 @@ public static class ChatBubblePatch
             XtremeLocalHandling.GetChatBubbleText(
                 __instance.playerInfo.PlayerId,
                 ref name,
-                ref bgcolor, 
+                ref bgcolor,
                 ref namecolor
             );
         }
+
         __instance.NameText.color = namecolor;
         __instance.NameText.text = name ?? __instance.NameText.text;
         sr.color = bgcolor;

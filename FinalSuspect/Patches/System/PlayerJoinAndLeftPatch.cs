@@ -28,13 +28,14 @@ class OnGameJoinedPatch
         ServerAddManager.SetServerName();
 
         Init();
-        if (AmongUsClient.Instance.AmHost) 
+        if (AmongUsClient.Instance.AmHost)
         {
             GameStartManagerPatch.GameStartManagerUpdatePatch.exitTimer = -1;
             //Main.NewLobby = true;
         }
     }
 }
+
 [HarmonyPatch(typeof(InnerNetClient), nameof(InnerNetClient.DisconnectInternal))]
 class DisconnectInternalPatch
 {
@@ -60,13 +61,15 @@ class DisconnectInternalPatch
         }
     }
 }
+
 [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerJoined))]
 public class OnPlayerJoinedPatch
 {
     private static readonly Regex ValidFormatRegex = new(
-        @"^[a-z]+#\d{4}$", 
+        @"^[a-z]+#\d{4}$",
         RegexOptions.Compiled
     );
+
     public static void Postfix(AmongUsClient __instance, [HarmonyArgument(0)] ClientData client)
     {
         Info($"{client.PlayerName}(ClientID:{client.Id}/FriendCode:{client.FriendCode}) 加入房间", "Session");
@@ -77,7 +80,7 @@ public class OnPlayerJoinedPatch
             var currentPrefixes = AmongUsClient.Instance.allClients
                 .ToArray()
                 .Where(c => c.Id != client.Id)
-                .Select(c => 
+                .Select(c =>
                 {
                     if (string.IsNullOrEmpty(c.FriendCode)) return null;
                     var parts = c.FriendCode.Split('#');
@@ -97,34 +100,42 @@ public class OnPlayerJoinedPatch
             if (currentPrefixes.Contains(newPrefix))
             {
                 KickPlayer(client.Id, false, "NotLogin");
-                NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.KickedByNoFriendCode"), client.PlayerName));
+                NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.KickedByNoFriendCode"),
+                    client.PlayerName));
                 Info($"重复好友代码前缀的玩家 {client.PlayerName} 已被踢出", "Kick");
                 return;
             }
         }
+
         if (AmongUsClient.Instance.AmHost && client.FriendCode == "" && Main.KickPlayerWhoFriendCodeNotExist.Value)
         {
             KickPlayer(client.Id, false, "NotLogin");
-            NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.KickedByNoFriendCode"), client.PlayerName));
+            NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.KickedByNoFriendCode"),
+                client.PlayerName));
             Info($"没有好友代码的玩家 {client.PlayerName} 已被踢出。", "Kick");
         }
-        if (DestroyableSingleton<FriendsListManager>.Instance.IsPlayerBlockedUsername(client.FriendCode) && AmongUsClient.Instance.AmHost && Main.KickPlayerInBanList.Value)
+
+        if (DestroyableSingleton<FriendsListManager>.Instance.IsPlayerBlockedUsername(client.FriendCode) &&
+            AmongUsClient.Instance.AmHost && Main.KickPlayerInBanList.Value)
         {
             KickPlayer(client.Id, true, "BanList");
             Info($"已封锁的玩家 {client.PlayerName} ({client.FriendCode}) 已被封禁。", "BAN");
         }
+
         if (AmongUsClient.Instance.AmHost && !ValidFormatRegex.IsMatch(client.FriendCode) && client.FriendCode != "")
         {
             KickPlayer(client.Id, false, "NotLogin");
             NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.Cheater"), client.PlayerName));
             Info($"没有好友代码的玩家 {client.PlayerName} 已被踢出。", "Kick");
         }
+
         if (client.PlayerName.Contains("1337"))
         {
             KickPlayer(client.Id, false, "NotLogin");
             NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.Cheater"), client.PlayerName));
             Info($"Kami玩家 {client.PlayerName} 已被踢出。", "Kick");
         }
+
         BanManager.CheckBanPlayer(client);
         BanManager.CheckDenyNamePlayer(client);
 
@@ -136,11 +147,13 @@ public class OnPlayerJoinedPatch
 class OnPlayerLeftPatch
 {
     public static readonly List<int> ClientsProcessed = [];
+
     public static void Add(int id)
     {
         ClientsProcessed.Remove(id);
         ClientsProcessed.Add(id);
     }
+
     public static void Postfix([HarmonyArgument(0)] ClientData data, [HarmonyArgument(1)] DisconnectReasons reason)
     {
         try
@@ -153,7 +166,9 @@ class OnPlayerLeftPatch
 
             data.Character?.SetDisconnected();
 
-            Info($"{data.PlayerName}(ClientID:{data.Id}/FriendCode:{data.FriendCode})断开连接(理由:{reason}，Ping:{AmongUsClient.Instance.Ping})", "Session");
+            Info(
+                $"{data.PlayerName}(ClientID:{data.Id}/FriendCode:{data.FriendCode})断开连接(理由:{reason}，Ping:{AmongUsClient.Instance.Ping})",
+                "Session");
             var id = data.Character?.Data?.DefaultOutfit?.ColorId ?? XtremePlayerData.AllPlayerData
                 .Where(playerData => playerData.CheatData.ClientData.Id == data.Id).FirstOrDefault()!.ColorId;
             var color = Palette.PlayerColors[id];
@@ -181,9 +196,9 @@ class OnPlayerLeftPatch
                         NotificationPopperPatch.NotificationPop(string.Format(GetString("PlayerLeft"), name));
                     break;
             }
-            
+
             Dispose(data.Character?.PlayerId ?? 255);
-            
+
             XtremeGameData.PlayerVersion.playerVersion.Remove(data.Character?.PlayerId ?? 255);
             ClientsProcessed.Remove(data.Id);
             XtremePlayerData.AllPlayerData.Do(_data => _data.AdjustPlayerId());

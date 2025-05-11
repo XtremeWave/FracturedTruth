@@ -47,17 +47,19 @@ public sealed class ClientOptionItem_Boolean : ClientActionItem
 
     public void UpdateToggle()
     {
-        if (ToggleButton == null) return;
+        if (!ToggleButton) return;
 
         var color = Config.Value ? ColorHelper.ClientOptionColor : ColorHelper.ClientOptionColor_Disable;
         ToggleButton.Background.color = color;
         ToggleButton.Rollover?.ChangeOutColor(color);
     }
 }
+
 public sealed class ClientOptionItem_String : ClientActionItem
 {
     public ConfigEntry<string> Config { get; private set; }
-    public string Name {get; private set;}
+    public string Name { get; private set; }
+
     private ClientOptionItem_String(
         string name,
         string showingName,
@@ -95,15 +97,15 @@ public sealed class ClientOptionItem_String : ClientActionItem
         item.OnClickAction = () =>
         {
             var currentIndex = Array.IndexOf(selections, config.Value);
-            
+
             if (currentIndex == -1)
             {
                 Error("wrong index", "ClientOptionItem_String");
                 return;
             }
-            
+
             var nextIndex = (currentIndex + 1) % selections.Length;
-            showingName = 
+            showingName =
                 config.Value = selections[nextIndex];
             item.UpdateToggle(selections);
             item.UpdateName(showingName);
@@ -114,7 +116,7 @@ public sealed class ClientOptionItem_String : ClientActionItem
 
     public void UpdateToggle(string[] selections)
     {
-        if (ToggleButton == null) return;
+        if (!ToggleButton) return;
 
         var color = Config.Value == selections[0] ? Palette.Purple : Color.magenta;
         if (Config.Value == "HorseMode")
@@ -125,7 +127,7 @@ public sealed class ClientOptionItem_String : ClientActionItem
 
     public void UpdateName(string name)
     {
-        if (ToggleButton == null) return;
+        if (!ToggleButton) return;
 
         ToggleButton.Text.text = GetString(name);
         if (Config.Value == "HorseMode")

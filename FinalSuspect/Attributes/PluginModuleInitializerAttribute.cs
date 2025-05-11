@@ -5,4 +5,7 @@
 /// 在静态方法前面加上 [PluginModuleInitializer]，可以在启动时自动调用
 /// 可以使用 [PluginModuleInitializer(InitializePriority.High)] 来指定调用顺序
 /// </summary>
-public sealed class PluginModuleInitializerAttribute(InitializePriority priority = InitializePriority.Normal) : InitializerAttribute<PluginModuleInitializerAttribute>(priority) { }
+public sealed class PluginModuleInitializerAttribute(InitializePriority priority = InitializePriority.Normal)
+    : InitializerAttribute<PluginModuleInitializerAttribute>(priority)
+{
+}

@@ -26,11 +26,11 @@ public class ResourcesDownloader
             default:
                 return false;
         }
-        
+
         var DownloadFileTempPath = filePath + ".xwr";
 
         var retrytimes = 0;
-        var remoteType = RemoteType.Github; 
+        var remoteType = RemoteType.Github;
         retry:
         if (IsChineseLanguageUser)
             remoteType = retrytimes switch
@@ -50,7 +50,7 @@ public class ResourcesDownloader
         }
 
         File.Create(DownloadFileTempPath).Close();
-        
+
         Msg("Start Downloading from: " + url, "Download Resources");
         Msg("Saving file to: " + filePath, "Download Resources");
 
@@ -69,16 +69,18 @@ public class ResourcesDownloader
             Error($"Failed to download\n{ex.Message}", "Download Resources", false);
             File.Delete(DownloadFileTempPath);
             retrytimes++;
-            if (retrytimes < 3) 
+            if (retrytimes < 3)
                 goto retry;
             return false;
         }
     }
+
     private static bool IsValidUrl(string url)
     {
         var pattern = @"^(https?|ftp)://[^\s/$.?#].[^\s]*$";
         return Regex.IsMatch(url, pattern);
     }
+
     /*private static void OnDownloadProgressChanged(long? totalFileSize, long totalBytesDownloaded, double? progressPercentage)
     {
         var msg = $"\n{totalFileSize / 1000}KB / {totalBytesDownloaded / 1000}KB  -  {(int)progressPercentage}%";

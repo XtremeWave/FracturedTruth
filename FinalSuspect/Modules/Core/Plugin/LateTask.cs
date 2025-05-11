@@ -17,7 +17,7 @@ internal class LateTask
         action();
         return true;
     }
-    
+
     public LateTask(Action action, float time, string name = "No Name Task")
     {
         this.action = action;
@@ -27,7 +27,7 @@ internal class LateTask
         if (name != "")
             Info("\"" + name + "\" is created", "LateTask");
     }
-    
+
     public static void Update(float deltaTime)
     {
         var TasksToRemove = new List<LateTask>();
@@ -46,6 +46,7 @@ internal class LateTask
                 TasksToRemove.Add(task);
             }
         }
+
         TasksToRemove.ForEach(task => Tasks.Remove(task));
     }
 }

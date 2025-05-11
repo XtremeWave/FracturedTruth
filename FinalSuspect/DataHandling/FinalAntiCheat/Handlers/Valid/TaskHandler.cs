@@ -11,7 +11,7 @@ public class TaskHandler : IRpcHandler
     [
         (byte)RpcCalls.CompleteTask
     ];
-    
+
     public bool HandleLobby(PlayerControl sender, MessageReader reader,
         ref bool notify, ref string reason, ref bool ban)
     {

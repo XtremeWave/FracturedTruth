@@ -10,12 +10,17 @@ namespace FinalSuspect.Attributes;
 public abstract class InitializerAttribute<T>(InitializePriority priority) : Attribute
 {
     /// <summary>所有初始化方法</summary>
+    // ReSharper disable once StaticMemberInGenericType
     private static MethodInfo[] allInitializers;
+
     private static LogHandler logger = Handler(nameof(InitializerAttribute<T>));
 
-    public InitializerAttribute() : this(InitializePriority.Normal) { }
+    public InitializerAttribute() : this(InitializePriority.Normal)
+    {
+    }
 
     private readonly InitializePriority priority = priority;
+
     /// <summary>在初始化时调用的方法</summary>
     private MethodInfo targetMethod;
 
@@ -42,9 +47,12 @@ public abstract class InitializerAttribute<T>(InitializePriority priority) : Att
                 }
             }
         }
+
         // 将找到的初始化方法按照优先级排序并转换为数组
-        allInitializers = initializers.OrderBy(initializer => initializer.priority).Select(initializer => initializer.targetMethod).ToArray();
+        allInitializers = initializers.OrderBy(initializer => initializer.priority)
+            .Select(initializer => initializer.targetMethod).ToArray();
     }
+
     public static void InitializeAll()
     {
         // 在首次初始化时查找初始化方法
@@ -61,16 +69,21 @@ public abstract class InitializerAttribute<T>(InitializePriority priority) : Att
         }
     }
 }
+
 public enum InitializePriority
 {
     /// <summary>最高优先级，首先执行</summary>
     VeryHigh,
+
     /// <summary>在默认值之前执行</summary>
     High,
+
     /// <summary>默认值</summary>
     Normal,
+
     /// <summary>在默认值之后执行</summary>
     Low,
+
     /// <summary>最低优先级，最后执行</summary>
     VeryLow,
 }

@@ -13,13 +13,13 @@ public static class ColorHelper
         var markingColor = Color.HSVToRGB(h, MarkerSat, bright ? MarkerVal : v).SetAlpha(MarkerAlpha);
         return markingColor;
     }
-    
+
     public static Color HexToColor(string hex)
     {
         _ = ColorUtility.TryParseHtmlString(hex, out var color);
         return color;
     }
-    
+
     public static string ColorToHex(Color color)
     {
         Color32 color32 = color;
@@ -30,7 +30,7 @@ public static class ColorHelper
     private const float MarkerVal = 1f;
     private const float MarkerAlpha = 0.2f;
 
-    public const string TeamColor = "#cdfffd"; 
+    public const string TeamColor = "#cdfffd";
     public const string ModColor = "#cecdfd";
 
     public static readonly Color32 TeamColor32 = new(205, 255, 253, 255);
@@ -43,14 +43,14 @@ public static class ColorHelper
     public static readonly Color32 ClientlessColor = new(225, 224, 179, 255);
     public static readonly Color32 DownloadYellow = new(252, 255, 152, 255);
     public static readonly Color32 LoadCompleteGreen = new(185, 255, 181, 255);
-    
+
     public static readonly Color32 ClientOptionColor = new(150, 149, 227, 255);
     public static readonly Color32 ClientOptionColor_Disable = new(61, 60, 97, 255);
     public static readonly Color32 ClientOptionColor_CanNotUse = new(90, 89, 108, 255);
     public static readonly Color32 ClientFeatureColor = new(191, 149, 227, 255);
     public static readonly Color32 ClientFeatureColor_ClickType = new(219, 207, 227, 255);
     public static readonly Color32 ClientFeatureColor_CanNotUse = new(102, 89, 97, 255);
-    
+
     public static readonly Color32 ImpostorRedPale = new(255, 90, 90, 255);
 
     /// <summary>

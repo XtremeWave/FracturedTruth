@@ -18,7 +18,7 @@ public class AudioLoader
     {
         var dummyBytes = new byte[2];
         ConvertBytesToFloats(dummyBytes);
-        
+
         var warmupClip = AudioClip.Create("Warmup", 1, 1, 44100, false);
         warmupClip.SetData(new float[] { 0 }, 0);
         Object.Destroy(warmupClip);
@@ -43,10 +43,11 @@ public class AudioLoader
             Debug.LogError("Failed to read file: " + filePath + "\n" + e.Message);
             return null;
         }
-        
+
         var floatData = await Task.Run(() => ConvertBytesToFloats(audioData));
+        // ReSharper disable once RedundantAssignment
         audioData = null; // 及时释放内存
-        
+
         var audioClip = AudioClip.Create("LoadedAudioClip", floatData.Length, 2, 44100, false);
         audioClip.SetData(floatData, 0);
 
@@ -66,7 +67,7 @@ public class AudioLoader
     {
         var floatCount = audioBytes.Length / 2;
         var floatData = new float[floatCount];
-        
+
         unsafe
         {
             fixed (byte* bytePtr = audioBytes)
@@ -80,6 +81,7 @@ public class AudioLoader
                 }
             }
         }
+
         return floatData;
     }
 }

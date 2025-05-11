@@ -16,6 +16,7 @@ public static class AprilFoolsModePatch
 }
 
 #region GameManager Patches
+
 [HarmonyPatch(typeof(NormalGameManager), nameof(NormalGameManager.GetBodyType))]
 public static class GetNormalBodyType_Patch
 {
@@ -31,6 +32,7 @@ public static class GetNormalBodyType_Patch
             __result = PlayerBodyTypes.Long;
             return;
         }
+
         __result = PlayerBodyTypes.Normal;
     }
 }
@@ -40,7 +42,7 @@ public static class GetHnsBodyType_Patch
 {
     public static void Postfix(ref PlayerBodyTypes __result, [HarmonyArgument(0)] PlayerControl player)
     {
-        if (player == null || player.Data == null || player.Data.Role == null)
+        if (!player || !player.Data || !player.Data.Role)
         {
             //if (Main.ChangeOutfit.Value == Main.changeOutfit[1])
             //{
@@ -52,6 +54,7 @@ public static class GetHnsBodyType_Patch
                 __result = PlayerBodyTypes.Long;
                 return;
             }
+
             __result = PlayerBodyTypes.Normal;
             return;
         }
@@ -73,6 +76,7 @@ public static class GetHnsBodyType_Patch
                 __result = PlayerBodyTypes.LongSeeker;
                 return;
             }
+
             __result = PlayerBodyTypes.Long;
             return;
         }
@@ -82,13 +86,16 @@ public static class GetHnsBodyType_Patch
             __result = PlayerBodyTypes.Seeker;
             return;
         }
+
         __result = PlayerBodyTypes.Normal;
         return;
     }
 }
+
 #endregion
 
 #region LongBoi Patches
+
 [HarmonyPatch(typeof(LongBoiPlayerBody))]
 public static class LongBoiPatches
 {
@@ -99,7 +106,8 @@ public static class LongBoiPatches
         //Fixes base-game layer issues
         __instance.cosmeticLayer.OnSetBodyAsGhost += (Action)__instance.SetPoolableGhost;
         __instance.cosmeticLayer.OnColorChange += (Action<int>)__instance.SetHeightFromColor;
-        __instance.cosmeticLayer.OnCosmeticSet += (Action<string, int, CosmeticsLayer.CosmeticKind>)__instance.OnCosmeticSet;
+        __instance.cosmeticLayer.OnCosmeticSet +=
+            (Action<string, int, CosmeticsLayer.CosmeticKind>)__instance.OnCosmeticSet;
         __instance.gameObject.layer = 8;
         return false;
     }
@@ -114,19 +122,22 @@ public static class LongBoiPatches
         {
             __instance.cosmeticLayer.SetHatVisorVisible(false);
         }
+
         __instance.SetupNeckGrowth();
         if (__instance.isExiledPlayer)
         {
             var instance = ShipStatus.Instance;
-            if (instance == null || instance.Type != ShipStatus.MapType.Fungle)
+            if (!instance || instance.Type != ShipStatus.MapType.Fungle)
             {
                 __instance.cosmeticLayer.AdjustCosmeticRotations(-17.75f);
             }
         }
+
         if (!__instance.isPoolablePlayer)
         {
             __instance.cosmeticLayer.ValidateCosmetics();
         }
+
         return false;
     }
 
@@ -157,8 +168,10 @@ public static class LongBoiPatches
             __result = false;
             return false;
         }
+
         __result = true;
         return false;
     }
 }
+
 #endregion

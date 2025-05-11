@@ -20,7 +20,10 @@ public static class Utils
 {
     private static readonly DateTime timeStampStartTime = new(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
     public static long TimeStamp => (long)(DateTime.Now.ToUniversalTime() - timeStampStartTime).TotalSeconds;
-    public static long GetTimeStamp(DateTime? dateTime = null) => (long)((dateTime ?? DateTime.Now).ToUniversalTime() - timeStampStartTime).TotalSeconds;
+
+    public static long GetTimeStamp(DateTime? dateTime = null) =>
+        (long)((dateTime ?? DateTime.Now).ToUniversalTime() - timeStampStartTime).TotalSeconds;
+
     public static ClientData GetClientById(int id)
     {
         try
@@ -33,21 +36,25 @@ public static class Utils
             return null;
         }
     }
+
     public static string GetRoleName(RoleTypes role, bool forUser = true)
     {
         return GetRoleString(Enum.GetName(typeof(RoleTypes), role), forUser);
     }
+
     public static Color GetRoleColor(RoleTypes role)
     {
         Main.roleColors.TryGetValue(role, out var hexColor);
         _ = ColorUtility.TryParseHtmlString(hexColor, out var c);
         return c;
     }
+
     public static string GetRoleColorCode(RoleTypes role)
     {
         Main.roleColors.TryGetValue(role, out var hexColor);
         return hexColor;
     }
+
     public static string GetRoleInfoForVanilla(this RoleTypes role, bool InfoLong = false)
     {
         if (role is RoleTypes.Crewmate or RoleTypes.Impostor)
@@ -70,23 +77,24 @@ public static class Utils
             OnPlayerLeftPatch.Add(clientId);
             AmongUsClient.Instance.KickPlayer(clientId, ban);
         }
-        catch 
+        catch
         {
             /* ignored */
         }
     }
+
     public static void KickPlayer(byte playerId, bool ban, string reason = "")
     {
         try
         {
             KickPlayer(GetPlayerById(playerId).GetClient().Id, ban, reason);
         }
-        catch 
+        catch
         {
             /* ignored */
         }
-        
     }
+
     public static string PadRightV2(this object text, int num)
     {
         var bc = 0;
@@ -94,6 +102,7 @@ public static class Utils
         foreach (var c in t!) bc += Encoding.GetEncoding("UTF-8").GetByteCount(c.ToString()) == 1 ? 1 : 2;
         return t.PadRight(Mathf.Max(num - (bc - t.Length), 0));
     }
+
     public static DirectoryInfo GetLogFolder(bool auto = false)
     {
         var folder = Directory.CreateDirectory($"{Application.persistentDataPath}/FinalSuspect/Logs");
@@ -101,20 +110,24 @@ public static class Utils
         {
             folder = Directory.CreateDirectory($"{folder.FullName}/AutoLogs");
         }
+
         return folder;
     }
+
     public static void DumpLog(bool popup = false)
     {
         var logs = GetLogFolder();
         var filename = CopyLog(logs.FullName);
         OpenDirectory(filename);
-        if (PlayerControl.LocalPlayer != null)
+        if (PlayerControl.LocalPlayer)
         {
             var t = DateTime.Now.ToString("yyyy-MM-dd_HH.mm.ss");
-            if (popup) 
-                HudManager.Instance.ShowPopUp(string.Format(GetString("Message.DumpfileSaved"), $"FinalSuspect - v{Main.DisplayedVersion}-{t}.log"));
-            else 
-                AddChatMessage(string.Format(GetString("Message.DumpfileSaved"), $"FinalSuspect - v{Main.DisplayedVersion}-{t}.log"));
+            if (popup)
+                HudManager.Instance.ShowPopUp(string.Format(GetString("Message.DumpfileSaved"),
+                    $"FinalSuspect - v{Main.DisplayedVersion}-{t}.log"));
+            else
+                AddChatMessage(string.Format(GetString("Message.DumpfileSaved"),
+                    $"FinalSuspect - v{Main.DisplayedVersion}-{t}.log"));
         }
     }
 
@@ -122,14 +135,14 @@ public static class Utils
     {
         foreach (var f in Directory.GetFiles(GetLogFolder(true).FullName + "/Final Suspect-logs")) File.Delete(f);
     }
-    
+
     public static void SaveNowLog()
     {
         var logs = GetLogFolder(true);
         logs.EnumerateFiles().Where(f => f.CreationTime < DateTime.Now.AddDays(-7)).ToList().ForEach(f => f.Delete());
         CopyLog(logs.FullName);
     }
-    
+
     public static string CopyLog(string path)
     {
         var f = $"{path}/Final Suspect-logs/";
@@ -160,20 +173,24 @@ public static class Utils
         pos += 1.5f;
         builder.AppendFormat("<pos={0}em>", pos).Append(GetProgressText(id)).Append("</pos>");
         pos += 4.5f;
-        
+
         builder.AppendFormat("<pos={0}em>", pos).Append(GetVitalText(id, true)).Append("</pos>");
-        pos += DestroyableSingleton<TranslationController>.Instance.currentLanguage.languageID == SupportedLangs.English ? 14f : 10.5f;
+        pos += DestroyableSingleton<TranslationController>.Instance.currentLanguage.languageID == SupportedLangs.English
+            ? 14f
+            : 10.5f;
 
         builder.AppendFormat("<pos={0}em>", pos);
 
         var oldrole = thisdata.RoleWhenAlive ?? RoleTypes.Crewmate;
-        var newrole = thisdata.RoleAfterDeath ?? (thisdata.IsImpostor? RoleTypes.ImpostorGhost : RoleTypes.CrewmateGhost);
+        var newrole = thisdata.RoleAfterDeath ??
+                      (thisdata.IsImpostor ? RoleTypes.ImpostorGhost : RoleTypes.CrewmateGhost);
         builder.Append(StringHelper.ColorString(GetRoleColor(oldrole), GetString($"{oldrole}")));
 
-        if (thisdata.IsDead  && newrole != oldrole)
+        if (thisdata.IsDead && newrole != oldrole)
         {
             builder.Append($"=> {StringHelper.ColorString(GetRoleColor(newrole), GetRoleString($"{newrole}"))}");
         }
+
         builder.Append("</pos>");
 
         return builder.ToString();
@@ -187,7 +204,8 @@ public static class Utils
         {
             if (CachedSprites.TryGetValue(file + pixelsPerUnit, out var sprite)) return sprite;
             var texture = LoadTextureFromResources(file);
-            sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), pixelsPerUnit);
+            sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f),
+                pixelsPerUnit);
             sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
             return CachedSprites[file + pixelsPerUnit] = sprite;
         }
@@ -195,6 +213,7 @@ public static class Utils
         {
             Error($"读入Texture失败：{file}", "LoadImage");
         }
+
         return null;
     }
 
@@ -206,7 +225,7 @@ public static class Utils
         {
             if (!File.Exists(path))
                 goto InDLL;
-            
+
             var fileData = File.ReadAllBytes(path);
             var texture = new Texture2D(1, 1, TextureFormat.ARGB32, false);
             if (texture.LoadImage(fileData))
@@ -220,6 +239,7 @@ public static class Utils
         {
             Warn($"读入Texture失败：{path} - {ex.Message}", "LoadTexture");
         }
+
         InDLL:
         /*path = "FinalSuspect.Resources.Images." + file;
 
@@ -244,7 +264,6 @@ public static class Utils
     /// <params name="nums">生成した乱数を格納したint配列</params>
     /// <params name="scale">ヒストグラムの倍率 大量の乱数を扱う場合、この値を下げることをお勧めします。</params>
     /// </summary>
-
     public static bool TryCast<T>(this Il2CppObjectBase obj, out T casted)
         where T : Il2CppObjectBase
     {
@@ -257,6 +276,7 @@ public static class Utils
 
     public static bool AmDev() => IsDev(EOSManager.Instance.FriendCode);
     public static bool IsDev(this PlayerControl pc) => IsDev(pc.FriendCode);
+
     public static bool IsDev(string friendCode) => friendCode
         is "teamelder#5856" //Slok
         or "cloakhazy#9133"; //LezaiYa
@@ -274,13 +294,15 @@ public static class Utils
     private static Dictionary<byte, PlayerControl> cachedPlayers = new();
 
     public static PlayerControl GetPlayerById(int playerId) => GetPlayerById((byte)playerId);
+
     public static PlayerControl GetPlayerById(byte playerId)
     {
-        if (cachedPlayers.TryGetValue(playerId, out var cachedPlayer) && cachedPlayer != null)
+        if (cachedPlayers.TryGetValue(playerId, out var cachedPlayer) && cachedPlayer)
         {
             return cachedPlayer;
         }
-        var player = Main.AllPlayerControls.Where(pc => pc.PlayerId == playerId).FirstOrDefault();
+
+        var player = Main.AllPlayerControls.FirstOrDefault(pc => pc.PlayerId == playerId);
         cachedPlayers[playerId] = player;
         return player;
     }
@@ -293,14 +315,14 @@ public static class Utils
 
         var comms = IsActive(SystemTypes.Comms);
         var text = GetProgressText(pc.PlayerId, comms);
-        return enable? text : "";
+        return enable ? text : "";
     }
 
     private static string GetProgressText(byte playerId, bool comms = false)
     {
         return GetTaskProgressText(playerId, comms);
     }
-    
+
     public static string GetTaskProgressText(byte playerId, bool comms = false)
     {
         var data = XtremePlayerData.GetXtremeDataById(playerId);
@@ -311,25 +333,27 @@ public static class Utils
                 var KillColor = Palette.ImpostorRed;
                 return StringHelper.ColorString(KillColor, $"({GetString("KillCount")}: {data.KillCount})");
             }
+
             return "";
         }
-        
+
         if (data.IsImpostor)
         {
             var KillColor = data.IsDisconnected ? Color.gray : Palette.ImpostorRed;
             return StringHelper.ColorString(KillColor, $"({GetString("KillCount")}: {data.KillCount})");
         }
+
         var NormalColor = data.TaskCompleted ? Color.green : Color.yellow;
         var TextColor = comms || data.IsDisconnected ? Color.gray : NormalColor;
         var Completed = comms ? "?" : $"{data.CompleteTaskCount}";
         return StringHelper.ColorString(TextColor, $"({Completed}/{data.TotalTaskCount})");
     }
-    
+
     public static string GetVitalText(byte playerId, bool summary = false, bool docolor = true)
     {
         var data = XtremePlayerData.GetXtremeDataById(playerId);
         if (!data.IsDead || data.RealDeathReason is VanillaDeathReason.None) return "";
-        
+
         var deathReason = GetString("DeathReason." + data.RealDeathReason);
         var color = Palette.CrewmateBlue;
         switch (data.RealDeathReason)
@@ -350,12 +374,14 @@ public static class Utils
                 color = Palette.Purple;
                 break;
         }
+
         if (!summary) deathReason = "(" + deathReason + ")";
-        
-        deathReason = StringHelper.ColorString(color, deathReason) ;
+
+        deathReason = StringHelper.ColorString(color, deathReason);
 
         return deathReason;
     }
+
     public static bool IsActive(SystemTypes type)
     {
         if (!IsNormalGame) return false;
@@ -363,6 +389,7 @@ public static class Utils
         {
             return false;
         }
+
         int mapId = Main.NormalOptions.MapId;
         switch (type)
         {
@@ -377,7 +404,7 @@ public static class Utils
                 var ReactorSystemType = ShipStatus.Instance.Systems[type].Cast<ReactorSystemType>();
                 return ReactorSystemType != null && ReactorSystemType.IsActive;
             }
-            case SystemTypes.Laboratory: 
+            case SystemTypes.Laboratory:
             {
                 if (mapId != 2) return false;
                 var ReactorSystemType = ShipStatus.Instance.Systems[type].Cast<ReactorSystemType>();
@@ -396,23 +423,26 @@ public static class Utils
                     var HqHudSystemType = ShipStatus.Instance.Systems[type].Cast<HqHudSystemType>();
                     return HqHudSystemType != null && HqHudSystemType.IsActive;
                 }
+
                 var HudOverrideSystemType = ShipStatus.Instance.Systems[type].Cast<HudOverrideSystemType>();
                 return HudOverrideSystemType != null && HudOverrideSystemType.IsActive;
             }
             case SystemTypes.HeliSabotage:
             {
                 var HeliSabotageSystem = ShipStatus.Instance.Systems[type].Cast<HeliSabotageSystem>();
-                return HeliSabotageSystem != null && HeliSabotageSystem.IsActive;
+                return HeliSabotageSystem && HeliSabotageSystem.IsActive;
             }
             case SystemTypes.MushroomMixupSabotage:
             {
-                var mushroomMixupSabotageSystem = ShipStatus.Instance.Systems[type].TryCast<MushroomMixupSabotageSystem>();
-                return mushroomMixupSabotageSystem != null && mushroomMixupSabotageSystem.IsActive;
+                var mushroomMixupSabotageSystem =
+                    ShipStatus.Instance.Systems[type].TryCast<MushroomMixupSabotageSystem>();
+                return mushroomMixupSabotageSystem && mushroomMixupSabotageSystem.IsActive;
             }
             default:
                 return false;
         }
     }
+
     public static bool IsImpostor(RoleTypes role)
     {
         return role switch
@@ -421,6 +451,7 @@ public static class Utils
             _ => false,
         };
     }
+
     public static bool IsGhost(RoleTypes role)
     {
         return role switch
@@ -429,7 +460,7 @@ public static class Utils
             _ => false,
         };
     }
-  
+
     public static bool CanSeeTargetRole(PlayerControl target, out bool bothImp)
     {
         var LocalDead = !PlayerControl.LocalPlayer.IsAlive();
@@ -439,22 +470,23 @@ public static class Utils
 
         return target.IsLocalPlayer() ||
                BothDeathCanSee ||
-               bothImp && LocalDead || 
-               Main.GodMode.Value || 
+               bothImp && LocalDead ||
+               Main.GodMode.Value ||
                IsFreePlay;
     }
-    
+
     public static bool CanSeeOthersRole()
     {
         if (!IsInGame) return true;
         if (IsFreePlay) return true;
         var LocalDead = !PlayerControl.LocalPlayer.IsAlive();
         var IsAngel = PlayerControl.LocalPlayer.GetRoleType() is RoleTypes.GuardianAngel;
-        
-        return !IsAngel && LocalDead || 
-               Main.GodMode.Value || 
+
+        return !IsAngel && LocalDead ||
+               Main.GodMode.Value ||
                IsFreePlay;
     }
+
     public static void ExecuteWithTryCatch(this Action action, bool Log = false)
     {
         try
@@ -467,7 +499,8 @@ public static class Utils
         }
     }
 
-    public static void FormatButtonColor(MainMenuManager __instance, PassiveButton button, Color inActiveColor, Color activeColor, Color inActiveTextColor, Color activeTextColor)
+    public static void FormatButtonColor(MainMenuManager __instance, PassiveButton button, Color inActiveColor,
+        Color activeColor, Color inActiveTextColor, Color activeTextColor)
     {
         button.activeSprites.transform.FindChild("Shine")?.gameObject.SetActive(false);
         button.inactiveSprites.transform.FindChild("Shine")?.gameObject.SetActive(false);
@@ -475,8 +508,8 @@ public static class Utils
         var inActiveRenderer = button.inactiveSprites.GetComponent<SpriteRenderer>();
         activeRenderer.sprite = __instance.quitButton.activeSprites.GetComponent<SpriteRenderer>().sprite;
         inActiveRenderer.sprite = __instance.quitButton.activeSprites.GetComponent<SpriteRenderer>().sprite;
-        activeRenderer.color = activeColor.a == 0f 
-            ? new Color(inActiveColor.r, inActiveColor.g, inActiveColor.b, 1f) 
+        activeRenderer.color = activeColor.a == 0f
+            ? new Color(inActiveColor.r, inActiveColor.g, inActiveColor.b, 1f)
             : activeColor;
         inActiveRenderer.color = inActiveColor;
         button.activeTextColor = activeTextColor;

@@ -16,9 +16,9 @@ public static class Zoom
     {
         try
         {
-            var canZoom = IsShip || IsLobby || IsFreePlay ;
+            var canZoom = IsShip || IsLobby || IsFreePlay;
 
-            if (!canZoom || !CanSeeOthersRole()|| IsMeeting || !IsCanMove || InGameRoleInfoMenu.Showing)
+            if (!canZoom || !CanSeeOthersRole() || IsMeeting || !IsCanMove || InGameRoleInfoMenu.Showing)
             {
                 Flag.Run(() => { SetZoomSize(reset: true); }, "Zoom");
                 return;
@@ -41,6 +41,7 @@ public static class Zoom
                     }
                 }
             }
+
             Flag.NewFlag("Zoom");
         }
         catch
@@ -51,7 +52,7 @@ public static class Zoom
 
     public static void SetZoomSize(bool times = false, bool reset = false)
     {
-        if (Camera.main == null) return;
+        if (!Camera.main) return;
         var size = 1.5f;
         if (!times) size = 1 / size;
         if (reset)
@@ -66,10 +67,13 @@ public static class Zoom
             Camera.main.orthographicSize *= size;
             HudManager.Instance.UICamera.orthographicSize *= size;
         }
-        DestroyableSingleton<HudManager>.Instance?.ShadowQuad?.gameObject.SetActive((reset || Mathf.Approximately(Camera.main.orthographicSize, 3.0f)) && PlayerControl.LocalPlayer.IsAlive());
+
+        DestroyableSingleton<HudManager>.Instance?.ShadowQuad?.gameObject.SetActive(
+            (reset || Mathf.Approximately(Camera.main.orthographicSize, 3.0f)) && PlayerControl.LocalPlayer.IsAlive());
         if (ResetButtons)
         {
-            ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height, Screen.width, Screen.height, Screen.fullScreen);
+            ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height, Screen.width, Screen.height,
+                Screen.fullScreen);
             ResetButtons = false;
         }
     }
@@ -79,14 +83,17 @@ public static class Zoom
     {
         SetZoomSize(reset: true);
     }
+
     public static void OnFixedUpdate()
-        => DestroyableSingleton<HudManager>.Instance?.ShadowQuad?.gameObject.SetActive(Mathf.Approximately(Camera.main!.orthographicSize, 3.0f) && PlayerControl.LocalPlayer.IsAlive());
+        => DestroyableSingleton<HudManager>.Instance?.ShadowQuad?.gameObject.SetActive(
+            Mathf.Approximately(Camera.main!.orthographicSize, 3.0f) && PlayerControl.LocalPlayer.IsAlive());
 }
 
 public static class Flag
 {
     private static readonly List<string> OneTimeList = [];
     private static readonly List<string> FirstRunList = [];
+
     public static void Run(Action action, string type, bool firstrun = false)
     {
         if (OneTimeList.Contains(type) || (firstrun && !FirstRunList.Contains(type)))
@@ -96,10 +103,11 @@ public static class Flag
             action();
         }
     }
+
     public static void NewFlag(string type)
     {
         if (!OneTimeList.Contains(type)) OneTimeList.Add(type);
-    }        
+    }
 
     public static void DeleteFlag(string type)
     {

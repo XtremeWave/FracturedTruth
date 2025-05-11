@@ -32,11 +32,14 @@ public sealed class LobbyJoinBind
     [HarmonyPostfix]
     public static void Postfix()
     {
-        InitializeTextObject(ref LastRoomText, ref lastRoomTextComponent, LAST_ROOM_TEXT_NAME, new Vector3(9.8f, -3.6f, 0));
-        InitializeTextObject(ref CopiedRoomText, ref copiedRoomTextComponent, COPIED_ROOM_TEXT_NAME, new Vector3(9.8f, -3.8f, 0));
+        InitializeTextObject(ref LastRoomText, ref lastRoomTextComponent, LAST_ROOM_TEXT_NAME,
+            new Vector3(9.8f, -3.6f, 0));
+        InitializeTextObject(ref CopiedRoomText, ref copiedRoomTextComponent, COPIED_ROOM_TEXT_NAME,
+            new Vector3(9.8f, -3.8f, 0));
     }
 
-    private static void InitializeTextObject(ref GameObject gameObject, ref TextMeshPro textComponent, string name, Vector3 position)
+    private static void InitializeTextObject(ref GameObject gameObject, ref TextMeshPro textComponent, string name,
+        Vector3 position)
     {
         if (gameObject) return;
         gameObject = new GameObject(name);
@@ -53,6 +56,7 @@ public sealed class LobbyJoinBind
         UpdateGameJoinLogic(__instance);
         UpdateTextDisplay();
     }
+
     private static void UpdateGameJoinLogic(MMOnlineManager manager)
     {
         if (GameId != 0 && Input.GetKeyDown(KeyCode.LeftShift))
@@ -64,21 +68,22 @@ public sealed class LobbyJoinBind
             var copyBuffer = GUIUtility.systemCopyBuffer;
             if (Regex.IsMatch(copyBuffer, @"^[a-zA-Z]+$"))
             {
-                manager.StartCoroutine(AmongUsClient.Instance.CoJoinOnlineGameFromCode(GameCode.GameNameToInt(copyBuffer)));
+                manager.StartCoroutine(
+                    AmongUsClient.Instance.CoJoinOnlineGameFromCode(GameCode.GameNameToInt(copyBuffer)));
             }
         }
     }
 
     private static void UpdateTextDisplay()
     {
-        if (lastRoomTextComponent == null || copiedRoomTextComponent == null)
+        if (!lastRoomTextComponent || !copiedRoomTextComponent)
         {
             return;
         }
-        
+
         var lastCode = GameId != 0 && GameId != 32 ? GameCode.IntToGameName(GameId) : "";
         var copiedCode = GUIUtility.systemCopyBuffer;
-        
+
         if (!Regex.IsMatch(copiedCode, @"^[a-zA-Z]+$") || copiedCode.Length > 6)
         {
             copiedCode = "";
@@ -89,12 +94,16 @@ public sealed class LobbyJoinBind
             lastCode = new string('*', lastCode.Length);
             copiedCode = new string('*', copiedCode.Length);
         }
+
         var lastY = copiedCode == "" ? -3.8f : -3.6f;
         LastRoomText.transform.localPosition = new Vector3(9.8f, lastY, 0);
         lastCode = string.IsNullOrEmpty(lastCode) ? "" : lastCode.ToUpper();
         copiedCode = string.IsNullOrEmpty(copiedCode) ? "" : copiedCode.ToUpper();
 
-        lastRoomTextComponent.text = lastCode != "" ? $"        {GetString("LShift")}: <color={MOD_COLOR}>{lastCode}</color>  " : "";
-        copiedRoomTextComponent.text = copiedCode != "" ? $"        {GetString("RShift")}: <color={MOD_COLOR}>{copiedCode}</color>  " : "";
+        lastRoomTextComponent.text =
+            lastCode != "" ? $"        {GetString("LShift")}: <color={MOD_COLOR}>{lastCode}</color>  " : "";
+        copiedRoomTextComponent.text = copiedCode != ""
+            ? $"        {GetString("RShift")}: <color={MOD_COLOR}>{copiedCode}</color>  "
+            : "";
     }
 }

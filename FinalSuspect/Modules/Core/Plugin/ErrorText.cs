@@ -8,18 +8,17 @@ namespace FinalSuspect.Modules.Core.Plugin;
 public class ErrorText : MonoBehaviour
 {
     #region Singleton
+
     public static ErrorText Instance
     {
-        get
-        {
-            return _instance;
-        }
+        get { return _instance; }
     }
+
     private static ErrorText _instance;
 
     private void Awake()
     {
-        if (_instance != null)
+        if (_instance)
         {
             Destroy(gameObject);
         }
@@ -29,7 +28,9 @@ public class ErrorText : MonoBehaviour
             DontDestroyOnLoad(this);
         }
     }
+
     #endregion
+
     public static void Create(TextMeshPro baseText)
     {
         var Text = Instantiate(baseText);
@@ -44,10 +45,12 @@ public class ErrorText : MonoBehaviour
         Text.outlineColor = Color.black;
         Text.alignment = TextAlignmentOptions.Top;
     }
+
     public TextMeshPro Text;
     public Camera Camera;
     public List<ErrorData> AllErrors = [];
     public Vector3 TextOffset = new(0, 0.3f, -1000f);
+
     public void Update()
     {
         AllErrors.ForEach(err => err.IncreaseTimer());
@@ -59,17 +62,20 @@ public class ErrorText : MonoBehaviour
             UpdateText();
         }
     }
+
     public void LateUpdate()
     {
         if (!Text.enabled) return;
 
-        if (Camera == null)
+        if (!Camera)
             Camera = !HudManager.InstanceExists ? Camera.main : HudManager.Instance.PlayerCam.GetComponent<Camera>();
-        if (Camera != null)
+        if (Camera)
         {
-            transform.position = AspectPosition.ComputeWorldPosition(Camera, AspectPosition.EdgeAlignments.Top, TextOffset);
+            transform.position =
+                AspectPosition.ComputeWorldPosition(Camera, AspectPosition.EdgeAlignments.Top, TextOffset);
         }
     }
+
     public void AddError(ErrorCode code)
     {
         var error = new ErrorData(code);
@@ -81,8 +87,10 @@ public class ErrorText : MonoBehaviour
             //まだ出ていないエラー
             AllErrors.Add(error);
         }
+
         UpdateText();
     }
+
     public void UpdateText()
     {
         var text = "";
@@ -92,6 +100,7 @@ public class ErrorText : MonoBehaviour
             text += $"{err}: {err.Message}\n";
             if (maxLevel < err.ErrorLevel) maxLevel = err.ErrorLevel;
         }
+
         if (maxLevel == 0)
         {
             Text.enabled = false;
@@ -103,10 +112,12 @@ public class ErrorText : MonoBehaviour
                 text = SBDetected ? GetString("FAC.CheatDetected.HighLevel") : GetString("FAC.CheatDetected.LowLevel");
             Text.enabled = true;
         }
+
         if (IsInGame && maxLevel != 3 && !CheatDetected)
             text += $"\n{GetString("TerminateCommand")}: Shift+L+Enter";
         Text.text = text;
     }
+
     public void Clear()
     {
         AllErrors.RemoveAll(err => err.ErrorLevel != 3);
@@ -121,6 +132,7 @@ public class ErrorText : MonoBehaviour
         public readonly int ErrorLevel;
         public float Timer { get; private set; }
         public string Message => GetString(ToString());
+
         public ErrorData(ErrorCode code)
         {
             Code = code;
@@ -129,17 +141,20 @@ public class ErrorText : MonoBehaviour
             ErrorLevel = (int)code - (int)code / 10 * 10;
             Timer = 0f;
         }
+
         public override string ToString()
         {
             // ERR-xxx-yyy-z
             return $"ERR-{ErrorType1:000}-{ErrorType2:000}-{ErrorLevel:0}";
         }
+
         public void IncreaseTimer() => Timer += Time.deltaTime;
     }
 
     public bool CheatDetected;
     public bool SBDetected;
 }
+
 public enum ErrorCode
 {
     //xxxyyyz: ERR-xxx-yyy-z
@@ -154,8 +169,10 @@ public enum ErrorCode
     // 001 Main
     Main_DictionaryError = 0010003, // 001-000-3 Main Dictionary Error
     OptionIDDuplicate = 001_010_3, // 001-010-3 オプションIDが重複している(DEBUGビルド時のみ)
+
     // 002 サポート関連
-    UnsupportedVersion = 002_000_1,  // 002-000-1 AmongUsのバージョンが古い
+    UnsupportedVersion = 002_000_1, // 002-000-1 AmongUsのバージョンが古い
+
     // ==========
     // 000 Test
     NoError = 0000000, // 000-000-0 No Error

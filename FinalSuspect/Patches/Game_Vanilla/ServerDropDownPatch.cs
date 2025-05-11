@@ -22,11 +22,12 @@ public static class ServerDropDownPatch
 
         var num = 0;
         var column = 0;
-        const int maxPerColumn = 6;       // 每列最大按钮数
-        const float columnWidth = 4.15f;  // 列宽度
+        const int maxPerColumn = 6; // 每列最大按钮数
+        const float columnWidth = 4.15f; // 列宽度
         const float buttonSpacing = 0.5f; // 按钮间距
 
-        var regions = DestroyableSingleton<ServerManager>.Instance.AvailableRegions.OrderBy(ServerManager.DefaultRegions.Contains).ToList();
+        var regions = DestroyableSingleton<ServerManager>.Instance.AvailableRegions
+            .OrderBy(ServerManager.DefaultRegions.Contains).ToList();
         var totalColumns = Mathf.Max(1, Mathf.CeilToInt(regions.Count / (float)maxPerColumn));
         //int rowsInLastColumn = regions.Count % maxPerColumn;
         var maxRows = (regions.Count > maxPerColumn) ? maxPerColumn : regions.Count;
@@ -36,7 +37,9 @@ public static class ServerDropDownPatch
             if (DestroyableSingleton<ServerManager>.Instance.CurrentRegion.Name == regionInfo.Name)
             {
                 __instance.defaultButtonSelected = __instance.firstOption;
-                __instance.firstOption.ChangeButtonText(DestroyableSingleton<TranslationController>.Instance.GetStringWithDefault(regionInfo.TranslateName, regionInfo.Name, new Il2CppReferenceArray<Object>(0)));
+                __instance.firstOption.ChangeButtonText(
+                    DestroyableSingleton<TranslationController>.Instance.GetStringWithDefault(regionInfo.TranslateName,
+                        regionInfo.Name, new Il2CppReferenceArray<Object>(0)));
                 continue;
             }
 
@@ -51,7 +54,7 @@ public static class ServerDropDownPatch
             // 按钮位置和缩放
             serverListButton.transform.localPosition = new Vector3(xPos, yPos, -1f);
             serverListButton.transform.localScale = Vector3.one;
-            
+
             // 设置按钮
             serverListButton.Text.text = DestroyableSingleton<TranslationController>.Instance.GetStringWithDefault(
                 regionInfo.TranslateName,
@@ -71,9 +74,9 @@ public static class ServerDropDownPatch
 
         // 调整背景大小和位置
         var backgroundHeight = 1.2f + buttonSpacing * (maxRows - 1);
-        var backgroundWidth = (totalColumns > 1) ?
-            (columnWidth * (totalColumns - 1) + __instance.background.size.x) :
-            __instance.background.size.x;
+        var backgroundWidth = (totalColumns > 1)
+            ? (columnWidth * (totalColumns - 1) + __instance.background.size.x)
+            : __instance.background.size.x;
 
         __instance.background.transform.localPosition = new Vector3(
             0f,
@@ -95,7 +98,11 @@ public static class ServerDropDownPatch
         var columnSpacing = 6f;
 
         // 按钮按Y轴排序
-        List<ServerListButton> allButtons = [.. __instance.GetComponentsInChildren<ServerListButton>().OrderByDescending(b => b.transform.localPosition.y)];
+        List<ServerListButton> allButtons =
+        [
+            .. __instance.GetComponentsInChildren<ServerListButton>()
+                .OrderByDescending(b => b.transform.localPosition.y)
+        ];
         if (allButtons.Count == 0)
             return;
 
@@ -107,14 +114,14 @@ public static class ServerDropDownPatch
         {
             var col = i / buttonsPerColumn;
             var row = i % buttonsPerColumn;
-            allButtons[i].transform.localPosition = startPosition + new Vector3(col * columnSpacing, -row * buttonSpacing, 0f);
+            allButtons[i].transform.localPosition =
+                startPosition + new Vector3(col * columnSpacing, -row * buttonSpacing, 0f);
         }
 
         // 计算背景大小和位置
-        var maxRows  = Math.Min(buttonsPerColumn, allButtons.Count);
+        var maxRows = Math.Min(buttonsPerColumn, allButtons.Count);
         var backgroundHeight = 1.2f + buttonSpacing * (maxRows - 1);
-        var backgroundWidth = (columnCount > 1) ?
-            (columnSpacing * (columnCount - 1) + 5) : 5;
+        var backgroundWidth = (columnCount > 1) ? (columnSpacing * (columnCount - 1) + 5) : 5;
 
         __instance.background.transform.localPosition = new Vector3(
             0f,

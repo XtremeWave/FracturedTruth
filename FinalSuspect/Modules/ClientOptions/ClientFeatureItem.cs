@@ -22,7 +22,7 @@ public class ClientFeatureItem
             var mouseMoveToggle = optionsMenuBehaviour.DisableMouseMovement;
 
             // 1つ目のボタンの生成時に背景も生成
-            if (CustomBackground == null)
+            if (!CustomBackground)
             {
                 numItems = 0;
                 CustomBackground = Object.Instantiate(optionsMenuBehaviour.Background, optionsMenuBehaviour.transform);
@@ -63,11 +63,13 @@ public class ClientFeatureItem
                         returnButton = button.GetComponent<PassiveButton>();
                     }
                 }
+
                 var generalTab = mouseMoveToggle.transform.parent.parent.parent;
 
                 ModOptionsButton = Object.Instantiate(mouseMoveToggle, generalTab);
                 var pos = leaveButton?.transform.localPosition;
-                ModOptionsButton.transform.localPosition = pos != null ? pos.Value - new Vector3(1.3f, 0f, 0f) : new Vector3(-1.3f, -2.4f, 1f);
+                ModOptionsButton.transform.localPosition =
+                    pos != null ? pos.Value - new Vector3(1.3f, 0f, 0f) : new Vector3(-1.3f, -2.4f, 1f);
                 ModOptionsButton.name = "FinalSuspectFeatures Options";
                 ModOptionsButton.Text.text = GetString("FinalSuspectFeatures");
                 ModOptionsButton.Background.color = ColorHelper.ClientFeatureColor;
@@ -78,11 +80,12 @@ public class ClientFeatureItem
                     CustomBackground.gameObject.SetActive(true);
                 }));
 
-                if (leaveButton != null)
+                if (leaveButton)
                 {
                     leaveButton.transform.localPosition = new Vector3(-1.35f, -2.411f, -1f);
                 }
-                if (returnButton != null)
+
+                if (returnButton)
                 {
                     returnButton.transform.localPosition = new Vector3(1.35f, -2.411f, -1f);
                 }
@@ -93,6 +96,7 @@ public class ClientFeatureItem
             ToggleButton.transform.localPosition = new Vector3(
                 // 現在のオプション数を基に位置を計算
                 numItems % 2 == 0 ? -1.3f : 1.3f,
+                // ReSharper disable once PossibleLossOfFraction
                 2.2f - 0.5f * (numItems / 2),
                 -6f);
             ToggleButton.name = name;

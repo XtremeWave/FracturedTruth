@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using FinalSuspect.DataHandling.FinalAntiCheat.Interfaces;
@@ -12,19 +13,20 @@ public static class FAC
 {
     public static int DeNum;
     public static long _lastHandleCheater = -1;
-    private static List<byte> LobbyDeadBodies = [];
     private static readonly List<RpcHandlers> _handlers = [];
 
     static FAC()
     {
-        foreach (var type in Assembly.GetExecutingAssembly().GetTypes().Where(t => typeof(IRpcHandler).IsAssignableFrom(t) && !t.IsAbstract))
+        foreach (var type in Assembly.GetExecutingAssembly().GetTypes()
+                     .Where(t => typeof(IRpcHandler).IsAssignableFrom(t) && !t.IsAbstract))
         {
             var handler = (IRpcHandler)Activator.CreateInstance(type);
+            Debug.Assert(handler != null, nameof(handler) + " != null");
             var rpcTypes = handler.TargetRpcs;
 
             var activehandler = new RpcHandlers(rpcTypes);
             activehandler.Handlers.Add(handler);
-            
+
             _handlers.Add(activehandler);
         }
     }
@@ -32,7 +34,6 @@ public static class FAC
     public static void Init()
     {
         DeNum = 0;
-        LobbyDeadBodies = [];
     }
 
     public static void WarnHost(int denum = 1)
@@ -47,13 +48,14 @@ public static class FAC
             ErrorText.Instance.Clear();
     }
 
-    public static bool ReceiveRpc(PlayerControl pc, byte callId, MessageReader reader, out bool notify, out string reason, out bool ban)
+    public static bool ReceiveRpc(PlayerControl pc, byte callId, MessageReader reader, out bool notify,
+        out string reason, out bool ban)
     {
         notify = true;
         reason = "Hacking";
         ban = false;
 
-        if (Main.DisableFAC.Value || !pc || reader == null || pc.AmOwner) 
+        if (Main.DisableFAC.Value || !pc || reader == null || pc.AmOwner)
             return false;
 
         try
@@ -79,11 +81,13 @@ public static class FAC
                             ban = true;
                             if (reason == "Hacking")
                                 reason = GetString("Unknown");
-                            NotificationPopperPatch.NotificationPop(string.Format(GetString("FAC.CheatDetected.UsingCheat"), pc.GetDataName(), reason));
+                            NotificationPopperPatch.NotificationPop(
+                                string.Format(GetString("FAC.CheatDetected.UsingCheat"), pc.GetDataName(), reason));
                             return true;
                         }
-                        
-                        NotificationPopperPatch.NotificationPop(string.Format(GetString("FAC.CheatDetected.MayUseCheat"), pc.GetDataName(), reason));
+
+                        NotificationPopperPatch.NotificationPop(
+                            string.Format(GetString("FAC.CheatDetected.MayUseCheat"), pc.GetDataName(), reason));
                         return false;
                     }
 
@@ -112,7 +116,7 @@ public static class FAC
         return false;
     }
 
-    public static void HandleCheat(PlayerControl pc, string text) => 
+    public static void HandleCheat(PlayerControl pc, string text) =>
         NotificationPopperPatch.NotificationPop(string.Format(text, pc.GetDataName()));
 
     public static void Dispose(byte id)

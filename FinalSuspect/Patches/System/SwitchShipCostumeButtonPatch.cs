@@ -6,20 +6,22 @@ namespace FinalSuspect.Patches.System;
 [HarmonyPatch]
 public class SwitchShipCostumeButtonPatch
 {
-    public static int Costume;
-    public static GameObject SwitchShipCostumeButton;
+    private static int Costume;
+    private static GameObject SwitchShipCostumeButton;
+
     [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.Awake)), HarmonyPostfix]
     public static void ShipStatusFixedUpdate(ShipStatus __instance)
     {
         var mapId = GameOptionsManager.Instance.CurrentGameOptions.MapId;
         if (mapId != 0)
         {
-            if (SwitchShipCostumeButton != null)
+            if (SwitchShipCostumeButton)
                 Object.Destroy(SwitchShipCostumeButton);
             SwitchShipCostumeButton = null;
             return;
         }
-        if (SwitchShipCostumeButton == null)
+
+        if (!SwitchShipCostumeButton)
         {
             var template = __instance.EmergencyButton.gameObject;
             SwitchShipCostumeButton = Object.Instantiate(template, template.transform.parent);
@@ -32,6 +34,7 @@ public class SwitchShipCostumeButtonPatch
             console.name = "Switch Ship Costume Console";
         }
     }
+
     [HarmonyPatch(typeof(SystemConsole), nameof(SystemConsole.Use)), HarmonyPrefix]
     public static bool UseConsole(SystemConsole __instance)
     {
@@ -42,7 +45,7 @@ public class SwitchShipCostumeButtonPatch
         ShipStatus.Instance.gameObject.transform.FindChild("HelloweenDecorSkeld")?.gameObject.SetActive(Costume == 1);
         ShipStatus.Instance.gameObject.transform.FindChild("BirthdayDecorSkeld")?.gameObject.SetActive(Costume == 2);
         var sounds = Sounds.TaskComplete;
-        if (Costume == 0) sounds = Sounds.KillSound; 
+        if (Costume == 0) sounds = Sounds.KillSound;
         if (Costume == 1) sounds = Sounds.ImpTransform;
         if (Costume == 2) sounds = Sounds.TaskUpdateSound;
         Modules.SoundInterface.SoundManager.PlaySound(PlayerControl.LocalPlayer.PlayerId, sounds);

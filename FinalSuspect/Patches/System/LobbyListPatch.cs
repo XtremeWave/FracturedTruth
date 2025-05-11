@@ -10,18 +10,24 @@ public static class MatchMakerGameButtonSetGamePatch
 {
     public static bool Prefix([HarmonyArgument(0)] GameListing game)
     {
-        var nameList = TranslationController.Instance.currentLanguage.languageID is SupportedLangs.SChinese or SupportedLangs.TChinese ? Main.TName_Snacks_CN : Main.TName_Snacks_EN;
+        var nameList =
+            TranslationController.Instance.currentLanguage.languageID is SupportedLangs.SChinese
+                or SupportedLangs.TChinese
+                ? Main.TName_Snacks_CN
+                : Main.TName_Snacks_EN;
 
         if (game.Language.ToString().Length > 9) return true;
         var str = Math.Abs(game.GameId).ToString();
-        var id = Math.Min(Math.Max(int.Parse(str.Substring(str.Length - 2, 2)), 1) * nameList.Count / 100, nameList.Count);
+        var id = Math.Min(Math.Max(int.Parse(str.Substring(str.Length - 2, 2)), 1) * nameList.Count / 100,
+            nameList.Count);
 
         var color = "#ffffff";
         string RoomName = null;
         var name = "?";
         var LobbyTime = Math.Max(0, game.Age);
         var LobbyTimeDisplayText = GetString("LobbyTimeDisplay");
-        var lobbyTimeDisplay = $"{LobbyTimeDisplayText}:{LobbyTime / 60}:{(LobbyTime % 60 < 10 ? "0" : "")}{LobbyTime % 60}";
+        var lobbyTimeDisplay =
+            $"{LobbyTimeDisplayText}:{LobbyTime / 60}:{(LobbyTime % 60 < 10 ? "0" : "")}{LobbyTime % 60}";
 
         switch (game.Platform)
         {

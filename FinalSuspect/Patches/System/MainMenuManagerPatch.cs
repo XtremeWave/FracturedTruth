@@ -16,7 +16,9 @@ public class MainMenuManagerPatch
     public static MainMenuManager Instance { get; private set; }
 
     public static GameObject InviteButton;
+
     public static GameObject GithubButton;
+
     //public static GameObject WebsiteButton;
     public static GameObject UpdateButton;
     public static GameObject PlayButton;
@@ -54,28 +56,36 @@ public class MainMenuManagerPatch
     private static bool isOnline;
     public static bool ShowedBak;
     public static bool ShowingPanel;
+
     [HarmonyPatch(typeof(SignInStatusComponent), nameof(SignInStatusComponent.SetOnline)), HarmonyPostfix]
-    public static void SetOnline_Postfix() { _ = new LateTask(() => { isOnline = true; }, 0.1f, "Set Online Status"); }
+    public static void SetOnline_Postfix()
+    {
+        _ = new LateTask(() => { isOnline = true; }, 0.1f, "Set Online Status");
+    }
+
     [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.LateUpdate)), HarmonyPostfix]
     public static void MainMenuManager_LateUpdate()
     {
         CustomPopup.Update();
 
-        if (GameObject.Find("MainUI") == null) ShowingPanel = false;
-        VersionShowerStartPatch.CreditTextCredential.gameObject.SetActive(!ShowingPanel && MainMenuButtonHoverAnimation.Active);
+        if (!GameObject.Find("MainUI")) ShowingPanel = false;
+        VersionShowerStartPatch.CreditTextCredential.gameObject.SetActive(!ShowingPanel &&
+                                                                          MainMenuButtonHoverAnimation.Active);
 
-        if (TitleLogoPatch.RightPanel != null)
+        if (TitleLogoPatch.RightPanel)
         {
             var pos1 = TitleLogoPatch.RightPanel.transform.localPosition;
-            var lerp1 = Vector3.Lerp(pos1, TitleLogoPatch.RightPanelOp + new Vector3(ShowingPanel ? 0f : 10f, 0f, 0f), Time.deltaTime * (ShowingPanel ? 3f : 2f));
+            var lerp1 = Vector3.Lerp(pos1, TitleLogoPatch.RightPanelOp + new Vector3(ShowingPanel ? 0f : 10f, 0f, 0f),
+                Time.deltaTime * (ShowingPanel ? 3f : 2f));
             if (ShowingPanel
                     ? TitleLogoPatch.RightPanel.transform.localPosition.x > TitleLogoPatch.RightPanelOp.x + 0.03f
                     : TitleLogoPatch.RightPanel.transform.localPosition.x < TitleLogoPatch.RightPanelOp.x + 9f
                ) TitleLogoPatch.RightPanel.transform.localPosition = lerp1;
         }
+
         if (ShowedBak || !isOnline) return;
         var bak = GameObject.Find("BackgroundTexture");
-        if (bak == null || !bak.active) return;
+        if (!bak || !bak.active) return;
         var pos2 = bak.transform.position;
         var lerp2 = Vector3.Lerp(pos2, new Vector3(pos2.x, 7.1f, pos2.z), Time.deltaTime * 1.4f);
         bak.transform.position = lerp2;
@@ -89,12 +99,13 @@ public class MainMenuManagerPatch
 
         SimpleButton.SetBase(__instance.quitButton);
 
-        var row = 1; var col = 0;
+        var row = 1;
+        var col = 0;
 
         var extraLinkName = IsChineseUser ? "QQ群" : "Discord";
         var extraLinkUrl = IsChineseUser ? Main.QQInviteUrl : Main.DiscordInviteUrl;
 
-        if (InviteButton == null) InviteButton = CreatButton(extraLinkName, () => { Application.OpenURL(extraLinkUrl); });
+        if (!InviteButton) InviteButton = CreatButton(extraLinkName, () => { Application.OpenURL(extraLinkUrl); });
         InviteButton.gameObject.SetActive(true);
         InviteButton.name = "FinalSuspect Extra Link Button";
 
@@ -102,12 +113,12 @@ public class MainMenuManagerPatch
         //WebsiteButton.gameObject.SetActive(true);
         //WebsiteButton.name = "FinalSuspect Website Button";
 
-        if (GithubButton == null) GithubButton = CreatButton("Github", () => Application.OpenURL(Main.GithubRepoUrl));
+        if (!GithubButton) GithubButton = CreatButton("Github", () => Application.OpenURL(Main.GithubRepoUrl));
         GithubButton.gameObject.SetActive(true);
         GithubButton.name = "FinalSuspect Github Button";
         PlayButton = __instance.playButton.gameObject;
 
-        if (UpdateButton == null)
+        if (!UpdateButton)
         {
             UpdateButton = Object.Instantiate(PlayButton, PlayButton.transform.parent);
             UpdateButton.name = "FinalSuspect Update Button";
@@ -120,27 +131,32 @@ public class MainMenuManagerPatch
             {
                 PlayButton.SetActive(true);
                 UpdateButton.SetActive(false);
-                if (!DebugModeManager.AmDebugger || !Input.GetKey(KeyCode.LeftShift))
+                if (DebugModeManager.AmDebugger && Input.GetKey(KeyCode.LeftShift)) return;
+                if (VersionChecker.CanUpdate)
                 {
-                    if (VersionChecker.CanUpdate)
-                    {
-                        ModUpdater.StartUpdate();
-                    }
-                    else
-                    {
-                        CustomPopup.Show(GetString("UpdateBySelfTitle"), GetString("UpdateBySelfText"),
-                            [(GetString(StringNames.Okay), null)]);
-                    }
+                    ModUpdater.StartUpdate();
+                }
+                else
+                {
+                    CustomPopup.Show(GetString("UpdateBySelfTitle"), GetString("UpdateBySelfText"),
+                        [(GetString(StringNames.Okay), null)]);
                 }
             }));
             UpdateButton.transform.transform.FindChild("FontPlacer").GetChild(0).gameObject.DestroyTranslator();
         }
+
         Application.targetFrameRate = Main.UnlockFPS.Value ? 165 : 60;
         return;
 
         GameObject CreatButton(string text, Action action)
         {
-            col++; if (col > 2) { col = 1; row++; }
+            col++;
+            if (col > 2)
+            {
+                col = 1;
+                row++;
+            }
+
             var template = col == 1 ? __instance.creditsButton.gameObject : __instance.quitButton.gameObject;
             var button = Object.Instantiate(template, template.transform.parent);
             button.transform.transform.FindChild("FontPlacer").GetChild(0).gameObject.DestroyTranslator();

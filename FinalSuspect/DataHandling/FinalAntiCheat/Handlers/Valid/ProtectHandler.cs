@@ -12,13 +12,13 @@ public class ProtectHandler : IRpcHandler
         (byte)RpcCalls.ProtectPlayer,
         (byte)RpcCalls.CheckProtect,
     ];
-    
+
     public bool HandleLobby(PlayerControl sender, MessageReader reader,
         ref bool notify, ref string reason, ref bool ban)
     {
         return true;
     }
-    
+
     public bool HandleGame_InMeeting(PlayerControl sender, MessageReader reader,
         ref bool notify, ref string reason, ref bool ban)
     {

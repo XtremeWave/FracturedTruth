@@ -28,9 +28,14 @@ public class MersenneTwister : IRandom
 {
     // 参考元
     public const string REFERENCE_HOMEPAGE = "http://www.math.sci.hiroshima-u.ac.jp/m-mat/MT/mt.html";
-    public const string REFERENCE_SOURCE_CODE = "https://github.com/vpmedia/template-unity/blob/master/Framework/Assets/Frameworks/URandom/MersenneTwister.cs";
 
-    public MersenneTwister() : this((int)DateTime.UtcNow.Ticks) { }
+    public const string REFERENCE_SOURCE_CODE =
+        "https://github.com/vpmedia/template-unity/blob/master/Framework/Assets/Frameworks/URandom/MersenneTwister.cs";
+
+    public MersenneTwister() : this((int)DateTime.UtcNow.Ticks)
+    {
+    }
+
     public MersenneTwister(int seed)
     {
         Init((uint)seed);
@@ -41,6 +46,7 @@ public class MersenneTwister : IRandom
     /// これより下の値の一部は参考元のソースより拝借
     /// </summary>
     private const int N = 624;
+
     private const int M = 397;
     private const uint MatrixA = 0x9908b0df;
     private const uint UpperMask = 0x80000000;

@@ -13,6 +13,7 @@ namespace FinalSuspect.Patches.Game_Vanilla;
 class AmongUsClientEndGamePatch
 {
     public static Dictionary<byte, string> SummaryText = new();
+
     public static void Postfix(AmongUsClient __instance, [HarmonyArgument(0)] ref EndGameResult endGameResult)
     {
         SummaryText = new Dictionary<byte, string>();
@@ -20,6 +21,7 @@ class AmongUsClientEndGamePatch
             SummaryText[data.PlayerId] = SummaryTexts(data.PlayerId);
     }
 }
+
 [HarmonyPatch(typeof(EndGameManager), nameof(EndGameManager.SetEverythingUp))]
 class SetEverythingUpPatch
 {
@@ -40,13 +42,15 @@ class SetEverythingUpPatch
         //          ==勝利陣営表示==
         //#######################################
         var WinnerTextObject = Object.Instantiate(__instance.WinText.gameObject);
-        WinnerTextObject.transform.position = new Vector3(__instance.WinText.transform.position.x, __instance.WinText.transform.position.y - 0.5f, __instance.WinText.transform.position.z);
+        WinnerTextObject.transform.position = new Vector3(__instance.WinText.transform.position.x,
+            __instance.WinText.transform.position.y - 0.5f, __instance.WinText.transform.position.z);
         WinnerTextObject.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
         var WinnerText = WinnerTextObject.GetComponent<TextMeshPro>(); // WinTextと同じ型のコンポーネントを取得
         WinnerText.fontSizeMin = 3f;
 
         var CustomWinnerColor = DidHumansWin ? "#8CFFFF" : "#FF1919";
-        __instance.BackgroundBar.material.color = __instance.WinText.color = WinnerText.color = DidHumansWin ? Palette.CrewmateBlue : Palette.ImpostorRed;
+        __instance.BackgroundBar.material.color = __instance.WinText.color =
+            WinnerText.color = DidHumansWin ? Palette.CrewmateBlue : Palette.ImpostorRed;
         __instance.WinText.text = DidHumansWin ? GetString("CrewmatesWin") : GetString("ImpostorsWin");
         WinnerText.text = DidHumansWin ? GetString("CrewmatesWinBlurb") : GetString("ImpostorsWinBlurb");
 
@@ -54,11 +58,11 @@ class SetEverythingUpPatch
         WinnerTextObject.SetActive(!showInitially);
 
         //ShowResult:
-        showHideButton = 
+        showHideButton =
             new SimpleButton(
                 __instance.transform,
                 "ShowHideResultsButton",
-                new Vector3(-4.5f, 2.6f, -14f),  // 比 BackgroundLayer(z = -13) 更靠前
+                new Vector3(-4.5f, 2.6f, -14f), // 比 BackgroundLayer(z = -13) 更靠前
                 new Color32(209, 190, 0, byte.MaxValue),
                 new Color32(byte.MaxValue, byte.MaxValue, 0, byte.MaxValue),
                 () =>
@@ -78,17 +82,21 @@ class SetEverythingUpPatch
         var lastgameresult = DidHumansWin ? GetString("CrewsWin") : GetString("ImpsWin");
         HudManagerPatch.LastGameResult = lastgameresult;
         StringBuilder sb = new($"{GetString("RoleSummaryText")}{lastgameresult}");
-        var gamecode =  StringHelper.ColorString(
-            ColorHelper.ModColor32, 
-            DataManager.Settings.Gameplay.StreamerMode?  new string('*', HudManagerPatch.LastRoomCode.Length): HudManagerPatch.LastRoomCode);
-        sb.Append("\n"+ HudManagerPatch.LastServer +"  "+gamecode);
+        var gamecode = StringHelper.ColorString(
+            ColorHelper.ModColor32,
+            DataManager.Settings.Gameplay.StreamerMode
+                ? new string('*', HudManagerPatch.LastRoomCode.Length)
+                : HudManagerPatch.LastRoomCode);
+        sb.Append("\n" + HudManagerPatch.LastServer + "  " + gamecode);
         sb.Append("\n" + GetString("HideSummaryTextToShowWinText"));
 
         StringBuilder sb2 = new();
         foreach (var data in XtremePlayerData.AllPlayerData.Where(x => x.IsImpostor != DidHumansWin))
         {
-            sb2.Append($"\n<color={CustomWinnerColor}>★</color> ").Append(AmongUsClientEndGamePatch.SummaryText[data.PlayerId]);
+            sb2.Append($"\n<color={CustomWinnerColor}>★</color> ")
+                .Append(AmongUsClientEndGamePatch.SummaryText[data.PlayerId]);
         }
+
         foreach (var data in XtremePlayerData.AllPlayerData.Where(x => x.IsImpostor == DidHumansWin))
         {
             sb2.Append("\n\u3000 ").Append(AmongUsClientEndGamePatch.SummaryText[data.PlayerId]);
@@ -110,7 +118,7 @@ class SetEverythingUpPatch
         roleSummary.fontStyle = FontStyles.Bold;
         roleSummary.SetOutlineColor(Color.black);
         roleSummary.SetOutlineThickness(0.15f);
- 
+
         XtremePlayerData.DisposeAll();
     }
 }

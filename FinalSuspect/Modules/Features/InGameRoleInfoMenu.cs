@@ -8,7 +8,7 @@ namespace FinalSuspect.Modules.Features;
 
 public static class InGameRoleInfoMenu
 {
-    public static bool Showing => Fill != null && Fill.active && Menu != null && Menu.active;
+    public static bool Showing => Fill && Fill.active && Menu && Menu.active;
 
     public static GameObject Fill;
     public static SpriteRenderer FillSP => Fill.GetComponent<SpriteRenderer>();
@@ -56,7 +56,7 @@ public static class InGameRoleInfoMenu
 
     public static void SetRoleInfoRef(PlayerControl player)
     {
-        if (player == null) return;
+        if (!player) return;
         if (!Fill || !Menu) Init();
         var builder = new StringBuilder(256);
         builder.AppendFormat("<size={0}>\n", BlankLineSize);
@@ -64,7 +64,7 @@ public static class InGameRoleInfoMenu
         var role = player.Data.Role.Role;
         builder.AppendFormat("<size={0}>{1}", FirstHeaderSize, GetRoleName(role).Color(GetRoleColor(role)));
         // 职业阵营 / 原版职业
-        var roleTeam = player.IsImpostor()? "Impostor":"Crewmate";
+        var roleTeam = player.IsImpostor() ? "Impostor" : "Crewmate";
         builder.AppendFormat("<size={0}> ({1})\n", BodySize, GetString($"Type{roleTeam}"));
         builder.AppendFormat("<size={0}>{1}\n", BodySize, player.GetRoleType().GetRoleInfoForVanilla(true) ?? "");
         RoleInfoTMP.text = builder.ToString();
@@ -84,6 +84,7 @@ public static class InGameRoleInfoMenu
         }
         //HudManager.Instance?.gameObject.SetActive(false);
     }
+
     public static void Hide()
     {
         if (Showing)
@@ -93,6 +94,7 @@ public static class InGameRoleInfoMenu
         }
         //HudManager.Instance?.gameObject?.SetActive(true);
     }
+
     public const string FirstHeaderSize = "130%";
     public const string SecondHeaderSize = "100%";
     public const string BodySize = "70%";

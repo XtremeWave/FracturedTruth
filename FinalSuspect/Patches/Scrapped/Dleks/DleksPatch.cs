@@ -141,3 +141,4 @@ class VentUpdateArrowsPatch
         return !XtremeGameData.GameStates.MapIsActive(MapNames.Dleks);
     }
 }*/
+

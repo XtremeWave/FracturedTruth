@@ -11,6 +11,7 @@ public static partial class XtremeGameData
     public static class GameStates
     {
         public static bool InGame { private get; set; }
+
         public static bool OtherModHost
         {
             get
@@ -46,13 +47,15 @@ public static partial class XtremeGameData
                                           GameStartManager.Instance.startState ==
                                           GameStartManager.StartingStates.Countdown;
 
-        public static bool IsShip => ShipStatus.Instance != null;
+        public static bool IsShip => ShipStatus.Instance;
         public static bool IsCanMove => PlayerControl.LocalPlayer?.CanMove is true;
         public static bool IsDead => PlayerControl.LocalPlayer?.Data?.IsDead is true && !IsLobby;
 
-        public static bool IsNormalGame => GameOptionsManager.Instance.CurrentGameOptions.GameMode is GameModes.Normal or GameModes.NormalFools;
+        public static bool IsNormalGame =>
+            GameOptionsManager.Instance.CurrentGameOptions.GameMode is GameModes.Normal or GameModes.NormalFools;
 
-        public static bool IsHideNSeek => GameOptionsManager.Instance.CurrentGameOptions.GameMode is GameModes.HideNSeek or GameModes.SeekFools;
+        public static bool IsHideNSeek =>
+            GameOptionsManager.Instance.CurrentGameOptions.GameMode is GameModes.HideNSeek or GameModes.SeekFools;
 
         public static bool MapIsActive(MapNames name)
         {
@@ -73,14 +76,20 @@ public static partial class XtremeGameData
         }
     }
 
-    public static bool OtherModClient(this PlayerControl player) => OtherModClient(player.PlayerId) || player.Data.OwnerId == -2 && !IsFinalSuspect(player.PlayerId);
-    public static bool OtherModClient(byte id) => PlayerVersion.playerVersion.TryGetValue(id, out var ver) && Main.ForkId != ver.forkId;
+    public static bool OtherModClient(this PlayerControl player) => OtherModClient(player.PlayerId) ||
+                                                                    player.Data.OwnerId == -2 &&
+                                                                    !IsFinalSuspect(player.PlayerId);
+
+    public static bool OtherModClient(byte id) =>
+        PlayerVersion.playerVersion.TryGetValue(id, out var ver) && Main.ForkId != ver.forkId;
 
     public static bool ModClient(this PlayerControl player) => ModClient(player.PlayerId);
     public static bool ModClient(byte id) => PlayerVersion.playerVersion.ContainsKey(id);
-    
-    public static bool IsFinalSuspect(this PlayerControl pc)  => IsFinalSuspect(pc.PlayerId);
-    public static bool IsFinalSuspect(byte id) => PlayerVersion.playerVersion.TryGetValue(id, out var ver) && Main.ForkId == ver.forkId;
+
+    public static bool IsFinalSuspect(this PlayerControl pc) => IsFinalSuspect(pc.PlayerId);
+
+    public static bool IsFinalSuspect(byte id) =>
+        PlayerVersion.playerVersion.TryGetValue(id, out var ver) && Main.ForkId == ver.forkId;
 }
 
 public enum VanillaDeathReason

@@ -6,12 +6,12 @@ namespace FinalSuspect.Patches.System;
 [HarmonyPatch(typeof(RegionMenu))]
 public static class RegionMenuPatch
 {
-    public static Scroller Scroller;
+    private static Scroller Scroller;
 
     [HarmonyPatch(nameof(RegionMenu.Awake)), HarmonyPostfix]
     public static void Awake_Postfix(RegionMenu __instance)
     {
-        if (Scroller != null) return;
+        if (Scroller) return;
 
         var back = __instance.ButtonPool.transform.FindChild("Backdrop");
         back.transform.localScale *= 10f;
@@ -25,6 +25,7 @@ public static class RegionMenuPatch
         Scroller.SetYBoundsMax(4f);
         Scroller.allowY = true;
     }
+
     [HarmonyPatch(nameof(RegionMenu.ChooseOption)), HarmonyPostfix]
     public static void ChooseOption_Postfix()
         => ServerAddManager.SetServerName();

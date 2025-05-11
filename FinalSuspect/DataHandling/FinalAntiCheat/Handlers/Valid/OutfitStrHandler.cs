@@ -15,7 +15,7 @@ public class OutfitStrHandler : IRpcHandler
         (byte)RpcCalls.SetVisorStr,
         (byte)RpcCalls.SetNamePlateStr,
     ];
-    
+
     public bool HandleGame_All(PlayerControl sender, MessageReader reader,
         ref bool notify, ref string reason, ref bool ban)
     {
