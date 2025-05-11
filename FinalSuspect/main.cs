@@ -300,5 +300,5 @@ public enum VersionTypes
     Scrapter,
 
     /// <summary>正式发行版。</summary>
-    Release
+    Release,
 }
