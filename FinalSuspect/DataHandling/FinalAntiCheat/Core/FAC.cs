@@ -18,7 +18,7 @@ public static class FAC
     static FAC()
     {
         foreach (var type in Assembly.GetExecutingAssembly().GetTypes()
-                    .Where(t => typeof(IRpcHandler).IsAssignableFrom(t) && !t.IsAbstract))
+                     .Where(t => typeof(IRpcHandler).IsAssignableFrom(t) && !t.IsAbstract))
         {
             var handler = (IRpcHandler)Activator.CreateInstance(type);
             Debug.Assert(handler != null, nameof(handler) + " != null");
