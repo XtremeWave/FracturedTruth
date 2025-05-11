@@ -64,12 +64,44 @@ class DisconnectInternalPatch
 public class OnPlayerJoinedPatch
 {
     private static readonly Regex ValidFormatRegex = new(
-        @"^[A-Za-z]+#\d{4}$", 
+        @"^[a-z]+#\d{4}$", 
         RegexOptions.Compiled
     );
     public static void Postfix(AmongUsClient __instance, [HarmonyArgument(0)] ClientData client)
     {
         Info($"{client.PlayerName}(ClientID:{client.Id}/FriendCode:{client.FriendCode}) 加入房间", "Session");
+        if (AmongUsClient.Instance.AmHost)
+        {
+            //用于检测是否为xxx#1145/xxx#1337的重复代码前缀
+            //InnerSloth的好友代码不会出现前端重复 如果有前端重复一定是UE或者SM黑客
+            var currentPrefixes = AmongUsClient.Instance.allClients
+                .ToArray()
+                .Where(c => c.Id != client.Id)
+                .Select(c => 
+                {
+                    if (string.IsNullOrEmpty(c.FriendCode)) return null;
+                    var parts = c.FriendCode.Split('#');
+                    return parts.Length > 0 ? parts[0].ToLowerInvariant() : null;
+                })
+                .Where(prefix => !string.IsNullOrEmpty(prefix))
+                .ToHashSet();
+
+            var newPrefixParts = client.FriendCode.Split('#');
+            if (newPrefixParts.Length < 1)
+            {
+                KickPlayer(client.Id, false, "NotLogin");
+                return;
+            }
+
+            var newPrefix = newPrefixParts[0].ToLowerInvariant();
+            if (currentPrefixes.Contains(newPrefix))
+            {
+                KickPlayer(client.Id, false, "NotLogin");
+                NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.KickedByNoFriendCode"), client.PlayerName));
+                Info($"重复好友代码前缀的玩家 {client.PlayerName} 已被踢出", "Kick");
+                return;
+            }
+        }
         if (AmongUsClient.Instance.AmHost && client.FriendCode == "" && Main.KickPlayerWhoFriendCodeNotExist.Value)
         {
             KickPlayer(client.Id, false, "NotLogin");
