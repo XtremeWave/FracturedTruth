@@ -299,6 +299,9 @@ public enum VersionTypes
     /// <summary>废弃版。</summary>
     Scrapter,
 
-    /// <summary>正式发行版。</summary>
+    /// <summary>
+    /// 正式发行版。
+    /// 除此之外若要发行，全部使用OpenBeta。
+    /// </summary>
     Release,
 }
