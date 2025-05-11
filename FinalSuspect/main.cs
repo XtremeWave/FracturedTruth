@@ -49,15 +49,7 @@ public class Main : BasePlugin
     private const string DisplayedVersion_Date = BuildTime.Date;
 
     /// <summary>
-    /// 测试信息；
-    /// 支持的内容：Alpha, Beta, Canary, Dev, RC, Preview, Scrapter
-    /// Alpha: 早期内测版
-    /// Beta: 内测版
-    /// Canary: 测试版(不稳定)
-    /// Dev: 开发版
-    /// RC: 发行候选版Release Candidate
-    /// Preview: 预览/预发行版
-    /// Scrapter: 废弃版
+    /// 表示当前显示的版本类型。
     /// </summary>
     private const VersionTypes DisplayedVersion_Type = VersionTypes.Canary;
 
@@ -281,14 +273,32 @@ public class Main : BasePlugin
     }
 }
 
+/// <summary>
+/// 表示软件版本的不同类型。
+/// </summary>
 public enum VersionTypes
 {
-    Alpha, // 早期内测版
-    Beta, // 内测版
-    Canary, // 测试版(不稳定)
-    Dev, // 开发版
-    RC, // 发行候选版Release Candidate
-    Preview, // 预览/预发行版
-    Scrapter, // 废弃版
-    Release, // 发行版
+    /// <summary>早期内测版。</summary>
+    Alpha,
+
+    /// <summary>内测版。</summary>
+    Beta,
+
+    /// <summary>测试版（不稳定）。</summary>
+    Canary,
+
+    /// <summary>开发版。</summary>
+    Dev,
+
+    /// <summary>发行候选版 (Release Candidate)。</summary>
+    RC,
+
+    /// <summary>预览/预发行版。</summary>
+    Preview,
+
+    /// <summary>废弃版。</summary>
+    Scrapter,
+
+    /// <summary>正式发行版。</summary>
+    Release
 }

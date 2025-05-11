@@ -129,13 +129,6 @@ public class OnPlayerJoinedPatch
             Info($"没有好友代码的玩家 {client.PlayerName} 已被踢出。", "Kick");
         }
 
-        if (client.PlayerName.Contains("1337"))
-        {
-            KickPlayer(client.Id, false, "NotLogin");
-            NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.Cheater"), client.PlayerName));
-            Info($"Kami玩家 {client.PlayerName} 已被踢出。", "Kick");
-        }
-
         BanManager.CheckBanPlayer(client);
         BanManager.CheckDenyNamePlayer(client);
 
