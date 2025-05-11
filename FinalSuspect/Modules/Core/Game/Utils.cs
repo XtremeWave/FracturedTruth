@@ -119,16 +119,14 @@ public static class Utils
         var logs = GetLogFolder();
         var filename = CopyLog(logs.FullName);
         OpenDirectory(filename);
-        if (PlayerControl.LocalPlayer)
-        {
-            var t = DateTime.Now.ToString("yyyy-MM-dd_HH.mm.ss");
-            if (popup)
-                HudManager.Instance.ShowPopUp(string.Format(GetString("Message.DumpfileSaved"),
-                    $"FinalSuspect - v{Main.DisplayedVersion}-{t}.log"));
-            else
-                AddChatMessage(string.Format(GetString("Message.DumpfileSaved"),
-                    $"FinalSuspect - v{Main.DisplayedVersion}-{t}.log"));
-        }
+        if (!PlayerControl.LocalPlayer) return;
+        var t = DateTime.Now.ToString("yyyy-MM-dd_HH.mm.ss");
+        if (popup)
+            HudManager.Instance.ShowPopUp(string.Format(GetString("Message.DumpfileSaved"),
+                $"FinalSuspect - v{Main.DisplayedVersion}-{t}.log"));
+        else
+            AddChatMessage(string.Format(GetString("Message.DumpfileSaved"),
+                $"FinalSuspect - v{Main.DisplayedVersion}-{t}.log"));
     }
 
     public static void ClearAutoLogs()
