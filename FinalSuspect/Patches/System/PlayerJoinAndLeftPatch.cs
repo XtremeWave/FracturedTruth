@@ -66,14 +66,14 @@ class DisconnectInternalPatch
 public class OnPlayerJoinedPatch
 {
     private static readonly Regex ValidFormatRegex = new(
-        @"^[a-z]+#\d{4}$",
+        @"^[a-z]{7,10}#\d{4}$",
         RegexOptions.Compiled
     );
 
     public static void Postfix(AmongUsClient __instance, [HarmonyArgument(0)] ClientData client)
     {
         Info($"{client.PlayerName}(ClientID:{client.Id}/FriendCode:{client.FriendCode}) 加入房间", "Session");
-        if (AmongUsClient.Instance.AmHost)
+        if (AmongUsClient.Instance.AmHost && Main.KickPlayerWhoFriendCodeNotExist.Value)
         {
             //用于检测是否为xxx#1145/xxx#1337的重复代码前缀
             //InnerSloth的好友代码不会出现前端重复 如果有前端重复一定是UE或者SM黑客
