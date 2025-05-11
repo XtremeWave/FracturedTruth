@@ -18,7 +18,8 @@ public static class PathManager
     public static string downloadUrl_gitee =
         "https://gitee.com/LezaiYa/FinalSuspectAssets/releases/download/v{showVer}/FinalSuspect.dll";
 
-    public const string downloadUrl_xtremeapi = "https://api.xtreme.net.cn/FinalSuspect/download/FinalSuspect.dll";
+    public const string downloadUrl_xtremeapi =
+        "https://api.xtreme.net.cn/FinalSuspect/download/FinalSuspect.dll";
 
     public static string GetFile(FileType fileType, RemoteType remoteType, string file)
     {

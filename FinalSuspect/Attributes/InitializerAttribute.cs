@@ -49,8 +49,7 @@ public abstract class InitializerAttribute<T>(InitializePriority priority) : Att
         }
 
         // 将找到的初始化方法按照优先级排序并转换为数组
-        allInitializers = initializers.OrderBy(initializer => initializer.priority)
-            .Select(initializer => initializer.targetMethod).ToArray();
+        allInitializers = [.. initializers.OrderBy(initializer => initializer.priority).Select(initializer => initializer.targetMethod)];
     }
 
     public static void InitializeAll()

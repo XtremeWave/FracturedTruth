@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace FinalSuspect.Modules.Features;
 
-// 来源：https://github.com/tugaru1975/TownOfPlus/TOPmods/Zoom.cs 
+// 来源：https://github.com/tugaru1975/TownOfPlus/TOPmods/Zoom.cs
 // 参考：https://github.com/Yumenopai/TownOfHost_Y
 [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
 public static class Zoom

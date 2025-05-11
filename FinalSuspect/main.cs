@@ -291,5 +291,4 @@ public enum VersionTypes
     Preview, // 预览/预发行版
     Scrapter, // 废弃版
     Release, // 发行版
-    //
 }

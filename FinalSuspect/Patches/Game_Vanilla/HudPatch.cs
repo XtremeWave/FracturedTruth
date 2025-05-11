@@ -357,8 +357,7 @@ public static class HudManagerPatch
             IsInGame ? new Vector3(0.2f, 2.685f, -14f) : new Vector3(-4.5f, 2.6f, -1f);
         if (IsInGame)
             showHideButton.Button.gameObject.SetActive
-            (PlayerControl.LocalPlayer.GetRoleType() is RoleTypes.CrewmateGhost or RoleTypes.ImpostorGhost &&
-             !IsMeeting);
+            (PlayerControl.LocalPlayer.GetRoleType() is RoleTypes.CrewmateGhost or RoleTypes.ImpostorGhost && !IsMeeting);
         else
             showHideButton.Button.gameObject.SetActive(true);
 

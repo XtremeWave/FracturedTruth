@@ -130,7 +130,7 @@ public class VersionShowerStartPatch
                 $"<color={ColorHelper.ModColor}>FS</color> - <color=#C8FF78>v{Main.DisplayedVersion}</color>";
 #elif OPENBETA
             var versionText =
- $"<color={ColorHelper.ModColor}>{Main.GitBranch}</color> - {Main.GitCommit}" + $"<color={ColorHelper.ModColor}>FS</color> - <color=#C8FF78>v{Main.DisplayedVersion}</color>";
+                $"<color={ColorHelper.ModColor}>{Main.GitBranch}</color> - {Main.GitCommit}" + $"<color={ColorHelper.ModColor}>FS</color> - <color=#C8FF78>v{Main.DisplayedVersion}</color>";
 #endif
             credentialsText += versionText;
 

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using AmongUs.GameOptions;
 using FinalSuspect.Attributes;
-using FinalSuspect.DataHandling.FinalAntiCheat;
 using FinalSuspect.DataHandling.FinalAntiCheat.Core;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game;
