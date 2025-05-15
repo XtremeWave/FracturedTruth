@@ -31,14 +31,14 @@ public static class DllChecker
         }
 
         // 基于version注入检测
-        string gameDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location); //byd怎么找不到游戏根目录
+        string rootPath = Environment.CurrentDirectory;
 
         string[] suspiciousFiles = { "SickoMenu.dll", "version.dll" };
 
         // 检查每个文件是否存在非法文件
         foreach (string fileName in suspiciousFiles)
         {
-            string fullPath = Path.Combine(gameDirectory, fileName);
+            string fullPath = Path.Combine(rootPath, fileName);
 
             if (File.Exists(fullPath))
             {
