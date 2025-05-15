@@ -66,4 +66,5 @@
 - 增加对NonalusAntiCheatMenu的RPC检测
 制作: Nonalus
 - 为BetterAmongUs添加了RPC152检测
+- 当目录存在其它模组时，将强制关闭游戏
 制作: LezaiYa
