@@ -10,13 +10,13 @@ public static class DllChecker
     private static void Prefix(MainMenuManager __instance)
     {
         // SM的文件名是写死的
-        string[] suspiciousFiles = { "SickoMenu.dll", "version.dll" };
+        string[] SuspiciousFiles = { "SickoMenu.dll", "version.dll" };
         // 获取当前Dll启动目录
-        string directoryPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        string DirectoryPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         // 获取游戏根目录
-        string rootPath = Environment.CurrentDirectory;
+        string AmongUsPath = Environment.CurrentDirectory;
         // 针对基于BepInEx注入检测
-        foreach (string path in Directory.EnumerateFiles(directoryPath, "*.*"))
+        foreach (string path in Directory.EnumerateFiles(DirectoryPath, "*.*"))
         {
             string fileName = Path.GetFileName(path);
 
@@ -28,9 +28,9 @@ public static class DllChecker
         }
 
         // 针对基于version注入检测
-        foreach (string fileName in suspiciousFiles)
+        foreach (string fileName in SuspiciousFiles)
         {
-            string fullPath = Path.Combine(rootPath, fileName);
+            string fullPath = Path.Combine(AmongUsPath, fileName);
 
             if (File.Exists(fullPath))
             {
