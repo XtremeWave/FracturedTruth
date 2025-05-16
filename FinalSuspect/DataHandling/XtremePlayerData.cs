@@ -20,6 +20,7 @@ public class XtremePlayerData : IDisposable
     public string Name { get; private set; }
     public int ColorId { get; private set; }
     public byte PlayerId { get; private set; }
+    public uint NetId { get; private set; }
 
     public bool IsImpostor { get; private set; }
     public bool IsDead { get; private set; }
@@ -48,6 +49,7 @@ public class XtremePlayerData : IDisposable
         ColorId = colorid;
         CheatData = new PlayerCheatData(player);
         PlayerId = player.PlayerId;
+        NetId = player.NetId;
         IsImpostor = IsDead = RoleAssgined = false;
         CompleteTaskCount = KillCount = TotalTaskCount = 0;
         RealDeathReason = VanillaDeathReason.None;

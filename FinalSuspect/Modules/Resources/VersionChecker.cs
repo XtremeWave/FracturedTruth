@@ -127,6 +127,9 @@ public static class VersionChecker
             }
 
             ModUpdater.SetUpdateButtonStatus();
+            VersionShowerStartPatch.VisitText.text = isChecked
+                ? string.Format(GetString("FinalSuspectWelcomeText"), ColorHelper.ModColor)
+                : GetString("ConnectToFinalSuspectServerFailed");
         }, "Check For Update");
     }
 

@@ -10,6 +10,11 @@ public class MainThreadTask
     private readonly Action action;
     private static readonly List<MainThreadTask> Tasks = [];
 
+    /// <summary>
+    /// 用于异步线程的类型
+    /// </summary>
+    /// <param name="action">需要转到主线程执行的行为</param>
+    /// <param name="name">本次行为名称，会输出日志</param>
     public MainThreadTask(Action action, string name = "No Name Task")
     {
         this.action = action;
@@ -23,8 +28,7 @@ public class MainThreadTask
     public static void Update()
     {
         var TasksToRemove = new List<MainThreadTask>();
-        // 创建原集合的副本用于遍历
-        foreach (var task in Tasks.ToList()) // 关键修复：.ToList() 创建副本
+        foreach (var task in Tasks.ToList())
         {
             try
             {
@@ -41,7 +45,6 @@ public class MainThreadTask
             }
         }
 
-        // 安全移除已处理的任务
         TasksToRemove.ForEach(task => Tasks.Remove(task));
     }
 }

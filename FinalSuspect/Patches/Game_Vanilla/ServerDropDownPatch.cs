@@ -94,8 +94,8 @@ public static class ServerDropDownPatch
         // 仅在搜索界面生效
         if (SceneManager.GetActiveScene().name != "FindAGame") return;
 
-        var buttonSpacing = 0.6f;
-        var columnSpacing = 6f;
+        const float buttonSpacing = 0.6f;
+        const float columnSpacing = 7.2f;
 
         // 按钮按Y轴排序
         List<ServerListButton> allButtons =

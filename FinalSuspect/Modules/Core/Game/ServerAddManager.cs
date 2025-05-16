@@ -9,7 +9,7 @@ namespace FinalSuspect.Modules.Core.Game;
 
 public static class ServerAddManager
 {
-    private static ServerManager serverManager = DestroyableSingleton<ServerManager>.Instance;
+    private static readonly ServerManager serverManager = DestroyableSingleton<ServerManager>.Instance;
 
     [PluginModuleInitializer]
     public static void Init()
@@ -87,7 +87,7 @@ public static class ServerAddManager
         PingTrackerUpdatePatch.ServerName = StringHelper.ColorString(color, name);
     }
 
-    public static Color GetServerColor(string serverName)
+    private static Color GetServerColor(string serverName)
     {
         var color = serverName switch
         {
@@ -112,7 +112,7 @@ public static class ServerAddManager
         return color;
     }
 
-    public static IRegionInfo CreateHttp(string ip, string name, ushort port, bool ishttps)
+    private static IRegionInfo CreateHttp(string ip, string name, ushort port, bool ishttps)
     {
         var serverIp = (ishttps ? "https://" : "http://") + ip;
         var serverInfo = new ServerInfo(name, serverIp, port, false);

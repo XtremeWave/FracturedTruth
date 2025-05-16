@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using AmongUs.GameOptions;
-using FinalSuspect.DataHandling.FinalAntiCheat;
 using FinalSuspect.DataHandling.FinalAntiCheat.Core;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Resources;

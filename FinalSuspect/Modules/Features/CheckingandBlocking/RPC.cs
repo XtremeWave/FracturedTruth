@@ -19,42 +19,44 @@ public enum Sounds
     Yeehawfrom,
 }
 
-[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
-internal class PlayerControlRPCHandlerPatch
+[HarmonyPatch(typeof(InnerNetObject), nameof(InnerNetObject.HandleRpc))]
+internal class RPCHandlerPatch
 {
-    public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)] ref byte callId,
+    public static bool Prefix(InnerNetObject __instance, [HarmonyArgument(0)] ref byte callId,
         [HarmonyArgument(1)] MessageReader reader)
     {
         if (!__instance) return true;
-        if (OnPlayerLeftPatch.ClientsProcessed.Contains(__instance.PlayerId)) return false;
+        var netId = __instance.NetId;
+        var player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => x.NetId == netId)?.Player;
+        if (!player) return true;
+        if (OnPlayerLeftPatch.ClientsProcessed.Contains(player.PlayerId)) return false;
 
-        Info($"{__instance.Data?.PlayerId}" +
-             $"({__instance.Data?.PlayerName})" +
-             $"{(__instance.IsHost() ? "Host" : "")}" +
+        Info($"{player.Data?.PlayerId}" +
+             $"({player.Data?.PlayerName})" +
+             $"{(player.IsHost() ? "Host" : "")}" +
              $":{callId}({RPC.GetRpcName(callId)})",
             "ReceiveRPC");
-
-
-        if (XtremePlayerData.AllPlayerData.Any(data => data.PlayerId == __instance.Data?.PlayerId))
-            if (ReceiveRpc(__instance, callId, reader, out var notify, out var reason, out var ban))
+        
+        if (XtremePlayerData.AllPlayerData.Any(data => data.PlayerId == player.Data?.PlayerId))
+            if (ReceiveRpc(player, callId, reader, out var notify, out var reason, out var ban))
             {
-                if (!__instance.IsLocalPlayer())
+                if (!player.IsLocalPlayer())
                 {
-                    __instance.MarkAsCheater();
+                    player.MarkAsCheater();
                 }
 
                 if (AmongUsClient.Instance.AmHost)
                 {
-                    KickPlayer(__instance.PlayerId, ban, reason);
+                    KickPlayer(player.PlayerId, ban, reason);
                     WarnHost();
                     if (notify)
                         NotificationPopperPatch.NotificationPop
-                        (string.Format(GetString("Warning.InvalidSlothRPC"), __instance.GetRealName(),
+                        (string.Format(GetString("Warning.InvalidSlothRPC"), player.GetRealName(),
                             $"{callId}({RPC.GetRpcName(callId)})"));
                 }
                 else if (notify)
                     NotificationPopperPatch.NotificationPop
-                    (string.Format(GetString("Warning.InvalidSlothRPC_NotHost"), __instance.GetRealName(),
+                    (string.Format(GetString("Warning.InvalidSlothRPC_NotHost"), player.GetRealName(),
                         $"{callId}({RPC.GetRpcName(callId)})"));
 
                 return false;
@@ -69,35 +71,40 @@ internal class PlayerControlRPCHandlerPatch
             case RpcCalls.CheckName: //CheckNameRPC
                 var name = subReader.ReadString();
                 Info("RPC Check Name For Player: " + name, "CheckName");
-                if (__instance.IsHost())
+                if (player.IsHost())
                     Main.HostNickName = name;
-                if (XtremePlayerData.AllPlayerData.All(data => data.PlayerId != __instance.PlayerId))
-                    XtremePlayerData.CreateDataFor(__instance, name);
+                if (XtremePlayerData.AllPlayerData.All(data => data.PlayerId != player.PlayerId))
+                    XtremePlayerData.CreateDataFor(player, name);
                 break;
             case RpcCalls.SetName: //SetNameRPC
                 subReader.ReadUInt32();
                 name = subReader.ReadString();
-                Info("RPC Set Name For Player: " + __instance.GetNameWithRole() + " => " + name, "SetName");
+                Info("RPC Set Name For Player: " + player.GetNameWithRole() + " => " + name, "SetName");
                 break;
             case RpcCalls.SendChat: // Free chat
                 var text = subReader.ReadString();
-                Info($"{__instance.GetNameWithRole().RemoveHtmlTags()}:{text.RemoveHtmlTags()}", "ReceiveChat");
+                Info($"{player.GetNameWithRole().RemoveHtmlTags()}:{text.RemoveHtmlTags()}", "ReceiveChat");
                 break;
             case RpcCalls.SendQuickChat:
-                Info($"{__instance.GetNameWithRole().RemoveHtmlTags()}:Some message from quick chat", "ReceiveChat");
+                Info($"{player.GetNameWithRole().RemoveHtmlTags()}:Some message from quick chat", "ReceiveChat");
                 break;
             case RpcCalls.StartMeeting:
                 var p = GetPlayerById(subReader.ReadByte());
-                Info($"{__instance.GetNameWithRole()} => {p?.GetNameWithRole() ?? "null"}", "StartMeeting");
+                Info($"{player.GetNameWithRole()} => {p?.GetNameWithRole() ?? "null"}", "StartMeeting");
                 break;
         }
 
         return true;
     }
 
-    public static void Postfix(PlayerControl __instance, [HarmonyArgument(0)] byte callId,
+    public static void Postfix(InnerNetObject __instance, [HarmonyArgument(0)] byte callId,
         [HarmonyArgument(1)] MessageReader reader)
     {
+        if (!__instance) return;
+        var netId = __instance.NetId;
+        var player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => x.NetId == netId)?.Player;
+        if (!player) return;
+        
         var rpcType = (RpcCalls)callId;
         switch (rpcType)
         {
@@ -108,14 +115,14 @@ internal class PlayerControlRPCHandlerPatch
                     var tag = reader.ReadString();
                     var forkId = reader.ReadString();
 
-                    XtremeGameData.PlayerVersion.playerVersion[__instance.PlayerId] =
+                    XtremeGameData.PlayerVersion.playerVersion[player.PlayerId] =
                         new XtremeGameData.PlayerVersion(version, tag, forkId);
 
-                    if (!XtremeGameData.PlayerVersion.playerVersion.ContainsKey(__instance.PlayerId))
+                    if (!XtremeGameData.PlayerVersion.playerVersion.ContainsKey(player.PlayerId))
                         RPC.RpcVersionCheck();
 
                     if (Main.VersionCheat.Value && AmongUsClient.Instance.AmHost)
-                        XtremeGameData.PlayerVersion.playerVersion[__instance.PlayerId] =
+                        XtremeGameData.PlayerVersion.playerVersion[player.PlayerId] =
                             XtremeGameData.PlayerVersion.playerVersion[0];
 
                     // Kick Unmached Player Start
@@ -266,14 +273,5 @@ internal class HazelPatch
     public static bool Prefix(MessageReader __instance)
     {
         return __instance.Length > 0;
-    }
-}
-
-[HarmonyPatch(typeof(MessageReader), nameof(MessageReader.ReadUInt16))]
-internal class HazelRBPatch
-{
-    public static bool Prefix(MessageReader __instance)
-    {
-        return true;
     }
 }
