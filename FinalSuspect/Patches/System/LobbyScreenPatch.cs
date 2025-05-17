@@ -1,25 +1,20 @@
-ï»¿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using AmongUs.Data;
 using FinalSuspect.Helpers;
+using HarmonyLib;
 using InnerNet;
 using TMPro;
 using UnityEngine;
 
-namespace FinalSuspect.Patches.System;
+namespace TheOtherRoles.Patches;
 
 [HarmonyPatch]
 public sealed class LobbyJoinBind
 {
     private static int GameId;
-    private static GameObject LastRoomText;
-    private static GameObject CopiedRoomText;
-    private static TextMeshPro lastRoomTextComponent;
-    private static TextMeshPro copiedRoomTextComponent;
 
-    private const float TEXT_SIZE = 1.5f;
-    private const string LAST_ROOM_TEXT_NAME = "LastLobbyCode";
-    private const string COPIED_ROOM_TEXT_NAME = "CopiedLobbyCode";
-    private const string MOD_COLOR = ColorHelper.ModColor;
+    public static GameObject LobbyText;
+    internal static TMP_FontAsset fontAssetPingTracker;
 
     [HarmonyPatch(typeof(InnerNetClient), nameof(InnerNetClient.JoinGame))]
     [HarmonyPostfix]
@@ -28,82 +23,51 @@ public sealed class LobbyJoinBind
         GameId = __instance.GameId;
     }
 
-    [HarmonyPatch(typeof(MMOnlineManager), nameof(MMOnlineManager.Start))]
+    [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
     [HarmonyPostfix]
     public static void Postfix()
     {
-        InitializeTextObject(ref LastRoomText, ref lastRoomTextComponent, LAST_ROOM_TEXT_NAME,
-            new Vector3(9.8f, -3.6f, 0));
-        InitializeTextObject(ref CopiedRoomText, ref copiedRoomTextComponent, COPIED_ROOM_TEXT_NAME,
-            new Vector3(9.8f, -3.8f, 0));
+        if (!LobbyText)
+        {
+            LobbyText = new GameObject("lobbycode");
+            LobbyText.transform.SetParent(GameObject.Find("RightPanel").transform, false);
+            var comp = LobbyText.AddComponent<TextMeshPro>();
+            comp.fontSize = 2.5f;
+            comp.font = fontAssetPingTracker;
+            comp.outlineWidth = -2f;
+            LobbyText.transform.localPosition = new Vector3(6.9f, 0.1f, 0);
+            LobbyText.SetActive(true);
+        }
     }
 
-    private static void InitializeTextObject(ref GameObject gameObject, ref TextMeshPro textComponent, string name,
-        Vector3 position)
-    {
-        if (gameObject) return;
-        gameObject = new GameObject(name);
-        textComponent = gameObject.AddComponent<TextMeshPro>();
-        textComponent.fontSize = TEXT_SIZE;
-        gameObject.transform.localPosition = position;
-        gameObject.SetActive(true);
-    }
-
-    [HarmonyPatch(typeof(MMOnlineManager), nameof(MMOnlineManager.Update))]
+    [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.LateUpdate))]
     [HarmonyPostfix]
-    public static void Postfix(MMOnlineManager __instance)
+    public static void Postfix(MainMenuManager __instance)
     {
-        UpdateGameJoinLogic(__instance);
-        UpdateTextDisplay();
-    }
+        var code2 = GUIUtility.systemCopyBuffer;
 
-    private static void UpdateGameJoinLogic(MMOnlineManager manager)
-    {
+        if (code2.Length != 6 || !Regex.IsMatch(code2, @"^[a-zA-Z]+$"))
+            code2 = "";
+        var code2Disp = DataManager.Settings.Gameplay.StreamerMode ? "****" : code2.ToUpper();
         if (GameId != 0 && Input.GetKeyDown(KeyCode.LeftShift))
+            __instance.StartCoroutine(AmongUsClient.Instance.CoJoinOnlineGameFromCode(GameId));
+        else if (Input.GetKeyDown(KeyCode.RightShift) && code2 != "")
+            __instance.StartCoroutine(AmongUsClient.Instance.CoJoinOnlineGameFromCode(GameCode.GameNameToInt(code2)));
+
+        if (LobbyText)
         {
-            manager.StartCoroutine(AmongUsClient.Instance.CoJoinOnlineGameFromCode(GameId));
-        }
-        else if (Input.GetKeyDown(KeyCode.RightShift))
-        {
-            var copyBuffer = GUIUtility.systemCopyBuffer;
-            if (Regex.IsMatch(copyBuffer, @"^[a-zA-Z]+$"))
+            LobbyText.GetComponent<TextMeshPro>().text = "";
+            if (GameId != 0 && GameId != 32)
             {
-                manager.StartCoroutine(
-                    AmongUsClient.Instance.CoJoinOnlineGameFromCode(GameCode.GameNameToInt(copyBuffer)));
+                var code = GameCode.IntToGameName(GameId);
+                if (code != "")
+                {
+                    code = DataManager.Settings.Gameplay.StreamerMode ? "****" : code;
+                    LobbyText.GetComponent<TextMeshPro>().text = string.Format($"{GetString("LShift")}£º<color={ColorHelper.ModColor}>{code}</color>");
+                }
             }
+
+            if (code2 != "") LobbyText.GetComponent<TextMeshPro>().text += string.Format($"\n{GetString("RShift")}£º<color={ColorHelper.ModColor}> {code2Disp}</color>");
         }
-    }
-
-    private static void UpdateTextDisplay()
-    {
-        if (!lastRoomTextComponent || !copiedRoomTextComponent)
-        {
-            return;
-        }
-
-        var lastCode = GameId != 0 && GameId != 32 ? GameCode.IntToGameName(GameId) : "";
-        var copiedCode = GUIUtility.systemCopyBuffer;
-
-        if (!Regex.IsMatch(copiedCode, @"^[a-zA-Z]+$") || copiedCode.Length > 6)
-        {
-            copiedCode = "";
-        }
-
-        if (DataManager.Settings.Gameplay.StreamerMode)
-        {
-            lastCode = new string('*', lastCode.Length);
-            copiedCode = new string('*', copiedCode.Length);
-        }
-
-        var lastY = copiedCode == "" ? -3.8f : -3.6f;
-        LastRoomText.transform.localPosition = new Vector3(9.8f, lastY, 0);
-        lastCode = string.IsNullOrEmpty(lastCode) ? "" : lastCode.ToUpper();
-        copiedCode = string.IsNullOrEmpty(copiedCode) ? "" : copiedCode.ToUpper();
-
-        lastRoomTextComponent.text =
-            lastCode != "" ? $"        {GetString("LShift")}: <color={MOD_COLOR}>{lastCode}</color>  " : "";
-        copiedRoomTextComponent.text = copiedCode != ""
-            ? $"        {GetString("RShift")}: <color={MOD_COLOR}>{copiedCode}</color>  "
-            : "";
     }
 }

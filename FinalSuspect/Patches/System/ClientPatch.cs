@@ -80,6 +80,7 @@ internal class RunLoginPatch
         // If you wish to make your lobby public in a debug build, please use it only for testing purposes
         // If you modify the code, please indicate in the lobby announcement that this is a modified version and provide the author of the modification
         canOnline = Environment.UserName is "Slok7" or "17921";
+
 #endif
     }
 }
