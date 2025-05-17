@@ -39,8 +39,8 @@ public sealed class LobbyJoinBind
             comp.fontSize = 2.5f;
             comp.font = fontAssetPingTracker;
             comp.outlineWidth = -2f;
-            LobbyText.transform.localPosition = new Vector3(6.9f, 0.1f, 0);
-            if (code2 == "") LobbyText.transform.localPosition = new Vector3(6.9f, -0.15f, 0);
+            LobbyText.transform.localPosition = new Vector3(8f, 0.1f, 0);
+            if (code2 == "") LobbyText.transform.localPosition = new Vector3(8f, -0.15f, 0);
             LobbyText.SetActive(true);
         }
     }
