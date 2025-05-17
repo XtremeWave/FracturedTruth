@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game;
@@ -19,15 +21,19 @@ public enum Sounds
     Yeehawfrom,
 }
 
-[HarmonyPatch(typeof(InnerNetObject), nameof(InnerNetObject.HandleRpc))]
+[HarmonyPatch]
 internal class RPCHandlerPatch
 {
+    public static IEnumerable<MethodBase> TargetMethods()
+    {
+        return (from type in typeof(InnerNetObject).Assembly.GetTypes() where typeof(InnerNetObject).IsAssignableFrom(type) && !type.IsAbstract select type.GetMethod("HandleRpc", BindingFlags.Public | BindingFlags.Instance) into method where method != null && method.GetBaseDefinition() != method select method).Cast<MethodBase>();
+    }
+    
     public static bool Prefix(InnerNetObject __instance, [HarmonyArgument(0)] ref byte callId,
         [HarmonyArgument(1)] MessageReader reader)
     {
         if (!__instance) return true;
-        var netId = __instance.NetId;
-        var player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => x.NetId == netId)?.Player;
+        var player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => __instance.OwnerId == x.Player.OwnerId)?.Player;
         if (!player) return true;
         if (OnPlayerLeftPatch.ClientsProcessed.Contains(player.PlayerId)) return false;
 
@@ -101,6 +107,7 @@ internal class RPCHandlerPatch
         [HarmonyArgument(1)] MessageReader reader)
     {
         if (!__instance) return;
+        // 仅通过PlayerControl发送
         var netId = __instance.NetId;
         var player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => x.NetId == netId)?.Player;
         if (!player) return;

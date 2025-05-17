@@ -24,7 +24,7 @@ public class PlayerCheatData
 
     public void MarkAsCheater() => IsSuspectCheater = true;
 
-    public void HandleLobbyPosition()
+    private void HandleLobbyPosition()
     {
         if (!IsLobby) return;
         var pos = _player.GetTruePosition();
@@ -32,13 +32,13 @@ public class PlayerCheatData
             MarkAsCheater();
     }
 
-    public void HandleBan()
+    private void HandleBan()
     {
         if (ClientData.IsFACPlayer() || ClientData.IsBannedPlayer())
             MarkAsCheater();
     }
 
-    public void HandleSuspectCheater()
+    private void HandleSuspectCheater()
     {
         if (Main.DisableFAC.Value || !IsSuspectCheater ||
             _lastHandleCheater != -1 && _lastHandleCheater + 1 >= GetTimeStamp()) return;
