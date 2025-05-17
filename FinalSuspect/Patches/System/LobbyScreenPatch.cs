@@ -26,6 +26,11 @@ public sealed class LobbyJoinBind
     [HarmonyPostfix]
     public static void Postfix()
     {
+        var code2 = GUIUtility.systemCopyBuffer;
+
+        if (code2.Length != 6 || !Regex.IsMatch(code2, @"^[a-zA-Z]+$"))
+            code2 = "";
+
         if (!LobbyText)
         {
             LobbyText = new GameObject("lobbycode");
@@ -35,6 +40,7 @@ public sealed class LobbyJoinBind
             comp.font = fontAssetPingTracker;
             comp.outlineWidth = -2f;
             LobbyText.transform.localPosition = new Vector3(6.9f, 0.1f, 0);
+            if (code2 == "") LobbyText.transform.localPosition = new Vector3(6.9f, -0.15f, 0);
             LobbyText.SetActive(true);
         }
     }
