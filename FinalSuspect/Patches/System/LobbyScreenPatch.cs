@@ -66,7 +66,7 @@ public sealed class LobbyJoinBind
                 }
             }
 
-            if (code2 != "") LobbyText.GetComponent<TextMeshPro>().text += string.Format($"\n{GetString("RShift")}£º<color={ColorHelper.ModColor}> {code2Disp}</color>");
+            if (code2 != "") LobbyText.GetComponent<TextMeshPro>().text += string.Format($"\n{GetString("RShift")}£º<color={ColorHelper.ModColor}>{code2Disp}</color>");
         }
     }
 }
