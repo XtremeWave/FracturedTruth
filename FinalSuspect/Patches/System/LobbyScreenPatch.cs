@@ -1,12 +1,11 @@
 using System.Text.RegularExpressions;
 using AmongUs.Data;
 using FinalSuspect.Helpers;
-using HarmonyLib;
 using InnerNet;
 using TMPro;
 using UnityEngine;
 
-namespace TheOtherRoles.Patches;
+namespace FinalSuspect.Patches.System;
 
 [HarmonyPatch]
 public sealed class LobbyJoinBind
