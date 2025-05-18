@@ -5,13 +5,14 @@ using InnerNet;
 using TMPro;
 using UnityEngine;
 
+
 namespace FinalSuspect.Patches.System;
 
 [HarmonyPatch]
 public sealed class LobbyJoinBind
 {
     private static int GameId;
-
+    public static Color Color = ColorHelper.LoadCompleteGreen;
     public static GameObject LobbyText;
     internal static TMP_FontAsset fontAssetPingTracker;
 
@@ -39,8 +40,8 @@ public sealed class LobbyJoinBind
             comp.fontSize = 2.5f;
             comp.font = fontAssetPingTracker;
             comp.outlineWidth = -2f;
-            LobbyText.transform.localPosition = new Vector3(8f, 0.1f, 0);
-            if (code2 == "") LobbyText.transform.localPosition = new Vector3(8f, -0.15f, 0);
+            float lastY = code2 == "" ? -0.15f : 0.1f;
+            LobbyText.transform.localPosition = new Vector3(8f, lastY, 0);
             LobbyText.SetActive(true);
         }
     }
@@ -51,13 +52,21 @@ public sealed class LobbyJoinBind
     {
         var code2 = GUIUtility.systemCopyBuffer;
 
-        if (code2.Length != 6 || !Regex.IsMatch(code2, @"^[a-zA-Z]+$"))
+        if (code2.Length != 6  || !Regex.IsMatch(code2, @"^[a-zA-Z]+$"))
             code2 = "";
-        var code2Disp = DataManager.Settings.Gameplay.StreamerMode ? "****" : code2.ToUpper();
+        var code2Disp = DataManager.Settings.Gameplay.StreamerMode ? new string('*', code2.Length) : code2.ToUpper();
         if (GameId != 0 && Input.GetKeyDown(KeyCode.LeftShift))
+        {
             __instance.StartCoroutine(AmongUsClient.Instance.CoJoinOnlineGameFromCode(GameId));
+            LobbyText.GetComponent<TextMeshPro>().color = Color.AlphaMultiplied(0.75f);
+        }
+
         else if (Input.GetKeyDown(KeyCode.RightShift) && code2 != "")
+        {
             __instance.StartCoroutine(AmongUsClient.Instance.CoJoinOnlineGameFromCode(GameCode.GameNameToInt(code2)));
+            LobbyText.GetComponent<TextMeshPro>().color = Color.AlphaMultiplied(0.75f);
+        }
+            
 
         if (LobbyText)
         {
@@ -67,7 +76,7 @@ public sealed class LobbyJoinBind
                 var code = GameCode.IntToGameName(GameId);
                 if (code != "")
                 {
-                    code = DataManager.Settings.Gameplay.StreamerMode ? "****" : code;
+                    code = DataManager.Settings.Gameplay.StreamerMode ? new string('*', code.Length) : code;
                     LobbyText.GetComponent<TextMeshPro>().text = string.Format($"{GetString("LShift")}£º<color={ColorHelper.ModColor}>{code}</color>");
                 }
             }
