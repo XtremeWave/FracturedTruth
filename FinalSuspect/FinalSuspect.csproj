@@ -59,6 +59,6 @@
     </Target>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-        <Exec Command="set &quot;sourcePath=..\Export\$(ConfigurationName)\net6.0\FinalSuspect.dll&quot;&#xA;&#xA;if exist &quot;%sourcePath%&quot; (&#xA;    if not exist &quot;D:\SteamLibrary\steamapps\common\Among Us\BepInEx\plugins\&quot; mkdir &quot;D:\SteamLibrary\steamapps\common\Among Us\BepInEx\plugins\&quot;&#xA;    copy &quot;%sourcePath%&quot; &quot;D:\SteamLibrary\steamapps\common\Among Us\BepInEx\plugins\FinalSuspect.dll&quot;&#xA;) else (&#xA;    echo Source file not found: %sourcePath%&#xA;)"/>
+		<Exec Command="set &quot;sourcePath=..\Export\$(ConfigurationName)\net6.0\FinalSuspect.dll&quot;&#xA;&#xA;if exist &quot;%sourcePath%&quot; (&#xA;    if not exist &quot;D:\SteamLibrary\steamapps\common\Among Us\BepInEx\plugins\&quot; mkdir &quot;D:\SteamLibrary\steamapps\common\Among Us\BepInEx\plugins\&quot;&#xA;    copy &quot;%sourcePath%&quot; &quot;D:\SteamLibrary\steamapps\common\Among Us\BepInEx\plugins\FinalSuspect.dll&quot;&#xA;) else (&#xA;    echo Source file not found: %sourcePath%&#xA;)"/>
     </Target>
 </Project>
