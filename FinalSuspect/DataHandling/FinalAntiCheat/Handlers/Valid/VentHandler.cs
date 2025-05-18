@@ -18,6 +18,6 @@ public class VentHandler : IRpcHandler
     public bool HandleAll(PlayerControl sender, MessageReader reader,
         ref bool notify, ref string reason, ref bool ban)
     {
-        return !sender.IsImpostor() && sender.GetRoleType() != RoleTypes.Engineer;
+        return !sender.IsImpostor() && sender.GetRoleType() is not RoleTypes.Engineer and not RoleTypes.CrewmateGhost and not RoleTypes.GuardianAngel;
     }
 }

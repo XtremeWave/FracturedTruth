@@ -10,9 +10,10 @@ namespace FinalSuspect.DataHandling.FinalAntiCheat.Core;
 public class PlayerCheatData
 {
     public bool IsSuspectCheater { get; private set; }
-    public ClientData ClientData { get; }
+    public ClientData ClientData { get; set; }
     public string FriendCode => ClientData.FriendCode;
     public string Puid => ClientData.GetHashedPuid();
+    public bool InComingOverloaded { get; private set; }
 
     private readonly PlayerControl _player;
 
@@ -22,7 +23,16 @@ public class PlayerCheatData
         ClientData = _player.GetClient();
     }
 
-    public void MarkAsCheater() => IsSuspectCheater = true;
+    public void MarkAsCheater()
+    {
+        if (IsSuspectCheater) return;
+        IsSuspectCheater = true;
+        Warn($"Suspect Cheater: {_player.GetXtremeData().Name}," +
+             $"FriendCode: {FriendCode}," +
+             $"Puid: {Puid},",
+            "FAC");
+    }
+        
 
     private void HandleLobbyPosition()
     {
@@ -65,6 +75,7 @@ public class PlayerCheatData
 
     public bool HandleIncomingRpc(byte rpcId)
     {
+        if (InComingOverloaded) return true;
         var currentTime = GetCurrentTimestamp();
 
         if (_rpcRecords.TryGetValue(rpcId, out var record))
@@ -80,10 +91,12 @@ public class PlayerCheatData
             {
                 record.Count++;
 
-                if (record.Count > 10)
+                if (record.Count > 20)
                 {
                     MarkAsCheater();
                     record.Count = 0;
+                    InComingOverloaded = true;
+                    Warn($"InComingRpc Overloaded: {_player.GetDataName()}", "FAC");
                     return true;
                 }
             }
@@ -111,6 +124,7 @@ public class PlayerCheatData
     {
         try
         {
+            ClientData ??= _player.GetClient();
             HandleBan();
             HandleLobbyPosition();
             HandleSuspectCheater();

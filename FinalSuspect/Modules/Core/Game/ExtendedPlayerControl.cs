@@ -6,14 +6,14 @@ using UnityEngine;
 
 namespace FinalSuspect.Modules.Core.Game;
 
-static class ExtendedPlayerControl
+internal static class ExtendedPlayerControl
 {
     public static ClientData GetClient(this PlayerControl player)
     {
         try
         {
-            var client = AmongUsClient.Instance.allClients.ToArray()
-                .Where(cd => cd.Character.PlayerId == player.PlayerId).FirstOrDefault();
+            var client = AmongUsClient.Instance.allClients
+                .ToArray().FirstOrDefault(cd => cd.Character.PlayerId == player.PlayerId);
             return client;
         }
         catch

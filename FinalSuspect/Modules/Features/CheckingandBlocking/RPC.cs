@@ -26,88 +26,152 @@ internal class RPCHandlerPatch
 {
     public static IEnumerable<MethodBase> TargetMethods()
     {
-        return (from type in typeof(InnerNetObject).Assembly.GetTypes() where typeof(InnerNetObject).IsAssignableFrom(type) && !type.IsAbstract select type.GetMethod("HandleRpc", BindingFlags.Public | BindingFlags.Instance) into method where method != null && method.GetBaseDefinition() != method select method).Cast<MethodBase>();
+        return (from type in typeof(InnerNetObject).Assembly.GetTypes() where typeof(InnerNetObject).IsAssignableFrom(type) && !type.IsAbstract select type.GetMethod("HandleRpc", BindingFlags.Public | BindingFlags.Instance) into method where method != null && method.GetBaseDefinition() != method select method);
     }
     
-    public static bool Prefix(InnerNetObject __instance, [HarmonyArgument(0)] ref byte callId,
-        [HarmonyArgument(1)] MessageReader reader)
+    public static bool Prefix(InnerNetObject __instance, [HarmonyArgument(0)] ref byte callId, [HarmonyArgument(1)] MessageReader reader)
     {
         if (!__instance) return true;
-        var player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => __instance.OwnerId == x.Player.OwnerId)?.Player;
+
+        var player = GetPlayerFromInstance(__instance, reader);
+        if (player?.GetCheatData()?.InComingOverloaded != true)
+        {
+            var cd = player?.GetCheatData();
+            Info(player && player.Data
+                ? $"{player.Data.PlayerId}(" +
+                  $"Name: {player.Data.PlayerName}," +
+                  $"FriendCode: {cd?.FriendCode}," +
+                  $"Puid: {cd?.Puid}," +
+                  $")" +
+                  $"{(player.IsHost() ? "Host" : "")}:{callId}({RPC.GetRpcName(callId)})"
+                : $"Call from {__instance.name}:{callId}({RPC.GetRpcName(callId)})", "ReceiveRPC");
+        }
+        
         if (!player) return true;
+
         if (OnPlayerLeftPatch.ClientsProcessed.Contains(player.PlayerId)) return false;
 
-        Info($"{player.Data?.PlayerId}" +
-             $"({player.Data?.PlayerName})" +
-             $"{(player.IsHost() ? "Host" : "")}" +
-             $":{callId}({RPC.GetRpcName(callId)})",
-            "ReceiveRPC");
-        
-        if (XtremePlayerData.AllPlayerData.Any(data => data.PlayerId == player.Data?.PlayerId))
-            if (ReceiveRpc(player, callId, reader, out var notify, out var reason, out var ban))
-            {
-                if (!player.IsLocalPlayer())
-                {
-                    player.MarkAsCheater();
-                }
+        HandleCheatDetection(player, callId, reader);
 
-                if (AmongUsClient.Instance.AmHost)
-                {
-                    KickPlayer(player.PlayerId, ban, reason);
-                    WarnHost();
-                    if (notify)
-                        NotificationPopperPatch.NotificationPop
-                        (string.Format(GetString("Warning.InvalidSlothRPC"), player.GetRealName(),
-                            $"{callId}({RPC.GetRpcName(callId)})"));
-                }
-                else if (notify)
-                    NotificationPopperPatch.NotificationPop
-                    (string.Format(GetString("Warning.InvalidSlothRPC_NotHost"), player.GetRealName(),
-                        $"{callId}({RPC.GetRpcName(callId)})"));
-
-                return false;
-            }
-
-        var subReader = MessageReader.Get(reader);
         var rpcType = (RpcCalls)callId;
+        ProcessRpc(rpcType, player, reader);
 
+        return true;
+    }
+    
+    private static PlayerControl GetPlayerFromInstance(InnerNetObject instance, MessageReader reader)
+    {
+        var player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => instance.OwnerId == x.Player.OwnerId)?.Player;
+        if (player) return player;
+
+        try
+        {
+            var sr = MessageReader.Get(reader);
+            player = sr.ReadNetObject<PlayerControl>();
+        }
+        catch
+        {
+            /* ignored */
+        }
+
+        return player;
+    }
+    
+    private static void HandleCheatDetection(PlayerControl player, byte callId, MessageReader reader)
+    {
+        if (XtremePlayerData.AllPlayerData.All(data => data.PlayerId != player.Data?.PlayerId)) return;
+        if (!ReceiveRpc(player, callId, reader, out var notify, out var reason, out var ban)) return;
+        HandleCheater(player, notify, reason, ban, callId);
+    }
+    
+    private static void HandleCheater(PlayerControl player, bool notify, string reason, bool ban, byte callId)
+    {
+        if (!player.IsLocalPlayer())
+        {
+            player.MarkAsCheater();
+        }
+
+        if (AmongUsClient.Instance.AmHost)
+        {
+            KickPlayer(player.PlayerId, ban, reason);
+            WarnHost();
+            if (notify)
+            {
+                NotificationPopperPatch.NotificationPop(
+                    string.Format(GetString("Warning.InvalidSlothRPC"), player.GetRealName(), $"{callId}({RPC.GetRpcName(callId)})"));
+            }
+        }
+        else if (notify)
+        {
+            NotificationPopperPatch.NotificationPop(
+                string.Format(GetString("Warning.InvalidSlothRPC_NotHost"), player.GetRealName(), $"{callId}({RPC.GetRpcName(callId)})"));
+        }
+    }
+
+    // 处理RPC调用的逻辑
+    private static void ProcessRpc(RpcCalls rpcType, PlayerControl player, MessageReader reader)
+    {
+        var subReader = MessageReader.Get(reader);
 
         switch (rpcType)
         {
-            case RpcCalls.CheckName: //CheckNameRPC
-                var name = subReader.ReadString();
-                Info("RPC Check Name For Player: " + name, "CheckName");
-                if (player.IsHost())
-                    Main.HostNickName = name;
-                if (XtremePlayerData.AllPlayerData.All(data => data.PlayerId != player.PlayerId))
-                    XtremePlayerData.CreateDataFor(player, name);
+            case RpcCalls.CheckName:
+                HandleCheckNameRpc(player, subReader);
                 break;
-            case RpcCalls.SetName: //SetNameRPC
-                subReader.ReadUInt32();
-                name = subReader.ReadString();
-                Info("RPC Set Name For Player: " + player.GetNameWithRole() + " => " + name, "SetName");
+            case RpcCalls.SetName:
+                HandleSetNameRpc(player, subReader);
                 break;
-            case RpcCalls.SendChat: // Free chat
-                var text = subReader.ReadString();
-                Info($"{player.GetNameWithRole().RemoveHtmlTags()}:{text.RemoveHtmlTags()}", "ReceiveChat");
+            case RpcCalls.SendChat:
+                HandleSendChatRpc(player, subReader);
                 break;
             case RpcCalls.SendQuickChat:
-                Info($"{player.GetNameWithRole().RemoveHtmlTags()}:Some message from quick chat", "ReceiveChat");
+                HandleSendQuickChatRpc(player);
                 break;
             case RpcCalls.StartMeeting:
-                var p = GetPlayerById(subReader.ReadByte());
-                Info($"{player.GetNameWithRole()} => {p?.GetNameWithRole() ?? "null"}", "StartMeeting");
+                HandleStartMeetingRpc(player, subReader);
                 break;
         }
+    }
+    
+    private static void HandleCheckNameRpc(PlayerControl player, MessageReader reader)
+    {
+        var name = reader.ReadString();
+        Info("RPC Check Name For Player: " + name, "CheckName");
+        if (player.IsHost())
+            Main.HostNickName = name;
+        if (XtremePlayerData.AllPlayerData.All(data => data.PlayerId != player.PlayerId))
+            XtremePlayerData.CreateDataFor(player, name);
+    }
 
-        return true;
+    private static void HandleSetNameRpc(PlayerControl player, MessageReader reader)
+    {
+        reader.ReadUInt32();
+        var name = reader.ReadString();
+        Info("RPC Set Name For Player: " + player.GetNameWithRole() + " => " + name, "SetName");
+    }
+
+    private static void HandleSendChatRpc(PlayerControl player, MessageReader reader)
+    {
+        var text = reader.ReadString();
+        Info($"{player.GetNameWithRole().RemoveHtmlTags()}:{text.RemoveHtmlTags()}", "ReceiveChat");
+    }
+
+    private static void HandleSendQuickChatRpc(PlayerControl player)
+    {
+        Info($"{player.GetNameWithRole().RemoveHtmlTags()}:Some message from quick chat", "ReceiveChat");
+    }
+
+    private static void HandleStartMeetingRpc(PlayerControl player, MessageReader reader)
+    {
+        var p = GetPlayerById(reader.ReadByte());
+        Info($"{player.GetNameWithRole()} => {p?.GetNameWithRole() ?? "null"}", "StartMeeting");
     }
 
     public static void Postfix(InnerNetObject __instance, [HarmonyArgument(0)] byte callId,
         [HarmonyArgument(1)] MessageReader reader)
     {
         if (!__instance) return;
-        // 仅通过PlayerControl发送
+
         var netId = __instance.NetId;
         var player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => x.NetId == netId)?.Player;
         if (!player) return;
@@ -158,46 +222,6 @@ internal class RPCHandlerPatch
     }
 }
 
-[HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.HandleRpc))]
-internal class PlayerPhysicsRPCHandlerPatch
-{
-    public static bool Prefix(PlayerPhysics __instance, [HarmonyArgument(0)] ref byte callId,
-        [HarmonyArgument(1)] MessageReader reader)
-    {
-        if (!__instance) return true;
-        var player = __instance.myPlayer;
-        if (OnPlayerLeftPatch.ClientsProcessed.Contains(player.PlayerId)) return false;
-        //Info($"{player.Data?.PlayerId}" +
-        //     $"({player.Data?.PlayerName})" +
-        //     $"{(player.IsHost() ? "Host" : "")}" +
-        //     $":{callId}({RPC.GetRpcName(callId)})",
-        //    "ReceiveRPC");
-
-        if (XtremePlayerData.AllPlayerData.All(data => data.PlayerId != player.Data?.PlayerId)) return true;
-        if (!ReceiveRpc(player, callId, reader, out var notify, out var reason, out var ban)) return true;
-        if (!player.IsLocalPlayer())
-        {
-            player.MarkAsCheater();
-        }
-
-        if (AmongUsClient.Instance.AmHost)
-        {
-            KickPlayer(player.PlayerId, ban, reason);
-            WarnHost();
-            if (notify)
-                NotificationPopperPatch.NotificationPop
-                (string.Format(GetString("Warning.InvalidSlothRPC"), player.GetRealName(),
-                    $"{callId}({RPC.GetRpcName(callId)})"));
-        }
-        else if (notify)
-            NotificationPopperPatch.NotificationPop
-            (string.Format(GetString("Warning.InvalidSlothRPC_NotHost"), player.GetRealName(),
-                $"{callId}({RPC.GetRpcName(callId)})"));
-
-        return false;
-    }
-}
-
 internal static class RPC
 {
     public static async void RpcVersionCheck()
@@ -240,8 +264,7 @@ internal static class RPC
             /* ignored */
         }
 
-        Info($"FromNetID:{targetNetId}({from}) TargetClientID:{targetClientId}({target}) CallID:{callId}({rpcName})",
-            "SendRPC");
+        Info($"FromNetID:{targetNetId}({from}) TargetClientID:{targetClientId}({target}) CallID:{callId}({rpcName})", "SendRPC");
     }
 
     public static string GetRpcName(byte callId)
