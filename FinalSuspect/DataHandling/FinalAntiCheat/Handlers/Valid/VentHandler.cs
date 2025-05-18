@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using AmongUs.GameOptions;
 using FinalSuspect.DataHandling.FinalAntiCheat.Interfaces;
-using FinalSuspect.Modules.Core.Game;
 using Hazel;
 
 namespace FinalSuspect.DataHandling.FinalAntiCheat.Handlers.Valid;
@@ -15,9 +13,10 @@ public class VentHandler : IRpcHandler
         (byte)RpcCalls.ExitVent,
     ];
 
-    public bool HandleAll(PlayerControl sender, MessageReader reader,
+//检测所有会因为树懒的延迟刀出现管道杀而被FS误判
+    public bool HandleLobby(PlayerControl sender, MessageReader reader,
         ref bool notify, ref string reason, ref bool ban)
     {
-        return !sender.IsImpostor() && sender.GetRoleType() != RoleTypes.Engineer;
+        return true;
     }
 }
