@@ -26,9 +26,9 @@ internal class RPCHandlerPatch
 {
     public static IEnumerable<MethodBase> TargetMethods()
     {
-        return (from type in typeof(InnerNetObject).Assembly.GetTypes() where typeof(InnerNetObject).IsAssignableFrom(type) && !type.IsAbstract select type.GetMethod("HandleRpc", BindingFlags.Public | BindingFlags.Instance) into method where method != null && method.GetBaseDefinition() != method select method);
+        return from type in typeof(InnerNetObject).Assembly.GetTypes() where typeof(InnerNetObject).IsAssignableFrom(type) && !type.IsAbstract select type.GetMethod("HandleRpc", BindingFlags.Public | BindingFlags.Instance) into method where method != null && method.GetBaseDefinition() != method select method;
     }
-    
+
     public static bool Prefix(InnerNetObject __instance, [HarmonyArgument(0)] ref byte callId, [HarmonyArgument(1)] MessageReader reader)
     {
         if (!__instance) return true;
@@ -46,7 +46,7 @@ internal class RPCHandlerPatch
                   $"{(player.IsHost() ? "Host" : "")}:{callId}({RPC.GetRpcName(callId)})"
                 : $"Call from {__instance.name}:{callId}({RPC.GetRpcName(callId)})", "ReceiveRPC");
         }
-        
+
         if (!player) return true;
 
         if (OnPlayerLeftPatch.ClientsProcessed.Contains(player.PlayerId)) return false;
@@ -58,7 +58,7 @@ internal class RPCHandlerPatch
 
         return true;
     }
-    
+
     private static PlayerControl GetPlayerFromInstance(InnerNetObject instance, MessageReader reader)
     {
         var player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => instance.OwnerId == x.Player.OwnerId)?.Player;
@@ -76,14 +76,14 @@ internal class RPCHandlerPatch
 
         return player;
     }
-    
+
     private static void HandleCheatDetection(PlayerControl player, byte callId, MessageReader reader)
     {
         if (XtremePlayerData.AllPlayerData.All(data => data.PlayerId != player.Data?.PlayerId)) return;
         if (!ReceiveRpc(player, callId, reader, out var notify, out var reason, out var ban)) return;
         HandleCheater(player, notify, reason, ban, callId);
     }
-    
+
     private static void HandleCheater(PlayerControl player, bool notify, string reason, bool ban, byte callId)
     {
         if (!player.IsLocalPlayer())
@@ -132,7 +132,7 @@ internal class RPCHandlerPatch
                 break;
         }
     }
-    
+
     private static void HandleCheckNameRpc(PlayerControl player, MessageReader reader)
     {
         var name = reader.ReadString();
@@ -175,7 +175,7 @@ internal class RPCHandlerPatch
         var netId = __instance.NetId;
         var player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => x.NetId == netId)?.Player;
         if (!player) return;
-        
+
         var rpcType = (RpcCalls)callId;
         switch (rpcType)
         {

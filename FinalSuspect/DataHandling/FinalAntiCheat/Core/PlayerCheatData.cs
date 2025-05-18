@@ -32,7 +32,6 @@ public class PlayerCheatData
              $"Puid: {Puid},",
             "FAC");
     }
-        
 
     private void HandleLobbyPosition()
     {
