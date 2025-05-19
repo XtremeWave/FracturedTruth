@@ -13,7 +13,6 @@ public sealed class LobbyJoinBind
     private static int GameId;
     public static Color Color = ColorHelper.LoadCompleteGreen;
     public static GameObject LobbyText;
-    internal static TMP_FontAsset fontAssetPingTracker;
 
     [HarmonyPatch(typeof(InnerNetClient), nameof(InnerNetClient.JoinGame))]
     [HarmonyPostfix]
@@ -37,7 +36,6 @@ public sealed class LobbyJoinBind
             LobbyText.transform.SetParent(GameObject.Find("RightPanel").transform, false);
             var comp = LobbyText.AddComponent<TextMeshPro>();
             comp.fontSize = 2.5f;
-            comp.font = fontAssetPingTracker;
             comp.outlineWidth = -2f;
             float lastY = code2 == "" ? -0.15f : 0.1f;
             LobbyText.transform.localPosition = new Vector3(8f, lastY, 0);
