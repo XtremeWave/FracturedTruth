@@ -231,7 +231,7 @@ internal static class RPC
             while (!PlayerControl.LocalPlayer) await Task.Delay(500);
             if (!Main.VersionCheat.Value)
             {
-                var writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)RpcCalls.CancelPet);
+                var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)RpcCalls.CancelPet, SendOption.None);
                 writer.Write(Main.PluginVersion);
                 writer.Write($"{Main.GitCommit}({Main.GitBranch})");
                 writer.Write(Main.ForkId);
@@ -273,15 +273,6 @@ internal static class RPC
         if ((rpcName = Enum.GetName(typeof(RpcCalls), callId)) == null)
             rpcName = callId + " 无效";
         return rpcName;
-    }
-}
-
-[HarmonyPatch(typeof(InnerNetClient), nameof(InnerNetClient.StartRpc))]
-internal class StartRpcPatch
-{
-    public static void Prefix([HarmonyArgument(0)] uint targetNetId, [HarmonyArgument(1)] byte callId)
-    {
-        RPC.SendRpcLogger(targetNetId, callId);
     }
 }
 
