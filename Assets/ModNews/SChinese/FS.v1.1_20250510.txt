@@ -14,7 +14,7 @@
 ## 模组版本信息
 - 程序集版本号: v1.1.3
 - 版本类型: Canary
-- 构建号: 5
+- 构建号: 7
 
 ## 更新内容
 - 修正: 6
@@ -30,6 +30,7 @@
 ## 贡献者
 - [LezaiYa]("https://github.com/NewLezaiYa")
 - [Nonalus]("https://github.com/Reborn5537/")
+- [Elinmei]("https://github.com/linmeideli")
 
 ## 修正
 - 修复了快速启动模式失效的问题
@@ -41,6 +42,8 @@
 - 修复了返回主菜单时强制更改分辨率的问题
 修复：LezaiYa
 反馈：警长小蓝
+- 修复了按下左Shift和右Shift快捷键不适配16.0.0以上版本的问题
+修复: Elinmei
 
 ## 优化
 - 重写启动加载界面以优化代码运行效率

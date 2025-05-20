@@ -5,7 +5,6 @@ using InnerNet;
 using TMPro;
 using UnityEngine;
 
-
 namespace FinalSuspect.Patches.System;
 
 [HarmonyPatch]
@@ -14,7 +13,6 @@ public sealed class LobbyJoinBind
     private static int GameId;
     public static Color Color = ColorHelper.LoadCompleteGreen;
     public static GameObject LobbyText;
-    internal static TMP_FontAsset fontAssetPingTracker;
 
     [HarmonyPatch(typeof(InnerNetClient), nameof(InnerNetClient.JoinGame))]
     [HarmonyPostfix]
@@ -38,7 +36,6 @@ public sealed class LobbyJoinBind
             LobbyText.transform.SetParent(GameObject.Find("RightPanel").transform, false);
             var comp = LobbyText.AddComponent<TextMeshPro>();
             comp.fontSize = 2.5f;
-            comp.font = fontAssetPingTracker;
             comp.outlineWidth = -2f;
             float lastY = code2 == "" ? -0.15f : 0.1f;
             LobbyText.transform.localPosition = new Vector3(8f, lastY, 0);
@@ -66,7 +63,6 @@ public sealed class LobbyJoinBind
             __instance.StartCoroutine(AmongUsClient.Instance.CoJoinOnlineGameFromCode(GameCode.GameNameToInt(code2)));
             LobbyText.GetComponent<TextMeshPro>().color = Color.AlphaMultiplied(0.75f);
         }
-            
 
         if (LobbyText)
         {
@@ -77,11 +73,11 @@ public sealed class LobbyJoinBind
                 if (code != "")
                 {
                     code = DataManager.Settings.Gameplay.StreamerMode ? new string('*', code.Length) : code;
-                    LobbyText.GetComponent<TextMeshPro>().text = string.Format($"{GetString("LShift")}£º<color={ColorHelper.ModColor}>{code}</color>");
+                    LobbyText.GetComponent<TextMeshPro>().text = string.Format($"{GetString("LShift")}ï¿½ï¿½<color={ColorHelper.ModColor}>{code}</color>");
                 }
             }
 
-            if (code2 != "") LobbyText.GetComponent<TextMeshPro>().text += string.Format($"\n{GetString("RShift")}£º<color={ColorHelper.ModColor}>{code2Disp}</color>");
+            if (code2 != "") LobbyText.GetComponent<TextMeshPro>().text += string.Format($"\n{GetString("RShift")}ï¿½ï¿½<color={ColorHelper.ModColor}>{code2Disp}</color>");
         }
     }
 }
