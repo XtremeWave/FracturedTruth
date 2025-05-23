@@ -11,7 +11,7 @@ using InnerNet;
 namespace FinalSuspect.Patches.System;
 
 [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameJoined))]
-class OnGameJoinedPatch
+internal class OnGameJoinedPatch
 {
     public static void Postfix(AmongUsClient __instance)
     {

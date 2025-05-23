@@ -231,11 +231,11 @@ internal static class RPC
             while (!PlayerControl.LocalPlayer) await Task.Delay(500);
             if (!Main.VersionCheat.Value)
             {
-                var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)RpcCalls.CancelPet, SendOption.None);
+                var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)RpcCalls.CancelPet, SendOption.Reliable);
                 writer.Write(Main.PluginVersion);
                 writer.Write($"{Main.GitCommit}({Main.GitBranch})");
                 writer.Write(Main.ForkId);
-                writer.EndMessage();
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
             }
 
             XtremeGameData.PlayerVersion.playerVersion[PlayerControl.LocalPlayer.PlayerId] =

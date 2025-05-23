@@ -14,7 +14,7 @@ public static class XtremeLocalHandling
     private static readonly int OutlineColor = Shader.PropertyToID("_OutlineColor");
     private static readonly int AddColor = Shader.PropertyToID("_AddColor");
 
-    public static string CheckAndGetNameWithDetails(
+    private static string CheckAndGetNameWithDetails(
         this PlayerControl player,
         out Color topcolor,
         out Color bottomcolor,
@@ -26,7 +26,7 @@ public static class XtremeLocalHandling
             topswap);
     }
 
-    public static string CheckAndGetNameWithDetails(
+    private static string CheckAndGetNameWithDetails(
         byte id,
         out Color topcolor,
         out Color bottomcolor,
@@ -66,20 +66,21 @@ public static class XtremeLocalHandling
                 toptext = toptext.CheckAndAppendText($"<size=1.5>{ver.forkId}</size>");
                 topcolor = ColorHelper.UnmatchedColor;
             }
-            else if (Main.version.CompareTo(ver.version) == 0 && ver.tag == $"{Main.GitCommit}({Main.GitBranch})")
-            {
-                topcolor = ColorHelper.ModColor32;
-            }
-            else if (Main.version.CompareTo(ver.version) == 0 && ver.tag != $"{Main.GitCommit}({Main.GitBranch})")
-            {
-                toptext = toptext.CheckAndAppendText($"<size=1.5>{ver.tag}</size>");
-                topcolor = Color.yellow;
-            }
             else
-            {
-                toptext = toptext.CheckAndAppendText($"<size=1.5>v{ver.version}</size>");
-                topcolor = Color.red;
-            }
+                switch (Main.version.CompareTo(ver.version))
+                {
+                    case 0 when ver.tag == $"{Main.GitCommit}({Main.GitBranch})":
+                        topcolor = ColorHelper.ModColor32;
+                        break;
+                    case 0 when ver.tag != $"{Main.GitCommit}({Main.GitBranch})":
+                        toptext = toptext.CheckAndAppendText($"<size=1.5>{ver.tag}</size>");
+                        topcolor = Color.yellow;
+                        break;
+                    default:
+                        toptext = toptext.CheckAndAppendText($"<size=1.5>v{ver.version}</size>");
+                        topcolor = Color.red;
+                        break;
+                }
         }
         else
         {
@@ -88,11 +89,9 @@ public static class XtremeLocalHandling
             else topcolor = ColorHelper.ClientlessColor;
         }
 
-        if (Main.ShowPlayerInfo.Value)
-        {
-            bottomtext = bottomtext.CheckAndAppendText($"{player.GetPlatform()} {player.GetClient().FriendCode}");
-            bottomcolor = ColorHelper.DownloadYellow;
-        }
+        if (!Main.ShowPlayerInfo.Value) return;
+        bottomtext = bottomtext.CheckAndAppendText($"{player.GetPlatform()} {player.GetClient().FriendCode}");
+        bottomcolor = ColorHelper.DownloadYellow;
     }
 
     private static string GetPlatform(this PlayerControl player)
