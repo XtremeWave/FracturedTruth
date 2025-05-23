@@ -73,11 +73,11 @@ public sealed class LobbyJoinBind
                 if (code != "")
                 {
                     code = DataManager.Settings.Gameplay.StreamerMode ? new string('*', code.Length) : code;
-                    LobbyText.GetComponent<TextMeshPro>().text = string.Format($"{GetString("LShift")}��<color={ColorHelper.ModColor}>{code}</color>");
+                    LobbyText.GetComponent<TextMeshPro>().text = string.Format($"{GetString("LShift")}<color={ColorHelper.ModColor}>{code}</color>");
                 }
             }
 
-            if (code2 != "") LobbyText.GetComponent<TextMeshPro>().text += string.Format($"\n{GetString("RShift")}��<color={ColorHelper.ModColor}>{code2Disp}</color>");
+            if (code2 != "") LobbyText.GetComponent<TextMeshPro>().text += string.Format($"\n{GetString("RShift")}<color={ColorHelper.ModColor}>{code2Disp}</color>");
         }
     }
 }
