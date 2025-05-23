@@ -57,7 +57,7 @@ public static class BanManager
                     KickPlayer(player.Id, false, "DenyName");
                     NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.KickedByDenyName"),
                         player.PlayerName, line));
-                    Info($"{player.PlayerName}は名前が「{line}」に一致したためキックされました。", "Kick");
+                    Info($"{player.PlayerName} 因为名字与「{line}」一致而被踢出", "Kick");
                     return;
                 }
             }
@@ -78,7 +78,7 @@ public static class BanManager
                 KickPlayer(player.Id, true, "BanList");
                 NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.BanedByBanList"),
                     player.PlayerName));
-                Info($"{player.PlayerName}は過去にBAN済みのためBANされました。", "BAN");
+                Info($"{player.PlayerName}因过去已被封禁而被封禁", "BAN");
             }
             else if (player.IsFACPlayer())
             {

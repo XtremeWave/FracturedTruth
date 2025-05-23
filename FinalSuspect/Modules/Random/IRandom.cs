@@ -40,7 +40,7 @@ public interface IRandom
         }
         else
         {
-            Warn($"無効なID: {id}", "IRandom.SetInstanceById");
+            Warn($"无效ID: {id}", "IRandom.SetInstanceById");
         }
     }
 }

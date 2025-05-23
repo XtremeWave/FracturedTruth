@@ -118,7 +118,7 @@ public class OnPlayerJoinedPatch
             AmongUsClient.Instance.AmHost && Main.KickPlayerInBanList.Value)
         {
             KickPlayer(client.Id, true, "BanList");
-            Info($"已封锁的玩家 {client.PlayerName} ({client.FriendCode}) 已被封禁。", "BAN");
+            Info($"已封禁的玩家 {client.PlayerName} ({client.FriendCode})", "BAN");
         }
 
         if (AmongUsClient.Instance.AmHost && !ValidFormatRegex.IsMatch(client.FriendCode) && client.FriendCode != "")
