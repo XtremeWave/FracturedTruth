@@ -45,11 +45,7 @@ public static class CustomPopup
         if (busy || !Fill || !InfoScreen || !ActionButtonPrefab || !TitleTMP || !InfoTMP)
         {
             Init();
-            if (!Fill || !InfoScreen || !ActionButtonPrefab || !TitleTMP || !InfoTMP)
-            {
-                Debug.LogError("CustomPopup not initialized properly.");
-                return;
-            }
+            if (!Fill || !InfoScreen || !ActionButtonPrefab || !TitleTMP || !InfoTMP) return;
         }
 
         busy = true;
@@ -132,20 +128,12 @@ public static class CustomPopup
     public static void Init()
     {
         var DOBScreen = AccountManager.Instance?.transform.FindChild("DOBEnterScreen");
-        if (!DOBScreen)
-        {
-            Debug.LogError("DOBEnterScreen not found!");
-            return;
-        }
+        if (!DOBScreen) return;
 
         if (!Fill)
         {
             Fill = Object.Instantiate(DOBScreen.FindChild("Fill")?.gameObject);
-            if (!Fill)
-            {
-                Debug.LogError("Failed to instantiate Fill.");
-                return;
-            }
+            if (!Fill) return;
 
             FillTemp = Fill;
             Fill.transform.SetLocalZ(-100f);
@@ -156,11 +144,7 @@ public static class CustomPopup
         if (!InfoScreen)
         {
             InfoScreen = Object.Instantiate(DOBScreen.FindChild("InfoPage")?.gameObject);
-            if (!InfoScreen)
-            {
-                Debug.LogError("Failed to instantiate InfoScreen.");
-                return;
-            }
+            if (!InfoScreen) return;
 
             InfoScreen.transform.SetLocalZ(-110f);
             InfoScreen.name = "FinalSuspect Info Popup Page";
@@ -170,11 +154,7 @@ public static class CustomPopup
         if (!TitleTMP)
         {
             TitleTMP = InfoScreen.transform.FindChild("Title Text")?.GetComponent<TextMeshPro>();
-            if (!TitleTMP)
-            {
-                Debug.LogError("Failed to find TitleTMP.");
-                return;
-            }
+            if (!TitleTMP) return;
 
             TitleTMP.transform.localPosition = new Vector3(0f, 2.3f, 3f);
             TitleTMP.DestroyTranslator();
@@ -184,11 +164,7 @@ public static class CustomPopup
         if (!InfoTMP)
         {
             InfoTMP = InfoScreen.transform.FindChild("InfoText_TMP")?.GetComponent<TextMeshPro>();
-            if (!InfoTMP)
-            {
-                Debug.LogError("Failed to find InfoTMP.");
-                return;
-            }
+            if (!InfoTMP) return;
 
             InfoTMP.GetComponent<RectTransform>().sizeDelta = new Vector2(7f, 1.3f);
             InfoTMP.transform.localScale = new Vector3(1f, 1f, 1f);
@@ -199,11 +175,7 @@ public static class CustomPopup
         if (!ActionButtonPrefab)
         {
             ActionButtonPrefab = InfoScreen.transform.FindChild("BackButton")?.GetComponent<PassiveButton>();
-            if (!ActionButtonPrefab)
-            {
-                Debug.LogError("Failed to find ActionButtonPrefab.");
-                return;
-            }
+            if (!ActionButtonPrefab) return;
 
             ActionButtonPrefab.gameObject.name = "ActionButtonPrefab";
             ActionButtonPrefab.transform.localScale = new Vector3(0.66f, 0.66f, 0.66f);

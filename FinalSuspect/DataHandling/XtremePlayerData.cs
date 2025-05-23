@@ -56,7 +56,6 @@ public class XtremePlayerData : IDisposable
         RealKiller = null;
     }
 
-
     public SpriteRenderer Rend { get; set; }
     public SpriteRenderer Deadbodyrend { get; set; }
     public Vector3? PreMeetingPosition { get; set; }

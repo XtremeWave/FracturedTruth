@@ -27,7 +27,8 @@ namespace FinalSuspect.Modules.Random;
 public class MersenneTwister : IRandom
 {
     // 参考元
-    public const string REFERENCE_HOMEPAGE = "http://www.math.sci.hiroshima-u.ac.jp/m-mat/MT/mt.html";
+    public const string REFERENCE_HOMEPAGE =
+        "http://www.math.sci.hiroshima-u.ac.jp/m-mat/MT/mt.html";
 
     public const string REFERENCE_SOURCE_CODE =
         "https://github.com/vpmedia/template-unity/blob/master/Framework/Assets/Frameworks/URandom/MersenneTwister.cs";

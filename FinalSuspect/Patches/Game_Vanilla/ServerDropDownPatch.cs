@@ -17,7 +17,6 @@ public static class ServerDropDownPatch
     {
         if (SceneManager.GetActiveScene().name == "FindAGame") return true;
 
-        // 调整背景大小
         __instance.background.size = new Vector2(5, 1);
 
         var num = 0;
