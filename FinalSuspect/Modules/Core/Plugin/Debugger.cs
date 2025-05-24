@@ -100,9 +100,9 @@ class XtremeLogger
         }
     }
 
-    public static void Test(object content, string tag = "======= Test =======", bool escapeCRLF = true,
+    public static void Test(object content = null, string tag = "======= Test =======", bool escapeCRLF = true,
         [CallerLineNumber] int lineNumber = 0, [CallerFilePath] string fileName = "") =>
-        SendToFile(content.ToString(), LogLevel.Debug, tag, escapeCRLF, lineNumber, fileName);
+        SendToFile((content ?? "Test Message").ToString(), LogLevel.Debug, tag, escapeCRLF, lineNumber, fileName);
 
     public static void Info(string text, string tag, bool escapeCRLF = true, [CallerLineNumber] int lineNumber = 0,
         [CallerFilePath] string fileName = "") =>

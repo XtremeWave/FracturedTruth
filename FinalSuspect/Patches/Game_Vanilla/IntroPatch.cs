@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game;
@@ -9,16 +10,25 @@ namespace FinalSuspect.Patches.Game_Vanilla;
 [HarmonyPatch(typeof(IntroCutscene))]
 internal class IntroCutscenePatch
 {
-    [HarmonyPatch(nameof(IntroCutscene.ShowRole)), HarmonyPostfix]
+    [HarmonyPatch(nameof(IntroCutscene.CoBegin)), HarmonyPrefix]
+    public static void CoBegin_Prefix()
+    {
+        InGame = true;
+        Info("Game Start", "IntroCutscene");
+    }
+
+    [HarmonyPatch(nameof(IntroCutscene.ShowRole)), HarmonyPrefix]
     public static void ShowRole_Postfix(IntroCutscene __instance)
     {
-        if (OtherModHost) return;
+        //莫名失效
+        if (!Main.EnableFinalSuspect.Value) return;
 
         _ = new MainThreadTask(() =>
         {
             var roleType = PlayerControl.LocalPlayer.Data.Role.Role;
             __instance.YouAreText.color =
-                __instance.RoleText.color = __instance.RoleBlurbText.color = GetRoleColor(roleType);
+                __instance.RoleText.color =
+                    __instance.RoleBlurbText.color = GetRoleColor(roleType);
             __instance.RoleText.text = GetRoleName(roleType);
             __instance.RoleText.fontWeight = FontWeight.Thin;
             __instance.RoleText.SetOutlineColor(GetRoleColor(roleType).ShadeColor(0.1f).SetAlpha(0.38f));
@@ -27,36 +37,29 @@ internal class IntroCutscenePatch
         }, "Override Role Text");
     }
 
-    [HarmonyPatch(nameof(IntroCutscene.CoBegin)), HarmonyPrefix]
-    public static void CoBegin_Prefix()
-    {
-        InGame = true;
-        Info("Game Start", "IntroCutscene");
-    }
-
     [HarmonyPatch(nameof(IntroCutscene.BeginImpostor)), HarmonyPostfix]
     public static void BeginImpostor_Postfix(IntroCutscene __instance)
     {
-        if (OtherModHost) return;
+        if (!Main.EnableFinalSuspect.Value) return;
 
         __instance.ImpostorText.gameObject.SetActive(true);
-        var onlyimp = GameManager.Instance.LogicOptions.GetAdjustedNumImpostors(GameData.Instance.PlayerCount) == 1;
+        var onlyImp = GameManager.Instance.LogicOptions.GetAdjustedNumImpostors(GameData.Instance.PlayerCount) == 1;
 
         var color = Palette.ImpostorRed;
-        var colorcode = onlyimp
+        var colorcode = onlyImp
             ? ColorHelper.ColorToHex(Palette.DisabledGrey)
             : ColorHelper.ColorToHex(Palette.ImpostorRed);
-        __instance.TeamTitle.text = onlyimp
+        __instance.TeamTitle.text = onlyImp
             ? GetString("TeamImpostorOnly")
             : GetString("TeamImpostor");
 
         __instance.TeamTitle.color = color;
         __instance.ImpostorText.text = $"<color=#{colorcode}>";
-        __instance.ImpostorText.text += onlyimp
+        __instance.ImpostorText.text += onlyImp
             ? GetString("ImpostorNumImpOnly")
             : $"{string.Format(GetString("ImpostorNumImp"), GameManager.Instance.LogicOptions.GetAdjustedNumImpostors(GameData.Instance.PlayerCount))}";
 
-        __instance.ImpostorText.text += "\n" + (onlyimp
+        __instance.ImpostorText.text += "\n" + (onlyImp
             ? GetString("ImpostorIntroTextOnly")
             : GetString("ImpostorIntroText"));
 
@@ -68,7 +71,7 @@ internal class IntroCutscenePatch
     [HarmonyPatch(nameof(IntroCutscene.BeginCrewmate)), HarmonyPostfix]
     public static void BeginCrewmate_Postfix(IntroCutscene __instance)
     {
-        if (OtherModHost) return;
+        if (!Main.EnableFinalSuspect.Value) return;
 
         __instance.TeamTitle.text = $"{GetString("TeamCrewmate")}";
         __instance.ImpostorText.text =
@@ -79,33 +82,38 @@ internal class IntroCutscenePatch
         StartFadeIntro(__instance, new Color32(140, 255, 255, byte.MaxValue), PlayerControl.LocalPlayer.GetRoleColor());
 
 
-        if (Input.GetKey(KeyCode.RightControl))
-        {
-            __instance.TeamTitle.text = "警告";
-            __instance.ImpostorText.gameObject.SetActive(true);
-            __instance.ImpostorText.text = "请远离无知的玩家";
-            __instance.TeamTitle.color = Color.magenta;
-            StartFadeIntro(__instance, Color.red, Color.magenta);
-        }
+        if (!Input.GetKey(KeyCode.RightControl)) return;
+        __instance.TeamTitle.text = "警告";
+        __instance.ImpostorText.gameObject.SetActive(true);
+        __instance.ImpostorText.text = "请远离无知的玩家";
+        __instance.TeamTitle.color = Color.magenta;
+        StartFadeIntro(__instance, Color.red, Color.magenta);
     }
 
     private static async void StartFadeIntro(IntroCutscene __instance, Color start, Color end)
     {
-        await Task.Delay(1000);
-        var milliseconds = 0;
-        while (true)
+        try
         {
-            await Task.Delay(20);
-            milliseconds += 20;
-            var time = milliseconds / (float)500;
-            var LerpingColor = Color.Lerp(start, end, time);
-            if (!__instance || milliseconds > 500)
+            await Task.Delay(1000);
+            var milliseconds = 0;
+            while (true)
             {
-                Info("break", "StartFadeIntro");
-                break;
-            }
+                await Task.Delay(20);
+                milliseconds += 20;
+                var time = milliseconds / (float)500;
+                var LerpingColor = Color.Lerp(start, end, time);
+                if (!__instance || milliseconds > 500)
+                {
+                    Info("break", "StartFadeIntro");
+                    break;
+                }
 
-            __instance.BackgroundBar.material.color = LerpingColor;
+                __instance.BackgroundBar.material.color = LerpingColor;
+            }
+        }
+        catch
+        {
+            /* ignored */
         }
     }
 }

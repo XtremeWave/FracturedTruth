@@ -72,20 +72,18 @@ public static class ModUnloaderScreen
 
     public static void Show()
     {
-        if (Popup)
-        {
-            Popup.gameObject.SetActive(true);
+        if (!Popup) return;
+        Popup.gameObject.SetActive(true);
 
-            if (AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Started)
-            {
-                WarnText.text = GetString("CannotUnloadDuringGame");
-                UnloadButton.gameObject.SetActive(false);
-            }
-            else
-            {
-                WarnText.text = GetString("UnloadWarning");
-                UnloadButton.gameObject.SetActive(true);
-            }
+        if (AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Started)
+        {
+            WarnText.text = GetString("CannotUnloadDuringGame");
+            UnloadButton.gameObject.SetActive(false);
+        }
+        else
+        {
+            WarnText.text = GetString("UnloadWarning");
+            UnloadButton.gameObject.SetActive(true);
         }
     }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using FinalSuspect.Modules.Features;
+using FinalSuspect.Modules.Features.CheckingandBlocking;
 using UnityEngine;
 
 namespace FinalSuspect.Patches.System;
@@ -102,6 +103,40 @@ internal class ControllerManagerUpdatePatch
             isAlsoInGame = !isAlsoInGame;
             SendInGame($"游戏中输出日志：{isAlsoInGame}");
         }
+
+        if (!DebugModeManager.IsDebugMode) return;
+
+        //实名投票
+        if (GetKeysDown(KeyCode.Return, KeyCode.V, KeyCode.LeftShift) && IsMeeting && !IsOnlineGame)
+        {
+            MeetingHud.Instance.RpcClearVote(AmongUsClient.Instance.ClientId);
+        }
+
+        //打开飞艇所有的门
+        if (GetKeysDown(KeyCode.Return, KeyCode.D, KeyCode.LeftShift) && IsInGame)
+        {
+            ShipStatus.Instance.RpcUpdateSystem(SystemTypes.Doors, 79);
+            ShipStatus.Instance.RpcUpdateSystem(SystemTypes.Doors, 80);
+            ShipStatus.Instance.RpcUpdateSystem(SystemTypes.Doors, 81);
+            ShipStatus.Instance.RpcUpdateSystem(SystemTypes.Doors, 82);
+        }
+
+        //将击杀冷却设定为0秒
+        if (GetKeysDown(KeyCode.Return, KeyCode.K, KeyCode.LeftShift) && IsInGame)
+        {
+            PlayerControl.LocalPlayer.Data.Object.SetKillTimer(0f);
+        }
+
+        //开场动画测试
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            HudManager.Instance.StartCoroutine(HudManager.Instance.CoFadeFullScreen(Color.clear, Color.black));
+            HudManager.Instance.StartCoroutine(DestroyableSingleton<HudManager>.Instance.CoShowIntro());
+        }
+
+        //获取现在的坐标
+        if (Input.GetKeyDown(KeyCode.I))
+            Info(PlayerControl.LocalPlayer.GetTruePosition().ToString(), "GetLocalPlayerPos");
     }
 
     private static bool GetKeysDown(params KeyCode[] keys)

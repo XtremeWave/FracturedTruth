@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AmongUs.Data;
 using AmongUs.Data.Player;
 using Assets.InnerNet;
 using FinalSuspect.Helpers;
@@ -17,13 +18,13 @@ namespace FinalSuspect.Patches.System;
 // 参考：https://github.com/Yumenopai/TownOfHost_Y
 public class ModNews
 {
-    public int Number;
-    public uint Lang;
-    public string Title;
-    public string SubTitle;
-    public string ShortTitle;
-    public string Text;
     public string Date;
+    public uint Lang;
+    public int Number;
+    public string ShortTitle;
+    public string SubTitle;
+    public string Text;
+    public string Title;
 
     public Announcement ToAnnouncement()
     {
@@ -47,6 +48,32 @@ public class ModNewsHistory
 {
     private static readonly List<ModNews> AllModNews = [];
 
+    public static bool AnnouncementLoadComplete;
+
+    [HarmonyPatch(typeof(AnnouncementPopUp), nameof(AnnouncementPopUp.Show))]
+    [HarmonyPatch(typeof(AnnouncementPopUp), nameof(AnnouncementPopUp.Init))]
+    [HarmonyPatch(typeof(AnnouncementPopUp), nameof(AnnouncementPopUp.ShowIfNew))]
+    [HarmonyPrefix]
+    public static bool A()
+    {
+        Test();
+        return AnnouncementLoadComplete;
+    }
+
+    [HarmonyPatch(typeof(AnnouncementPopUp), nameof(AnnouncementPopUp.Show))]
+    [HarmonyPatch(typeof(AnnouncementPopUp), nameof(AnnouncementPopUp.Init))]
+    [HarmonyPatch(typeof(AnnouncementPopUp), nameof(AnnouncementPopUp.ShowIfNew))]
+    [HarmonyPostfix]
+    public static void B()
+    {
+        Test();
+        if (!AnnouncementLoadComplete)
+        {
+            MainMenuManagerPatch.Instance.announcementPopUp.Close();
+        }
+    }
+
+
     [HarmonyPatch(typeof(PlayerAnnouncementData), nameof(PlayerAnnouncementData.SetAnnouncements)), HarmonyPrefix]
     public static bool SetModAnnouncements([HarmonyArgument(0)] ref Il2CppReferenceArray<Announcement> aRange)
     {
@@ -58,15 +85,7 @@ public class ModNewsHistory
                 if (n.Lang == (uint)TranslationController.Instance.currentLanguage.languageID)
                     FinalAllNews.Add(n.ToAnnouncement());
             });
-
-            foreach (var news in aRange)
-            {
-                if (!AllModNews.Any(x => x.Number == news.Number))
-                {
-                    FinalAllNews.Add(news);
-                }
-            }
-
+            FinalAllNews.AddRange(aRange.Where(news => !AllModNews.Any(x => x.Number == news.Number)));
             FinalAllNews.Sort((a1, a2) =>
             {
                 if (string.IsNullOrEmpty(a1.Date) || string.IsNullOrEmpty(a2.Date))
@@ -111,8 +130,6 @@ public class ModNewsHistory
         sr.sprite = LoadSprite("TeamLogo.png", 1000f);
         sr.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
     }
-
-    public static bool AnnouncementLoadComplete;
 
     public static async Task LoadModAnnouncements()
     {
@@ -165,8 +182,13 @@ public class ModNewsHistory
             /* ignored */
         }
 
-        AnnouncementLoadComplete = true;
-        Info("Loading mod announcements complete.", "SetModAnnouncements");
+        _ = new MainThreadTask(() =>
+        {
+            AnnouncementLoadComplete = true;
+            DataManager.Player.Announcements.AllAnnouncements.Clear();
+            MainMenuManagerPatch.Instance.announcementPopUp.Show();
+            Info("Loading mod announcements complete.", "SetModAnnouncements");
+        }, "ReShow mod announcements", true);
     }
 
     private static async Task<(bool, string)> GetAnnouncements(string url, string name)

@@ -42,12 +42,15 @@ public class SwitchShipCostumeButtonPatch
         Costume++;
         if (Costume > 2)
             Costume = 0;
-        ShipStatus.Instance.gameObject.transform.FindChild("HelloweenDecorSkeld")?.gameObject.SetActive(Costume == 1);
+        ShipStatus.Instance.gameObject.transform.FindChild("HalloweenDecorSkeld")?.gameObject.SetActive(Costume == 1);
         ShipStatus.Instance.gameObject.transform.FindChild("BirthdayDecorSkeld")?.gameObject.SetActive(Costume == 2);
-        var sounds = Sounds.TaskComplete;
-        if (Costume == 0) sounds = Sounds.KillSound;
-        if (Costume == 1) sounds = Sounds.ImpTransform;
-        if (Costume == 2) sounds = Sounds.TaskUpdateSound;
+        var sounds = Costume switch
+        {
+            0 => Sounds.KillSound,
+            1 => Sounds.ImpTransform,
+            2 => Sounds.TaskUpdateSound,
+            _ => Sounds.TaskComplete
+        };
         Modules.SoundInterface.SoundManager.PlaySound(PlayerControl.LocalPlayer.PlayerId, sounds);
         return false;
     }
