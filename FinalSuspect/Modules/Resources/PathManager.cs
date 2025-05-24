@@ -142,7 +142,7 @@ public static class PathManager
     {
         var list = URLs.ToList();
         if (!allowDesktop && DebugModeManager.AmDebugger)
-            list.RemoveAt(3);
+            list.RemoveAt(4);
         if (IsChineseUser) list.Reverse();
         return list;
     }

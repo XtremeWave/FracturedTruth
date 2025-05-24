@@ -271,7 +271,7 @@ internal static class RPC
     {
         string rpcName;
         if ((rpcName = Enum.GetName(typeof(RpcCalls), callId)) == null)
-            rpcName = callId + " 无效";
+            rpcName = callId + "(无效)";
         return rpcName;
     }
 }
