@@ -54,7 +54,7 @@ public class ModNewsHistory
     [HarmonyPatch(typeof(AnnouncementPopUp), nameof(AnnouncementPopUp.Init))]
     [HarmonyPatch(typeof(AnnouncementPopUp), nameof(AnnouncementPopUp.ShowIfNew))]
     [HarmonyPrefix]
-    public static bool A()
+    public static bool AnnouncementPopupPrefix()
     {
         Test();
         return AnnouncementLoadComplete;
@@ -64,7 +64,7 @@ public class ModNewsHistory
     [HarmonyPatch(typeof(AnnouncementPopUp), nameof(AnnouncementPopUp.Init))]
     [HarmonyPatch(typeof(AnnouncementPopUp), nameof(AnnouncementPopUp.ShowIfNew))]
     [HarmonyPostfix]
-    public static void B()
+    public static void AnnouncementPopupPostfix()
     {
         Test();
         if (!AnnouncementLoadComplete)
