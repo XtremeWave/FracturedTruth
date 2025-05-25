@@ -47,7 +47,7 @@ public static class AwakeFriendCodeUIPatch
 [HarmonyPatch(typeof(AccountManager), nameof(AccountManager.Awake))]
 public static class AwakeAccountManager
 {
-    public static Sprite[] AllRoleRoleIllustration =
+    public static readonly Sprite[] AllRoleRoleIllustration =
     [
         LoadSprite("CI_Crewmate.png", 450f),
         LoadSprite("CI_HnSEngineer.png", 450f),

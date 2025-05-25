@@ -70,7 +70,7 @@ class TaskPanelBehaviourPatch
 
 public static class HudManagerPatch
 {
-    static GameObject ModLoading;
+    private static GameObject ModLoading;
 
     private static int currentIndex;
 
@@ -291,20 +291,27 @@ public static class HudManagerPatch
     {
         public static void Prefix(HudManager __instance)
         {
-            if (!ModLoading && !IsFreePlay)
+            if (!ModLoading)
             {
                 ModLoading = new GameObject("ModLoading") { layer = 5 };
                 ModLoading.transform.SetParent(__instance.GameLoadAnimation.transform.parent);
-
-                ModLoading.transform.localScale = new Vector3(0.4f, 0.4f, 1f);
-                ModLoading.transform.localPosition = new Vector3(4.5833f, -2.25f, -600);
 
                 var Sprite = ModLoading.AddComponent<SpriteRenderer>();
                 Sprite.color = Color.white;
                 Sprite.flipX = false;
                 ModLoading.SetActive(false);
                 __instance.StartCoroutine(SwitchRoleIllustration(Sprite));
+                
+                var ap = ModLoading.AddComponent<AspectPosition>();
+                ap.Alignment = AspectPosition.EdgeAlignments.RightBottom;
+                ap.DistanceFromEdge = new Vector3(0.6f, 0.5f, -310);
+                ap.updateAlways = true;
+                
+                ModLoading.transform.localScale = new Vector3(0.4f, 0.4f, 1f);
             }
+            
+            ModLoading.SetActive(!IsInGame && !IsLobby);
+            //ModLogo.SetActive(!IsInGame && !IsLobby);
             /*Scrapped
             if (WarningText == null)
             {
@@ -362,25 +369,6 @@ public static class HudManagerPatch
             {
                 /* ignored */
             }
-        }
-    }
-
-    [HarmonyPatch(typeof(HudManager), nameof(HudManager.CoFadeFullScreen))]
-    public static class CoFadeFullScreen
-    {
-        public static void Prefix([HarmonyArgument(3)] ref bool showLoader)
-        {
-            ModLoading.SetActive(showLoader);
-            showLoader = false;
-        }
-    }
-
-    [HarmonyPatch(typeof(HudManager), nameof(HudManager.HideGameLoader))]
-    public static class HideGameLoader
-    {
-        public static void Prefix()
-        {
-            ModLoading.SetActive(false);
         }
     }
 }

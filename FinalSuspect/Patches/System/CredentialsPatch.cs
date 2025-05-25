@@ -56,7 +56,7 @@ internal class PingTrackerUpdatePatch
             || (FriendsListUI.Instance?.gameObject.active ?? false)
             || (HudManagerPatch.showHideButton?.Button?.gameObject.active ?? false) && Main.ShowResults.Value)
             CreditTextCredential.text = "";
-
+        
         var ping = AmongUsClient.Instance.Ping;
         var color = ping switch
         {
@@ -70,6 +70,7 @@ internal class PingTrackerUpdatePatch
         deltaTime += (Time.deltaTime - deltaTime) * 0.1f;
         var fps = Mathf.Ceil(1.0f / deltaTime);
 
+        
         __instance.text.alignment = TextAlignmentOptions.TopGeoAligned;
         __instance.text.text =
             $"<color={color}>{GetString("Ping")}:{ping} <size=60%>ms</size></color>" + "  "
