@@ -77,6 +77,7 @@ public static class VersionChecker
     {
         isChecked = false;
         ModUpdater.DeleteOldFiles();
+        ModUpdater.MoveOtherFiles();
 
         foreach (var url in GetInfoFileUrlList(true))
         {

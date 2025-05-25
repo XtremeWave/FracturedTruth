@@ -39,8 +39,4 @@ public static class DllChecker
             }
         }
     }
-    public static void Init()
-    {
-        // 什么都不干，只是让main.cs有个引用防止被反编译大蛇删除
-    }
 }
