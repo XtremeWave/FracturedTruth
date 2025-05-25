@@ -304,7 +304,7 @@ public static class HudManagerPatch
                 
                 var ap = ModLoading.AddComponent<AspectPosition>();
                 ap.Alignment = AspectPosition.EdgeAlignments.RightBottom;
-                ap.DistanceFromEdge = new Vector3(0.6f, 0.5f, -310);
+                ap.DistanceFromEdge = new Vector3(0.6f, 0.5f, -1000);
                 ap.updateAlways = true;
                 
                 ModLoading.transform.localScale = new Vector3(0.4f, 0.4f, 1f);
