@@ -56,7 +56,6 @@ public class ModNewsHistory
     [HarmonyPrefix]
     public static bool AnnouncementPopupPrefix()
     {
-        Test();
         return AnnouncementLoadComplete;
     }
 
@@ -66,7 +65,6 @@ public class ModNewsHistory
     [HarmonyPostfix]
     public static void AnnouncementPopupPostfix()
     {
-        Test();
         if (!AnnouncementLoadComplete)
         {
             MainMenuManagerPatch.Instance.announcementPopUp.Close();
@@ -184,11 +182,18 @@ public class ModNewsHistory
 
         _ = new MainThreadTask(() =>
         {
-            AnnouncementLoadComplete = true;
-            DataManager.Player.Announcements.AllAnnouncements.Clear();
-            MainMenuManagerPatch.Instance.announcementPopUp.Show();
-            Info("Loading mod announcements complete.", "SetModAnnouncements");
-        }, "ReShow mod announcements", true);
+            try
+            {
+                AnnouncementLoadComplete = true;
+                DataManager.Player.Announcements.AllAnnouncements.Clear();
+                MainMenuManagerPatch.Instance.announcementPopUp.Show();
+                Info("Loading mod announcements complete.", "SetModAnnouncements");
+            }
+            catch 
+            {
+                /* ignored */
+            }
+        }, "ReShow mod announcements");
     }
 
     private static async Task<(bool, string)> GetAnnouncements(string url, string name)
