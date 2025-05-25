@@ -10,3 +10,6 @@ FinalSuspect/FodyWeavers.xsd
 
 /FinalSuspect.sln
 *.zip
+
+Assets/Mod/**
+!Assets/Mod/BaseBepInEx/

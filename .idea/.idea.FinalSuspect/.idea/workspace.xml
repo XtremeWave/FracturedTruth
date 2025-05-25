@@ -1,0 +1,821 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="40a988d5-14bd-4df7-acd9-3886768e4240" name="更改" comment="Rename patch methods for clarity and consistency&#10;&#10;Renamed `A` to `AnnouncementPopupPrefix` and `B` to `AnnouncementPopupPostfix` to better reflect their purpose and improve code readability. This change aligns method names with their roles in Harmony patching.">
+      <change beforePath="$PROJECT_DIR$/Assets/Languages/German.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Languages/German.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinalSuspect/DataHandling/FinalAntiCheat/Handlers/Valid/TaskHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinalSuspect/DataHandling/FinalAntiCheat/Handlers/Valid/TaskHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinalSuspect/DataHandling/FinalAntiCheat/Handlers/Valid/VentHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinalSuspect/DataHandling/FinalAntiCheat/Handlers/Valid/VentHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinalSuspect/FinalSuspect.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/FinalSuspect/FinalSuspect.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinalSuspect/Modules/Core/Game/ServerAddManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinalSuspect/Modules/Core/Game/ServerAddManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinalSuspect/Modules/Features/CheckingandBlocking/RPC.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinalSuspect/Modules/Features/CheckingandBlocking/RPC.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinalSuspect/Patches/System/LobbyScreenPatch.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinalSuspect/Patches/System/LobbyScreenPatch.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinalSuspect/main.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FinalSuspect/main.cs" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DpaMonitoringSettings">
+    <option name="firstShow" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <favorite-branches>
+      <branch-storage>
+        <map>
+          <entry type="LOCAL">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="FinalSus" />
+                <branch-info repo="$PROJECT_DIR$" source="FS_Dev" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </favorite-branches>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="opimization" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Slok7565&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/XtremeWave/FinalSuspect.git&quot;,
+    &quot;accountId&quot;: &quot;73619748-1b05-4864-85be-41fd2c6e83cf&quot;
+  },
+  &quot;recentNewPullRequestHead&quot;: {
+    &quot;server&quot;: {
+      &quot;useHttp&quot;: false,
+      &quot;host&quot;: &quot;github.com&quot;,
+      &quot;port&quot;: null,
+      &quot;suffix&quot;: null
+    },
+    &quot;owner&quot;: &quot;XtremeWave&quot;,
+    &quot;repository&quot;: &quot;FinalSuspect_Dev&quot;
+  }
+}</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///AIAssistantSnippet.." root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///AIAssistantSnippet.." root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///AIAssistantSnippet.." root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///AIAssistantSnippet.." root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///AIAssistantSnippet.." root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/ILViewer/182d6729f11b44a4a64f8d77e4ce8c426e000/ab/34ce4107/02000097pdb37.il" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/1b1a39e4d57b4750baf5acce7b036fc013800/18/a215a3ea/BasePlugin.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/2097ebe5a77043ffbd83677a9b53bc8727a00/e8/ed8bf8b1/SendOption.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/6bbef1fc8791477f923def06e6cfcb4f43400/88/b082e870/Il2CppException.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ab1c455e33584b46af19db0220ddb6df725c00/41/5616fc50/InnerNetClient.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ab1c455e33584b46af19db0220ddb6df725c00/bb/b170c593/HudManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/accf676d737f462aa9eb85ae5d05951c74a000/26/2bf32f0d/ResolutionManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/accf676d737f462aa9eb85ae5d05951c74a000/39/4102b796/ClientData.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/accf676d737f462aa9eb85ae5d05951c74a000/ca/05f6f596/PlayerControl.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/e300fc3bcf2547fd9aa67e2916204333a25118/6d/739aca51/Assembly.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fb3161f74a4f4a6a9d196e7ecb820f0a988888/77/eaf0471f/Boolean.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Attributes/InitializerAttribute.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Attributes/InitializerAttribute.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/DataHandling/FinalAntiCheat/Core/DllChecker.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/DataHandling/FinalAntiCheat/Core/PlayerCheatData.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/DataHandling/FinalAntiCheat/Core/PlayerCheatData.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/DataHandling/FinalAntiCheat/Core/PlayerCheatData.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/DataHandling/FinalAntiCheat/Core/PlayerCheatData.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/DataHandling/FinalAntiCheat/Core/PlayerCheatData.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/DataHandling/FinalAntiCheat/Core/PlayerCheatData.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/DataHandling/FinalAntiCheat/Core/PlayerCheatData.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/FinalSuspect/DataHandling/FinalAntiCheat/Handlers/Invalid/NonalusAntiCheatMenu.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/FinalSuspect/DataHandling/FinalAntiCheat/Handlers/Valid/SendQuickChatHandler.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/DataHandling/FinalAntiCheat/Handlers/Valid/TaskHandler.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/DataHandling/FinalAntiCheat/Handlers/Valid/TaskHandler.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/DataHandling/FinalAntiCheat/Handlers/Valid/VentHandler.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/DataHandling/FinalAntiCheat/Handlers/Valid/VentHandler.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/DataHandling/FinalAntiCheat/Handlers/Valid/VentHandler.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/DataHandling/FinalAntiCheat/Handlers/Valid/VentHandler.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/DataHandling/FinalAntiCheat/Handlers/Valid/VentHandler.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/DataHandling/FinalAntiCheat/Handlers/Valid/VentHandler.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/DataHandling/FinalAntiCheat/Handlers/Valid/VentHandler.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/DataHandling/FinalAntiCheat/Handlers/Valid/VentHandler.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/DataHandling/XtremeGameData.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/FinalSuspect/DataHandling/XtremeGameData.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/FinalSuspect/DataHandling/XtremeLocalHandling.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/DataHandling/XtremeLocalHandling.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/FinalSuspect/Modules/ClientOptions/ModUnloaderScreen.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/ClientOptions/ModUnloaderScreen.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/ClientOptions/ModUnloaderScreen.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Core/Game/ExtendedPlayerControl.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Core/Game/ServerAddManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Core/Game/ServerAddManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Core/Game/Utils.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Core/Game/Utils.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/FinalSuspect/Modules/Core/Game/Utils.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Core/Game/Utils.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Core/Game/Utils.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Core/Game/Utils.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/FinalSuspect/Modules/Core/Plugin/Debugger.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Core/Plugin/Debugger.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Core/Plugin/Debugger.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Core/Plugin/MainThreadTask.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/FinalSuspect/Modules/Core/Plugin/MainThreadTask.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Core/Plugin/MainThreadTask.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Core/Plugin/MainThreadTask.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Features/CheckingandBlocking/RPC.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Features/CheckingandBlocking/RPC.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Features/CheckingandBlocking/RPC.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/FinalSuspect/Modules/Features/CheckingandBlocking/RPC.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Features/CheckingandBlocking/RPC.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Features/CheckingandBlocking/RPC.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Features/CheckingandBlocking/RPC.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Features/CheckingandBlocking/RPC.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Features/CheckingandBlocking/RPC.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Features/CheckingandBlocking/RPC.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Features/CheckingandBlocking/RPC.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Features/CheckingandBlocking/RPC.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Features/CheckingandBlocking/RPC.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Features/CheckingandBlocking/RPC.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Features/CheckingandBlocking/RPC.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Features/CheckingandBlocking/RPC.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Features/CheckingandBlocking/RPC.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Features/CheckingandBlocking/RPC.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Features/CheckingandBlocking/RPC.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Features/CheckingandBlocking/RPC.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Features/CheckingandBlocking/RPC.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/FinalSuspect/Modules/Features/CustomPopup.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/FinalSuspect/Modules/Features/InGameRoleInfoMenu.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Random/MersenneTwister.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Random/MersenneTwister.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Resources/PathManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Resources/PathManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Resources/PathManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Resources/PathManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Resources/VersionChecker.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/FinalSuspect/Modules/Resources/VersionChecker.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Resources/VersionChecker.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Resources/VersionChecker.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Modules/Resources/VersionChecker.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/FinalSuspect/Modules/SoundInterface/SoundManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/FinalSuspect/Patches/Game_Vanilla/DisconnectPatch.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/Game_Vanilla/HudPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/FinalSuspect/Patches/Game_Vanilla/HudPatch.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/Game_Vanilla/IntroPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/Game_Vanilla/IntroPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/Game_Vanilla/IntroPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/Game_Vanilla/IntroPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/Game_Vanilla/IntroPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/Game_Vanilla/IntroPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/Game_Vanilla/IntroPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/Game_Vanilla/IntroPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/FinalSuspect/Patches/Game_Vanilla/IntroPatch.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/Game_Vanilla/IntroPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/Game_Vanilla/IntroPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/Game_Vanilla/IntroPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/Game_Vanilla/ServerDropDownPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/System/AnnouncementPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/System/AnnouncementPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/System/AnnouncementPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/FinalSuspect/Patches/System/AnnouncementPatch.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/System/AnnouncementPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/System/AnnouncementPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/System/AnnouncementPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/System/AnnouncementPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/System/AnnouncementPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/FinalSuspect/Patches/System/ControlPatch.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/System/ControlPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/System/ControlPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/System/CredentialsPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/System/CredentialsPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/System/CredentialsPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/System/CredentialsPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/System/LobbyScreenPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/System/LobbyScreenPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/System/LobbyScreenPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/System/LobbyScreenPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/System/PlayerJoinAndLeftPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/System/PlayerJoinAndLeftPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/System/PlayerJoinAndLeftPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/System/PlayerJoinAndLeftPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/System/PlayerJoinAndLeftPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/System/PlayerJoinAndLeftPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/FinalSuspect/Patches/System/SwitchShipCostumeButtonPatch.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/Patches/System/SwitchShipCostumeButtonPatch.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/FinalSuspect/main.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/main.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/RiderProjects/FinalSuspect/FinalSuspect/main.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/FinalSuspect/obj/Debug/net6.0/.NETCoreApp,Version=v6.0.AssemblyAttributes.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/FinalSuspect/obj/Debug/net6.0/FinalSuspect.AssemblyInfo.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/FinalSuspect/obj/Open-Beta/net6.0/.NETCoreApp,Version=v6.0.AssemblyAttributes.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/FinalSuspect/obj/Open_Beta/net6.0/BuildTime.cs" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="false" />
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;5d5278ff&quot;
+}</component>
+  <component name="ProjectId" id="2wcQ2CcVHKh7Vmm9j2DksgvsFlR" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET 可执行文件.Among Us.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "FS__Dev",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "D:/RiderProjects/FinalSuspect",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "ml.llm.AIAssistantPromptsLibrary",
+    "vue.rearranger.settings.migration": "true",
+    "附加到进程.51020:Among Us.executor": "Debug"
+  }
+}]]></component>
+  <component name="RunManager" selected=".NET 可执行文件.Among Us">
+    <configuration name="Among Us" type="RunExe" factoryName=".NET Executable">
+      <option name="EXE_PATH" value="$PROJECT_DIR$/../../SteamLibrary/steamapps/common/Among Us/Among Us.exe" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../../SteamLibrary/steamapps/common/Among Us" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <option name="ENV_FILE_PATHS" value="" />
+      <option name="REDIRECT_INPUT_PATH" value="" />
+      <option name="PTY_MODE" value="Auto" />
+      <option name="USE_MONO" value="0" />
+      <option name="RUNTIME_ARGUMENTS" value="" />
+      <option name="AUTO_ATTACH_CHILDREN" value="0" />
+      <option name="MIXED_MODE_DEBUG" value="0" />
+      <option name="RUNTIME_TYPE" value="coreclr" />
+      <method v="2">
+        <option name="Build Solution" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+      <option name="allowRunningInParallel" value="false" />
+      <option name="listenPortForConnections" value="false" />
+      <option name="pid" />
+      <option name="projectPathOnTarget" />
+      <option name="runtimes">
+        <list />
+      </option>
+      <option name="selectedOptions">
+        <list />
+      </option>
+      <option name="useMixedMode" value="false" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue=".NET 可执行文件.Among Us" />
+      <item itemvalue="附加到 Unity 编辑器.附加到 Unity 编辑器" />
+    </list>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="默认任务">
+      <changelist id="40a988d5-14bd-4df7-acd9-3886768e4240" name="更改" comment="" />
+      <created>1738050585441</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1738050585441</updated>
+      <workItem from="1738050586690" duration="79000" />
+      <workItem from="1738051031484" duration="30131000" />
+      <workItem from="1738293194446" duration="20722000" />
+      <workItem from="1738380045625" duration="17043000" />
+      <workItem from="1738492050547" duration="4266000" />
+      <workItem from="1738503607830" duration="10000" />
+      <workItem from="1738504855755" duration="3142000" />
+      <workItem from="1738573922218" duration="8848000" />
+      <workItem from="1738736022353" duration="302000" />
+      <workItem from="1738737017282" duration="29413000" />
+      <workItem from="1739508247256" duration="48940000" />
+      <workItem from="1739628250606" duration="11912000" />
+      <workItem from="1739688951935" duration="776000" />
+      <workItem from="1739691948008" duration="6634000" />
+      <workItem from="1741412166167" duration="6031000" />
+      <workItem from="1741489434304" duration="14125000" />
+      <workItem from="1741531785252" duration="4410000" />
+      <workItem from="1742015324755" duration="2163000" />
+      <workItem from="1742133028914" duration="1423000" />
+      <workItem from="1742212711106" duration="926000" />
+      <workItem from="1742468233650" duration="2692000" />
+      <workItem from="1742943067417" duration="20856000" />
+      <workItem from="1744238641902" duration="8061000" />
+      <workItem from="1746066501345" duration="47401000" />
+      <workItem from="1746265110939" duration="7334000" />
+      <workItem from="1746274194600" duration="3701000" />
+      <workItem from="1746278066108" duration="14491000" />
+      <workItem from="1746338177023" duration="16967000" />
+      <workItem from="1746368374347" duration="17897000" />
+      <workItem from="1746426543189" duration="1075000" />
+      <workItem from="1746431471617" duration="8190000" />
+      <workItem from="1746771349612" duration="15917000" />
+      <workItem from="1746935276746" duration="9343000" />
+      <workItem from="1746952384118" duration="371000" />
+      <workItem from="1747349888901" duration="49209000" />
+    </task>
+    <task id="LOCAL-00070" summary="xtreme wave config">
+      <option name="closed" value="true" />
+      <created>1746198011750</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1746198011750</updated>
+    </task>
+    <task id="LOCAL-00071" summary="auto get date">
+      <option name="closed" value="true" />
+      <created>1746198045733</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1746198045733</updated>
+    </task>
+    <task id="LOCAL-00072" summary="assets-sync.yaml">
+      <option name="closed" value="true" />
+      <created>1746255437960</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1746255437960</updated>
+    </task>
+    <task id="LOCAL-00073" summary="移除很有必要的注释">
+      <option name="closed" value="true" />
+      <created>1746255538743</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1746255538743</updated>
+    </task>
+    <task id="LOCAL-00074" summary="不重要">
+      <option name="closed" value="true" />
+      <created>1746255855475</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1746255855475</updated>
+    </task>
+    <task id="LOCAL-00075" summary="workflow test">
+      <option name="closed" value="true" />
+      <created>1746256064997</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1746256064997</updated>
+    </task>
+    <task id="LOCAL-00076" summary="bugs fix">
+      <option name="closed" value="true" />
+      <created>1746261662058</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1746261662058</updated>
+    </task>
+    <task id="LOCAL-00077" summary="XWA">
+      <option name="closed" value="true" />
+      <created>1746262122818</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1746262122818</updated>
+    </task>
+    <task id="LOCAL-00078" summary="En/Decoding Bans">
+      <option name="closed" value="true" />
+      <created>1746267063229</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1746267063229</updated>
+    </task>
+    <task id="LOCAL-00079" summary="renew CheckSpam">
+      <option name="closed" value="true" />
+      <created>1746267735159</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1746267735159</updated>
+    </task>
+    <task id="LOCAL-00080" summary="code clean">
+      <option name="closed" value="true" />
+      <created>1746267745952</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1746267745952</updated>
+    </task>
+    <task id="LOCAL-00081" summary="code clean &amp; translation">
+      <option name="closed" value="true" />
+      <created>1746269397336</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1746269397337</updated>
+    </task>
+    <task id="LOCAL-00082" summary="deal with &quot;Use of obsolete symbol&quot;">
+      <option name="closed" value="true" />
+      <created>1746271433349</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1746271433349</updated>
+    </task>
+    <task id="LOCAL-00083" summary="MTT">
+      <option name="closed" value="true" />
+      <created>1746274504673</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1746274504673</updated>
+    </task>
+    <task id="LOCAL-00084" summary="Alpha 2">
+      <option name="closed" value="true" />
+      <created>1746274734806</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1746274734806</updated>
+    </task>
+    <task id="LOCAL-00085" summary="6">
+      <option name="closed" value="true" />
+      <created>1746275816953</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1746275816955</updated>
+    </task>
+    <task id="LOCAL-00086" summary="bug fix">
+      <option name="closed" value="true" />
+      <created>1746285343473</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1746285343475</updated>
+    </task>
+    <task id="LOCAL-00087" summary="Rebase FAC">
+      <option name="closed" value="true" />
+      <created>1746336988030</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1746336988030</updated>
+    </task>
+    <task id="LOCAL-00088" summary="初测成功！">
+      <option name="closed" value="true" />
+      <created>1746338212704</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1746338212704</updated>
+    </task>
+    <task id="LOCAL-00089" summary="初测成功！">
+      <option name="closed" value="true" />
+      <created>1746343474027</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1746343474027</updated>
+    </task>
+    <task id="LOCAL-00090" summary="FAC大升级！">
+      <option name="closed" value="true" />
+      <created>1746347267160</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1746347267160</updated>
+    </task>
+    <task id="LOCAL-00091" summary="完成！">
+      <option name="closed" value="true" />
+      <created>1746349428584</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1746349428584</updated>
+    </task>
+    <task id="LOCAL-00092" summary="完成！">
+      <option name="closed" value="true" />
+      <created>1746351562465</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1746351562465</updated>
+    </task>
+    <task id="LOCAL-00093" summary="try to solve 1337">
+      <option name="closed" value="true" />
+      <created>1746413870214</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1746413870214</updated>
+    </task>
+    <task id="LOCAL-00094" summary="bug fix">
+      <option name="closed" value="true" />
+      <created>1746423048756</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1746423048756</updated>
+    </task>
+    <task id="LOCAL-00095" summary="bug fix">
+      <option name="closed" value="true" />
+      <created>1746424775902</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1746424775902</updated>
+    </task>
+    <task id="LOCAL-00096" summary="bug&#10; fix">
+      <option name="closed" value="true" />
+      <created>1746425115512</created>
+      <option name="number" value="00096" />
+      <option name="presentableId" value="LOCAL-00096" />
+      <option name="project" value="LOCAL" />
+      <updated>1746425115512</updated>
+    </task>
+    <task id="LOCAL-00097" summary="bug&#10; fix">
+      <option name="closed" value="true" />
+      <created>1746427111443</created>
+      <option name="number" value="00097" />
+      <option name="presentableId" value="LOCAL-00097" />
+      <option name="project" value="LOCAL" />
+      <updated>1746427111443</updated>
+    </task>
+    <task id="LOCAL-00098" summary="log">
+      <option name="closed" value="true" />
+      <created>1746427387455</created>
+      <option name="number" value="00098" />
+      <option name="presentableId" value="LOCAL-00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1746427387455</updated>
+    </task>
+    <task id="LOCAL-00099" summary="bug fix">
+      <option name="closed" value="true" />
+      <created>1746432607283</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1746432607283</updated>
+    </task>
+    <task id="LOCAL-00100" summary="bug fix">
+      <option name="closed" value="true" />
+      <created>1746433249563</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1746433249563</updated>
+    </task>
+    <task id="LOCAL-00101" summary="bug fix">
+      <option name="closed" value="true" />
+      <created>1746435058635</created>
+      <option name="number" value="00101" />
+      <option name="presentableId" value="LOCAL-00101" />
+      <option name="project" value="LOCAL" />
+      <updated>1746435058636</updated>
+    </task>
+    <task id="LOCAL-00102" summary=" 不再删除冗余模组文件，而是移动到新文件夹">
+      <option name="closed" value="true" />
+      <created>1746436009622</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1746436009622</updated>
+    </task>
+    <task id="LOCAL-00103" summary="FINISH">
+      <option name="closed" value="true" />
+      <created>1746436131045</created>
+      <option name="number" value="00103" />
+      <option name="presentableId" value="LOCAL-00103" />
+      <option name="project" value="LOCAL" />
+      <updated>1746436131045</updated>
+    </task>
+    <task id="LOCAL-00104" summary="版本同步">
+      <option name="closed" value="true" />
+      <created>1746784943827</created>
+      <option name="number" value="00104" />
+      <option name="presentableId" value="LOCAL-00104" />
+      <option name="project" value="LOCAL" />
+      <updated>1746784943827</updated>
+    </task>
+    <task id="LOCAL-00105" summary="clean">
+      <option name="closed" value="true" />
+      <created>1746937196224</created>
+      <option name="number" value="00105" />
+      <option name="presentableId" value="LOCAL-00105" />
+      <option name="project" value="LOCAL" />
+      <updated>1746937196224</updated>
+    </task>
+    <task id="LOCAL-00106" summary="rider就是好用">
+      <option name="closed" value="true" />
+      <created>1746937771398</created>
+      <option name="number" value="00106" />
+      <option name="presentableId" value="LOCAL-00106" />
+      <option name="project" value="LOCAL" />
+      <updated>1746937771398</updated>
+    </task>
+    <task id="LOCAL-00107" summary="e">
+      <option name="closed" value="true" />
+      <created>1746938358229</created>
+      <option name="number" value="00107" />
+      <option name="presentableId" value="LOCAL-00107" />
+      <option name="project" value="LOCAL" />
+      <updated>1746938358229</updated>
+    </task>
+    <task id="LOCAL-00108" summary="opimization">
+      <option name="closed" value="true" />
+      <created>1746939479538</created>
+      <option name="number" value="00108" />
+      <option name="presentableId" value="LOCAL-00108" />
+      <option name="project" value="LOCAL" />
+      <updated>1746939479538</updated>
+    </task>
+    <task id="LOCAL-00109" summary="新的补充">
+      <option name="closed" value="true" />
+      <created>1746940197793</created>
+      <option name="number" value="00109" />
+      <option name="presentableId" value="LOCAL-00109" />
+      <option name="project" value="LOCAL" />
+      <updated>1746940197794</updated>
+    </task>
+    <task id="LOCAL-00110" summary="注释">
+      <option name="closed" value="true" />
+      <created>1746941770726</created>
+      <option name="number" value="00110" />
+      <option name="presentableId" value="LOCAL-00110" />
+      <option name="project" value="LOCAL" />
+      <updated>1746941770726</updated>
+    </task>
+    <task id="LOCAL-00111" summary="optimization">
+      <option name="closed" value="true" />
+      <created>1747407438054</created>
+      <option name="number" value="00111" />
+      <option name="presentableId" value="LOCAL-00111" />
+      <option name="project" value="LOCAL" />
+      <updated>1747407438055</updated>
+    </task>
+    <task id="LOCAL-00112" summary="Refactor RPC handling and improve cheat detection logic&#10;&#10;Replaced direct method patching with a dynamic `TargetMethods` approach for broader compatibility and updated player association logic. Made cheat data handling methods private to encapsulate functionality and prevent external access while refining position and ban processing logic.">
+      <option name="closed" value="true" />
+      <created>1747466338908</created>
+      <option name="number" value="00112" />
+      <option name="presentableId" value="LOCAL-00112" />
+      <option name="project" value="LOCAL" />
+      <updated>1747466338908</updated>
+    </task>
+    <task id="LOCAL-00113" summary="Refactor RPC handling and enhance cheat detection logic&#10;&#10;Reorganized RPC processing into modular methods for better readability and maintainability. Improved cheat detection by adding overload protection and additional player data checks. Updated vent handling to include new role types and enhanced player data management with better state tracking.">
+      <option name="closed" value="true" />
+      <created>1747572426851</created>
+      <option name="number" value="00113" />
+      <option name="presentableId" value="LOCAL-00113" />
+      <option name="project" value="LOCAL" />
+      <updated>1747572426852</updated>
+    </task>
+    <task id="LOCAL-00114" summary="Update RPC method and remove obsolete patch&#10;&#10;Replace `StartRpc` with `StartRpcImmediately` for better performance and remove the deprecated `StartRpcPatch` class. Additionally, update the `AmongUs.GameLibs.Steam` package to the latest version (2025.4.15) for improved compatibility.">
+      <option name="closed" value="true" />
+      <created>1747782402196</created>
+      <option name="number" value="00114" />
+      <option name="presentableId" value="LOCAL-00114" />
+      <option name="project" value="LOCAL" />
+      <updated>1747782402196</updated>
+    </task>
+    <task id="LOCAL-00115" summary="修复客户端校验">
+      <option name="closed" value="true" />
+      <created>1748004234191</created>
+      <option name="number" value="00115" />
+      <option name="presentableId" value="LOCAL-00115" />
+      <option name="project" value="LOCAL" />
+      <updated>1748004234191</updated>
+    </task>
+    <task id="LOCAL-00116" summary="Update RPC name formatting and adjust list index removal&#10;&#10;Replaced the invalid RPC name format with a more concise representation and corrected the index in the list removal logic to ensure proper functionality when `allowDesktop` is false and the user is a debugger. These changes improve code clarity and fix potential indexing issues.">
+      <option name="closed" value="true" />
+      <created>1748082322727</created>
+      <option name="number" value="00116" />
+      <option name="presentableId" value="LOCAL-00116" />
+      <option name="project" value="LOCAL" />
+      <updated>1748082322727</updated>
+    </task>
+    <task id="LOCAL-00117" summary="Refactor and enhance mod announcement loading logic&#10;&#10;Moved announcement loading to a separate thread and added Harmony patches to control popup behavior. &#10;This ensures announcements are only shown after loading is complete and improves the user experience by re-showing the popup post-load.">
+      <option name="closed" value="true" />
+      <created>1748090001509</created>
+      <option name="number" value="00117" />
+      <option name="presentableId" value="LOCAL-00117" />
+      <option name="project" value="LOCAL" />
+      <updated>1748090001509</updated>
+    </task>
+    <task id="LOCAL-00118" summary="Rename patch methods for clarity and consistency&#10;&#10;Renamed `A` to `AnnouncementPopupPrefix` and `B` to `AnnouncementPopupPostfix` to better reflect their purpose and improve code readability. This change aligns method names with their roles in Harmony patching.">
+      <option name="closed" value="true" />
+      <created>1748094227927</created>
+      <option name="number" value="00118" />
+      <option name="presentableId" value="LOCAL-00118" />
+      <option name="project" value="LOCAL" />
+      <updated>1748094227927</updated>
+    </task>
+    <option name="localTasksCounter" value="119" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
+  <component name="UnityProjectDiscoverer">
+    <option name="hasUnityReference" value="true" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ID_WIDTH">
+                <map>
+                  <entry key="Table.Default.Date.ColumnIdWidth" value="111" />
+                </map>
+              </option>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="FS_Dev" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="FAC大升级！" />
+    <MESSAGE value="完成！" />
+    <MESSAGE value="try to solve 1337" />
+    <MESSAGE value="bug&#10; fix" />
+    <MESSAGE value="log" />
+    <MESSAGE value="bug fix" />
+    <MESSAGE value=" 不再删除冗余模组文件，而是移动到新文件夹" />
+    <MESSAGE value="FINISH" />
+    <MESSAGE value="版本同步" />
+    <MESSAGE value="clean" />
+    <MESSAGE value="rider就是好用" />
+    <MESSAGE value="e" />
+    <MESSAGE value="opimization" />
+    <MESSAGE value="新的补充" />
+    <MESSAGE value="注释" />
+    <MESSAGE value="optimization" />
+    <MESSAGE value="Refactor RPC handling and improve cheat detection logic&#10;&#10;Replaced direct method patching with a dynamic `TargetMethods` approach for broader compatibility and updated player association logic. Made cheat data handling methods private to encapsulate functionality and prevent external access while refining position and ban processing logic." />
+    <MESSAGE value="Refactor RPC handling and enhance cheat detection logic&#10;&#10;Reorganized RPC processing into modular methods for better readability and maintainability. Added new cheat detection mechanisms, including overload tracking and improved player data handling. Updated vent handling to account for additional role types and enhanced logging for suspected cheaters." />
+    <MESSAGE value="Refactor cheat detection and RPC handling logic&#10;&#10;Reorganized RPC processing into modular methods for better readability and maintainability. Enhanced cheat detection with additional safeguards and improved player data handling. Added" />
+    <MESSAGE value="Refactor RPC handling and enhance cheat detection logic&#10;&#10;Reorganized RPC processing into modular methods for better readability and maintainability. Improved cheat detection by adding overload protection and additional player data checks. Updated vent handling to include new role types and enhanced player data management with better state tracking." />
+    <MESSAGE value="Update RPC method and remove obsolete patch&#10;&#10;Replace `StartRpc` with `StartRpcImmediately` for better performance and remove the deprecated `StartRpcPatch` class. Additionally, update the `AmongUs.GameLibs.Steam` package to the latest version (2025.4.15) for improved compatibility." />
+    <MESSAGE value="修复客户端校验" />
+    <MESSAGE value="Update RPC name formatting and adjust list index removal&#10;&#10;Replaced the invalid RPC name format with a more concise representation and corrected the index in the list removal logic to ensure proper functionality when `allowDesktop` is false and the user is a debugger. These changes improve code clarity and fix potential indexing issues." />
+    <MESSAGE value="Refactor and enhance mod announcement loading logic&#10;&#10;Moved announcement loading to a separate thread and added Harmony patches to control popup behavior. &#10;This ensures announcements are only shown after loading is complete and improves the user experience by re-showing the popup post-load." />
+    <MESSAGE value="Rename patch methods for clarity and consistency&#10;&#10;Renamed `A` to `AnnouncementPopupPrefix` and `B` to `AnnouncementPopupPostfix` to better reflect their purpose and improve code readability. This change aligns method names with their roles in Harmony patching." />
+    <option name="LAST_COMMIT_MESSAGE" value="Rename patch methods for clarity and consistency&#10;&#10;Renamed `A` to `AnnouncementPopupPrefix` and `B` to `AnnouncementPopupPostfix` to better reflect their purpose and improve code readability. This change aligns method names with their roles in Harmony patching." />
+    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
+          <properties exception="System.OperationCanceledException" breakIfHandledByOtherCode="false" displayValue="System.OperationCanceledException" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
+          <properties exception="System.Threading.Tasks.TaskCanceledException" breakIfHandledByOtherCode="false" displayValue="System.Threading.Tasks.TaskCanceledException" />
+          <option name="timeStamp" value="2" />
+        </breakpoint>
+        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
+          <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
+          <option name="timeStamp" value="3" />
+        </breakpoint>
+        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
+          <properties exception="Il2CppInterop.Runtime.Il2CppException" breakIfHandledByUserCode="true" breakIfHandledByOtherCode="false" isInternal="false" displayValue="Il2CppException" namespaceName="Il2CppInterop.Runtime">
+            <option name="internal" value="false" />
+          </properties>
+          <option name="timeStamp" value="14" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

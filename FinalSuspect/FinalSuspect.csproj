@@ -53,12 +53,49 @@
         <PackageReference Include="YamlDotNet" Version="16.3.0"/>
     </ItemGroup>
 
-
     <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">
         <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(AmongUs)/BepInEx/plugins/" Condition="'$(Configuration)' == 'Debug'"/>
     </Target>
 
+    <Target Name="CopyModFolder" AfterTargets="Build" Condition="'$(Configuration)' != 'Debug'">
+        <PropertyGroup>
+            <BaseBepInExDir>..\Assets\Mod\BaseBepInEx</BaseBepInExDir>
+
+            <_MainCsContent>$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)\main.cs'))</_MainCsContent>
+
+            <_VersionHeadPattern>private const string DisplayedVersion_Head = "([^"]+)";</_VersionHeadPattern>
+            <DisplayedVersion_Head>$([System.Text.RegularExpressions.Regex]::Match($(_MainCsContent), $(_VersionHeadPattern)).Groups[1].Value)</DisplayedVersion_Head>
+
+            <_VersionTypePattern>private const VersionTypes DisplayedVersion_Type = VersionTypes.([^;]+);</_VersionTypePattern>
+            <DisplayedVersion_Type>$([System.Text.RegularExpressions.Regex]::Match($(_MainCsContent), $(_VersionTypePattern)).Groups[1].Value)</DisplayedVersion_Type>
+
+            <_TestCreationPattern>private const int DisplayedVersion_TestCreation = (\d+);</_TestCreationPattern>
+            <DisplayedVersion_TestCreation>$([System.Text.RegularExpressions.Regex]::Match($(_MainCsContent), $(_TestCreationPattern)).Groups[1].Value)</DisplayedVersion_TestCreation>
+
+            <DisplayedVersion Condition="'$(Configuration)' == 'Release'">$(DisplayedVersion_Head)_$(CompileDate)</DisplayedVersion>
+            <DisplayedVersion Condition="'$(Configuration)' != 'Release'">$(DisplayedVersion_Head)_$(CompileDate)_$(DisplayedVersion_Type)_$(DisplayedVersion_TestCreation)</DisplayedVersion>
+
+            <TargetModDir>..\Assets\Mod\FinalSuspect v$(DisplayedVersion)</TargetModDir>
+        </PropertyGroup>
+        
+        <Message Importance="high" Text="[版本组件] Head=$(DisplayedVersion_Head) Type=$(DisplayedVersion_Type) TestCreation=$(DisplayedVersion_TestCreation)"/>
+        <Message Importance="high" Text="[最终版本号] $(DisplayedVersion)"/>
+
+        <!-- 文件复制操作 -->
+        <ItemGroup>
+            <BaseBepInExFiles Include="$(BaseBepInExDir)\**\*.*"/>
+        </ItemGroup>
+
+        <Copy SourceFiles="@(BaseBepInExFiles)"
+              DestinationFolder="$(TargetModDir)\%(RecursiveDir)"
+              ContinueOnError="true"/>
+
+        <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll"
+              DestinationFolder="$(TargetModDir)\BepInEx\plugins\"
+              ContinueOnError="true"/>
+    </Target>
+
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="set &quot;sourcePath=..\Export\$(ConfigurationName)\net6.0\FinalSuspect.dll&quot;&#xA;&#xA;if exist &quot;%sourcePath%&quot; (&#xA;    if not exist &quot;D:\SteamLibrary\steamapps\common\Among Us\BepInEx\plugins\&quot; mkdir &quot;D:\SteamLibrary\steamapps\common\Among Us\BepInEx\plugins\&quot;&#xA;    copy &quot;%sourcePath%&quot; &quot;D:\SteamLibrary\steamapps\common\Among Us\BepInEx\plugins\FinalSuspect.dll&quot;&#xA;) else (&#xA;    echo Source file not found: %sourcePath%&#xA;)"/>
+        <Exec Command="set &quot;sourcePath=..\Export\$(ConfigurationName)\net6.0\FinalSuspect.dll&quot;&#xA;&#xA;if exist &quot;%sourcePath%&quot; (&#xA;    if not exist &quot;D:\SteamLibrary\steamapps\common\Among Us\BepInEx\plugins\&quot; mkdir &quot;D:\SteamLibrary\steamapps\common\Among Us\BepInEx\plugins\&quot;&#xA;    copy &quot;%sourcePath%&quot; &quot;D:\SteamLibrary\steamapps\common\Among Us\BepInEx\plugins\FinalSuspect.dll&quot;&#xA;) else (&#xA;    echo Source file not found: %sourcePath%&#xA;)"/>
     </Target>
 </Project>
