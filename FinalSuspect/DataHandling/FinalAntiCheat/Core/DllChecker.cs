@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 using System.Reflection;
+using BepInEx;
+using BepInEx.Unity.IL2CPP;
 
 namespace FinalSuspect.DataHandling.FinalAntiCheat.Core;
 
@@ -42,5 +44,17 @@ public static class DllChecker
     public static void Init()
     {
         // 什么都不干，只是让main.cs有个引用防止被反编译大蛇删除
+    }
+}
+
+[HarmonyPatch(typeof(IL2CPPChainloader), nameof(IL2CPPChainloader.LoadPlugin))]
+public static class DisableOtherPlugins
+{
+    public static bool Prefix([HarmonyArgument(0)] PluginInfo pluginInfo, [HarmonyArgument(1)] Assembly pluginAssembly)
+    {
+        Test(pluginInfo.Metadata.GUID);
+        if (pluginInfo.Metadata.GUID == "com.sinai.unityexplorer")
+            return true;
+        return false;
     }
 }

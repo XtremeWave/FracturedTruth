@@ -10,7 +10,7 @@ namespace FinalSuspect.DataHandling.FinalAntiCheat.Core;
 public class PlayerCheatData
 {
     public bool IsSuspectCheater { get; private set; }
-    public ClientData ClientData { get; set; }
+    public ClientData ClientData { get; private set; }
     public string FriendCode => ClientData.FriendCode;
     public string Puid => ClientData.GetHashedPuid();
     public bool InComingOverloaded { get; private set; }
