@@ -34,12 +34,8 @@ public class Main : BasePlugin
     public const string PluginVersion = "1.1.3.7";
     public const string PluginGuid = "cn.finalsuspect.xtremewave";
     public const int PluginCreation = 0;
-
-    // == 认证设定 / Authentication Config ==
-    public static HashAuth DebugKeyAuth { get; private set; }
     public const string DebugKeyHash = "c0fd562955ba56af3ae20d7ec9e64c664f0facecef4b3e366e109306adeae29d";
     public const string DebugKeySalt = "59687b";
-    public static ConfigEntry<string> DebugKeyInput { get; private set; }
 
     // == 版本相关设定 / Version Config ==
     public const string LowestSupportedVersion = "2025.4.15"; // 16.0.5
@@ -53,14 +49,7 @@ public class Main : BasePlugin
     /// </summary>
     private const VersionTypes DisplayedVersion_Type = VersionTypes.Canary;
 
-    private const int DisplayedVersion_TestCreation = 8;
-
-    public static readonly string DisplayedVersion =
-#if RELEASE
-        $"{DisplayedVersion_Head}_{DisplayedVersion_Date}";
-#else
-        $"{DisplayedVersion_Head}_{DisplayedVersion_Date}_{DisplayedVersion_Type}_{DisplayedVersion_TestCreation}";
-#endif
+    private const int DisplayedVersion_TestCreation = 9;
 
 
     // == 链接相关设定 / Link Config ==
@@ -68,9 +57,14 @@ public class Main : BasePlugin
     public const string QQInviteUrl = "https://qm.qq.com/q/GNbm9UjfCa";
     public const string DiscordInviteUrl = "https://discord.gg/kz787Zg7h8/";
     public const string GithubRepoUrl = "https://github.com/XtremeWave/FinalSuspect/";
+    public const float RoleTextSize = 2f;
 
-    // ==========
-    public Harmony Harmony { get; } = new(PluginGuid);
+    public static readonly string DisplayedVersion =
+#if RELEASE
+        $"{DisplayedVersion_Head}_{DisplayedVersion_Date}";
+#else
+        $"{DisplayedVersion_Head}_{DisplayedVersion_Date}_{DisplayedVersion_Type}_{DisplayedVersion_TestCreation}";
+#endif
     public static readonly Version version = Version.Parse(PluginVersion);
     public static ManualLogSource Logger;
     public static bool hasArgumentException;
@@ -78,48 +72,10 @@ public class Main : BasePlugin
     public static bool ExceptionMessageIsShown;
     public static string CredentialsText;
 
-#pragma warning disable CS0618 // 类型或成员已过时
-    public const string GitBaseTag = ThisAssembly.Git.BaseTag;
-    public const string GitCommit = ThisAssembly.Git.Commit;
-    public const string GitCommits = ThisAssembly.Git.Commits;
-    public const string GitBranch = ThisAssembly.Git.Branch;
-    public const bool GitIsDirty = ThisAssembly.Git.IsDirty;
-    public const string GitSha = ThisAssembly.Git.Sha;
-    public const string GitTag = ThisAssembly.Git.Tag;
-#pragma warning restore CS0618
-    public static NormalGameOptionsV09 NormalOptions => GameOptionsManager.Instance.currentNormalGameOptions;
-    public static HideNSeekGameOptionsV09 HideNSeekOptions => GameOptionsManager.Instance.currentHideNSeekGameOptions;
-
-    //Client Options
-    public static ConfigEntry<bool> KickPlayerWhoFriendCodeNotExist { get; private set; }
-    public static ConfigEntry<bool> KickPlayerWithDenyName { get; private set; }
-    public static ConfigEntry<bool> KickPlayerInBanList { get; private set; }
-    public static ConfigEntry<bool> SpamDenyWord { get; private set; }
-    public static ConfigEntry<bool> UnlockFPS { get; private set; }
-    public static ConfigEntry<string> ChangeOutfit { get; private set; }
-    public static ConfigEntry<bool> AutoStartGame { get; private set; }
-    public static ConfigEntry<bool> AutoEndGame { get; private set; }
-    public static ConfigEntry<bool> DisableVanillaSound { get; private set; }
-    public static ConfigEntry<bool> DisableFAC { get; private set; }
-    public static ConfigEntry<bool> ShowPlayerInfo { get; private set; }
-    public static ConfigEntry<bool> UseModCursor { get; private set; }
-    public static ConfigEntry<bool> FastBoot { get; private set; }
-    public static ConfigEntry<bool> VersionCheat { get; private set; }
-    public static ConfigEntry<bool> GodMode { get; private set; }
-    public static ConfigEntry<bool> NoGameEnd { get; private set; }
-
     public static readonly string[] OutfitType =
     [
         "BeanMode", "HorseMode", "LongMode"
     ];
-
-    //Other Configs
-    public static ConfigEntry<string> HideName { get; private set; }
-    public static ConfigEntry<string> HideColor { get; private set; }
-    public static ConfigEntry<bool> ShowResults { get; private set; }
-    public static ConfigEntry<string> WebhookURL { get; private set; }
-    public static ConfigEntry<bool> EnableFinalSuspect { get; private set; }
-    public static ConfigEntry<string> LastStartVersion { get; private set; }
 
     public static Dictionary<RoleTypes, string> roleColors;
     public static List<int> clientIdList = [];
@@ -127,13 +83,6 @@ public class Main : BasePlugin
     public static string HostNickName = "";
     public static bool IsInitialRelease = DateTime.Now.Month == 8 && DateTime.Now.Day is 14;
     public static bool IsAprilFools = DateTime.Now.Month == 4 && DateTime.Now.Day is 1;
-    public const float RoleTextSize = 2f;
-
-    public static IEnumerable<PlayerControl> AllPlayerControls =>
-        PlayerControl.AllPlayerControls.ToArray().Where(p => p);
-
-    public static IEnumerable<PlayerControl> AllAlivePlayerControls =>
-        PlayerControl.AllPlayerControls.ToArray().Where(p => p && p.IsAlive() && !p.Data.Disconnected);
 
     public static Main Instance;
 
@@ -156,6 +105,47 @@ public class Main : BasePlugin
         "Snow Plum Niang", "Fried Yogurt", "Egg Tart", "Muffin", "Sago Dew", "panna cotta", "soufflé", "croissant",
         "toffee"
     ];
+
+    // == 认证设定 / Authentication Config ==
+    public static HashAuth DebugKeyAuth { get; private set; }
+    public static ConfigEntry<string> DebugKeyInput { get; private set; }
+
+    // ==========
+    public Harmony Harmony { get; } = new(PluginGuid);
+    public static NormalGameOptionsV09 NormalOptions => GameOptionsManager.Instance.currentNormalGameOptions;
+    public static HideNSeekGameOptionsV09 HideNSeekOptions => GameOptionsManager.Instance.currentHideNSeekGameOptions;
+
+    //Client Options
+    public static ConfigEntry<bool> KickPlayerWhoFriendCodeNotExist { get; private set; }
+    public static ConfigEntry<bool> KickPlayerWithDenyName { get; private set; }
+    public static ConfigEntry<bool> KickPlayerInBanList { get; private set; }
+    public static ConfigEntry<bool> SpamDenyWord { get; private set; }
+    public static ConfigEntry<bool> UnlockFPS { get; private set; }
+    public static ConfigEntry<string> ChangeOutfit { get; private set; }
+    public static ConfigEntry<bool> AutoStartGame { get; private set; }
+    public static ConfigEntry<bool> AutoEndGame { get; private set; }
+    public static ConfigEntry<bool> DisableVanillaSound { get; private set; }
+    public static ConfigEntry<bool> DisableFAC { get; private set; }
+    public static ConfigEntry<bool> ShowPlayerInfo { get; private set; }
+    public static ConfigEntry<bool> UseModCursor { get; private set; }
+    public static ConfigEntry<bool> FastBoot { get; private set; }
+    public static ConfigEntry<bool> VersionCheat { get; private set; }
+    public static ConfigEntry<bool> GodMode { get; private set; }
+    public static ConfigEntry<bool> NoGameEnd { get; private set; }
+
+    //Other Configs
+    public static ConfigEntry<string> HideName { get; private set; }
+    public static ConfigEntry<string> HideColor { get; private set; }
+    public static ConfigEntry<bool> ShowResults { get; private set; }
+    public static ConfigEntry<string> WebhookURL { get; private set; }
+    public static ConfigEntry<bool> EnableFinalSuspect { get; private set; }
+    public static ConfigEntry<string> LastStartVersion { get; private set; }
+
+    public static IEnumerable<PlayerControl> AllPlayerControls =>
+        PlayerControl.AllPlayerControls.ToArray().Where(p => p);
+
+    public static IEnumerable<PlayerControl> AllAlivePlayerControls =>
+        PlayerControl.AllPlayerControls.ToArray().Where(p => p && p.IsAlive() && !p.Data.Disconnected);
 
     public static string Get_TName_Snacks =>
         TranslationController.Instance.currentLanguage.languageID is SupportedLangs.SChinese or SupportedLangs.TChinese
@@ -271,6 +261,16 @@ public class Main : BasePlugin
         Msg("========= FinalSuspect loaded! =========", "Plugin Load");
         Application.quitting += new Action(SaveNowLog);
     }
+
+#pragma warning disable CS0618 // 类型或成员已过时
+    public const string GitBaseTag = ThisAssembly.Git.BaseTag;
+    public const string GitCommit = ThisAssembly.Git.Commit;
+    public const string GitCommits = ThisAssembly.Git.Commits;
+    public const string GitBranch = ThisAssembly.Git.Branch;
+    public const bool GitIsDirty = ThisAssembly.Git.IsDirty;
+    public const string GitSha = ThisAssembly.Git.Sha;
+    public const string GitTag = ThisAssembly.Git.Tag;
+#pragma warning restore CS0618
 }
 
 /// <summary>

@@ -26,10 +26,16 @@ internal class RPCHandlerPatch
 {
     public static IEnumerable<MethodBase> TargetMethods()
     {
-        return from type in typeof(InnerNetObject).Assembly.GetTypes() where typeof(InnerNetObject).IsAssignableFrom(type) && !type.IsAbstract select type.GetMethod("HandleRpc", BindingFlags.Public | BindingFlags.Instance) into method where method != null && method.GetBaseDefinition() != method select method;
+        return from type in typeof(InnerNetObject).Assembly.GetTypes()
+            where typeof(InnerNetObject).IsAssignableFrom(type) && !type.IsAbstract
+            select type.GetMethod("HandleRpc", BindingFlags.Public | BindingFlags.Instance)
+            into method
+            where method != null && method.GetBaseDefinition() != method
+            select method;
     }
 
-    public static bool Prefix(InnerNetObject __instance, [HarmonyArgument(0)] ref byte callId, [HarmonyArgument(1)] MessageReader reader)
+    public static bool Prefix(InnerNetObject __instance, [HarmonyArgument(0)] ref byte callId,
+        [HarmonyArgument(1)] MessageReader reader)
     {
         if (!__instance) return true;
 
@@ -98,13 +104,15 @@ internal class RPCHandlerPatch
             if (notify)
             {
                 NotificationPopperPatch.NotificationPop(
-                    string.Format(GetString("Warning.InvalidSlothRPC"), player.GetRealName(), $"{callId}({RPC.GetRpcName(callId)})"));
+                    string.Format(GetString("Warning.InvalidSlothRPC"), player.GetRealName(),
+                        $"{callId}({RPC.GetRpcName(callId)})"));
             }
         }
         else if (notify)
         {
             NotificationPopperPatch.NotificationPop(
-                string.Format(GetString("Warning.InvalidSlothRPC_NotHost"), player.GetRealName(), $"{callId}({RPC.GetRpcName(callId)})"));
+                string.Format(GetString("Warning.InvalidSlothRPC_NotHost"), player.GetRealName(),
+                    $"{callId}({RPC.GetRpcName(callId)})"));
         }
     }
 
@@ -231,7 +239,8 @@ internal static class RPC
             while (!PlayerControl.LocalPlayer) await Task.Delay(500);
             if (!Main.VersionCheat.Value)
             {
-                var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)RpcCalls.CancelPet, SendOption.Reliable);
+                var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
+                    (byte)RpcCalls.CancelPet, SendOption.Reliable);
                 writer.Write(Main.PluginVersion);
                 writer.Write($"{Main.GitCommit}({Main.GitBranch})");
                 writer.Write(Main.ForkId);
@@ -264,7 +273,8 @@ internal static class RPC
             /* ignored */
         }
 
-        Info($"FromNetID:{targetNetId}({from}) TargetClientID:{targetClientId}({target}) CallID:{callId}({rpcName})", "SendRPC");
+        Info($"FromNetID:{targetNetId}({from}) TargetClientID:{targetClientId}({target}) CallID:{callId}({rpcName})",
+            "SendRPC");
     }
 
     public static string GetRpcName(byte callId)
