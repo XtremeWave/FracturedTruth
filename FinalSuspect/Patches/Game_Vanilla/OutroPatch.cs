@@ -62,7 +62,7 @@ class SetEverythingUpPatch
             new SimpleButton(
                 __instance.transform,
                 "ShowHideResultsButton",
-                new Vector3(-4.5f, 2.6f, -14f), // 比 BackgroundLayer(z = -13) 更靠前
+                new Vector3(-4.5f * GetResolutionOffset(), 2.6f, -14f), // 比 BackgroundLayer(z = -13) 更靠前
                 new Color32(209, 190, 0, byte.MaxValue),
                 new Color32(byte.MaxValue, byte.MaxValue, 0, byte.MaxValue),
                 () =>

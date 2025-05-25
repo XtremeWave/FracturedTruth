@@ -140,16 +140,15 @@ public class VersionShowerStartPatch
             CreditTextCredential.alignment = TextAlignmentOptions.Right;
             CreditTextCredential.text = credentialsText;
             CreditTextCredential.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
-            CreditTextCredential.transform.localPosition = new Vector3(0.3f, -2.6f, 0f);
 
             CreditTextCredential.enabled = GameObject.Find("FinalSuspect Background");
             CreditTextCredential.SetOutlineColor(ColorHelper.ShadeColor(ColorHelper.ModColor32, 0.75f));
             CreditTextCredential.SetOutlineThickness(0.20f);
             CreditTextCredential.fontStyle = FontStyles.Bold;
-            var ap1 = OVersionShower.GetComponent<AspectPosition>();
-            if (ap1) Object.Destroy(ap1);
-            var ap2 = CreditTextCredential.GetComponent<AspectPosition>();
-            if (ap2) Object.Destroy(ap2);
+            var ap_credit = CreditTextCredential.gameObject.AddComponent<AspectPosition>();
+            ap_credit.Alignment = AspectPosition.EdgeAlignments.RightBottom;
+            ap_credit.DistanceFromEdge = new Vector3(5f, 0.4f);
+            ap_credit.updateAlways = true;
         }
 
         TeamLogo = new GameObject
@@ -160,7 +159,11 @@ public class VersionShowerStartPatch
         TeamLogo.AddComponent<SpriteRenderer>().sprite = LoadSprite("TeamLogo.png", 400f);
         TeamLogo.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 120);
         TeamLogo.transform.SetParent(VisitText.transform.parent);
-        TeamLogo.transform.localPosition = new Vector3(-4.72f, -2.5f, 0f);
+        var ap_teamLogo = TeamLogo.gameObject.AddComponent<AspectPosition>();
+        ap_teamLogo.Alignment = AspectPosition.EdgeAlignments.LeftBottom;
+        ap_teamLogo.DistanceFromEdge = new Vector3(0.6f, 0.5f);
+        ap_teamLogo.updateAlways = true;
+        
         TeamLogo.SetActive(false);
         ModLogo = new GameObject
         {
@@ -169,7 +172,10 @@ public class VersionShowerStartPatch
         };
         ModLogo.AddComponent<SpriteRenderer>().sprite = LoadSprite("FinalSuspect-Logo.png", 250f);
         ModLogo.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 120);
-        ModLogo.transform.localPosition = new Vector3(3.7f, -2.6f, 0f);
+        var ap_modLogo = ModLogo.gameObject.AddComponent<AspectPosition>();
+        ap_modLogo.Alignment = AspectPosition.EdgeAlignments.RightBottom;
+        ap_modLogo.DistanceFromEdge = new Vector3(1.6f, 0.4f);
+        ap_modLogo.updateAlways = true;
         ModLogo.SetActive(false);
     }
 
@@ -191,16 +197,18 @@ public class VersionShowerStartPatch
             ? string.Format(GetString("FinalSuspectWelcomeText"), ColorHelper.ModColor)
             : GetString("ConnectToFinalSuspectServerFailed");
         VisitText.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
-        VisitText.transform.localPosition = new Vector3(-3.92f, -2.9f, 0f);
         VisitText.enabled = GameObject.Find("FinalSuspect Background");
 
         __instance.text.alignment = TextAlignmentOptions.Left;
-        OVersionShower.transform.localPosition = new Vector3(-4.92f, -3.3f, 0f);
-
         var ap1 = OVersionShower.GetComponent<AspectPosition>();
-        if (ap1) Object.Destroy(ap1);
-        var ap2 = VisitText.GetComponent<AspectPosition>();
-        if (ap2) Object.Destroy(ap2);
+        ap1.Alignment = AspectPosition.EdgeAlignments.LeftBottom;
+        ap1.DistanceFromEdge = new Vector3(0.4f, -0.3f);
+        ap1.updateAlways = true;
+        
+        var ap2 = VisitText.gameObject.AddComponent<AspectPosition>();
+        ap2.Alignment = AspectPosition.EdgeAlignments.LeftBottom;
+        ap2.DistanceFromEdge = new Vector3(1.4f, 0.1f);
+        ap2.updateAlways = true;
     }
 }
 
@@ -219,7 +227,7 @@ internal class TitleLogoPatch
     public static GameObject AULogo;
     public static GameObject BottomButtonBounds;
 
-    public static Vector3 RightPanelOp;
+    public static Vector3 RightPanelOp = new(2.8f, -0.4f, -5.0f);
 
     public static void Postfix(MainMenuManager __instance)
     {
@@ -302,13 +310,12 @@ internal class TitleLogoPatch
         if (!(RightPanel = GameObject.Find("RightPanel"))) return;
         var rpap = RightPanel.GetComponent<AspectPosition>();
         if (rpap) Object.Destroy(rpap);
-        RightPanelOp = RightPanel.transform.localPosition;
         RightPanel.transform.localPosition = RightPanelOp + new Vector3(10f, 0f, 0f);
         RightPanel.GetComponent<SpriteRenderer>().color = new Color(1f, 0.78f, 0.9f, 1f);
 
         CloseRightButton = new GameObject("CloseRightPanelButton");
         CloseRightButton.transform.SetParent(RightPanel.transform);
-        CloseRightButton.transform.localPosition = new Vector3(-4.78f, 1.3f, 1f);
+        CloseRightButton.transform.localPosition = new Vector3(-4.78f * GetResolutionOffset(), 1.3f, 1f);
         CloseRightButton.transform.localScale = new Vector3(1f, 1f, 1f);
         CloseRightButton.AddComponent<BoxCollider2D>().size = new Vector2(0.6f, 1.5f);
         var closeRightSpriteRenderer = CloseRightButton.AddComponent<SpriteRenderer>();
@@ -328,7 +335,7 @@ internal class TitleLogoPatch
         var ttap = Tint.GetComponent<AspectPosition>();
         if (ttap) Object.Destroy(ttap);
         Tint.transform.SetParent(RightPanel.transform);
-        Tint.transform.localPosition = new Vector3(-0.0824f, 0.0513f, Tint.transform.localPosition.z);
+        Tint.transform.localPosition = new Vector3(-0.0824f * GetResolutionOffset(), 0.0513f, Tint.transform.localPosition.z);
         Tint.transform.localScale = new Vector3(1f, 1f, 1f);
 
         var creditsScreen = __instance.creditsScreen;
@@ -342,7 +349,8 @@ internal class TitleLogoPatch
 
         if (!(Sizer = GameObject.Find("Sizer"))) return;
         if (!(AULogo = GameObject.Find("LOGO-AU"))) return;
-        Sizer.transform.localPosition += new Vector3(0f, 0.12f, 0f);
+        Sizer.transform.localPosition =
+            new Vector3(-4.0f * GetResolutionOffset(), 1.4f, -1.0f);
         AULogo.transform.localScale = new Vector3(0.66f, 0.67f, 1f);
         AULogo.transform.position += new Vector3(0f, 0.1f, 0f);
         var logoRenderer = AULogo.GetComponent<SpriteRenderer>();
@@ -350,6 +358,10 @@ internal class TitleLogoPatch
 
         if (!(BottomButtonBounds = GameObject.Find("BottomButtonBounds"))) return;
         BottomButtonBounds.transform.localPosition -= new Vector3(0f, 0.1f, 0f);
+        
+        var mainButtonsobj = GameObject.Find("Main Buttons");
+        mainButtonsobj.transform.position = new Vector3(-3.4f * GetResolutionOffset(),
+            mainButtonsobj.transform.position.y, mainButtonsobj.transform.position.z);
         return;
         static void ResetParent(GameObject obj) => obj.transform.SetParent(LeftPanel.transform.parent);
     }
@@ -390,5 +402,48 @@ internal class CreditsScreenPopUpPatch
     public static void Postfix(CreditsScreenPopUp __instance)
     {
         __instance.BackButton.transform.parent.FindChild("Background").gameObject.SetActive(false);
+    }
+}
+
+[HarmonyPatch(typeof(ResolutionManager))]
+internal class ResolutionManagerPatch
+{
+    [HarmonyPatch(nameof(ResolutionManager.SetResolution))]
+    public static void Postfix(int width, int height)
+    {
+        _ = new LateTask(() =>
+        {
+            if (!GameObject.Find("MainUI")) return;
+            var offset = GetResolutionOffset();
+            TitleLogoPatch.CloseRightButton.transform.localPosition = new Vector3(-4.78f * offset, 1.3f, 1.0f);
+            TitleLogoPatch.Tint.transform.localPosition =
+                new Vector3(-0.0824f * offset, 0.0513f, TitleLogoPatch.Tint.transform.localPosition.z);
+            TitleLogoPatch.Sizer.transform.localPosition = new Vector3(-4.0f * offset, 1.4f, -1.0f);
+            var mainButtons = GameObject.Find("Main Buttons");
+            mainButtons.transform.position = new Vector3(-3.4f * offset, mainButtons.transform.position.y,
+                mainButtons.transform.position.z);
+            MainMenuButtonHoverAnimation.RefreshButtons(mainButtons);
+            
+            List<GameObject> nullObj = [];
+            foreach (var button in MainMenuManagerPatch.MainMenuCustomButtons)
+            {
+                if (!button)
+                {
+                    nullObj.Add(button);
+                    continue;
+                }
+            
+                var scale = MainMenuManagerPatch.Instance.quitButton.transform.localScale;
+                button.transform.localScale = new Vector3(scale.x * GetResolutionOffset(), button.transform.localScale.y);
+            }
+
+            foreach (var obj in nullObj)
+            {
+                MainMenuManagerPatch.MainMenuCustomButtons.Remove(obj);
+            }
+
+            TitleLogoPatch.CloseRightButton.transform.localPosition =
+                new Vector3(-4.78f * GetResolutionOffset(), 1.3f, 1f);
+        }, 0.01f, "RefreshMenu");
     }
 }

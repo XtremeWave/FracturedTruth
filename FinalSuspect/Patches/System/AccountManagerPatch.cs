@@ -96,7 +96,7 @@ public static class AwakeAccountManager
         }
     }
 
-    public static IEnumerator SwitchRoleIllustration(SpriteRenderer spriter)
+    private static IEnumerator SwitchRoleIllustration(SpriteRenderer spriter)
     {
         while (true)
         {

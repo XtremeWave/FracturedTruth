@@ -16,8 +16,8 @@ public static class InGameRoleInfoMenu
     public static GameObject Menu;
 
     public static GameObject RoleInfo;
-    public static GameObject RoleRoleIllustration;
-    public static SpriteRenderer RoleRoleIllustrationSP => RoleRoleIllustration.GetComponent<SpriteRenderer>();
+    public static GameObject RoleIllustration;
+    public static SpriteRenderer RoleIllustrationSP => RoleIllustration.GetComponent<SpriteRenderer>();
 
     public static TextMeshPro RoleInfoTMP => RoleInfo.GetComponent<TextMeshPro>();
 
@@ -48,10 +48,10 @@ public static class InGameRoleInfoMenu
         RoleInfoTMP.alignment = TextAlignmentOptions.Left;
         RoleInfoTMP.fontSize = 2f;
 
-        RoleRoleIllustration = new GameObject("Character Illustration") { layer = 5 };
-        RoleRoleIllustration.transform.SetParent(Menu.transform);
-        RoleRoleIllustration.AddComponent<SpriteRenderer>();
-        RoleRoleIllustration.transform.localPosition = new Vector3(2.3f, 0.8f, 4f);
+        RoleIllustration = new GameObject("Character Illustration") { layer = 5 };
+        RoleIllustration.transform.SetParent(Menu.transform);
+        RoleIllustration.AddComponent<SpriteRenderer>();
+        RoleIllustration.transform.localPosition = new Vector3(2.3f, 0.8f, 4f);
     }
 
     public static void SetRoleInfoRef(PlayerControl player)
@@ -71,7 +71,7 @@ public static class InGameRoleInfoMenu
         var HnSPrefix = "";
         if (!IsNormalGame && player.IsAlive())
             HnSPrefix = "HnS";
-        RoleRoleIllustrationSP.sprite = LoadSprite($"CI_{HnSPrefix + role}.png", 320f);
+        RoleIllustrationSP.sprite = LoadSprite($"CI_{HnSPrefix + role}.png", 320f);
     }
 
     public static void Show()

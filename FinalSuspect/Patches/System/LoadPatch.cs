@@ -34,7 +34,6 @@ public static class LoadPatch
     {
         public static bool Prefix(SplashManager __instance)
         {
-            ResolutionManager.SetResolution(1920, 1080, Screen.fullScreen);
             __instance.startTime = Time.time;
             __instance.StartCoroutine(InitializeRefData(__instance));
             return false;
@@ -464,12 +463,5 @@ public static class LoadPatch
             __instance.startedSceneLoad = true;
         }
     }
-
-    [HarmonyPatch(typeof(LoadingBarManager), nameof(LoadingBarManager.ToggleLoadingBar))]
-    public class LoadingBarManagerPatch
-    {
-        public static void Prefix(ref bool on) => on = false;
-    }
-
     #endregion
 }

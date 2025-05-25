@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Features;
 using FinalSuspect.Modules.Resources;
@@ -63,26 +64,31 @@ public class MainMenuManagerPatch
         _ = new LateTask(() => { isOnline = true; }, 0.1f, "Set Online Status");
     }
 
+    public static readonly List<GameObject> MainMenuCustomButtons = [];
+    
     [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.LateUpdate)), HarmonyPostfix]
-    public static void MainMenuManager_LateUpdate()
+    public static void MainMenuManager_LateUpdate(MainMenuManager __instance)
     {
         CustomPopup.Update();
 
         if (!GameObject.Find("MainUI")) ShowingPanel = false;
-        VersionShowerStartPatch.CreditTextCredential.gameObject.SetActive(!ShowingPanel &&
-                                                                          MainMenuButtonHoverAnimation.Active);
+        VersionShowerStartPatch.CreditTextCredential.gameObject.SetActive(!ShowingPanel && MainMenuButtonHoverAnimation.Active);
 
         if (TitleLogoPatch.RightPanel)
         {
             var pos1 = TitleLogoPatch.RightPanel.transform.localPosition;
-            var lerp1 = Vector3.Lerp(pos1, TitleLogoPatch.RightPanelOp + new Vector3(ShowingPanel ? 0f : 10f, 0f, 0f),
+            var pos3 = new Vector3(
+                TitleLogoPatch.RightPanelOp.x * GetResolutionOffset(),
+                TitleLogoPatch.RightPanelOp.y, TitleLogoPatch.RightPanelOp.z);
+            var lerp1 = Vector3.Lerp(pos1,
+                ShowingPanel ? pos3 : TitleLogoPatch.RightPanelOp + new Vector3(10f, 0f, 0f),
                 Time.deltaTime * (ShowingPanel ? 3f : 2f));
             if (ShowingPanel
-                    ? TitleLogoPatch.RightPanel.transform.localPosition.x > TitleLogoPatch.RightPanelOp.x + 0.03f
+                    ? TitleLogoPatch.RightPanel.transform.localPosition.x > pos3.x + 0.03f
                     : TitleLogoPatch.RightPanel.transform.localPosition.x < TitleLogoPatch.RightPanelOp.x + 9f
                ) TitleLogoPatch.RightPanel.transform.localPosition = lerp1;
         }
-
+        
         if (ShowedBak || !isOnline) return;
         var bak = GameObject.Find("BackgroundTexture");
         if (!bak || !bak.active) return;
@@ -167,6 +173,9 @@ public class MainMenuManagerPatch
             passiveButton.OnClick.AddListener(action);
             var aspectPosition = button.GetComponent<AspectPosition>();
             aspectPosition.anchorPoint = new Vector2(col == 1 ? 0.415f : 0.583f, 0.5f - 0.08f * row);
+            var scale = button.transform.localScale;
+            button.transform.localScale = new Vector3(scale.x * GetResolutionOffset(), button.transform.localScale.y);
+            MainMenuCustomButtons.Add(button);
             return button;
         }
     }

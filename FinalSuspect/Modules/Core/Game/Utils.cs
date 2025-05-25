@@ -23,6 +23,11 @@ public static class Utils
     public static long GetTimeStamp(DateTime? dateTime = null) =>
         (long)((dateTime ?? DateTime.Now).ToUniversalTime() - timeStampStartTime).TotalSeconds;
 
+    public static float GetResolutionOffset()
+    {
+        return (float)Screen.width / Screen.height / (16f / 9f);
+    }
+
     public static ClientData GetClientById(int id)
     {
         try

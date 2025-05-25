@@ -84,7 +84,7 @@ public static class HudManagerPatch
     public static string LastRoomCode;
     public static string LastServer;
 
-    public static IEnumerator SwitchRoleIllustration(SpriteRenderer spriter)
+    private static IEnumerator SwitchRoleIllustration(SpriteRenderer spriter)
     {
         while (true)
         {
@@ -160,7 +160,7 @@ public static class HudManagerPatch
         if (!IsInGame) return;
         var color = GetRoleColor(PlayerControl.LocalPlayer.GetRoleType());
         __instance.AbilityButton.buttonLabelText.SetOutlineColor(color);
-        __instance.AbilityButton.cooldownTimerText.color = Color.green;
+        __instance.AbilityButton.cooldownTimerText.color = color;
         __instance.KillButton.cooldownTimerText.color = ColorHelper.ImpostorRedPale;
     }
 
@@ -189,8 +189,8 @@ public static class HudManagerPatch
                 __instance.transform,
                 "ShowHideResultsButton",
                 IsInGame
-                    ? new Vector3(0.2f, 2.685f, -14f)
-                    : new Vector3(-4.5f, 2.6f, -14f), // 比 BackgroundLayer(z = -13) 更靠前
+                    ? new Vector3(0.2f * GetResolutionOffset(), 2.685f, -14f)
+                    : new Vector3(-4.5f * GetResolutionOffset(), 2.6f, -14f), // 比 BackgroundLayer(z = -13) 更靠前
                 new Color32(209, 190, 255, byte.MaxValue),
                 new Color32(208, 222, 255, byte.MaxValue),
                 () =>
