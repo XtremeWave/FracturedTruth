@@ -10,3 +10,10 @@ FinalSuspect/FodyWeavers.xsd
 
 /FinalSuspect.sln
 *.zip
+
+# 忽略Assets/Mod下所有内容
+Assets/Mod/**
+# 白名单：保留BaseBepInEx目录及其所有内容
+!Assets/Mod/BaseBepInEx/
+Assets/Mod/BaseBepInEx/**
+!Assets/Mod/BaseBepInEx/**/*
