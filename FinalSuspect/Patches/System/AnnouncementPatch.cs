@@ -182,6 +182,7 @@ public class ModNewsHistory
 
         _ = new MainThreadTask(() =>
         {
+            if (!MainMenuManagerPatch.Instance) return;
             try
             {
                 AnnouncementLoadComplete = true;
@@ -189,7 +190,7 @@ public class ModNewsHistory
                 MainMenuManagerPatch.Instance.announcementPopUp.Show();
                 Info("Loading mod announcements complete.", "SetModAnnouncements");
             }
-            catch 
+            catch
             {
                 /* ignored */
             }
