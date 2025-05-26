@@ -24,7 +24,7 @@ public static class DllChecker
 
             if (fileName != "FinalSuspect.dll")
             {
-                Error($"检测到非法文件: {fileName}！游戏将被强制终止。", "FAC");
+                Error($"检测到非法/模组文件: {fileName}！游戏将被强制终止。", "FAC");
                 Environment.Exit(1);
             }
         }
@@ -36,7 +36,7 @@ public static class DllChecker
 
             if (File.Exists(fullPath))
             {
-                Error($"检测到非法/模组文件: {fileName}！游戏将被强制终止。", "FAC");
+                Error($"检测到非法文件: {fileName}！游戏将被强制终止。", "FAC");
                 Environment.Exit(1);
             }
         }

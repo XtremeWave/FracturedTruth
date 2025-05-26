@@ -1,12 +1,7 @@
 using System;
 using System.Reflection;
-using HarmonyLib;
 
 namespace FinalSuspect.DataHandling.FinalAntiCheat.Core;
-
-using System;
-using System.Reflection;
-using HarmonyLib;
 
 public static class HarmonyCleaner
 {
@@ -26,8 +21,8 @@ public static class HarmonyCleaner
         {
             if (field.FieldType == typeof(Harmony))
             {
-                var harmony = (Harmony)field.GetValue(null);
-                harmony?.UnpatchAll();
+                _ = (Harmony)field.GetValue(null);
+                //harmony?.UnpatchAll();
             }
         }
 
@@ -36,24 +31,24 @@ public static class HarmonyCleaner
         {
             if (prop.PropertyType == typeof(Harmony) && prop.CanRead)
             {
-                var harmony = (Harmony)prop.GetValue(null);
-                harmony?.UnpatchAll();
+                _ = (Harmony)prop.GetValue(null);
+                //harmony?.UnpatchAll();
             }
         }
     }
-    
+
     private static void ProcessInstanceHarmonyMembers(Type type)
     {
         try
         {
             object instance = Activator.CreateInstance(type);
-            
+
             foreach (FieldInfo field in type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
             {
                 if (field.FieldType == typeof(Harmony))
                 {
                     var harmony = (Harmony)field.GetValue(instance);
-                    harmony?.UnpatchAll();
+                    //harmony?.UnpatchAll();
                 }
             }
 
@@ -62,7 +57,7 @@ public static class HarmonyCleaner
                 if (prop.PropertyType == typeof(Harmony) && prop.CanRead)
                 {
                     var harmony = (Harmony)prop.GetValue(instance);
-                    harmony?.UnpatchAll();
+                    //harmony?.UnpatchAll();
                 }
             }
         }
