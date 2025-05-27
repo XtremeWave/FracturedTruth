@@ -26,11 +26,11 @@
 
 ## 团队参与者
 - [Slok]("https://github.com/Slok7565/")
+- [Elinmei]("https://github.com/linmeideli")
 
 ## 贡献者
 - [LezaiYa]("https://github.com/NewLezaiYa")
 - [Nonalus]("https://github.com/Reborn5537/")
-- [Elinmei]("https://github.com/linmeideli")
 
 ## 修正
 - 修复了快速启动模式失效的问题
