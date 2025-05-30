@@ -57,7 +57,7 @@ public static class BanManager
                     KickPlayer(player.Id, false, "DenyName");
                     NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.KickedByDenyName"),
                         player.PlayerName, line));
-                    Info($"{player.PlayerName} 因为名字与「{line}」一致而被踢出", "Kick");
+                    Info($"{player.PlayerName} 因为名字匹配「{line}」而被踢出", "Kick");
                     return;
                 }
             }
