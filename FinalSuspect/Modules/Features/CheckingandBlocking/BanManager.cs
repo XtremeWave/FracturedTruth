@@ -13,7 +13,7 @@ namespace FinalSuspect.Modules.Features.CheckingandBlocking;
 
 public static class BanManager
 {
-    private static readonly string BAN_LIST_PATH = GetBanFilesPath("BanList.json");
+    private static readonly string BAN_LIST_PATH = GetBanFilesPath("BanList.txt");
     public static List<string> FACList = [];
 
     public static string GetHashedPuid(this PlayerControl player)
@@ -36,9 +36,10 @@ public static class BanManager
         if (!AmongUsClient.Instance.AmHost || player == null) return;
         if (player.IsBannedPlayer())
         {
-            File.AppendAllText(BAN_LIST_PATH, $"{player.FriendCode},{player.GetHashedPuid()},{player.PlayerName}\n");
+            File.AppendAllText(BAN_LIST_PATH, $"{player?.FriendCode},{player?.GetHashedPuid()},{player.PlayerName}\n");
             SendInGame(string.Format(GetString("Message.AddedPlayerToBanList"), player.PlayerName));
         }
+        else Info($"{player?.FriendCode},{player?.GetHashedPuid()},{player.PlayerName} 被加入封禁名单", "AddBanPlayer");
     }
 
     public static void CheckDenyNamePlayer(ClientData player)
@@ -72,20 +73,22 @@ public static class BanManager
     {
         if (AmongUsClient.Instance.AmHost)
         {
-            if (!Main.KickPlayerInBanList.Value) return;
+            if (!Main.KickPlayerInBanList.Value)
             if (player.IsBannedPlayer())
             {
                 KickPlayer(player.Id, true, "BanList");
                 NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.BanedByBanList"),
                     player.PlayerName));
-                Info($"{player.PlayerName}因过去已被封禁而被封禁", "BAN");
+                Info($"{player.PlayerName} 因过去已被封禁而被封禁", "BAN");
+                return;
             }
             else if (player.IsFACPlayer())
             {
                 KickPlayer(player.Id, true, "FACList");
                 NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.BanedByFACList"),
                     player.PlayerName));
-                Info($"{player.PlayerName}存在于FAC封禁名单", "BAN");
+                Info($"{player.PlayerName} 存在于FAC封禁名单", "BAN");
+                return;
             }
         }
     }
