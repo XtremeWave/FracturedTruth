@@ -73,14 +73,13 @@ public static class BanManager
     {
         if (AmongUsClient.Instance.AmHost)
         {
-            if (!Main.KickPlayerInBanList.Value)
+            if (!Main.KickPlayerInBanList.Value) return;
             if (player.IsBannedPlayer())
             {
                 KickPlayer(player.Id, true, "BanList");
                 NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.BanedByBanList"),
                     player.PlayerName));
                 Info($"{player.PlayerName} 因过去已被封禁而被封禁", "BAN");
-                return;
             }
             else if (player.IsFACPlayer())
             {
@@ -88,7 +87,6 @@ public static class BanManager
                 NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.BanedByFACList"),
                     player.PlayerName));
                 Info($"{player.PlayerName} 存在于FAC封禁名单", "BAN");
-                return;
             }
         }
     }
