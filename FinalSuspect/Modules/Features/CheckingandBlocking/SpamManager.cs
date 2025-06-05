@@ -13,7 +13,7 @@ namespace FinalSuspect.Modules.Features.CheckingandBlocking;
 
 public static class SpamManager
 {
-    private static readonly string BANEDWORDS_FILE_PATH = LocalPath_Data + "BanWords.json";
+    private static readonly string BANEDWORDS_FILE_PATH = GetBanFilesPath("BanWords.json");
     public static readonly string DENY_NAME_LIST_PATH = GetBanFilesPath("DenyName.json");
     public static List<string> BanWords = [];
 

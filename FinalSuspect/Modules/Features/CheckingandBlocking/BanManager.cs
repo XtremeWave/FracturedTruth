@@ -13,7 +13,7 @@ namespace FinalSuspect.Modules.Features.CheckingandBlocking;
 
 public static class BanManager
 {
-    private static readonly string BAN_LIST_PATH = GetBanFilesPath("BanList.txt");
+    private static readonly string BAN_LIST_PATH = LocalPath_Data + "BanList.txt";
     public static List<string> FACList = [];
 
     public static string GetHashedPuid(this PlayerControl player)
