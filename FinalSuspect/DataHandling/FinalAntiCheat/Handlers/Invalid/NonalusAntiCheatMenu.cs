@@ -15,7 +15,7 @@ public class NonalusAntiCheatMenu : IRpcHandler
     public bool HandleInvalidRPC(PlayerControl sender, MessageReader reader,
         ref bool notify, ref string reason, ref bool ban)
     {
-        reason = "NonalusAC";
+        reason = "NonalusAntiCheatMenu";
         return true;
     }
 }
