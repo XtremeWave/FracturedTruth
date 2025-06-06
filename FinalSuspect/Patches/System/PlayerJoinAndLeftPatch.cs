@@ -72,7 +72,7 @@ public class OnPlayerJoinedPatch
     public static void Postfix(AmongUsClient __instance, [HarmonyArgument(0)] ClientData client)
     {
         Info($"{client.PlayerName}(ClientID:{client.Id}/FriendCode:{client.FriendCode}) 加入房间", "Session");
-        if (AmongUsClient.Instance.AmHost && Main.KickPlayerWhoFriendCodeNotExist.Value && IsOnlineGame)
+        if (AmongUsClient.Instance.AmHost && Main.KickPlayerWhoFriendCodeNotExist.Value)
         {
             //用于检测是否为xxx#1145/xxx#1337的重复代码前缀
             //InnerSloth的好友代码不会出现前端重复 如果有前端重复一定是UE或者SM黑客
