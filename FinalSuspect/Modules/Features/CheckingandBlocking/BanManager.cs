@@ -34,12 +34,12 @@ public static class BanManager
     public static void AddBanPlayer(ClientData player)
     {
         if (!AmongUsClient.Instance.AmHost || player == null) return;
-        if (player.IsBannedPlayer())
+        if (!player.IsBannedPlayer())
         {
             File.AppendAllText(BAN_LIST_PATH, $"{player?.FriendCode},{player?.GetHashedPuid()},{player.PlayerName}\n");
             SendInGame(string.Format(GetString("Message.AddedPlayerToBanList"), player.PlayerName));
         }
-        else Info($"{player?.FriendCode},{player?.GetHashedPuid()},{player.PlayerName} 被加入封禁名单", "AddBanPlayer");
+        else Info($"{player?.FriendCode},{player?.GetHashedPuid()},{player.PlayerName} 已经加入封禁名单", "AddBanPlayer");
     }
 
     public static void CheckDenyNamePlayer(ClientData player)
