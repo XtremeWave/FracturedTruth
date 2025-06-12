@@ -34,6 +34,8 @@ public static class ServerAddManager
                 true));
             regionInfos.Add(CreateHttp("auhk.fangkuai.fun", "<color=#00ffff>方块</color><color=#FFC0CB>香港私服</color>", 443,
                 true));
+            regionInfos.Add(CreateHttp("server.xtreme.net.cn", "XtremeWave(HK)", 443,
+                true));
         }
 
         regionInfos.Add(CreateHttp("au-as.duikbo.at", "Modded Asia (MAS)", 443, true));
@@ -64,7 +66,7 @@ public static class ServerAddManager
             "Niko233(AS)" => "Niko[AS]",
             "Niko233(EU)" => "Niko[EU]",
             "Niko233(CN)" => "Niko[CN]",
-            "XtremeWave[HongKong]" => "XW[HK]",
+            "XtremeWave(HK)" => "XW[HK]",
             _ => serverName,
         };
 
@@ -105,7 +107,7 @@ public static class ServerAddManager
             "Niko233(AS)" => new Color32(255, 224, 0, 255),
             "Niko233(EU)" => new Color32(255, 224, 0, 255),
             "Niko233(CN)" => new Color32(255, 224, 0, 255),
-            "XtremeWave[HongKong]" => ColorHelper.TeamColor32,
+            "XtremeWave(HK)" => ColorHelper.TeamColor32,
 
             _ => new Color32(255, 255, 255, 255),
         };
