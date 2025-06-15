@@ -7,7 +7,7 @@ public static class HarmonyCleaner
 {
     public static void UnpatchAllHarmonyInstances(Assembly targetAssembly)
     {
-        foreach (Type type in targetAssembly.GetTypes())
+        foreach (var type in targetAssembly.GetTypes())
         {
             ProcessStaticHarmonyMembers(type);
             ProcessInstanceHarmonyMembers(type);
@@ -17,7 +17,7 @@ public static class HarmonyCleaner
     private static void ProcessStaticHarmonyMembers(Type type)
     {
         // 处理静态字段
-        foreach (FieldInfo field in type.GetFields(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
+        foreach (var field in type.GetFields(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
         {
             if (field.FieldType == typeof(Harmony))
             {
@@ -27,7 +27,7 @@ public static class HarmonyCleaner
         }
 
         // 处理静态属性
-        foreach (PropertyInfo prop in type.GetProperties(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
+        foreach (var prop in type.GetProperties(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
         {
             if (prop.PropertyType == typeof(Harmony) && prop.CanRead)
             {
@@ -41,9 +41,9 @@ public static class HarmonyCleaner
     {
         try
         {
-            object instance = Activator.CreateInstance(type);
+            var instance = Activator.CreateInstance(type);
 
-            foreach (FieldInfo field in type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+            foreach (var field in type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
             {
                 if (field.FieldType == typeof(Harmony))
                 {
@@ -52,7 +52,7 @@ public static class HarmonyCleaner
                 }
             }
 
-            foreach (PropertyInfo prop in type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+            foreach (var prop in type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
             {
                 if (prop.PropertyType == typeof(Harmony) && prop.CanRead)
                 {

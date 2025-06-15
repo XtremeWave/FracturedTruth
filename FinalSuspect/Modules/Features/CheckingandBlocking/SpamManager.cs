@@ -7,15 +7,14 @@ using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace FinalSuspect.Modules.Features.CheckingandBlocking;
 
 public static class SpamManager
 {
-    private static readonly string BANEDWORDS_FILE_PATH = GetBanFilesPath("BanWords.json");
-    public static readonly string DENY_NAME_LIST_PATH = GetBanFilesPath("DenyName.json");
-    public static List<string> BanWords = [];
+    private static List<string> BanWords = [];
 
     private static readonly List<string> Targets =
     [
@@ -29,12 +28,12 @@ public static class SpamManager
     {
         try
         {
-            CreateIfNotExists();
             BanWords = ReturnAllNewLinesInFile(BANEDWORDS_FILE_PATH);
             foreach (var target in Targets)
             {
                 foreach (var url in GetInfoFileUrlList())
                 {
+                    Test(url);
                     var task = GetConfigs(url + "Assets/Configs/" + target, target);
                     await task;
                     if (!task.Result) continue;
@@ -48,49 +47,21 @@ public static class SpamManager
         }
     }
 
-    private static void CreateIfNotExists()
-    {
-        if (!File.Exists(BANEDWORDS_FILE_PATH))
-        {
-            try
-            {
-                if (File.Exists(@"./BanWords.json"))
-                    File.Move(@"./BanWords.json", BANEDWORDS_FILE_PATH);
-                else
-                {
-                    var fileName = GetUserLangByRegion().ToString();
-                    Warn($"Create New BanWords: {fileName}", "SpamManager");
-                }
-            }
-            catch (Exception ex)
-            {
-                Exception(ex, "SpamManager");
-            }
-        }
 
-        if (File.Exists(DENY_NAME_LIST_PATH)) return;
-        {
-            try
-            {
-                if (File.Exists(@"./DenyName.json"))
-                    File.Move(@"./DenyName.json", DENY_NAME_LIST_PATH);
-            }
-            catch (Exception ex)
-            {
-                Exception(ex, "SpamManager");
-            }
-        }
-    }
-
-    private static List<string> ReturnAllNewLinesInFile(string filename)
+    private static List<string> ReturnAllNewLinesInFile(string filepath)
     {
-        if (!File.Exists(filename)) return [];
-        using StreamReader sr = new(filename, Encoding.GetEncoding("UTF-8"));
-        string text;
-        List<string> sendList = [];
-        while ((text = sr.ReadLine()) != null)
-            if (text.Length >= 1 && text != "")
-                sendList.Add(text.Replace("\\n", "\n").ToLower());
+        if (!File.Exists(filepath)) return [];
+        var json = File.ReadAllText(filepath);
+        List<string> sendList;
+        try
+        {
+            sendList = JsonConvert.DeserializeObject<List<string>>(json) ?? [];
+        }
+        catch
+        {
+            sendList = [];
+        }
+        
         return sendList;
     }
 
@@ -137,14 +108,15 @@ public static class SpamManager
 
             try
             {
+                if (result == string.Empty) return false;
                 var data = JObject.Parse(result);
                 ProcessBanWords(data);
                 ProcessDenyNames(data);
                 ProcessFacList(data);
             }
-            catch (JsonException ex)
+            catch (Exception ex)
             {
-                Error($"JSON 解析失败: {ex.Message}", "SpamManager");
+                Error($"JSON 解析失败: {ex.Message}\nData: {result[..Math.Min(100, result.Length)]}", "SpamManager");
                 return false;
             }
 
@@ -166,7 +138,8 @@ public static class SpamManager
             .Except(BanWords, StringComparer.OrdinalIgnoreCase)
             .ToList();
 
-        UpdateBanWords(newWords);
+        BanWords.AddRange(newWords);
+        Update(newWords, BANEDWORDS_FILE_PATH);
     }
 
     private static void ProcessDenyNames(JObject data)
@@ -178,10 +151,7 @@ public static class SpamManager
             .Except(existingNames, StringComparer.OrdinalIgnoreCase)
             .ToList();
 
-        if (newNames.Count > 0)
-        {
-            File.AppendAllLines(DENY_NAME_LIST_PATH, newNames);
-        }
+        Update(newNames, DENY_NAME_LIST_PATH);
     }
 
     private static void ProcessFacList(JObject data)
@@ -245,13 +215,44 @@ public static class SpamManager
             return cipherText;
         }
     }
-
-    private static void UpdateBanWords(List<string> newWords)
+    
+    private static void Update(List<string> newWords, string path)
     {
         if (newWords.Count == 0) return;
+        
+        List<string> updateWords;
+        if (!File.Exists(path)) return;
+        
+        try
+        {
+            var json = File.ReadAllText(path);
+            updateWords = JsonConvert.DeserializeObject<List<string>>(json) ?? [];
+        }
+        catch
+        {
+            updateWords = [];
+        }
+        
+        
+        var allWords = updateWords.Union(newWords).ToList();
 
-        BanWords.AddRange(newWords);
-        File.AppendAllLines(BANEDWORDS_FILE_PATH, newWords);
+        _ = new MainThreadTask(() =>
+        {
+            Il2CppSystem.IO.StringWriter sw = new();
+            JsonWriter jsonWriter = new JsonTextWriter(sw);
+    
+            jsonWriter.WriteStartArray();
+    
+            foreach (var word in allWords)
+            {
+                jsonWriter.WriteValue(word);
+            }
+    
+            jsonWriter.WriteEndArray();
+            sw.Flush();
+        
+            File.WriteAllText(path, sw.ToString());
+        }, "Write in Ban");
     }
 
     private static bool ShouldAddToFacList(string line)

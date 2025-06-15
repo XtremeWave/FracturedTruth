@@ -16,7 +16,6 @@ namespace FinalSuspect.Modules.Core.Plugin;
 public static class Translator
 {
     public static Dictionary<int, Dictionary<string, string>> TranslateMaps = new();
-    public const string LANGUAGE_FOLDER_NAME = LocalPath_Data + "Language";
 
     public static void TranslatorInit()
     {
@@ -60,11 +59,7 @@ public static class Translator
             else
                 Error($"翻译文件 [{fileName}] 没有提供语言ID", "Translator");
         }
-
-        // カスタム翻訳ファイルの読み込み
-        if (!Directory.Exists(LANGUAGE_FOLDER_NAME)) Directory.CreateDirectory(LANGUAGE_FOLDER_NAME);
-
-        // 翻訳テンプレートの作成
+        
         CreateTemplateFile();
         foreach (var lang in EnumHelper.GetAllValues<SupportedLangs>())
         {

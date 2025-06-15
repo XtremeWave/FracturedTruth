@@ -14,13 +14,13 @@ public static class DllChecker
         // SM的文件名是写死的
         string[] SuspiciousFiles = { "SickoMenu.dll", "version.dll" };
         // 获取当前Dll启动目录
-        string DirectoryPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        var DirectoryPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         // 获取游戏根目录
-        string AmongUsPath = Environment.CurrentDirectory;
+        var AmongUsPath = Environment.CurrentDirectory;
         // 针对基于BepInEx注入检测
-        foreach (string path in Directory.EnumerateFiles(DirectoryPath, "*.*"))
+        foreach (var path in Directory.EnumerateFiles(DirectoryPath, "*.*"))
         {
-            string fileName = Path.GetFileName(path);
+            var fileName = Path.GetFileName(path);
 
             if (fileName != "FinalSuspect.dll")
             {
@@ -30,9 +30,9 @@ public static class DllChecker
         }
 
         // 针对基于version注入检测
-        foreach (string fileName in SuspiciousFiles)
+        foreach (var fileName in SuspiciousFiles)
         {
-            string fullPath = Path.Combine(AmongUsPath, fileName);
+            var fullPath = Path.Combine(AmongUsPath, fileName);
 
             if (File.Exists(fullPath))
             {

@@ -182,10 +182,10 @@ public class ModNewsHistory
 
         _ = new MainThreadTask(() =>
         {
+            AnnouncementLoadComplete = true;
             if (!MainMenuManagerPatch.Instance) return;
             try
             {
-                AnnouncementLoadComplete = true;
                 DataManager.Player.Announcements.AllAnnouncements.Clear();
                 MainMenuManagerPatch.Instance.announcementPopUp.Show();
                 Info("Loading mod announcements complete.", "SetModAnnouncements");

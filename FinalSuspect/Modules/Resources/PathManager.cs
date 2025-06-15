@@ -8,9 +8,13 @@ namespace FinalSuspect.Modules.Resources;
 
 public static class PathManager
 {
-    public const string LocalPath_Data = "Final Suspect_Data/";
+    private const string LocalPath_Data = "Final Suspect_Data/";
+    public const string LANGUAGE_FOLDER_NAME = LocalPath_Data + "Language";
     private const string DependsSavePath = "BepInEx/core/";
     public const string DownloadFileTempPath = "BepInEx/plugins/FinalSuspect.dll.temp";
+    public const string BAN_LIST_PATH = LocalPath_Data + "BanList.txt";
+    public static readonly string BANEDWORDS_FILE_PATH = GetBanFilesPath("BanWords.json");
+    public static readonly string DENY_NAME_LIST_PATH = GetBanFilesPath("DenyName.json");
 
     public const string downloadUrl_github =
         "https://github.com/XtremeWave/FinalSuspect/releases/latest/download/FinalSuspect.dll";
@@ -26,7 +30,7 @@ public static class PathManager
         return GetRemoteUrl(fileType, remoteType) + file;
     }
 
-    public static string GetRemoteUrl(FileType fileType, RemoteType remoteType)
+    private static string GetRemoteUrl(FileType fileType, RemoteType remoteType)
     {
         return "https://" + GetRemoteBase(remoteType) + fileType + "/";
     }
@@ -64,7 +68,7 @@ public static class PathManager
         return GetLocalPath(LocalType.Resources) + fileType + "/" + file;
     }
 
-    public static string GetBanFilesPath(string file)
+    private static string GetBanFilesPath(string file)
     {
         return GetLocalPath(LocalType.Ban) + file;
     }
@@ -75,23 +79,33 @@ public static class PathManager
         CheckAndCreate(GetLocalPath(LocalType.Resources), false);
         CheckAndCreate(GetLocalPath(LocalType.Resources) + "Sounds", false);
         CheckAndCreate(GetLocalPath(LocalType.Resources) + "Images");
-
         CheckAndCreate(GetLocalPath(LocalType.Resources) + "Languages");
+        CheckAndCreate(LANGUAGE_FOLDER_NAME, false);
+        
         CheckAndCreate(GetLocalPath(LocalType.Ban));
+        CheckAndCreate(BANEDWORDS_FILE_PATH, false, true);
+        CheckAndCreate(DENY_NAME_LIST_PATH, false, true);
+        
         CheckAndCreate(GetLocalPath(LocalType.Bypass), false);
 
+
         // 防止崩溃的必要措施
-        CheckAndDelete(LocalPath_Data);
-        CheckAndDelete(DependsSavePath);
+        CheckAndDeleteXWR(LocalPath_Data);
+        CheckAndDeleteXWR(DependsSavePath);
     }
 
-    private static void CheckAndCreate(string path, bool hidden = true)
+    private static void CheckAndCreate(string path, bool hidden = true, bool isFile = false)
     {
         if (path == null) return;
-
-        if (!Directory.Exists(path))
+        
+        switch (isFile)
         {
-            Directory.CreateDirectory(path);
+            case true when !File.Exists(path):
+                File.Create(path);
+                break;
+            case false when !Directory.Exists(path):
+                Directory.CreateDirectory(path);
+                break;
         }
 
         var attributes = File.GetAttributes(path);
@@ -100,7 +114,7 @@ public static class PathManager
             : attributes & ~FileAttributes.Hidden);
     }
 
-    private static void CheckAndDelete(string targetFolder)
+    private static void CheckAndDeleteXWR(string targetFolder)
     {
         if (!Directory.Exists(targetFolder)) return;
         try

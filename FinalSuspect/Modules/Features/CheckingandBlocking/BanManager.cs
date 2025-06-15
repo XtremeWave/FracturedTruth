@@ -13,7 +13,6 @@ namespace FinalSuspect.Modules.Features.CheckingandBlocking;
 
 public static class BanManager
 {
-    private static readonly string BAN_LIST_PATH = LocalPath_Data + "BanList.txt";
     public static List<string> FACList = [];
 
     public static string GetHashedPuid(this PlayerControl player)
@@ -47,7 +46,7 @@ public static class BanManager
         if (!AmongUsClient.Instance.AmHost || !Main.KickPlayerWithDenyName.Value) return;
         try
         {
-            using StreamReader sr = new(SpamManager.DENY_NAME_LIST_PATH);
+            using StreamReader sr = new(DENY_NAME_LIST_PATH);
             string line;
             while ((line = sr.ReadLine()) != null)
             {

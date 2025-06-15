@@ -37,7 +37,7 @@ public sealed class LobbyJoinBind
             var comp = LobbyText.AddComponent<TextMeshPro>();
             comp.fontSize = 2.5f;
             comp.outlineWidth = -2f;
-            float lastY = code2 == "" ? -0.15f : 0.1f;
+            var lastY = code2 == "" ? -0.15f : 0.1f;
             LobbyText.transform.localPosition = new Vector3(8f, lastY, 0);
             LobbyText.SetActive(true);
         }

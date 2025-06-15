@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using AmongUs.Data;
 using AmongUs.GameOptions;
@@ -29,6 +30,7 @@ class SetVentOutlinePatch
 [HarmonyPatch(typeof(TaskPanelBehaviour), nameof(TaskPanelBehaviour.SetTaskText))]
 class TaskPanelBehaviourPatch
 {
+    private static bool even;
     public static void Postfix(TaskPanelBehaviour __instance)
     {
         if (!IsInGame) return;
@@ -42,23 +44,36 @@ class TaskPanelBehaviourPatch
         RoleWithInfo += role.GetRoleInfoForVanilla();
 
         var AllText = StringHelper.ColorString(player.GetRoleColor(), RoleWithInfo);
-
-        var lines = taskText.Split("\r\n</color>\n")[0].Split("\r\n\n")[0].Split("\r\n");
-        StringBuilder sb = new();
-        foreach (var eachLine in lines)
+        
+        if (!taskText.Contains(GetString(StringNames.FixComms)) || PlayerControl.LocalPlayer.IsImpostor())
         {
-            var line = eachLine.Trim();
-            if ((line.StartsWith("<color=#FF1919FF>") || line.StartsWith("<color=#FF0000FF>")) && sb.Length < 1 &&
-                !line.Contains('(')) continue;
-            sb.Append(line + "\r\n");
+            var lines = taskText.Split("\r\n</color>\n")[0].Split("\r\n\n")[0].Split("\r\n");
+            StringBuilder sb = new();
+            foreach (var eachLine in lines)
+            {
+                var line = eachLine.Trim();
+                if ((line.StartsWith("<color=#FF1919FF>") || line.StartsWith("<color=#FF0000FF>")) && sb.Length < 1 &&
+                    !line.Contains('(') || line.Contains(GetString(StringNames.FixComms))) continue;
+                sb.Append(line + "\r\n");
+            }
+
+            if (sb.Length > 1)
+            {
+                var text = sb.ToString().TrimEnd('\n').TrimEnd('\r');
+                if (player.IsImpostor() && sb.ToString().Count(s => s == '\n') >= 2)
+                    text =
+                        $"{StringHelper.ColorString(new Color32(255, 20, 147, byte.MaxValue), GetString("FakeTask"))}\r\n{text}";
+                AllText += $"\r\n\r\n<size=85%>{text}</size>";
+            }
         }
-
-        if (sb.Length > 1)
+        
+        if (taskText.Contains(GetString(StringNames.FixComms)))
         {
-            var text = sb.ToString().TrimEnd('\n').TrimEnd('\r');
-            if (player.IsImpostor() && sb.ToString().Count(s => s == '\n') >= 2)
-                text =
-                    $"{StringHelper.ColorString(new Color32(255, 20, 147, byte.MaxValue), GetString("FakeTask"))}\r\n{text}";
+            even = !even; 
+            var color = even ? Color.yellow : Color.red;
+            var text = color.ToTextColor();
+            text += GetString(StringNames.FixComms);
+            text += "</color>";
             AllText += $"\r\n\r\n<size=85%>{text}</size>";
         }
 
