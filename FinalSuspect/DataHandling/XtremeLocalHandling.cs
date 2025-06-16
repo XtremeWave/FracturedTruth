@@ -295,12 +295,9 @@ public static class XtremeLocalHandling
                 pva.NameText.text = name;
                 pva.NameText.color = color;
 
-                if (toptext.Length > 0)
-                {
-                    roleTextMeeting.text = toptext;
-                    roleTextMeeting.color = color;
-                    roleTextMeeting.enabled = true;
-                }
+                roleTextMeeting.text = toptext;
+                roleTextMeeting.color = color;
+                roleTextMeeting.enabled = toptext.Length > 0;
             }
             catch
             {
@@ -326,13 +323,10 @@ public static class XtremeLocalHandling
 
                 pva.NameText.text = name;
                 pva.NameText.color = color;
-
-                if (toptext.Length > 0)
-                {
-                    roleTextMeeting.text = toptext;
-                    roleTextMeeting.color = color;
-                    roleTextMeeting.enabled = true;
-                }
+                
+                roleTextMeeting.text = toptext;
+                roleTextMeeting.color = color;
+                roleTextMeeting.enabled = toptext.Length > 0;
             }
             catch
             {

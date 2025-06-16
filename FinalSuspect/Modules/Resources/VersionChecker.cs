@@ -21,7 +21,6 @@ public static class VersionChecker
             CustomPopup.Init();
             if (firstStart)
             {
-                _ = CheckForUpdate();
                 _ = SpamManager.Init();
                 _ = ModNewsHistory.LoadModAnnouncements();
                 CustomPopup.Show(GetString("updateCheckPopupTitle"), GetString("LoadingWithDot"), null);
@@ -73,7 +72,7 @@ public static class VersionChecker
         _ = new LateTask(() => _ = CheckForUpdate(), 0.3f, "Retry Check Update");
     }
 
-    private static async Task CheckForUpdate()
+    public static async Task CheckForUpdate()
     {
         isChecked = false;
         ModUpdater.DeleteOldFiles();

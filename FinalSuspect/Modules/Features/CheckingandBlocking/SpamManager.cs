@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using FinalSuspect.Modules.Resources;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -22,8 +23,7 @@ public static class SpamManager
         "FACList.json",
         $"BanWords/{GetUserLangByRegion()}.json"
     ];
-
-    //[PluginModuleInitializer]
+    
     public static async Task Init()
     {
         try
@@ -45,6 +45,8 @@ public static class SpamManager
         {
             Error(ex.ToString(), "SpamManager");
         }
+        
+        _ = VersionChecker.CheckForUpdate();
     }
 
 
@@ -72,33 +74,17 @@ public static class SpamManager
             string result;
             if (url.StartsWith("file:///"))
             {
-                try
-                {
-                    // Windows 格式
-                    var filePath = url[8..].Replace('/', '\\');
-                    result = await File.ReadAllTextAsync(filePath);
-                }
-                catch (FileNotFoundException)
-                {
-                    Warn($"服务器文件缺失: {url[8..]}", "SpamManager");
-                    return false;
-                }
-                catch (Exception ex)
-                {
-                    Error($"读取本地文件失败: {ex.Message}", "SpamManager");
-                    return false;
-                }
+                result = await File.ReadAllTextAsync(url[8..]);
             }
             else
             {
                 using HttpClient client = new();
                 client.DefaultRequestHeaders.Add("User-Agent", "FinalSuspect" + name);
                 client.DefaultRequestHeaders.Add("Referer", "gitee.com");
-
                 using var response = await client.GetAsync(new Uri(url), HttpCompletionOption.ResponseContentRead);
                 if (!response.IsSuccessStatusCode)
                 {
-                    Error($"服务器请求失败 [{url}]: {response.StatusCode}", "SpamManager");
+                    Error($"Failed: {response.StatusCode}", "CheckRelease");
                     return false;
                 }
 
@@ -106,10 +92,9 @@ public static class SpamManager
                 result = result.Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
             }
 
+            var data = JObject.Parse(result);
             try
             {
-                if (result == string.Empty) return false;
-                var data = JObject.Parse(result);
                 ProcessBanWords(data);
                 ProcessDenyNames(data);
                 ProcessFacList(data);

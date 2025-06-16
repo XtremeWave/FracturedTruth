@@ -193,7 +193,6 @@ class OnPlayerLeftPatch
 
             XtremeGameData.PlayerVersion.playerVersion.Remove(data.Character?.PlayerId ?? 255);
             ClientsProcessed.Remove(data.Id);
-            XtremePlayerData.AllPlayerData.Do(_data => _data.AdjustPlayerId());
         }
         catch
         {

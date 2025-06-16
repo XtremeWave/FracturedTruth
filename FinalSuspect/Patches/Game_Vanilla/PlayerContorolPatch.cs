@@ -36,20 +36,13 @@ class PlayerStartPatch
     public static void Postfix(PlayerControl __instance)
     {
         var topText = Object.Instantiate(__instance.cosmetics.nameText, __instance.cosmetics.nameText.transform, true);
-        topText.transform.localPosition = new Vector3(0f, 0.2f, 0f);
-        topText.transform.localScale = new Vector3(1f, 1f, 1f);
-        topText.fontSize = Main.RoleTextSize;
-        topText.text = "TopText";
-        topText.gameObject.name = "TopText";
-        topText.enabled = false;
-        var bottomText =
-            Object.Instantiate(__instance.cosmetics.nameText, __instance.cosmetics.nameText.transform, true);
-        bottomText.transform.localPosition = new Vector3(0f, 0.2f, 0f);
-        bottomText.transform.localScale = new Vector3(1f, 1f, 1f);
-        bottomText.fontSize = Main.RoleTextSize;
-        bottomText.text = "BottomText";
-        bottomText.gameObject.name = "BottomText";
-        bottomText.enabled = false;
+        var bottomText = Object.Instantiate(__instance.cosmetics.nameText, __instance.cosmetics.nameText.transform, true);
+        topText.transform.localPosition = bottomText.transform.localPosition = new Vector3(0f, 0.2f, 0f);
+        topText.transform.localScale = bottomText.transform.localScale = new Vector3(1f, 1f, 1f);
+        topText.fontSize = bottomText.fontSize = Main.RoleTextSize;
+        topText.text = topText.gameObject.name = "TopText";
+        bottomText.text = bottomText.gameObject.name = "BottomText";
+        topText.enabled = bottomText.enabled = false;
     }
 }
 

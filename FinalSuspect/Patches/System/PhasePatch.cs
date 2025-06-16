@@ -1,5 +1,7 @@
 using FinalSuspect.Attributes;
 
+//using InnerNet;
+
 namespace FinalSuspect.Patches.System;
 
 [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.Start))]
@@ -49,6 +51,27 @@ internal class CoStartGamePatch
         GameModuleInitializerAttribute.InitializeAll();
     }
 }
+
+/*[HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.CoStartGameHost))]
+internal class CoStartGameHPatch
+{
+    public static void Prefix()
+    {
+        foreach (var client in AmongUsClient.Instance.allClients)
+        {
+            client.IsReady = true;
+        }
+    }
+
+    public static void Postfix()
+    {
+        var clientData = GetPlayerById(1).GetXtremeData().CheatData.ClientData;
+
+        AmongUsClient.Instance.SendLateRejection(clientData.Id, DisconnectReasons.ClientTimeout);
+        clientData.IsReady = true;
+        AmongUsClient.Instance.OnPlayerLeft(clientData, DisconnectReasons.ClientTimeout);
+    }
+}*/
 
 [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
 public static class IntroCutsceneOnDestroyPatch
