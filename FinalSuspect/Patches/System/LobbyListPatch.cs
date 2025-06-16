@@ -16,7 +16,7 @@ public class SetupGameInfoPatch
         var old = mapTrans.parent.FindChild("NameText")?.gameObject;
         if (old)
             Object.Destroy(old);
-        
+
         var nameText = new GameObject("NameText")
         {
             transform =

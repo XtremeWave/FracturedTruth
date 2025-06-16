@@ -22,7 +22,7 @@ internal class IntroCutscenePatch
     {
         if (!Main.EnableFinalSuspect.Value) return;
         var intro = __instance.__4__this;
-        
+
         _ = new MainThreadTask(() =>
         {
             var roleType = PlayerControl.LocalPlayer.Data.Role.Role;

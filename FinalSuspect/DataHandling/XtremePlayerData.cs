@@ -290,7 +290,7 @@ public static class XtremePlayerDataExtensions
     }
 
     public static void SetDead(this PlayerControl pc) => pc.GetXtremeData().SetDead();
-    
+
     public static void SetDisconnected(this PlayerControl pc)
     {
         pc.GetXtremeData().SetDisconnected();

@@ -23,7 +23,7 @@ public static class SpamManager
         "FACList.json",
         $"BanWords/{GetUserLangByRegion()}.json"
     ];
-    
+
     public static async Task Init()
     {
         try
@@ -45,7 +45,7 @@ public static class SpamManager
         {
             Error(ex.ToString(), "SpamManager");
         }
-        
+
         _ = VersionChecker.CheckForUpdate();
     }
 
@@ -63,7 +63,7 @@ public static class SpamManager
         {
             sendList = [];
         }
-        
+
         return sendList;
     }
 
@@ -200,14 +200,14 @@ public static class SpamManager
             return cipherText;
         }
     }
-    
+
     private static void Update(List<string> newWords, string path)
     {
         if (newWords.Count == 0) return;
-        
+
         List<string> updateWords;
         if (!File.Exists(path)) return;
-        
+
         try
         {
             var json = File.ReadAllText(path);
@@ -217,25 +217,24 @@ public static class SpamManager
         {
             updateWords = [];
         }
-        
-        
+
         var allWords = updateWords.Union(newWords).ToList();
 
         _ = new MainThreadTask(() =>
         {
             Il2CppSystem.IO.StringWriter sw = new();
             JsonWriter jsonWriter = new JsonTextWriter(sw);
-    
+
             jsonWriter.WriteStartArray();
-    
+
             foreach (var word in allWords)
             {
                 jsonWriter.WriteValue(word);
             }
-    
+
             jsonWriter.WriteEndArray();
             sw.Flush();
-        
+
             File.WriteAllText(path, sw.ToString());
         }, "Write in Ban");
     }

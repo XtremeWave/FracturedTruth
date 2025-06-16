@@ -14,7 +14,7 @@ public class LoadingBarManagerPatch
     private static GameObject ModLogo;
     private static Vector3 LogoVector;
     private static bool hasSetVec;
-        
+
     [HarmonyPatch(nameof(LoadingBarManager.ToggleLoadingBar))]
     public static void Prefix(LoadingBarManager __instance, ref bool on)
     {
@@ -28,13 +28,13 @@ public class LoadingBarManagerPatch
                 hasSetVec = true;
                 LogoVector = trans.localPosition;
             }
-            
+
             if (!ModLogo)
             {
                 ModLogo = Object.Instantiate(AmongUsLogo, trans.parent);
                 ModLogo.GetComponent<Image>().sprite = LoadSprite("FinalSuspect-Logo.png", 150f);
             }
-            
+
             trans.localScale = new Vector3(0.3f, 0.3f, 1);
             cr.transform.localPosition = new Vector3(LogoVector.x, LogoVector.y + 60, LogoVector.z);
             trans.localPosition = new Vector3(LogoVector.x, LogoVector.y + 60, LogoVector.z);
@@ -44,7 +44,7 @@ public class LoadingBarManagerPatch
             ModLogo.GetComponent<RectTransform>().localScale = new Vector3(1.4f, 1.4f, 1);
             ModLogo.GetComponent<CanvasRenderer>().transform.localScale = new Vector3(1.4f, 1.4f, 1);
         }
-        
+
         __instance.loadingBar.barFill.color = ColorHelper.ModColor32;
         __instance.loadingBar.crewmate.gameObject.SetActive(false);
         try

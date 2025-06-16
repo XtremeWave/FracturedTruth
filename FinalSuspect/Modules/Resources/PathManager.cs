@@ -81,11 +81,11 @@ public static class PathManager
         CheckAndCreate(GetLocalPath(LocalType.Resources) + "Images");
         CheckAndCreate(GetLocalPath(LocalType.Resources) + "Languages");
         CheckAndCreate(LANGUAGE_FOLDER_NAME, false);
-        
+
         CheckAndCreate(GetLocalPath(LocalType.Ban));
         CheckAndCreate(BANEDWORDS_FILE_PATH, false, true);
         CheckAndCreate(DENY_NAME_LIST_PATH, false, true);
-        
+
         CheckAndCreate(GetLocalPath(LocalType.Bypass), false);
 
 
@@ -97,7 +97,7 @@ public static class PathManager
     private static void CheckAndCreate(string path, bool hidden = true, bool isFile = false)
     {
         if (path == null) return;
-        
+
         switch (isFile)
         {
             case true when !File.Exists(path):

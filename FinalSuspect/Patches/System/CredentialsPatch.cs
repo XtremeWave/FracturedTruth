@@ -56,7 +56,7 @@ internal class PingTrackerUpdatePatch
             || (FriendsListUI.Instance?.gameObject.active ?? false)
             || (HudManagerPatch.showHideButton?.Button?.gameObject.active ?? false) && Main.ShowResults.Value)
             CreditTextCredential.text = "";
-        
+
         var ping = AmongUsClient.Instance.Ping;
         var color = ping switch
         {
@@ -70,7 +70,6 @@ internal class PingTrackerUpdatePatch
         deltaTime += (Time.deltaTime - deltaTime) * 0.1f;
         var fps = Mathf.Ceil(1.0f / deltaTime);
 
-        
         __instance.text.alignment = TextAlignmentOptions.TopGeoAligned;
         __instance.text.text =
             $"<color={color}>{GetString("Ping")}:{ping} <size=60%>ms</size></color>" + "  "
@@ -164,7 +163,7 @@ public class VersionShowerStartPatch
         ap_teamLogo.Alignment = AspectPosition.EdgeAlignments.LeftBottom;
         ap_teamLogo.DistanceFromEdge = new Vector3(0.6f, 0.5f);
         ap_teamLogo.updateAlways = true;
-        
+
         TeamLogo.SetActive(false);
         ModLogo = new GameObject
         {
@@ -205,7 +204,7 @@ public class VersionShowerStartPatch
         ap1.Alignment = AspectPosition.EdgeAlignments.LeftBottom;
         ap1.DistanceFromEdge = new Vector3(0.4f, -0.3f);
         ap1.updateAlways = true;
-        
+
         var ap2 = VisitText.gameObject.AddComponent<AspectPosition>();
         ap2.Alignment = AspectPosition.EdgeAlignments.LeftBottom;
         ap2.DistanceFromEdge = new Vector3(1.4f, 0.1f);
@@ -359,7 +358,7 @@ internal class TitleLogoPatch
 
         if (!(BottomButtonBounds = GameObject.Find("BottomButtonBounds"))) return;
         BottomButtonBounds.transform.localPosition -= new Vector3(0f, 0.1f, 0f);
-        
+
         var mainButtonsobj = GameObject.Find("Main Buttons");
         mainButtonsobj.transform.position = new Vector3(-3.4f * GetResolutionOffset(),
             mainButtonsobj.transform.position.y, mainButtonsobj.transform.position.z);
@@ -424,7 +423,7 @@ internal class ResolutionManagerPatch
             mainButtons.transform.position = new Vector3(-3.4f * offset, mainButtons.transform.position.y,
                 mainButtons.transform.position.z);
             MainMenuButtonHoverAnimation.RefreshButtons(mainButtons);
-            
+
             List<GameObject> nullObj = [];
             foreach (var button in MainMenuManagerPatch.MainMenuCustomButtons)
             {
@@ -433,7 +432,7 @@ internal class ResolutionManagerPatch
                     nullObj.Add(button);
                     continue;
                 }
-            
+
                 var scale = MainMenuManagerPatch.Instance.quitButton.transform.localScale;
                 button.transform.localScale = new Vector3(scale.x * GetResolutionOffset(), button.transform.localScale.y);
             }

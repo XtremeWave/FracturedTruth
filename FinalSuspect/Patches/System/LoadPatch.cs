@@ -466,6 +466,6 @@ public static class LoadPatch
             LoadComplete = true;
         }
     }
-    
+
     #endregion
 }

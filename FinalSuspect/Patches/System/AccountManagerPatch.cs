@@ -89,7 +89,7 @@ public static class AwakeAccountManager
             Sprite.flipX = false;
             __instance.StartCoroutine(SwitchRoleIllustration(Sprite));
             crewpet_walk0001.SetActive(false);
-            
+
             var ap = ModLoading.AddComponent<AspectPosition>();
             ap.Alignment = AspectPosition.EdgeAlignments.RightBottom;
             ap.DistanceFromEdge = new Vector3(0.6f, 0.5f, -1000);

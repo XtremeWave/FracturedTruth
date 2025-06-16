@@ -38,7 +38,7 @@ public static class BanManager
             File.AppendAllText(BAN_LIST_PATH, $"{player?.FriendCode},{player?.GetHashedPuid()},{player.PlayerName}\n");
             SendInGame(string.Format(GetString("Message.AddedPlayerToBanList"), player.PlayerName));
         }
-        else Info($"{player?.FriendCode},{player?.GetHashedPuid()},{player.PlayerName} 已经加入封禁名单", "AddBanPlayer");
+        else Info($"{player?.FriendCode},{player?.GetHashedPuid()},{player.PlayerName} 已经被加入封禁名单", "AddBanPlayer");
     }
 
     public static void CheckDenyNamePlayer(ClientData player)
@@ -57,7 +57,7 @@ public static class BanManager
                     KickPlayer(player.Id, false, "DenyName");
                     NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.KickedByDenyName"),
                         player.PlayerName, line));
-                    Info($"{player.PlayerName} 因为名字匹配「{line}」而被踢出", "Kick");
+                    Info($"{player.PlayerName} 因名字匹配「{line}」而被踢出", "Kick");
                     return;
                 }
             }

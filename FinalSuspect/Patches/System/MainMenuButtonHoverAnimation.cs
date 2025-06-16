@@ -60,7 +60,7 @@ public class MainMenuButtonHoverAnimation
                 : Vector3.MoveTowards(pos, targetPos, Time.deltaTime * 2f);
         }
     }
-    
+
     public static void RefreshButtons(GameObject obj)
     {
         AllButtons = new Dictionary<GameObject, (Vector3, bool)>();

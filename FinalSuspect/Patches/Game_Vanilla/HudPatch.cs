@@ -44,7 +44,7 @@ class TaskPanelBehaviourPatch
         RoleWithInfo += role.GetRoleInfoForVanilla();
 
         var AllText = StringHelper.ColorString(player.GetRoleColor(), RoleWithInfo);
-        
+
         if (!taskText.Contains(GetString(StringNames.FixComms)) || PlayerControl.LocalPlayer.IsImpostor())
         {
             var lines = taskText.Split("\r\n</color>\n")[0].Split("\r\n\n")[0].Split("\r\n");
@@ -66,10 +66,10 @@ class TaskPanelBehaviourPatch
                 AllText += $"\r\n\r\n<size=85%>{text}</size>";
             }
         }
-        
+
         if (taskText.Contains(GetString(StringNames.FixComms)))
         {
-            even = !even; 
+            even = !even;
             var color = even ? Color.yellow : Color.red;
             var text = color.ToTextColor();
             text += GetString(StringNames.FixComms);
@@ -316,17 +316,17 @@ public static class HudManagerPatch
                 Sprite.flipX = false;
                 ModLoading.SetActive(false);
                 __instance.StartCoroutine(SwitchRoleIllustration(Sprite));
-                
+
                 var ap = ModLoading.AddComponent<AspectPosition>();
                 ap.Alignment = AspectPosition.EdgeAlignments.RightBottom;
                 ap.DistanceFromEdge = new Vector3(0.6f, 0.5f, -1000);
                 ap.updateAlways = true;
-                
+
                 ModLoading.transform.localScale = new Vector3(0.4f, 0.4f, 1f);
             }
-            
+
             ModLoading.SetActive(!IsInGame && !IsLobby);
-            
+
             __instance.Notifier.gameObject.layer = 5;
             var ap_n = __instance.Notifier.GetComponent<AspectPosition>();
             ap_n.DistanceFromEdge = new Vector3(ap_n.DistanceFromEdge.x, ap_n.DistanceFromEdge.y, -1000);

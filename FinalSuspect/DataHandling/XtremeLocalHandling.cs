@@ -323,7 +323,7 @@ public static class XtremeLocalHandling
 
                 pva.NameText.text = name;
                 pva.NameText.color = color;
-                
+
                 roleTextMeeting.text = toptext;
                 roleTextMeeting.color = color;
                 roleTextMeeting.enabled = toptext.Length > 0;

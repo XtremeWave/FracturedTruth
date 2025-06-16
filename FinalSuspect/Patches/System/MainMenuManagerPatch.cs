@@ -65,7 +65,7 @@ public class MainMenuManagerPatch
     }
 
     public static readonly List<GameObject> MainMenuCustomButtons = [];
-    
+
     [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.LateUpdate)), HarmonyPostfix]
     public static void MainMenuManager_LateUpdate(MainMenuManager __instance)
     {
@@ -88,7 +88,7 @@ public class MainMenuManagerPatch
                     : TitleLogoPatch.RightPanel.transform.localPosition.x < TitleLogoPatch.RightPanelOp.x + 9f
                ) TitleLogoPatch.RightPanel.transform.localPosition = lerp1;
         }
-        
+
         if (ShowedBak || !isOnline) return;
         var bak = GameObject.Find("BackgroundTexture");
         if (!bak || !bak.active) return;
