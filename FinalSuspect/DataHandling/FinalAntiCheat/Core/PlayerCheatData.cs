@@ -11,8 +11,8 @@ public class PlayerCheatData
 {
     public bool IsSuspectCheater { get; private set; }
     public ClientData ClientData { get; private set; }
-    public string FriendCode => ClientData.FriendCode;
-    public string Puid => ClientData.GetHashedPuid();
+    public string FriendCode => ClientData?.FriendCode ?? string.Empty;
+    public string Puid => ClientData?.GetHashedPuid() ?? string.Empty;
     public bool InComingOverloaded { get; private set; }
 
     private readonly PlayerControl _player;

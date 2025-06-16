@@ -14,7 +14,6 @@ public static class ServerAddManager
     [PluginModuleInitializer]
     public static void Init()
     {
-        serverManager.AvailableRegions = ServerManager.DefaultRegions;
         List<IRegionInfo> regionInfos =
         [
             CreateHttp("au-us.niko233.me", "Niko233(NA)", 443, true),

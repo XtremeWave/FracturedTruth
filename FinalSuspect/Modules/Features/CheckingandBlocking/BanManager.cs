@@ -13,7 +13,7 @@ namespace FinalSuspect.Modules.Features.CheckingandBlocking;
 
 public static class BanManager
 {
-    public static List<string> FACList = [];
+    public static readonly List<string> FACList = [];
 
     public static string GetHashedPuid(this PlayerControl player)
         => player.GetClient().GetHashedPuid();
@@ -47,19 +47,16 @@ public static class BanManager
         try
         {
             using StreamReader sr = new(DENY_NAME_LIST_PATH);
-            string line;
-            while ((line = sr.ReadLine()) != null)
+            while (sr.ReadLine() is { } line)
             {
                 if (line == "") continue;
                 if (Main.AllPlayerControls.Any(p => p.IsDev() && line.Contains(p.FriendCode))) continue;
-                if (Regex.IsMatch(player.PlayerName, line))
-                {
-                    KickPlayer(player.Id, false, "DenyName");
-                    NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.KickedByDenyName"),
-                        player.PlayerName, line));
-                    Info($"{player.PlayerName} 因名字匹配「{line}」而被踢出", "Kick");
-                    return;
-                }
+                if (!Regex.IsMatch(player.PlayerName, line)) continue;
+                KickPlayer(player.Id, false, "DenyName");
+                NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.KickedByDenyName"),
+                    player.PlayerName, line));
+                Info($"{player.PlayerName} 因名字匹配「{line}」而被踢出", "Kick");
+                return;
             }
         }
         catch (Exception ex)
@@ -70,23 +67,21 @@ public static class BanManager
 
     public static void CheckBanPlayer(ClientData player)
     {
-        if (AmongUsClient.Instance.AmHost)
+        if (!AmongUsClient.Instance.AmHost) return;
+        if (!Main.KickPlayerInBanList.Value) return;
+        if (player.IsBannedPlayer())
         {
-            if (!Main.KickPlayerInBanList.Value) return;
-            if (player.IsBannedPlayer())
-            {
-                KickPlayer(player.Id, true, "BanList");
-                NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.BanedByBanList"),
-                    player.PlayerName));
-                Info($"{player.PlayerName} 因过去已被封禁而被封禁", "BAN");
-            }
-            else if (player.IsFACPlayer())
-            {
-                KickPlayer(player.Id, true, "FACList");
-                NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.BanedByFACList"),
-                    player.PlayerName));
-                Info($"{player.PlayerName} 存在于FAC封禁名单", "BAN");
-            }
+            KickPlayer(player.Id, true, "BanList");
+            NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.BanedByBanList"),
+                player.PlayerName));
+            Info($"{player.PlayerName} 因过去已被封禁而被封禁", "BAN");
+        }
+        else if (player.IsFACPlayer())
+        {
+            KickPlayer(player.Id, true, "FACList");
+            NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.BanedByFACList"),
+                player.PlayerName));
+            Info($"{player.PlayerName} 存在于FAC封禁名单", "BAN");
         }
     }
 
@@ -96,7 +91,7 @@ public static class BanManager
     public static bool IsBannedPlayer(this ClientData player)
         => CheckBanStatus(player?.FriendCode, player?.GetHashedPuid());
 
-    public static bool CheckBanStatus(string friendCode, string hashedPuid)
+    private static bool CheckBanStatus(string friendCode, string hashedPuid)
     {
         try
         {
