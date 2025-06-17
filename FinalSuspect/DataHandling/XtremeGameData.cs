@@ -14,10 +14,10 @@ public static partial class XtremeGameData
                                                                     && !IsFreePlay;
 
     public static bool OtherModClient(byte id) =>
-        PlayerVersion.playerVersion.TryGetValue(id, out var ver) && Main.ForkId != ver.forkId;
+        GetPlayerVersion(id, out var ver) && Main.ForkId != ver.forkId;
 
     public static bool ModClient(this PlayerControl player) => ModClient(player.PlayerId);
-    public static bool ModClient(byte id) => PlayerVersion.playerVersion.ContainsKey(id);
+    public static bool ModClient(byte id) => GetPlayerVersion(id, out _);
 
     public static bool IsFinalSuspect(this PlayerControl pc) => IsFinalSuspect(pc.PlayerId);
 

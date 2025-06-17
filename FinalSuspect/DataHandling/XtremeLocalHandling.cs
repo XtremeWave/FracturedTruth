@@ -59,7 +59,7 @@ public static class XtremeLocalHandling
         var player = data.Player;
 
         if (player.IsHost()) toptext = toptext.CheckAndAppendText(GetString("Host"));
-        if (XtremeGameData.PlayerVersion.playerVersion.TryGetValue(player.PlayerId, out var ver) && ver != null)
+        if (GetPlayerVersion(player.PlayerId, out var ver))
         {
             if (Main.ForkId != ver.forkId)
             {

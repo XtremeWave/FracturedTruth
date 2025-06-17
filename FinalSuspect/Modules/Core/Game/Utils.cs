@@ -32,7 +32,7 @@ public static class Utils
     {
         try
         {
-            var client = AmongUsClient.Instance.allClients.ToArray().Where(cd => cd.Id == id).FirstOrDefault();
+            var client = AmongUsClient.Instance.allClients.ToArray().FirstOrDefault(cd => cd.Id == id);
             return client;
         }
         catch
@@ -75,7 +75,7 @@ public static class Utils
 
     public static void KickPlayer(int clientId, bool ban, string reason = "")
     {
-        Info($"try to kick {GetClientById(clientId)?.Character?.GetRealName()}", "Kick");
+        Info($"try to kick {GetClientById(clientId)?.Character?.GetRealName()} Due to {reason}", "Kick Player");
         try
         {
             OnPlayerLeftPatch.Add(clientId);
@@ -322,32 +322,23 @@ public static class Utils
 
     private static string GetProgressText(byte playerId, bool comms = false)
     {
-        return GetTaskProgressText(playerId, comms);
-    }
-
-    public static string GetTaskProgressText(byte playerId, bool comms = false)
-    {
         var data = XtremePlayerData.GetXtremeDataById(playerId);
         if (!IsNormalGame)
         {
-            if (data.IsImpostor)
-            {
-                var KillColor = Palette.ImpostorRed;
-                return StringHelper.ColorString(KillColor, $"({GetString("KillCount")}: {data.KillCount})");
-            }
-
-            return "";
+            if (!data.IsImpostor) return "";
+            var KillColor = Palette.ImpostorRed;
+            return StringHelper.ColorString(KillColor, $"({GetString("KillCount")}: {data.ProcessInt})");
         }
 
         if (data.IsImpostor)
         {
             var KillColor = data.IsDisconnected ? Color.gray : Palette.ImpostorRed;
-            return StringHelper.ColorString(KillColor, $"({GetString("KillCount")}: {data.KillCount})");
+            return StringHelper.ColorString(KillColor, $"({GetString("KillCount")}: {data.ProcessInt})");
         }
 
         var NormalColor = data.TaskCompleted ? Color.green : Color.yellow;
         var TextColor = comms || data.IsDisconnected ? Color.gray : NormalColor;
-        var Completed = comms ? "?" : $"{data.CompleteTaskCount}";
+        var Completed = comms ? "?" : $"{data.ProcessInt}";
         return StringHelper.ColorString(TextColor, $"({Completed}/{data.TotalTaskCount})");
     }
 
@@ -398,36 +389,36 @@ public static class Utils
             case SystemTypes.Electrical:
             {
                 var SwitchSystem = ShipStatus.Instance.Systems[type].Cast<SwitchSystem>();
-                return SwitchSystem != null && SwitchSystem.IsActive;
+                return SwitchSystem is { IsActive: true };
             }
             case SystemTypes.Reactor:
             {
                 if (mapId == 2) return false;
                 var ReactorSystemType = ShipStatus.Instance.Systems[type].Cast<ReactorSystemType>();
-                return ReactorSystemType != null && ReactorSystemType.IsActive;
+                return ReactorSystemType is { IsActive: true };
             }
             case SystemTypes.Laboratory:
             {
                 if (mapId != 2) return false;
                 var ReactorSystemType = ShipStatus.Instance.Systems[type].Cast<ReactorSystemType>();
-                return ReactorSystemType != null && ReactorSystemType.IsActive;
+                return ReactorSystemType is { IsActive: true };
             }
             case SystemTypes.LifeSupp:
             {
                 if (mapId is 2 or 4) return false;
                 var LifeSuppSystemType = ShipStatus.Instance.Systems[type].Cast<LifeSuppSystemType>();
-                return LifeSuppSystemType != null && LifeSuppSystemType.IsActive;
+                return LifeSuppSystemType is { IsActive: true };
             }
             case SystemTypes.Comms:
             {
                 if (mapId is 1 or 5)
                 {
                     var HqHudSystemType = ShipStatus.Instance.Systems[type].Cast<HqHudSystemType>();
-                    return HqHudSystemType != null && HqHudSystemType.IsActive;
+                    return HqHudSystemType is { IsActive: true };
                 }
 
                 var HudOverrideSystemType = ShipStatus.Instance.Systems[type].Cast<HudOverrideSystemType>();
-                return HudOverrideSystemType != null && HudOverrideSystemType.IsActive;
+                return HudOverrideSystemType is { IsActive: true };
             }
             case SystemTypes.HeliSabotage:
             {
@@ -533,5 +524,10 @@ public static class Utils
         {
             return null;
         }
+    }
+    
+    public static bool GetPlayerVersion(byte id, out XtremeGameData.PlayerVersion ver)
+    {
+        return XtremeGameData.PlayerVersion.playerVersion.TryGetValue(id, out ver) && ver != null;
     }
 }

@@ -34,11 +34,9 @@ public class XtremePlayerData : IDisposable
     public VanillaDeathReason RealDeathReason { get; private set; }
     public XtremePlayerData RealKiller { get; private set; }
 
-    //public int ProcessInt { get; private set; }
+    public int ProcessInt { get; private set; }
     public int TotalTaskCount { get; private set; }
-    public int CompleteTaskCount { get; private set; }
-    public bool TaskCompleted => TotalTaskCount == CompleteTaskCount;
-    public int KillCount { get; private set; }
+    public bool TaskCompleted => TotalTaskCount == ProcessInt;
 
     public PlayerCheatData CheatData { get; private set; }
 
@@ -51,7 +49,7 @@ public class XtremePlayerData : IDisposable
         PlayerId = player.PlayerId;
         NetId = player.NetId;
         IsImpostor = IsDead = RoleAssgined = false;
-        CompleteTaskCount = KillCount = TotalTaskCount = 0;
+        ProcessInt = TotalTaskCount = 0;
         RealDeathReason = VanillaDeathReason.None;
         RealKiller = null;
     }
@@ -134,7 +132,7 @@ public class XtremePlayerData : IDisposable
         if (!RoleAssgined)
         {
             RoleWhenAlive = role;
-            SetIsImp(IsImpostor(role));
+            SetAsImp(IsImpostor(role));
         }
         else
         {
@@ -157,14 +155,14 @@ public class XtremePlayerData : IDisposable
     {
         SetDead();
         SetDeathReason(VanillaDeathReason.Kill);
-        killer.KillCount++;
+        killer.UpdateProcess();
         RealKiller = killer;
         Info($"Set Real Killer For {Player.GetNameWithRole()}, Killer: {killer.Player.GetNameWithRole()}", "Data");
     }
 
     public void SetTaskTotalCount(int count) => TotalTaskCount = count;
-    public void CompleteTask() => CompleteTaskCount++;
-    public void SetIsImp(bool isimp) => IsImpostor = isimp;
+    public void UpdateProcess() => ProcessInt++;
+    private void SetAsImp(bool isimp) => IsImpostor = isimp;
 
     [GameModuleInitializer]
     public static void InitializeAll()
@@ -213,7 +211,7 @@ public class XtremePlayerData : IDisposable
         Name = null;
         ColorId = -1;
         IsImpostor = IsDead = RoleAssgined = false;
-        CompleteTaskCount = KillCount = TotalTaskCount = 0;
+        ProcessInt = TotalTaskCount = 0;
         RealDeathReason = VanillaDeathReason.None;
         RealKiller = null;
         Deadbodyrend = Rend = null;
@@ -311,5 +309,5 @@ public static class XtremePlayerDataExtensions
     public static void SetTaskTotalCount(this PlayerControl pc, int TaskTotalCount) =>
         pc.GetXtremeData().SetTaskTotalCount(TaskTotalCount);
 
-    public static void OnCompleteTask(this PlayerControl pc) => pc.GetXtremeData().CompleteTask();
+    public static void OnCompleteTask(this PlayerControl pc) => pc.GetXtremeData().UpdateProcess();
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -183,6 +184,7 @@ internal class RPCHandlerPatch
         var netId = __instance.NetId;
         var player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => x.NetId == netId)?.Player;
         if (!player) return;
+        if (XtremeGameData.PlayerVersion.playerVersion.ContainsKey(player.PlayerId)) return;
 
         var rpcType = (RpcCalls)callId;
         switch (rpcType)
@@ -222,7 +224,7 @@ internal class RPCHandlerPatch
                 }
                 catch
                 {
-                    /* ignored */
+                    XtremeGameData.PlayerVersion.playerVersion[player.PlayerId] = null;
                 }
 
                 break;
@@ -236,24 +238,75 @@ internal static class RPC
     {
         try
         {
-            while (!PlayerControl.LocalPlayer) await Task.Delay(500);
-            if (!Main.VersionCheat.Value)
+            var timeout = DateTime.UtcNow.AddSeconds(15);
+            while (PlayerControl.LocalPlayer == null && DateTime.UtcNow < timeout)
             {
-                var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                    (byte)RpcCalls.CancelPet, SendOption.Reliable);
-                writer.Write(Main.PluginVersion);
-                writer.Write($"{Main.GitCommit}({Main.GitBranch})");
-                writer.Write(Main.ForkId);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                await Task.Delay(500);
+                
+                if (IsInGame) continue;
+                return;
+            }
+            
+            if (PlayerControl.LocalPlayer == null ||
+                AmongUsClient.Instance == null ||
+                PlayerControl.LocalPlayer.NetId == uint.MaxValue)
+            {
+                return;
             }
 
-            XtremeGameData.PlayerVersion.playerVersion[PlayerControl.LocalPlayer.PlayerId] =
-                new XtremeGameData.PlayerVersion(Main.PluginVersion, $"{Main.GitCommit}({Main.GitBranch})",
-                    Main.ForkId);
+            if (!Main.VersionCheat.Value)
+            {
+                var safeContext = new
+                {
+                    netId = PlayerControl.LocalPlayer.NetId,
+                    version = Main.PluginVersion,
+                    commit = $"{Main.GitCommit}({Main.GitBranch})",
+                    forkId = Main.ForkId
+                };
+                
+                try
+                {
+                    var writer = AmongUsClient.Instance.StartRpcImmediately(
+                        safeContext.netId,
+                        (byte)RpcCalls.CancelPet,
+                        SendOption.Reliable
+                    );
+                    
+                    if (writer != null)
+                    {
+                        try
+                        {
+                            writer.Write(safeContext.version);
+                            writer.Write(safeContext.commit);
+                            writer.Write(safeContext.forkId);
+                            AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        }
+                        catch
+                        {
+                            writer.Recycle();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Fatal("RpcAttack", $"[{DateTime.UtcNow}] Attack detected: {ex}\n{ex.StackTrace}\n\n");
+                }
+            }
+
+            if (PlayerControl.LocalPlayer?.PlayerId != null)
+            {
+                XtremeGameData.PlayerVersion.playerVersion[
+                    PlayerControl.LocalPlayer.PlayerId
+                ] = new XtremeGameData.PlayerVersion(
+                    Main.PluginVersion,
+                    $"{Main.GitCommit}({Main.GitBranch})",
+                    Main.ForkId
+                );
+            }
         }
-        catch
+        catch (Exception ex)
         {
-            /* ignored */
+            Fatal("CrashDump", $"[MEM_ATTACK] {ex}");
         }
     }
 

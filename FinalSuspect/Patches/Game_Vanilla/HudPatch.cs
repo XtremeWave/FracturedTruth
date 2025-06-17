@@ -326,10 +326,9 @@ public static class HudManagerPatch
             }
 
             ModLoading.SetActive(!IsInGame && !IsLobby);
-
-            __instance.Notifier.gameObject.layer = 5;
+            
             var ap_n = __instance.Notifier.GetComponent<AspectPosition>();
-            ap_n.DistanceFromEdge = new Vector3(ap_n.DistanceFromEdge.x, ap_n.DistanceFromEdge.y, -1000);
+            ap_n.DistanceFromEdge = new Vector3(ap_n.DistanceFromEdge.x, ap_n.DistanceFromEdge.y, -900);
 
             //ModLogo.SetActive(!IsInGame && !IsLobby);
             /*Scrapped

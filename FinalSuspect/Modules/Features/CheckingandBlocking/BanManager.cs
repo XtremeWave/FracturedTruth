@@ -52,10 +52,9 @@ public static class BanManager
                 if (line == "") continue;
                 if (Main.AllPlayerControls.Any(p => p.IsDev() && line.Contains(p.FriendCode))) continue;
                 if (!Regex.IsMatch(player.PlayerName, line)) continue;
-                KickPlayer(player.Id, false, "DenyName");
+                KickPlayer(player.Id, false, "Using denied name");
                 NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.KickedByDenyName"),
-                    player.PlayerName, line));
-                Info($"{player.PlayerName} 因名字匹配「{line}」而被踢出", "Kick");
+                    player.PlayerName));
                 return;
             }
         }
@@ -71,17 +70,15 @@ public static class BanManager
         if (!Main.KickPlayerInBanList.Value) return;
         if (player.IsBannedPlayer())
         {
-            KickPlayer(player.Id, true, "BanList");
+            KickPlayer(player.Id, true, "Player in Banlist");
             NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.BanedByBanList"),
                 player.PlayerName));
-            Info($"{player.PlayerName} 因过去已被封禁而被封禁", "BAN");
         }
         else if (player.IsFACPlayer())
         {
-            KickPlayer(player.Id, true, "FACList");
+            KickPlayer(player.Id, true, "Player in FACList");
             NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.BanedByFACList"),
                 player.PlayerName));
-            Info($"{player.PlayerName} 存在于FAC封禁名单", "BAN");
         }
     }
 
@@ -97,8 +94,7 @@ public static class BanManager
         {
             if (!File.Exists(BAN_LIST_PATH)) File.Create(BAN_LIST_PATH).Close();
             using StreamReader sr = new(BAN_LIST_PATH);
-            string line;
-            while ((line = sr.ReadLine()) != null)
+            while (sr.ReadLine() is { } line)
             {
                 if (string.IsNullOrWhiteSpace(line)) continue;
                 if (!string.IsNullOrWhiteSpace(friendCode) && line.Contains(friendCode)) return true;
