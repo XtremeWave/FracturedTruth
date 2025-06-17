@@ -3,10 +3,10 @@ using FinalSuspect.Modules.Random;
 namespace FinalSuspect.Patches.System;
 
 [HarmonyPatch(typeof(HashRandom))]
-class HashRandomPatch
+internal class HashRandomPatch
 {
     [HarmonyPatch(nameof(HashRandom.FastNext)), HarmonyPrefix]
-    static bool FastNext([HarmonyArgument(0)] int maxInt, ref int __result)
+    private static bool FastNext([HarmonyArgument(0)] int maxInt, ref int __result)
     {
         if (IRandom.Instance is HashRandomWrapper) return true;
 
@@ -16,7 +16,7 @@ class HashRandomPatch
     }
 
     [HarmonyPatch(nameof(HashRandom.Next), typeof(int)), HarmonyPrefix]
-    static bool MaxNext([HarmonyArgument(0)] int maxInt, ref int __result)
+    private static bool MaxNext([HarmonyArgument(0)] int maxInt, ref int __result)
     {
         if (IRandom.Instance is HashRandomWrapper) return true;
 
@@ -26,7 +26,7 @@ class HashRandomPatch
     }
 
     [HarmonyPatch(nameof(HashRandom.Next), typeof(int), typeof(int)), HarmonyPrefix]
-    static bool MinMaxNext([HarmonyArgument(0)] int minInt, [HarmonyArgument(1)] int maxInt, ref int __result)
+    private static bool MinMaxNext([HarmonyArgument(0)] int minInt, [HarmonyArgument(1)] int maxInt, ref int __result)
     {
         if (IRandom.Instance is HashRandomWrapper) return true;
 

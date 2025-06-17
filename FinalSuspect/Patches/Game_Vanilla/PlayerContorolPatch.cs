@@ -6,7 +6,7 @@ using UnityEngine;
 namespace FinalSuspect.Patches.Game_Vanilla;
 
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.MurderPlayer))]
-class MurderPlayerPatch
+internal class MurderPlayerPatch
 {
     public static void Postfix(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl target)
     {
@@ -15,7 +15,7 @@ class MurderPlayerPatch
 }
 
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CoSetRole))]
-class CoSetRolePatch
+internal class CoSetRolePatch
 {
     public static void Postfix(PlayerControl __instance, [HarmonyArgument(0)] RoleTypes roleTypes)
     {
@@ -31,7 +31,7 @@ class CoSetRolePatch
 }
 
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Start))]
-class PlayerStartPatch
+internal class PlayerStartPatch
 {
     public static void Postfix(PlayerControl __instance)
     {
@@ -55,7 +55,7 @@ class PlayerStartPatch
 }
 
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.SetTasks))]
-class PlayerControlSetTasksPatch
+internal class PlayerControlSetTasksPatch
 {
     public static void Postfix(PlayerControl __instance, [HarmonyArgument(0)] List<NetworkedPlayerInfo.TaskInfo> tasks)
     {
@@ -67,7 +67,7 @@ class PlayerControlSetTasksPatch
 }
 
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CompleteTask))]
-class PlayerControlCompleteTaskPatch
+internal class PlayerControlCompleteTaskPatch
 {
     public static void Postfix(PlayerControl __instance)
     {

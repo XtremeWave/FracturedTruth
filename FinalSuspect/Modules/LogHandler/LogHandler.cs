@@ -2,7 +2,7 @@ using System;
 
 namespace FinalSuspect.Modules.LogHandler;
 
-class LogHandler(string tag) : ILogHandler
+internal class LogHandler(string tag) : ILogHandler
 {
     public string Tag { get; } = tag;
 

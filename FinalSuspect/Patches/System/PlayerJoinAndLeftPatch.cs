@@ -36,7 +36,7 @@ internal class OnGameJoinedPatch
 }
 
 [HarmonyPatch(typeof(InnerNetClient), nameof(InnerNetClient.DisconnectInternal))]
-class DisconnectInternalPatch
+internal class DisconnectInternalPatch
 {
     public static void Prefix(InnerNetClient __instance, DisconnectReasons reason, string stringReason)
     {
@@ -136,7 +136,7 @@ public class OnPlayerJoinedPatch
 }
 
 [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerLeft))]
-class OnPlayerLeftPatch
+internal class OnPlayerLeftPatch
 {
     public static readonly List<int> ClientsProcessed = [];
 

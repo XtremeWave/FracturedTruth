@@ -250,7 +250,7 @@ public static class HiddenTextPatch
 }
 
 [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.ResetStartState))]
-class ResetStartStatePatch
+internal class ResetStartStatePatch
 {
     public static void Prefix(GameStartManager __instance)
     {
@@ -262,7 +262,7 @@ class ResetStartStatePatch
 }
 
 [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.FinallyBegin))]
-class FinallyBeginPatch
+internal class FinallyBeginPatch
 {
     public static void Prefix(GameStartManager __instance)
     {

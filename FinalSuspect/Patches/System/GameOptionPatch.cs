@@ -7,7 +7,7 @@ using UnityEngine;
 namespace FinalSuspect.Patches.System;
 
 [HarmonyPatch(typeof(RoleOptionSetting), nameof(RoleOptionSetting.UpdateValuesAndText))]
-class RoleOptionSettingPatch
+internal class RoleOptionSettingPatch
 {
     public static void Postfix(RoleOptionSetting __instance)
     {
@@ -18,7 +18,7 @@ class RoleOptionSettingPatch
 }
 
 [HarmonyPatch(typeof(RolesSettingsMenu), nameof(RolesSettingsMenu.Update))]
-class RolesSettingsMenuPatch
+internal class RolesSettingsMenuPatch
 {
     private static readonly List<Color32> rolecolors =
     [
@@ -213,14 +213,14 @@ internal class GameOptionsMenuPatch
             color.ShadeColor(0.18f);
     }
 
-    static void SetColorForSettingsOpt_StringAndNumber(GameObject obj, Color color)
+    private static void SetColorForSettingsOpt_StringAndNumber(GameObject obj, Color color)
     {
         obj.transform.FindChild("LabelBackground").gameObject.GetComponent<SpriteRenderer>().color =
             color.ShadeColor(0.38f);
         obj.transform.FindChild("ValueBox").gameObject.GetComponent<SpriteRenderer>().color = color;
     }
 
-    static void SetColorForSettingsOpt_Checkbox(GameObject obj, Color color)
+    private static void SetColorForSettingsOpt_Checkbox(GameObject obj, Color color)
     {
         obj.transform.FindChild("LabelBackground").gameObject.GetComponent<SpriteRenderer>().color =
             color.ShadeColor(0.38f);
@@ -230,11 +230,11 @@ internal class GameOptionsMenuPatch
 }
 
 [HarmonyPatch(typeof(GameSettingMenu), nameof(GameSettingMenu.Update))]
-class GameSettingMenuPatch
+internal class GameSettingMenuPatch
 {
-    static GameObject GamePresetButton;
-    static GameObject GameSettingsButton;
-    static GameObject RoleSettingsButton;
+    private static GameObject GamePresetButton;
+    private static GameObject GameSettingsButton;
+    private static GameObject RoleSettingsButton;
 
     public static void Postfix()
     {
@@ -272,7 +272,7 @@ class GameSettingMenuPatch
         }
     }
 
-    static void SetColor(GameObject obj, Color bgcolor)
+    private static void SetColor(GameObject obj, Color bgcolor)
     {
         if (!obj) return;
         obj.transform.FindChild("Highlight").gameObject.GetComponent<SpriteRenderer>().color = bgcolor;

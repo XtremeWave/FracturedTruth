@@ -9,7 +9,7 @@ using LogLevel = BepInEx.Logging.LogLevel;
 
 namespace FinalSuspect.Modules.Core.Plugin;
 
-class Webhook
+internal class Webhook
 {
     public static void Send(string text)
     {
@@ -27,7 +27,7 @@ class Webhook
     }
 }
 
-class XtremeLogger
+internal class XtremeLogger
 {
     public static bool isEnable;
     public static List<string> disableList = [];

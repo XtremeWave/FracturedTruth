@@ -4,7 +4,7 @@ using UnityEngine;
 namespace FinalSuspect.Patches.System;
 
 [HarmonyPatch(typeof(JoinGameButton), nameof(JoinGameButton.OnClick))]
-class JoinGameButtonPatch
+internal class JoinGameButtonPatch
 {
     public static void Prefix(JoinGameButton __instance)
     {

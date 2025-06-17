@@ -23,7 +23,7 @@ public class ControllerNavMenuPatch
 }
 
 [HarmonyPatch(typeof(LogicGameFlowNormal), nameof(LogicGameFlowNormal.CheckEndCriteria))]
-class GameEndChecker
+internal class GameEndChecker
 {
     public static bool Prefix()
     {

@@ -5,7 +5,7 @@ using FinalSuspect.Attributes;
 namespace FinalSuspect.Patches.System;
 
 [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.Start))]
-class ShipStatusStartPatch
+internal class ShipStatusStartPatch
 {
     public static void Postfix()
     {
@@ -14,7 +14,7 @@ class ShipStatusStartPatch
 }
 
 [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameEnd))]
-class AmongUsClientOnGameEndPatch
+internal class AmongUsClientOnGameEndPatch
 {
     public static void Postfix()
     {
@@ -25,7 +25,7 @@ class AmongUsClientOnGameEndPatch
 
 [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Start))]
 [HarmonyPriority(Priority.First)]
-class MeetingHudStartPatch
+internal class MeetingHudStartPatch
 {
     public static void Prefix()
     {
@@ -34,7 +34,7 @@ class MeetingHudStartPatch
 }
 
 [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.OnDestroy))]
-class MeetingHudOnDestroyPatch
+internal class MeetingHudOnDestroyPatch
 {
     public static void Postfix()
     {

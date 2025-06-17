@@ -66,8 +66,8 @@ public static class AwakeAccountManager
 
     private static int currentIndex;
 
-    static GameObject crewpet_walk0001;
-    static GameObject ModLoading;
+    private static GameObject crewpet_walk0001;
+    private static GameObject ModLoading;
 
     public static void Prefix(AccountManager __instance)
     {

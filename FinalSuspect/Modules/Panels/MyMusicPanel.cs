@@ -86,7 +86,7 @@ public static class MyMusicPanel
         RefreshTagList();
     }
 
-    static void AddPageNavigationButton(OptionsMenuBehaviour optionsMenuBehaviour)
+    private static void AddPageNavigationButton(OptionsMenuBehaviour optionsMenuBehaviour)
     {
         var mouseMoveToggle = optionsMenuBehaviour.DisableMouseMovement;
         var nextPageButton = Object.Instantiate(mouseMoveToggle, CustomBackground.transform);

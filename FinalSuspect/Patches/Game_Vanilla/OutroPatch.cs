@@ -10,7 +10,7 @@ using UnityEngine;
 namespace FinalSuspect.Patches.Game_Vanilla;
 
 [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameEnd))]
-class AmongUsClientEndGamePatch
+internal class AmongUsClientEndGamePatch
 {
     public static Dictionary<byte, string> SummaryText = new();
 
@@ -23,11 +23,11 @@ class AmongUsClientEndGamePatch
 }
 
 [HarmonyPatch(typeof(EndGameManager), nameof(EndGameManager.SetEverythingUp))]
-class SetEverythingUpPatch
+internal class SetEverythingUpPatch
 {
     private static TextMeshPro roleSummary;
     private static SimpleButton showHideButton;
-    static bool DidHumansWin;
+    private static bool DidHumansWin;
 
     public static void Prefix()
     {

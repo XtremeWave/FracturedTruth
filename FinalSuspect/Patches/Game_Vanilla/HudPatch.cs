@@ -19,7 +19,7 @@ using Object = UnityEngine.Object;
 namespace FinalSuspect.Patches.Game_Vanilla;
 
 [HarmonyPatch(typeof(Vent), nameof(Vent.SetOutline))]
-class SetVentOutlinePatch
+internal class SetVentOutlinePatch
 {
     public static void Postfix(Vent __instance, [HarmonyArgument(1)] ref bool mainTarget)
     {
@@ -28,7 +28,7 @@ class SetVentOutlinePatch
 }
 
 [HarmonyPatch(typeof(TaskPanelBehaviour), nameof(TaskPanelBehaviour.SetTaskText))]
-class TaskPanelBehaviourPatch
+internal class TaskPanelBehaviourPatch
 {
     private static bool even;
     public static void Postfix(TaskPanelBehaviour __instance)

@@ -9,7 +9,7 @@ using UnityEngine;
 namespace FinalSuspect.Patches.System;
 
 [HarmonyPatch(typeof(LobbyInfoPane), nameof(LobbyInfoPane.Update))]
-class LobbyInfoPanePatch
+internal class LobbyInfoPanePatch
 {
     public static void Postfix()
     {
@@ -23,10 +23,10 @@ class LobbyInfoPanePatch
 }
 
 [HarmonyPatch]
-class LobbyViewSettingsPanePatch
+internal class LobbyViewSettingsPanePatch
 {
     [HarmonyPatch(typeof(LobbyViewSettingsPane), nameof(LobbyViewSettingsPane.Awake)), HarmonyPostfix]
-    static void Awake()
+    private static void Awake()
     {
         GameObject.Find("RulesPopOutWindow").transform.localPosition += Vector3.left * 0.4f;
     }
@@ -65,7 +65,7 @@ class LobbyViewSettingsPanePatch
     ];
 
     [HarmonyPatch(typeof(LobbyViewSettingsPane), nameof(LobbyViewSettingsPane.Update)), HarmonyPostfix]
-    static void Update()
+    private static void Update()
     {
         try
         {
@@ -194,7 +194,7 @@ class LobbyViewSettingsPanePatch
         }
     }
 
-    static void SetColorForRolesBanner(GameObject obj, Color iconcolor, Color bgcolor)
+    private static void SetColorForRolesBanner(GameObject obj, Color iconcolor, Color bgcolor)
     {
         if (!obj) return;
         if (obj.transform.FindChild("LabelBackground").gameObject.GetComponent<SpriteRenderer>().color ==
@@ -204,7 +204,7 @@ class LobbyViewSettingsPanePatch
         obj.transform.FindChild("RoleIcon").gameObject.GetComponent<SpriteRenderer>().color = iconcolor;
     }
 
-    static void SetColorForIcon(GameObject obj, Color iconcolor, Color bgcolor)
+    private static void SetColorForIcon(GameObject obj, Color iconcolor, Color bgcolor)
     {
         if (!obj) return;
         var cat = obj.transform.FindChild("CategoryHeaderRoleVariant");
@@ -226,7 +226,7 @@ class LobbyViewSettingsPanePatch
         }
     }
 
-    static void SetColorForSettingsBanner(GameObject obj, Color color)
+    private static void SetColorForSettingsBanner(GameObject obj, Color color)
     {
         if (!obj) return;
         obj.transform.FindChild("LabelBackground").gameObject.GetComponent<SpriteRenderer>().color =
@@ -234,7 +234,7 @@ class LobbyViewSettingsPanePatch
         obj.transform.FindChild("Value").FindChild("Sprite").gameObject.GetComponent<SpriteRenderer>().color = color;
     }
 
-    static void SetColorForCat(GameObject obj, Color color)
+    private static void SetColorForCat(GameObject obj, Color color)
     {
         if (!obj) return;
         obj.transform.FindChild("LabelSprite").gameObject.GetComponent<SpriteRenderer>().color =

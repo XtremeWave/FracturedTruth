@@ -8,7 +8,7 @@ namespace FinalSuspect.Patches.Game_Vanilla;
 public static class MeetingHudPatch
 {
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.UpdateButtons))]
-    class UpdatePatch
+    private class UpdatePatch
     {
         // ReSharper disable once UnusedMember.Local
         public static void Postfix(MeetingHud __instance)
@@ -48,7 +48,7 @@ public static class MeetingHudPatch
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.VotingComplete))]
     [HarmonyPriority(Priority.First)]
-    class VotingCompletePatch
+    private class VotingCompletePatch
     {
         // ReSharper disable once UnusedMember.Local
         public static void Postfix([HarmonyArgument(1)] NetworkedPlayerInfo exiled, [HarmonyArgument(2)] bool tie)
@@ -69,7 +69,7 @@ public static class MeetingHudPatch
 }
 
 [HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.SetHighlighted))]
-class SetHighlightedPatch
+internal class SetHighlightedPatch
 {
     public static bool Prefix(PlayerVoteArea __instance, bool value)
     {
