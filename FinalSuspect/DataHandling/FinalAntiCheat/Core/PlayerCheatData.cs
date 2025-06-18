@@ -101,6 +101,7 @@ public class PlayerCheatData
                     return true;
                 }
             }
+            
             Test($"{record.Count} {record.MaxiCount}");
             _rpcRecords[rpcId] = record;
         }
@@ -110,7 +111,7 @@ public class PlayerCheatData
             {
                 LastReceivedTime = currentTime,
                 Count = 1,
-                MaxiCount = _handlers.FirstOrDefault(x => x.TargetRpcs.Contains(rpcId))?.Handlers.FirstOrDefault()?.MaxiReceivedNumPerSecond() ?? 3
+                MaxiCount = _handlers.FirstOrDefault(x => x.TargetRpcs.Contains(rpcId))?.Handlers.FirstOrDefault()?.MaxiReceivedNumPerSecond() ?? 5
             };
         }
 

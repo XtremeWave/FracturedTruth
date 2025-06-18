@@ -31,7 +31,7 @@ public interface IRpcHandler
         ref bool ban) =>
         false;
 
-    int MaxiReceivedNumPerSecond() => 3;
+    int MaxiReceivedNumPerSecond() => 5;
 
     void Dispose(byte id)
     {

@@ -69,7 +69,7 @@ internal class RPCHandlerPatch
         return true;
     }
 
-    private static PlayerControl GetPlayerFromInstance(InnerNetObject instance, MessageReader reader)
+    public static PlayerControl GetPlayerFromInstance(InnerNetObject instance, MessageReader reader)
     {
         var player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => instance.OwnerId == x.Player.OwnerId)?.Player;
         if (player) return player;
@@ -345,51 +345,97 @@ internal class HazelPatch
     }
 }
 
-[HarmonyPatch]
-public static class MessageReaderRecycleGuard
+[HarmonyPatch(typeof(InnerNetClient._HandleGameDataInner_d__165), nameof(InnerNetClient._HandleGameDataInner_d__165.MoveNext))]
+public static class MessageReaderGuard
 {
-    private static readonly ConditionalWeakTable<MessageReader, RecycleTracker> Trackers = new();
-
-    private class RecycleTracker
+    private class MsgRecord
     {
-        public bool IsRecycled;
+        public long LastReceivedTime;
+        public int Count;
+        public bool InComingOverloaded;
     }
-
-    public static void SafeRecycle(MessageReader reader)
+    
+    private static Dictionary<int, MsgRecord> _msgRecords = new();
+    
+    public static bool Prefix(InnerNetClient._HandleGameDataInner_d__165 __instance)
     {
-        if (reader == null) return;
-
-        lock (Trackers)
+        try
         {
-            var tracker = Trackers.GetOrCreateValue(reader);
-
-            if (tracker is not { IsRecycled: false }) return;
-            tracker.IsRecycled = true;
-            reader.Recycle();
-        }
-    }
-
-    [HarmonyPatch(typeof(InnerNetClient), nameof(InnerNetClient.HandleGameDataInner),
-        typeof(MessageReader), typeof(int))]
-    [HarmonyTranspiler]
-    public static IEnumerable<CodeInstruction> FixRecycleCalls(
-        IEnumerable<CodeInstruction> instructions)
-    {
-        var targetMethod = typeof(MessageReader).GetMethod("Recycle");
-        var patchMethod = typeof(MessageReaderRecycleGuard)
-            .GetMethod("SafeRecycle");
-
-        foreach (var instruction in instructions)
-        {
-            if (instruction.Calls(targetMethod))
+            var innerNetClient = __instance.__4__this;
+            if (__instance.reader.Length < 1) return false;
+            var sr1 = MessageReader.Get(__instance.reader);
+            var sr2 = MessageReader.Get(__instance.reader);
+            int id;
+            PlayerControl _player;
+            try
             {
-                yield return new CodeInstruction(OpCodes.Ldarg_1);
-                yield return new CodeInstruction(OpCodes.Call, patchMethod);
+                var num1 = sr1.ReadPackedUInt32();
+                if (innerNetClient.allObjects.AllObjectsFast.TryGetValue(num1, out var obj))
+                {
+                    _player = RPCHandlerPatch.GetPlayerFromInstance(obj, sr1);
+                    id = _player.GetClientId();
+                    goto CheckForRecords;
+                }
+            }
+            catch
+            {
+                /* ignored */
+            }
+        
+            var num2 = sr2.ReadPackedInt32();
+            var clientData = innerNetClient.FindClientById(num2);
+            id = clientData.Id;
+
+            CheckForRecords:
+            var currentTime = GetCurrentTimestamp();
+            if (_msgRecords.TryGetValue(id, out var record))
+            {
+                if (_msgRecords[id].InComingOverloaded) return false;
+                _player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => x.CheatData.ClientData.Id == id)?.Player;
+                var timeDiff = currentTime - record.LastReceivedTime;
+
+                if (timeDiff > 1000)
+                {
+                    record.Count = 1;
+                    record.LastReceivedTime = currentTime;
+                }
+                else
+                {
+                    record.Count++;
+
+                    if (record.Count > 40)
+                    {
+                        _player.MarkAsCheater();
+                        record.Count = 0;
+                        _msgRecords[id].InComingOverloaded = true;
+                        Warn($"InComingRpc Overloaded: {_player.GetDataName()}", "FAC");
+                        return false;
+                    }
+                }
+
+                Test($"{record.Count} {40}");
+                _msgRecords[id] = record;
             }
             else
             {
-                yield return instruction;
+                _msgRecords[id] = new MsgRecord
+                {
+                    LastReceivedTime = currentTime,
+                    Count = 1,
+                };
             }
+
+            return true;
         }
+        catch
+        {
+            _msgRecords = new Dictionary<int, MsgRecord>();
+            return false;
+        }
+    }
+
+    private static long GetCurrentTimestamp()
+    {
+        return DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
     }
 }

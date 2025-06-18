@@ -131,7 +131,7 @@ public class OnPlayerJoinedPatch
         BanManager.CheckBanPlayer(client);
         BanManager.CheckDenyNamePlayer(client);
 
-        RPC.RpcVersionCheck();
+        _ = RPC.RpcVersionCheck();
     }
 }
 
