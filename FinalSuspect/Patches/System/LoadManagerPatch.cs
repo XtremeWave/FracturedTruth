@@ -1,8 +1,5 @@
-using System.Collections;
-using BepInEx.Unity.IL2CPP.Utils;
 using FinalSuspect.Helpers;
 using UnityEngine;
-using UnityEngine.UIElements;
 using Image = UnityEngine.UI.Image;
 
 namespace FinalSuspect.Patches.System;

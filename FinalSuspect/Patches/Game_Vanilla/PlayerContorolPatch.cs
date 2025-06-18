@@ -43,7 +43,7 @@ internal class PlayerStartPatch
         topText.text = "TopText";
         topText.gameObject.name = "TopText";
         topText.enabled = false;
-        
+
         var bottomText = Object.Instantiate(__instance.cosmetics.nameText, __instance.cosmetics.nameText.transform, true);
         bottomText.transform.localPosition = new Vector3(0f, 0.2f, 0f);
         bottomText.transform.localScale = new Vector3(1f, 1f, 1f);

@@ -8,7 +8,7 @@ namespace FinalSuspect.DataHandling;
 
 public static partial class XtremeGameData
 {
-    public static bool OtherModClient(this PlayerControl player) => 
+    public static bool OtherModClient(this PlayerControl player) =>
         OtherModClient(player.PlayerId) ||
         player.Data.OwnerId == -2
         && !IsFinalSuspect(player.PlayerId)

@@ -59,7 +59,7 @@ public static class Translator
             else
                 Error($"翻译文件 [{fileName}] 没有提供语言ID", "Translator");
         }
-        
+
         CreateTemplateFile();
         foreach (var lang in EnumHelper.GetAllValues<SupportedLangs>())
         {

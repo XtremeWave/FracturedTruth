@@ -110,6 +110,7 @@ public static class ServerAddManager
 
             _ => new Color32(255, 255, 255, 255),
         };
+
         return color;
     }
 

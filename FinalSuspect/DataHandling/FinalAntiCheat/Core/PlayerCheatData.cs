@@ -82,7 +82,6 @@ public class PlayerCheatData
         if (_rpcRecords.TryGetValue(rpcId, out var record))
         {
             var timeDiff = currentTime - record.LastReceivedTime;
-            
 
             if (timeDiff > 1000)
             {

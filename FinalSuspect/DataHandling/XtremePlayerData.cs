@@ -286,7 +286,7 @@ public static class XtremePlayerDataExtensions
             return null;
         }
     }
-    
+
     public static string GetColoredName(this PlayerControl pc)
     {
         try

@@ -32,7 +32,7 @@ public interface IRpcHandler
         false;
 
     int MaxiReceivedNumPerSecond() => 3;
-    
+
     void Dispose(byte id)
     {
     }

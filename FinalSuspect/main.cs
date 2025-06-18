@@ -259,7 +259,7 @@ public class Main : BasePlugin
 
         if (DebugModeManager.AmDebugger) ConsoleManager.CreateConsole();
         else ConsoleManager.DetachConsole();
-        
+
         Msg("========= FinalSuspect loaded! =========", "Plugin Load");
         Application.quitting += new Action(SaveNowLog);
     }

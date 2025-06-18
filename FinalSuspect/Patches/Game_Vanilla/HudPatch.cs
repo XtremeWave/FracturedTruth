@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using AmongUs.Data;
 using AmongUs.GameOptions;
@@ -326,7 +325,7 @@ public static class HudManagerPatch
             }
 
             ModLoading.SetActive(!IsInGame && !IsLobby);
-            
+
             var ap_n = __instance.Notifier.GetComponent<AspectPosition>();
             ap_n.DistanceFromEdge = new Vector3(ap_n.DistanceFromEdge.x, ap_n.DistanceFromEdge.y, -900);
 

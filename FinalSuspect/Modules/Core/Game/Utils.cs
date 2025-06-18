@@ -440,7 +440,7 @@ public static class Utils
     {
         return XtremePlayerData.GetRoleById(id);
     }
-    
+
     public static bool IsImpostor(RoleTypes role)
     {
         return role switch
@@ -530,7 +530,7 @@ public static class Utils
             return null;
         }
     }
-    
+
     public static bool GetPlayerVersion(byte id, out XtremeGameData.PlayerVersion ver)
     {
         return XtremeGameData.PlayerVersion.playerVersion.TryGetValue(id, out ver) && ver != null;

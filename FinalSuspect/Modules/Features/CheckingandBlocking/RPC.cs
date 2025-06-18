@@ -198,7 +198,7 @@ internal class RPCHandlerPatch
                     var version = Version.Parse(reader.ReadString());
                     var tag = reader.ReadString();
                     var forkId = reader.ReadString();
-                    
+
                     _ = RPC.RpcVersionCheck();
                     Test(1);
                     XtremeGameData.PlayerVersion.playerVersion[player.PlayerId] = new XtremeGameData.PlayerVersion(version, tag, forkId);
@@ -250,8 +250,8 @@ internal static class RPC
                 if (ct.IsCancellationRequested) return;
                 await Task.Delay(500, ct);
             }
-            
-            if (PlayerControl.LocalPlayer == null || 
+
+            if (PlayerControl.LocalPlayer == null ||
                 AmongUsClient.Instance == null)
             {
                 return;
@@ -268,18 +268,18 @@ internal static class RPC
                 writer.Write(Main.ForkId);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
             }
-            
+
             if (XtremeGameData.PlayerVersion.playerVersion != null)
             {
                 XtremeGameData.PlayerVersion.playerVersion[PlayerControl.LocalPlayer.PlayerId] =
                     new XtremeGameData.PlayerVersion(
-                        Main.PluginVersion, 
+                        Main.PluginVersion,
                         $"{Main.GitCommit}({Main.GitBranch})",
                         Main.ForkId
                     );
             }
         }
-        catch (OperationCanceledException) 
+        catch (OperationCanceledException)
         {
             /* ignored */
         }
@@ -288,7 +288,7 @@ internal static class RPC
             /* ignored */
         }
     }
-    
+
     public static void Cleanup()
     {
         _rpcCts?.Cancel();
@@ -354,7 +354,7 @@ public static class MessageReaderRecycleGuard
     {
         public bool IsRecycled;
     }
-    
+
     public static void SafeRecycle(MessageReader reader)
     {
         if (reader == null) return;
@@ -368,8 +368,8 @@ public static class MessageReaderRecycleGuard
             reader.Recycle();
         }
     }
-    
-    [HarmonyPatch(typeof(InnerNetClient), nameof(InnerNetClient.HandleGameDataInner), 
+
+    [HarmonyPatch(typeof(InnerNetClient), nameof(InnerNetClient.HandleGameDataInner),
         typeof(MessageReader), typeof(int))]
     [HarmonyTranspiler]
     public static IEnumerable<CodeInstruction> FixRecycleCalls(
