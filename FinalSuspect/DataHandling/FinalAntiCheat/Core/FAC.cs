@@ -13,7 +13,7 @@ public static class FAC
 {
     public static int DeNum;
     public static long _lastHandleCheater = -1;
-    private static readonly List<RpcHandlers> _handlers = [];
+    public static readonly List<RpcHandlers> _handlers = [];
 
     static FAC()
     {
@@ -82,12 +82,12 @@ public static class FAC
                             if (reason == "Hacking")
                                 reason = GetString("Unknown");
                             NotificationPopperPatch.NotificationPop(
-                                string.Format(GetString("FAC.CheatDetected.UsingCheat"), pc.GetDataName(), reason));
+                                string.Format(GetString("FAC.CheatDetected.UsingCheat"), pc.GetColoredName(), reason));
                             return true;
                         }
 
                         NotificationPopperPatch.NotificationPop(
-                            string.Format(GetString("FAC.CheatDetected.MayUseCheat"), pc.GetDataName(), reason));
+                            string.Format(GetString("FAC.CheatDetected.MayUseCheat"), pc.GetColoredName(), reason));
                         return false;
                     }
 
@@ -117,7 +117,7 @@ public static class FAC
     }
 
     public static void HandleCheat(PlayerControl pc, string text) =>
-        NotificationPopperPatch.NotificationPop(string.Format(text, pc.GetDataName()));
+        NotificationPopperPatch.NotificationPop(string.Format(text, pc.GetColoredName()));
 
     public static void Dispose(byte id)
     {

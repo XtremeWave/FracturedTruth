@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using FinalSuspect.Modules.Core.Game;
 using FinalSuspect.Modules.Features.CheckingandBlocking;
 using FinalSuspect.Patches.Game_Vanilla;
@@ -55,12 +56,12 @@ public class PlayerCheatData
         if (!AmongUsClient.Instance.AmHost)
         {
             NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.Cheater_NotHost"),
-                _player.GetDataName()));
+                _player.GetColoredName()));
             return;
         }
 
         NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.Cheater"),
-            _player.GetDataName()));
+            _player.GetColoredName()));
         KickPlayer(_player.PlayerId, false, "Suspect Cheater");
     }
 
@@ -70,6 +71,7 @@ public class PlayerCheatData
     {
         public long LastReceivedTime;
         public int Count;
+        public int MaxiCount;
     }
 
     public bool HandleIncomingRpc(byte rpcId)
@@ -80,6 +82,7 @@ public class PlayerCheatData
         if (_rpcRecords.TryGetValue(rpcId, out var record))
         {
             var timeDiff = currentTime - record.LastReceivedTime;
+            
 
             if (timeDiff > 1000)
             {
@@ -90,7 +93,7 @@ public class PlayerCheatData
             {
                 record.Count++;
 
-                if (record.Count > 20)
+                if (record.Count > record.MaxiCount)
                 {
                     MarkAsCheater();
                     record.Count = 0;
@@ -99,7 +102,7 @@ public class PlayerCheatData
                     return true;
                 }
             }
-
+            Test($"{record.Count} {record.MaxiCount}");
             _rpcRecords[rpcId] = record;
         }
         else
@@ -107,7 +110,8 @@ public class PlayerCheatData
             _rpcRecords[rpcId] = new RpcRecord
             {
                 LastReceivedTime = currentTime,
-                Count = 1
+                Count = 1,
+                MaxiCount = _handlers.FirstOrDefault(x => x.TargetRpcs.Contains(rpcId))?.Handlers.FirstOrDefault()?.MaxiReceivedNumPerSecond() ?? 3
             };
         }
 

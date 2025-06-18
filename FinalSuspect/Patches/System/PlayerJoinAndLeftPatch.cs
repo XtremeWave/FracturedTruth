@@ -21,7 +21,7 @@ internal class OnGameJoinedPatch
         XtremeGameData.PlayerVersion.playerVersion = new Dictionary<byte, XtremeGameData.PlayerVersion>();
         SoundManager.Instance.ChangeAmbienceVolume(DataManager.Settings.Audio.AmbienceVolume);
         XtremePlayerData.InitializeAll();
-        RPC.RpcVersionCheck();
+        _ = RPC.RpcVersionCheck();
         InGame = false;
         ErrorText.Instance.Clear();
         ServerAddManager.SetServerName();

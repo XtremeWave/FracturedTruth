@@ -211,7 +211,7 @@ public class XtremePlayerData : IDisposable
         Name = null;
         ColorId = -1;
         IsImpostor = IsDead = RoleAssgined = false;
-        ProcessInt = TotalTaskCount = 0;
+        ProcessInt = TotalTaskCount = -1;
         RealDeathReason = VanillaDeathReason.None;
         RealKiller = null;
         Deadbodyrend = Rend = null;
@@ -280,6 +280,19 @@ public static class XtremePlayerDataExtensions
         try
         {
             return XtremePlayerData.GetPlayerNameById(pc.PlayerId);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+    
+    public static string GetColoredName(this PlayerControl pc)
+    {
+        try
+        {
+            var data = XtremePlayerData.GetXtremeDataById(pc.PlayerId);
+            return StringHelper.ColorString(Palette.PlayerColors[data.ColorId], data.Name);
         }
         catch
         {

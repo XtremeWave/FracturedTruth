@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game;
@@ -180,7 +183,6 @@ internal class RPCHandlerPatch
         [HarmonyArgument(1)] MessageReader reader)
     {
         if (!__instance) return;
-
         var netId = __instance.NetId;
         var player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => x.NetId == netId)?.Player;
         if (!player) return;
@@ -192,15 +194,14 @@ internal class RPCHandlerPatch
             case RpcCalls.CancelPet:
                 try
                 {
+                    Test(0);
                     var version = Version.Parse(reader.ReadString());
                     var tag = reader.ReadString();
                     var forkId = reader.ReadString();
-
-                    XtremeGameData.PlayerVersion.playerVersion[player.PlayerId] =
-                        new XtremeGameData.PlayerVersion(version, tag, forkId);
-
-                    if (!XtremeGameData.PlayerVersion.playerVersion.ContainsKey(player.PlayerId))
-                        RPC.RpcVersionCheck();
+                    
+                    _ = RPC.RpcVersionCheck();
+                    Test(1);
+                    XtremeGameData.PlayerVersion.playerVersion[player.PlayerId] = new XtremeGameData.PlayerVersion(version, tag, forkId);
 
                     if (Main.VersionCheat.Value && AmongUsClient.Instance.AmHost)
                         XtremeGameData.PlayerVersion.playerVersion[player.PlayerId] =
@@ -234,80 +235,64 @@ internal class RPCHandlerPatch
 
 internal static class RPC
 {
-    public static async void RpcVersionCheck()
+    private static CancellationTokenSource _rpcCts; // 用于取消异步操作
+
+    public static async Task RpcVersionCheck()
     {
+        _rpcCts?.Cancel();
+        _rpcCts = new CancellationTokenSource();
+        var ct = _rpcCts.Token;
+
         try
         {
-            var timeout = DateTime.UtcNow.AddSeconds(15);
-            while (PlayerControl.LocalPlayer == null && DateTime.UtcNow < timeout)
+            while (PlayerControl.LocalPlayer == null || AmongUsClient.Instance == null)
             {
-                await Task.Delay(500);
-                
-                if (IsInGame) continue;
-                return;
+                if (ct.IsCancellationRequested) return;
+                await Task.Delay(500, ct);
             }
             
-            if (PlayerControl.LocalPlayer == null ||
-                AmongUsClient.Instance == null ||
-                PlayerControl.LocalPlayer.NetId == uint.MaxValue)
+            if (PlayerControl.LocalPlayer == null || 
+                AmongUsClient.Instance == null)
             {
                 return;
             }
 
             if (!Main.VersionCheat.Value)
             {
-                var safeContext = new
-                {
-                    netId = PlayerControl.LocalPlayer.NetId,
-                    version = Main.PluginVersion,
-                    commit = $"{Main.GitCommit}({Main.GitBranch})",
-                    forkId = Main.ForkId
-                };
-                
-                try
-                {
-                    var writer = AmongUsClient.Instance.StartRpcImmediately(
-                        safeContext.netId,
-                        (byte)RpcCalls.CancelPet,
-                        SendOption.Reliable
-                    );
-                    
-                    if (writer != null)
-                    {
-                        try
-                        {
-                            writer.Write(safeContext.version);
-                            writer.Write(safeContext.commit);
-                            writer.Write(safeContext.forkId);
-                            AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        }
-                        catch
-                        {
-                            writer.Recycle();
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Fatal("RpcAttack", $"[{DateTime.UtcNow}] Attack detected: {ex}\n{ex.StackTrace}\n\n");
-                }
+                var writer = AmongUsClient.Instance.StartRpcImmediately(
+                    PlayerControl.LocalPlayer.NetId,
+                    (byte)RpcCalls.CancelPet,
+                    SendOption.Reliable);
+                writer.Write(Main.PluginVersion);
+                writer.Write($"{Main.GitCommit}({Main.GitBranch})");
+                writer.Write(Main.ForkId);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
             }
-
-            if (PlayerControl.LocalPlayer?.PlayerId != null)
+            
+            if (XtremeGameData.PlayerVersion.playerVersion != null)
             {
-                XtremeGameData.PlayerVersion.playerVersion[
-                    PlayerControl.LocalPlayer.PlayerId
-                ] = new XtremeGameData.PlayerVersion(
-                    Main.PluginVersion,
-                    $"{Main.GitCommit}({Main.GitBranch})",
-                    Main.ForkId
-                );
+                XtremeGameData.PlayerVersion.playerVersion[PlayerControl.LocalPlayer.PlayerId] =
+                    new XtremeGameData.PlayerVersion(
+                        Main.PluginVersion, 
+                        $"{Main.GitCommit}({Main.GitBranch})",
+                        Main.ForkId
+                    );
             }
         }
-        catch (Exception ex)
+        catch (OperationCanceledException) 
         {
-            Fatal("CrashDump", $"[MEM_ATTACK] {ex}");
+            /* ignored */
         }
+        catch
+        {
+            /* ignored */
+        }
+    }
+    
+    public static void Cleanup()
+    {
+        _rpcCts?.Cancel();
+        _rpcCts?.Dispose();
     }
 
     public static void SendRpcLogger(uint targetNetId, byte callId, int targetClientId = -1)
@@ -357,5 +342,54 @@ internal class HazelPatch
     public static bool Prefix(MessageReader __instance)
     {
         return __instance.Length > 0;
+    }
+}
+
+[HarmonyPatch]
+public static class MessageReaderRecycleGuard
+{
+    private static readonly ConditionalWeakTable<MessageReader, RecycleTracker> Trackers = new();
+
+    private class RecycleTracker
+    {
+        public bool IsRecycled;
+    }
+    
+    public static void SafeRecycle(MessageReader reader)
+    {
+        if (reader == null) return;
+
+        lock (Trackers)
+        {
+            var tracker = Trackers.GetOrCreateValue(reader);
+
+            if (tracker is not { IsRecycled: false }) return;
+            tracker.IsRecycled = true;
+            reader.Recycle();
+        }
+    }
+    
+    [HarmonyPatch(typeof(InnerNetClient), nameof(InnerNetClient.HandleGameDataInner), 
+        typeof(MessageReader), typeof(int))]
+    [HarmonyTranspiler]
+    public static IEnumerable<CodeInstruction> FixRecycleCalls(
+        IEnumerable<CodeInstruction> instructions)
+    {
+        var targetMethod = typeof(MessageReader).GetMethod("Recycle");
+        var patchMethod = typeof(MessageReaderRecycleGuard)
+            .GetMethod("SafeRecycle");
+
+        foreach (var instruction in instructions)
+        {
+            if (instruction.Calls(targetMethod))
+            {
+                yield return new CodeInstruction(OpCodes.Ldarg_1);
+                yield return new CodeInstruction(OpCodes.Call, patchMethod);
+            }
+            else
+            {
+                yield return instruction;
+            }
+        }
     }
 }

@@ -26,17 +26,12 @@ internal static class ExtendedPlayerControl
     {
         if (!player) return -1;
         var client = player.GetClient();
-        return client == null ? -1 : client.Id;
+        return client?.Id ?? -1;
     }
 
     public static RoleTypes GetRoleType(this PlayerControl player)
     {
-        return GetRoleType(player.PlayerId);
-    }
-
-    public static RoleTypes GetRoleType(byte id)
-    {
-        return XtremePlayerData.GetRoleById(id);
+        return Utils.GetRoleType(player.PlayerId);
     }
 
     public static bool IsImpostor(this PlayerControl pc)

@@ -19,4 +19,6 @@ public class PetHandler : IRpcHandler
     {
         return false;
     }
+
+    public int MaxiReceivedNumPerSecond() => 20;
 }

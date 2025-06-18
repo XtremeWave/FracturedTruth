@@ -436,6 +436,11 @@ public static class Utils
         }
     }
 
+    public static RoleTypes GetRoleType(byte id)
+    {
+        return XtremePlayerData.GetRoleById(id);
+    }
+    
     public static bool IsImpostor(RoleTypes role)
     {
         return role switch
