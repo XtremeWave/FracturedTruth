@@ -2,7 +2,6 @@ using AmongUs.GameOptions;
 using FinalSuspect.Modules.Core.Game;
 using UnityEngine;
 
-
 namespace FinalSuspect.Patches.Game_Vanilla;
 
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.MurderPlayer))]
