@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using FinalSuspect.Modules.Features.CheckingandBlocking;
+﻿using FinalSuspect.Modules.Features.CheckingandBlocking;
 
 namespace FinalSuspect.Patches.Game_Vanilla;
 

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using FinalSuspect.Modules.Panels;
+﻿using FinalSuspect.Modules.Panels;
 using UnityEngine;
 using Object = UnityEngine.Object;
 

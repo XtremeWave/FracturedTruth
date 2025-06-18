@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using AmongUs.GameOptions;
 using FinalSuspect.DataHandling.FinalAntiCheat.Interfaces;
 using Hazel;

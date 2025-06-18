@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Hazel;
 
 namespace FinalSuspect.DataHandling.FinalAntiCheat.Interfaces;

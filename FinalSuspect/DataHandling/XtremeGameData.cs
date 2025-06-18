@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using AmongUs.GameOptions;
 using FinalSuspect.Modules.Core.Game;
 using InnerNet;

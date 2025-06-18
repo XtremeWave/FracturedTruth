@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using FinalSuspect.Helpers;
+﻿using FinalSuspect.Helpers;
 
 namespace FinalSuspect.Patches.System;
 
