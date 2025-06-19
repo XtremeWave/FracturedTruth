@@ -1,6 +1,5 @@
 using AmongUs.GameOptions;
 using FinalSuspect.Modules.Core.Game;
-using Il2CppSystem.Collections.Generic;
 using UnityEngine;
 
 namespace FinalSuspect.Patches.Game_Vanilla;
@@ -57,7 +56,8 @@ internal class PlayerStartPatch
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.SetTasks))]
 internal class PlayerControlSetTasksPatch
 {
-    public static void Postfix(PlayerControl __instance, [HarmonyArgument(0)] List<NetworkedPlayerInfo.TaskInfo> tasks)
+    public static void Postfix(PlayerControl __instance,
+        [HarmonyArgument(0)] Il2CppSystem.Collections.Generic.List<NetworkedPlayerInfo.TaskInfo> tasks)
     {
         // 自由模式假人处理
         if (__instance.GetXtremeData() == null)

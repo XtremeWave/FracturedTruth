@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
 using FinalSuspect.DataHandling.FinalAntiCheat.Interfaces;
 using FinalSuspect.Patches.Game_Vanilla;
 using Hazel;

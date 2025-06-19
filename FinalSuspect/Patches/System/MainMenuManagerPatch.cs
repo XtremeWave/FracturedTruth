@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Features;
 using FinalSuspect.Modules.Resources;

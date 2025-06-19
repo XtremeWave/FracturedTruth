@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using FinalSuspect.Attributes;
+﻿using FinalSuspect.Attributes;
 using FinalSuspect.Helpers;
 using FinalSuspect.Patches.System;
 using UnityEngine;

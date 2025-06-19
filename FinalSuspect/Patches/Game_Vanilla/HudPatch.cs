@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Linq;
 using System.Text;
 using AmongUs.Data;
 using AmongUs.GameOptions;

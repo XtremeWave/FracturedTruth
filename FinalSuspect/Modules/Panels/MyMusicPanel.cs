@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.SoundInterface;
 using TMPro;

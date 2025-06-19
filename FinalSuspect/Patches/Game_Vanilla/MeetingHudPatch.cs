@@ -1,4 +1,3 @@
-using System.Linq;
 using AmongUs.GameOptions;
 using Object = UnityEngine.Object;
 

@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace FinalSuspect.Helpers;
 
 public static class ResourcesHelper
