@@ -38,7 +38,7 @@ public class SetupGameInfoPatch
         {
             case Platforms.StandaloneEpicPC:
                 color = "#905CDA";
-                platform = "EPIC";
+                platform = "Epic";
                 break;
             case Platforms.StandaloneSteamPC:
                 color = "#4391CD";

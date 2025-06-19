@@ -104,7 +104,7 @@ public static class XtremeLocalHandling
             {
                 case Platforms.StandaloneEpicPC:
                     color = "#905CDA";
-                    name = "EPIC";
+                    name = "Epic";
                     break;
                 case Platforms.StandaloneSteamPC:
                     color = "#4391CD";
