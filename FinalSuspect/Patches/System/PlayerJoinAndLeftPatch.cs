@@ -70,7 +70,9 @@ public class OnPlayerJoinedPatch
     public static void Postfix(AmongUsClient __instance, [HarmonyArgument(0)] ClientData client)
     {
         Info($"{client.PlayerName}(ClientID:{client.Id}/FriendCode:{client.FriendCode}) 加入房间", "Session");
-        if (AmongUsClient.Instance.AmHost && Main.KickPlayerWhoFriendCodeNotExist.Value)
+
+        if (!AmongUsClient.Instance.AmHost) return;
+        if (Main.KickPlayerWhoFriendCodeNotExist.Value)
         {
             //用于检测是否为xxx#1145/xxx#1337的重复代码前缀
             //InnerSloth的好友代码不会出现前端重复 如果有前端重复一定是UE或者SM黑客
@@ -104,7 +106,7 @@ public class OnPlayerJoinedPatch
             }
         }
 
-        if (AmongUsClient.Instance.AmHost && client.FriendCode == "" && Main.KickPlayerWhoFriendCodeNotExist.Value)
+        if (client.FriendCode == "")
         {
             KickPlayer(client.Id, false, "NotLogin");
             NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.KickedByNoFriendCode"),
@@ -112,18 +114,18 @@ public class OnPlayerJoinedPatch
             Info($"没有好友代码的玩家 {client.PlayerName} 已被踢出。", "Kick");
         }
 
-        if (DestroyableSingleton<FriendsListManager>.Instance.IsPlayerBlockedUsername(client.FriendCode) &&
-            AmongUsClient.Instance.AmHost && Main.KickPlayerInBanList.Value)
-        {
-            KickPlayer(client.Id, true, "BanList");
-            Info($"已封禁的玩家 {client.PlayerName} ({client.FriendCode})", "BAN");
-        }
-
-        if (AmongUsClient.Instance.AmHost && !ValidFormatRegex.IsMatch(client.FriendCode) && client.FriendCode != "")
+        if (!ValidFormatRegex.IsMatch(client.FriendCode) && client.FriendCode != "")
         {
             KickPlayer(client.Id, false, "NotLogin");
             NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.Cheater"), client.PlayerName));
             Info($"没有好友代码的玩家 {client.PlayerName} 已被踢出。", "Kick");
+        }
+
+        if (DestroyableSingleton<FriendsListManager>.Instance.IsPlayerBlockedUsername(client.FriendCode) &&
+            Main.KickPlayerInBanList.Value)
+        {
+            KickPlayer(client.Id, true, "BanList");
+            Info($"已封禁的玩家 {client.PlayerName} ({client.FriendCode})", "BAN");
         }
 
         BanManager.CheckBanPlayer(client);
