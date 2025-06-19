@@ -1,6 +1,4 @@
 using System;
-using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using FinalSuspect.Helpers;
@@ -350,9 +348,9 @@ public static class MessageReaderGuard
         public int Count;
         public bool InComingOverloaded;
     }
-    
+
     private static Dictionary<int, MsgRecord> _msgRecords = new();
-    
+
     public static bool Prefix(InnerNetClient._HandleGameDataInner_d__165 __instance)
     {
         try
@@ -377,7 +375,7 @@ public static class MessageReaderGuard
             {
                 /* ignored */
             }
-        
+
             var num2 = sr2.ReadPackedInt32();
             var clientData = innerNetClient.FindClientById(num2);
             id = clientData.Id;

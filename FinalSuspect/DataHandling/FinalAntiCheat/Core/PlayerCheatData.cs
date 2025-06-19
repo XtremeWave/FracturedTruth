@@ -99,7 +99,7 @@ public class PlayerCheatData
                     return true;
                 }
             }
-            
+
             Test($"{record.Count} {record.MaxiCount}");
             _rpcRecords[rpcId] = record;
         }
