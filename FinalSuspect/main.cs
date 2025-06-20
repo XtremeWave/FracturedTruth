@@ -38,16 +38,16 @@ public class Main : BasePlugin
     // == 版本相关设定 / Version Config ==
     public const string LowestSupportedVersion = "2025.6.10"; // 16.0.5
 
-    private const string DisplayedVersion_Head = "1.1";
+    private const string DisplayedVersion_Head = "1.2";
 
     private const string DisplayedVersion_Date = BuildTime.Date;
 
     /// <summary>
     /// 表示当前显示的版本类型。
     /// </summary>
-    private const VersionTypes DisplayedVersion_Type = VersionTypes.Canary;
+    private const VersionTypes DisplayedVersion_Type = VersionTypes.Alpha;
 
-    private const int DisplayedVersion_TestCreation = 11;
+    private const int DisplayedVersion_TestCreation = 1;
 
 
     // == 链接相关设定 / Link Config ==
