@@ -2,7 +2,6 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Text;
-using AmongUs.Data;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Resources;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;

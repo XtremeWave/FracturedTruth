@@ -66,7 +66,7 @@ public static class Utils
         var text = role.ToString();
         var Info = "Blurb" + (InfoLong ? "Long" : "");
         if (IsNormalGame) return GetString($"{text}{Info}");
-        
+
         if (InfoLong)
             switch (role)
             {
@@ -79,7 +79,7 @@ public static class Utils
                            $"\n{GetString(StringNames.RuleTwoImpostor)}" +
                            $"\n{GetString(StringNames.RuleThreeImpostor)}";
             }
-            
+
         text = "HnS" + text;
         return GetString($"{text}{Info}");
     }
@@ -88,14 +88,14 @@ public static class Utils
     {
         var client = GetClientById(clientId);
         Info($"try to kick {client?.Character?.GetRealName()} Due to {reason}", "Kick Player");
-        
+
         var _player = XtremePlayerData.AllPlayerData.FirstOrDefault(p => p.CheatData?.ClientData?.Id == clientId)?.Player;
         try
         {
             OnPlayerLeftPatch.Add(clientId);
             AmongUsClient.Instance.KickPlayer(clientId, ban);
             if (level != KickLevel.None)
-                NotificationPopperPatch.NotificationPop(string.Format(GetString($"{level}.{reason}"), 
+                NotificationPopperPatch.NotificationPop(string.Format(GetString($"{level}.{reason}"),
                     _player ? _player.GetColoredName() : client?.PlayerName));
         }
         catch
@@ -552,7 +552,7 @@ public static class Utils
     {
         return XtremeGameData.PlayerVersion.playerVersion.TryGetValue(id, out ver) && ver != null;
     }
-    
+
     public static long GetCurrentTimestamp()
     {
         return DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;

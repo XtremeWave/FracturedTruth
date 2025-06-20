@@ -4,7 +4,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using FinalSuspect.Modules.Core.Game;
-using FinalSuspect.Patches.Game_Vanilla;
 using InnerNet;
 
 namespace FinalSuspect.Modules.Features.CheckingandBlocking;
@@ -64,7 +63,7 @@ public static class BanManager
         @"^[a-z]{7,10}#\d{4}$",
         RegexOptions.Compiled
     );
-    
+
     public static void CheckFriendCode(ClientData player)
     {
         if (!AmongUsClient.Instance.AmHost || !Main.KickPlayerWithAbnormalFriendCode.Value) return;
@@ -83,7 +82,7 @@ public static class BanManager
             .ToHashSet();
         var newPrefixParts = player.FriendCode.Split('#');
         var newPrefix = newPrefixParts[0].ToLowerInvariant();
-        
+
         if (currentPrefixes.Contains(newPrefix))
         {
             KickPlayer(player.Id, false, "KickedByAbnormalFriendCode");
@@ -104,7 +103,7 @@ public static class BanManager
             Info($"好友代码格式异常玩家 {player.PlayerName} 已被踢出。", "Kick");
         }
     }
-    
+
     public static void CheckBanPlayer(ClientData player)
     {
         if (!AmongUsClient.Instance.AmHost && !Main.KickPlayerInBanList.Value) return;

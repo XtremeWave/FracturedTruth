@@ -1,4 +1,3 @@
-using System;
 using FinalSuspect.Modules.Core.Game;
 using FinalSuspect.Modules.Features.CheckingandBlocking;
 using FinalSuspect.Patches.Game_Vanilla;
@@ -57,7 +56,7 @@ public class PlayerCheatData
                 _player.GetColoredName()));
             return;
         }
-        
+
         KickPlayer(_player.PlayerId, false, "Cheater", KickLevel.Warning);
     }
 

@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using AmongUs.Data;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game;
