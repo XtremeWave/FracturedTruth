@@ -6,6 +6,7 @@ using AmongUs.GameOptions;
 using FinalSuspect.DataHandling.FinalAntiCheat.Core;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Resources;
+using FinalSuspect.Patches.Game_Vanilla;
 using FinalSuspect.Patches.System;
 using Il2CppInterop.Runtime.InteropTypes;
 using InnerNet;
@@ -71,13 +72,19 @@ public static class Utils
         return GetString($"{text}{Info}");
     }
 
-    public static void KickPlayer(int clientId, bool ban, string reason = "")
+    public static void KickPlayer(int clientId, bool ban, string reason = "", KickLevel level = KickLevel.Message)
     {
-        Info($"try to kick {GetClientById(clientId)?.Character?.GetRealName()} Due to {reason}", "Kick Player");
+        var client = GetClientById(clientId);
+        Info($"try to kick {client?.Character?.GetRealName()} Due to {reason}", "Kick Player");
+        
+        var _player = XtremePlayerData.AllPlayerData.FirstOrDefault(p => p.CheatData?.ClientData?.Id == clientId)?.Player;
         try
         {
             OnPlayerLeftPatch.Add(clientId);
             AmongUsClient.Instance.KickPlayer(clientId, ban);
+            if (level != KickLevel.None)
+                NotificationPopperPatch.NotificationPop(string.Format(GetString($"{level}.{reason}"), 
+                    _player ? _player.GetColoredName() : client?.PlayerName));
         }
         catch
         {
@@ -85,11 +92,11 @@ public static class Utils
         }
     }
 
-    public static void KickPlayer(byte playerId, bool ban, string reason = "")
+    public static void KickPlayer(byte playerId, bool ban, string reason = "", KickLevel level = KickLevel.Message)
     {
         try
         {
-            KickPlayer(GetPlayerById(playerId).GetClient().Id, ban, reason);
+            KickPlayer(GetPlayerById(playerId).GetClient().Id, ban, reason, level);
         }
         catch
         {
@@ -538,4 +545,11 @@ public static class Utils
     {
         return DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
     }
+}
+
+public enum KickLevel
+{
+    None,
+    Message,
+    Warning
 }

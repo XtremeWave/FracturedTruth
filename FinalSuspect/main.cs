@@ -114,7 +114,7 @@ public class Main : BasePlugin
     public static HideNSeekGameOptionsV09 HideNSeekOptions => GameOptionsManager.Instance.currentHideNSeekGameOptions;
 
     //Client Options
-    public static ConfigEntry<bool> KickPlayerWhoFriendCodeNotExist { get; private set; }
+    public static ConfigEntry<bool> KickPlayerWithAbnormalFriendCode { get; private set; }
     public static ConfigEntry<bool> KickPlayerWithDenyName { get; private set; }
     public static ConfigEntry<bool> KickPlayerInBanList { get; private set; }
     public static ConfigEntry<bool> SpamDenyWord { get; private set; }
@@ -165,7 +165,7 @@ public class Main : BasePlugin
 
         UnlockFPS = Config.Bind("Client Options", "Unlock FPS", false);
         ChangeOutfit = Config.Bind("Client Options", "Change Outfit", OutfitType[0]);
-        KickPlayerWhoFriendCodeNotExist = Config.Bind("Client Options", "Kick Player FriendCode Not Exist", true);
+        KickPlayerWithAbnormalFriendCode = Config.Bind("Client Options", "Kick Player FriendCode Not Exist", true);
         KickPlayerInBanList = Config.Bind("Client Options", "Kick Player In BanList", true);
         KickPlayerWithDenyName = Config.Bind("Client Options", "Kick Player With Deny Name", true);
         SpamDenyWord = Config.Bind("Client Options", "Spam Deny Word", true);

@@ -103,7 +103,7 @@ internal class RPCHandlerPatch
 
         if (AmongUsClient.Instance.AmHost)
         {
-            KickPlayer(player.PlayerId, ban, reason);
+            KickPlayer(player.PlayerId, ban, reason, KickLevel.None);
             WarnHost();
             if (notify)
             {

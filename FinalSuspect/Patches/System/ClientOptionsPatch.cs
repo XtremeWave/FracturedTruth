@@ -82,7 +82,7 @@ public static class OptionsMenuBehaviourStartPatch
         CreateOptionItem(ref ChangeOutfit, "ChangeOutfit", Main.ChangeOutfit, __instance, Main.OutfitType,
             SwitchHorseMode);
         CreateOptionItem(ref KickPlayerFriendCodeNotExist, "KickPlayerFriendCodeNotExist",
-            Main.KickPlayerWhoFriendCodeNotExist, __instance);
+            Main.KickPlayerWithAbnormalFriendCode, __instance);
         CreateOptionItem(ref KickPlayerInBanList, "KickPlayerInBanList", Main.KickPlayerInBanList, __instance);
         CreateOptionItem(ref KickPlayerWithDenyName, "KickPlayerWithDenyName", Main.KickPlayerWithDenyName, __instance);
         CreateOptionItem(ref SpamDenyWord, "SpamDenyWord", Main.SpamDenyWord, __instance);

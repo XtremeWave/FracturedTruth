@@ -33,10 +33,10 @@ public static class BanManager
         if (!AmongUsClient.Instance.AmHost || player == null) return;
         if (!player.IsBannedPlayer())
         {
-            File.AppendAllText(BAN_LIST_PATH, $"{player?.FriendCode},{player?.GetHashedPuid()},{player.PlayerName}\n");
+            File.AppendAllText(BAN_LIST_PATH, $"{player.FriendCode},{player.GetHashedPuid()},{player.PlayerName}\n");
             SendInGame(string.Format(GetString("Message.AddedPlayerToBanList"), player.PlayerName));
         }
-        else Info($"{player?.FriendCode},{player?.GetHashedPuid()},{player.PlayerName} 已经被加入封禁名单", "AddBanPlayer");
+        else Info($"{player.FriendCode},{player?.GetHashedPuid()},{player.PlayerName} 已经被加入封禁名单", "AddBanPlayer");
     }
 
     public static void CheckDenyNamePlayer(ClientData player)
@@ -50,9 +50,7 @@ public static class BanManager
                 if (line == "") continue;
                 if (Main.AllPlayerControls.Any(p => p.IsDev() && line.Contains(p.FriendCode))) continue;
                 if (!Regex.IsMatch(player.PlayerName, line)) continue;
-                KickPlayer(player.Id, false, "Using denied name");
-                NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.KickedByDenyName"),
-                    player.PlayerName));
+                KickPlayer(player.Id, false, "KickedByDenyName");
                 return;
             }
         }
@@ -62,20 +60,61 @@ public static class BanManager
         }
     }
 
+    private static readonly Regex ValidFormatRegex = new(
+        @"^[a-z]{7,10}#\d{4}$",
+        RegexOptions.Compiled
+    );
+    
+    public static void CheckFriendCode(ClientData player)
+    {
+        if (!AmongUsClient.Instance.AmHost || !Main.KickPlayerWithAbnormalFriendCode.Value) return;
+        //用于检测是否为xxx#1145/xxx#1337的重复代码前缀
+        //InnerSloth的好友代码不会出现前端重复 如果有前端重复一定是UE或者SM黑客
+        var currentPrefixes = AmongUsClient.Instance.allClients
+            .ToArray()
+            .Where(c => c.Id != player.Id)
+            .Select(c =>
+            {
+                if (string.IsNullOrEmpty(c.FriendCode)) return null;
+                var parts = c.FriendCode.Split('#');
+                return parts.Length > 0 ? parts[0].ToLowerInvariant() : null;
+            })
+            .Where(prefix => !string.IsNullOrEmpty(prefix))
+            .ToHashSet();
+        var newPrefixParts = player.FriendCode.Split('#');
+        var newPrefix = newPrefixParts[0].ToLowerInvariant();
+        
+        if (currentPrefixes.Contains(newPrefix))
+        {
+            KickPlayer(player.Id, false, "KickedByAbnormalFriendCode");
+            Info($"重复好友代码前缀的玩家 {player.PlayerName} 已被踢出", "Kick");
+            return;
+        }
+
+        if (player.FriendCode == "")
+        {
+            KickPlayer(player.Id, false, "KickedByAbnormalFriendCode");
+            Info($"没有好友代码的玩家 {player.PlayerName} 已被踢出。", "Kick");
+            return;
+        }
+
+        if (!ValidFormatRegex.IsMatch(player.FriendCode) || newPrefixParts.Length < 1)
+        {
+            KickPlayer(player.Id, false, "KickedByAbnormalFriendCode");
+            Info($"好友代码格式异常玩家 {player.PlayerName} 已被踢出。", "Kick");
+        }
+    }
+    
     public static void CheckBanPlayer(ClientData player)
     {
         if (!AmongUsClient.Instance.AmHost && !Main.KickPlayerInBanList.Value) return;
-        if (player.IsBannedPlayer())
+        if (player.IsBannedPlayer() || DestroyableSingleton<FriendsListManager>.Instance.IsPlayerBlockedUsername(player.FriendCode))
         {
-            KickPlayer(player.Id, true, "Player in Banlist");
-            NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.BanedByBanList"),
-                player.PlayerName));
+            KickPlayer(player.Id, true, "BanedByBanList");
         }
         else if (player.IsFACPlayer())
         {
-            KickPlayer(player.Id, true, "Player in FACList");
-            NotificationPopperPatch.NotificationPop(string.Format(GetString("Message.BanedByFACList"),
-                player.PlayerName));
+            KickPlayer(player.Id, true, "BanedByFACList");
         }
     }
 

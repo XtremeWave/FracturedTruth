@@ -57,10 +57,8 @@ public class PlayerCheatData
                 _player.GetColoredName()));
             return;
         }
-
-        NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.Cheater"),
-            _player.GetColoredName()));
-        KickPlayer(_player.PlayerId, false, "Suspect Cheater");
+        
+        KickPlayer(_player.PlayerId, false, "Cheater", KickLevel.Warning);
     }
 
     private readonly Dictionary<byte, RpcRecord> _rpcRecords = new();
