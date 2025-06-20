@@ -9,8 +9,10 @@ using InnerNet;
 namespace FinalSuspect.Patches.System;
 
 [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameJoined))]
-internal class OnGameJoinedPatch
+public class OnGameJoinedPatch
 {
+    public static bool JoinedCompleted;
+
     public static void Postfix(AmongUsClient __instance)
     {
         HudManagerPatch.Init();
@@ -24,7 +26,13 @@ internal class OnGameJoinedPatch
         ErrorText.Instance.Clear();
         ServerAddManager.SetServerName();
 
-        Init();
+        Init_FAC();
+
+        _ = new LateTask(() =>
+        {
+            JoinedCompleted = true;
+        }, 0.1f, "SyncJoined");
+        
         if (AmongUsClient.Instance.AmHost)
         {
             GameStartManagerPatch.GameStartManagerUpdatePatch.exitTimer = -1;
@@ -50,6 +58,7 @@ internal class DisconnectInternalPatch
             ErrorText.Instance.CheatDetected = false;
             ErrorText.Instance.SBDetected = false;
             ErrorText.Instance.Clear();
+            OnGameJoinedPatch.JoinedCompleted = false;
             //Cloud.StopConnect();
         }
         catch

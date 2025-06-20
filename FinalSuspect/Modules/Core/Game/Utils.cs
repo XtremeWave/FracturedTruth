@@ -533,4 +533,9 @@ public static class Utils
     {
         return XtremeGameData.PlayerVersion.playerVersion.TryGetValue(id, out ver) && ver != null;
     }
+    
+    public static long GetCurrentTimestamp()
+    {
+        return DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+    }
 }

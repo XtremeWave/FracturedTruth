@@ -28,7 +28,7 @@ public static class FAC
         }
     }
 
-    public static void Init()
+    public static void Init_FAC()
     {
         DeNum = 0;
     }

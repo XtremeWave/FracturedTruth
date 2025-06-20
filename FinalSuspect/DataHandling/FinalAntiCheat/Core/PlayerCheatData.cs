@@ -116,11 +116,6 @@ public class PlayerCheatData
         return false;
     }
 
-    private static long GetCurrentTimestamp()
-    {
-        return DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-    }
-
     public void HandleCheatData()
     {
         try
