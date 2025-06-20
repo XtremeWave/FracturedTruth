@@ -64,8 +64,8 @@ public static class InGameRoleInfoMenu
         var role = player.Data.Role.Role;
         builder.AppendFormat("<size={0}>{1}", FirstHeaderSize, GetRoleName(role).Color(GetRoleColor(role)));
         // 职业阵营 / 原版职业
-        var roleTeam = player.IsImpostor() ? "Impostor" : "Crewmate";
-        builder.AppendFormat("<size={0}> ({1})\n", BodySize, GetString($"Type{roleTeam}"));
+        var roleTeam = player.IsImpostor() ? "Imp" : "Crew";
+        builder.AppendFormat("<size={0}> ({1})\n", BodySize, GetString($"RoleType.{roleTeam}"));
         builder.AppendFormat("<size={0}>{1}\n", BodySize, player.GetRoleType().GetRoleInfoForVanilla(true) ?? "");
         RoleInfoTMP.text = builder.ToString();
         var HnSPrefix = "";

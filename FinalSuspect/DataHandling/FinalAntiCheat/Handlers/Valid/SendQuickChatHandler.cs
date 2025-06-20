@@ -30,11 +30,11 @@ public class SendQuickChatHandler : IRpcHandler
             {
                 if (AmongUsClient.Instance.AmHost)
                 {
-                    HandleCheat(sender, GetString("Warning.SendQuickChat"));
+                    HandleCheat(sender, GetString("CheatDetected.SendQuickChat"));
                 }
                 else if (!OtherModHost)
                 {
-                    HandleCheat(sender, GetString("Warning.SendQuickChat_NotHost"));
+                    HandleCheat(sender, GetString("CheatDetected.SendQuickChat_NotHost"));
                 }
 
                 Warn(

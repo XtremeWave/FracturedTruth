@@ -18,7 +18,7 @@ internal class MakePublicPatch
         if (VersionChecker.isBroken || (VersionChecker.hasUpdate && VersionChecker.forceUpdate) ||
             !VersionChecker.IsSupported)
         {
-            var message = GetString("PublicNotAvailableOnThisVersion");
+            var message = "";
             if (VersionChecker.isBroken) message = GetString("ModBrokenMessage");
             if (VersionChecker.hasUpdate) message = GetString("CanNotJoinPublicRoomNoLatest");
             Info(message, "MakePublicPatch");
@@ -127,12 +127,12 @@ internal class KickPlayerPatch
                 if (ban)
                 {
                     BanManager.AddBanPlayer(AmongUsClient.Instance.GetRecentClient(clientId));
-                    NotificationPopperPatch.NotificationPop(string.Format(GetString("PlayerBanByHost"),
+                    NotificationPopperPatch.NotificationPop(string.Format(GetString("Notification.PlayerBanByHost"),
                         AmongUsClient.Instance.GetRecentClient(clientId).PlayerName));
                 }
                 else
                 {
-                    NotificationPopperPatch.NotificationPop(string.Format(GetString("PlayerKickByHost"),
+                    NotificationPopperPatch.NotificationPop(string.Format(GetString("Notification.PlayerKickByHost"),
                         AmongUsClient.Instance.GetRecentClient(clientId).PlayerName));
                 }
             }

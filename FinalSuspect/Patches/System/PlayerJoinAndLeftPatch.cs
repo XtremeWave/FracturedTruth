@@ -117,23 +117,23 @@ internal class OnPlayerLeftPatch
             switch (reason)
             {
                 case DisconnectReasons.Hacking:
-                    NotificationPopperPatch.NotificationPop(string.Format(GetString("PlayerLeftByAU-Anticheat"), name));
+                    NotificationPopperPatch.NotificationPop(string.Format(GetString("Notification.PlayerLeftByAU-Anticheat"), name));
                     break;
                 case DisconnectReasons.Error:
-                    NotificationPopperPatch.NotificationPop(string.Format(GetString("PlayerLeftCuzError"), name));
+                    NotificationPopperPatch.NotificationPop(string.Format(GetString("Notification.PlayerLeftCuzError"), name));
                     break;
                 case DisconnectReasons.Kicked:
                 case DisconnectReasons.Banned:
                     break;
                 case DisconnectReasons.ExitGame:
-                    NotificationPopperPatch.NotificationPop(string.Format(GetString("PlayerLeft"), name));
+                    NotificationPopperPatch.NotificationPop(string.Format(GetString("Notification.PlayerLeft"), name));
                     break;
                 case DisconnectReasons.ClientTimeout:
-                    NotificationPopperPatch.NotificationPop(string.Format(GetString("PlayerLeftCuzTimeout"), name));
+                    NotificationPopperPatch.NotificationPop(string.Format(GetString("Notification.PlayerLeftCuzTimeout"), name));
                     break;
                 default:
                     if (!ClientsProcessed.Contains(data.Id))
-                        NotificationPopperPatch.NotificationPop(string.Format(GetString("PlayerLeft"), name));
+                        NotificationPopperPatch.NotificationPop(string.Format(GetString("Notification.PlayerLeft"), name));
                     break;
             }
 

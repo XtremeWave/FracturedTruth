@@ -24,18 +24,18 @@ public class ModUpdater
         var buttonText = MainMenuManagerPatch.UpdateButton.transform.FindChild("FontPlacer").GetChild(0)
             .GetComponent<TextMeshPro>();
         buttonText.text =
-            $"{(VersionChecker.CanUpdate ? GetString("updateButton") : GetString("updateNotice"))}\nv{VersionChecker.showVer ?? " ???"}";
+            $"{(VersionChecker.CanUpdate ? GetString("UpdateRemind.updatePopup") : GetString("UpdateRemind.updateNotice"))}\nv{VersionChecker.showVer ?? " ???"}";
     }
 
     public static void StartUpdate(string url = "waitToSelect")
     {
         if (url == "waitToSelect")
         {
-            CustomPopup.Show(GetString("updatePopupTitle"), GetString("updateChoseSource"),
+            CustomPopup.Show(GetString("UpdateRemind.updatePopup"), GetString("UpdateSource.Choose:"),
             [
-                (GetString("updateSource.XtremeApi"), () => StartUpdate(downloadUrl_xtremeapi)),
-                (GetString("updateSource.Github"), () => StartUpdate(downloadUrl_github)),
-                (GetString("updateSource.Gitee"), () => StartUpdate(downloadUrl_gitee)),
+                (GetString("UpdateSource.XtremeApi"), () => StartUpdate(downloadUrl_xtremeapi)),
+                (GetString("UpdateSource.Github"), () => StartUpdate(downloadUrl_github)),
+                (GetString("UpdateSource.Gitee"), () => StartUpdate(downloadUrl_gitee)),
                 (GetString(StringNames.Cancel), SetUpdateButtonStatus)
             ]);
             return;
@@ -45,20 +45,20 @@ public class ModUpdater
             @"^(http|https|ftp)\://([a-zA-Z0-9\.\-]+(\:[a-zA-Z0-9\.&%\$\-]+)*@)?((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\.[a-zA-Z]{2,4})(\:[0-9]+)?(/[^/][a-zA-Z0-9\.\,\?\'\\/\+&%\$#\=~_\-@]*)*$");
         if (!r.IsMatch(url))
         {
-            CustomPopup.ShowLater(GetString("updatePopupTitleFailed"),
-                string.Format(GetString("updatePingFialed"), "404 Not Found"),
+            CustomPopup.ShowLater(GetString("UpdateResult.Failed_Title"),
+                string.Format(GetString("UpdateResult.Failed_Reason_NotFound"), "404 Not Found"),
                 [(GetString(StringNames.Okay), SetUpdateButtonStatus)]);
             return;
         }
 
-        CustomPopup.Show(GetString("updatePopupTitle"), GetString("updatePleaseWait"), null);
+        CustomPopup.Show(GetString("UpdateRemind.updatePopup"), GetString("Tip.PleaseWait"), null);
 
         var task = DownloadDLL(url);
         task.ContinueWith(t =>
         {
             var (done, reason) = t.Result;
-            var title = done ? GetString("updatePopupTitleDone") : GetString("updatePopupTitleFailed");
-            var desc = done ? GetString("updateRestart") : reason;
+            var title = done ? GetString("updatePopupTitleDone") : GetString("UpdateResult.Failed_Title");
+            var desc = done ? GetString("UpdateResult.Succeed_Text") : reason;
             CustomPopup.ShowLater(title, desc,
                 [(GetString(done ? StringNames.ExitGame : StringNames.Okay), done ? Application.Quit : null)]);
             SetUpdateButtonStatus();
@@ -100,7 +100,7 @@ public class ModUpdater
             if (GetMD5HashFromFile(DownloadFileTempPath) != VersionChecker.md5)
             {
                 File.Delete(DownloadFileTempPath);
-                return (false, GetString("updateFileMd5Incorrect"));
+                return (false, GetString("UpdateResult.Failed_Reason_FileMd5Incorrect"));
             }
 
             var fileName = Assembly.GetExecutingAssembly().Location;
@@ -112,7 +112,7 @@ public class ModUpdater
         {
             File.Delete(DownloadFileTempPath);
             Error($"更新失败\n{ex.Message}", "DownloadDLL", false);
-            return (false, GetString("downloadFailed"));
+            return (false, GetString("UpdateResult.Failed_Reason_Ping"));
         }
     }
 
@@ -122,7 +122,7 @@ public class ModUpdater
         if (progressPercentage != null)
         {
             var msg =
-                $"{GetString("updateInProgress")}\n{totalFileSize / 1000}KB / {totalBytesDownloaded / 1000}KB  -  {(int)progressPercentage}%";
+                $"{GetString("Tip.Updating")}\n{totalFileSize / 1000}KB / {totalBytesDownloaded / 1000}KB  -  {(int)progressPercentage}%";
             Info(msg, "DownloadDLL");
             CustomPopup.UpdateTextLater(msg);
         }

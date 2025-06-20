@@ -40,9 +40,9 @@ public static class Utils
         }
     }
 
-    public static string GetRoleName(RoleTypes role, bool forUser = true)
+    public static string GetRoleName(RoleTypes role)
     {
-        return GetRoleString(Enum.GetName(typeof(RoleTypes), role), forUser);
+        return GetRoleString(Enum.GetName(typeof(RoleTypes), role));
     }
 
     public static Color GetRoleColor(RoleTypes role)
@@ -64,11 +64,23 @@ public static class Utils
             InfoLong = false;
 
         var text = role.ToString();
-
         var Info = "Blurb" + (InfoLong ? "Long" : "");
-
-        if (!IsNormalGame) text = "HnS" + text;
-
+        if (IsNormalGame) return GetString($"{text}{Info}");
+        
+        if (InfoLong)
+            switch (role)
+            {
+                case RoleTypes.Engineer:
+                    return $"{GetString(StringNames.RuleOneCrewmates)}" +
+                           $"\n{GetString(StringNames.RuleTwoCrewmates)}" +
+                           $"\n{GetString(StringNames.RuleThreeCrewmates)}";
+                case RoleTypes.Impostor:
+                    return $"{GetString(StringNames.RuleOneImpostor)}" +
+                           $"\n{GetString(StringNames.RuleTwoImpostor)}" +
+                           $"\n{GetString(StringNames.RuleThreeImpostor)}";
+            }
+            
+        text = "HnS" + text;
         return GetString($"{text}{Info}");
     }
 
@@ -191,7 +203,7 @@ public static class Utils
         var oldrole = thisdata.RoleWhenAlive ?? RoleTypes.Crewmate;
         var newrole = thisdata.RoleAfterDeath ??
                       (thisdata.IsImpostor ? RoleTypes.ImpostorGhost : RoleTypes.CrewmateGhost);
-        builder.Append(StringHelper.ColorString(GetRoleColor(oldrole), GetString($"{oldrole}")));
+        builder.Append(StringHelper.ColorString(GetRoleColor(oldrole), GetRoleString($"{oldrole}")));
 
         if (thisdata.IsDead && newrole != oldrole)
         {
@@ -551,5 +563,6 @@ public enum KickLevel
 {
     None,
     Message,
-    Warning
+    Warning,
+    CheatDetected
 }

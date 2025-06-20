@@ -34,7 +34,7 @@ public static class BanManager
         if (!player.IsBannedPlayer())
         {
             File.AppendAllText(BAN_LIST_PATH, $"{player.FriendCode},{player.GetHashedPuid()},{player.PlayerName}\n");
-            SendInGame(string.Format(GetString("Message.AddedPlayerToBanList"), player.PlayerName));
+            SendInGame(string.Format(GetString("Notification.AddedPlayerToBanList"), player.PlayerName));
         }
         else Info($"{player.FriendCode},{player?.GetHashedPuid()},{player.PlayerName} 已经被加入封禁名单", "AddBanPlayer");
     }

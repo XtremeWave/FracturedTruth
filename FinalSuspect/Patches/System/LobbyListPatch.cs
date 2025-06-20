@@ -50,7 +50,7 @@ public class SetupGameInfoPatch
                 break;
             case Platforms.StandaloneWin10:
                 color = "#0078d4";
-                platform = GetString("MicrosoftStore");
+                platform = GetString("Platform.MicrosoftStore");
                 break;
             case Platforms.StandaloneItch:
                 color = "#E35F5F";
@@ -58,11 +58,11 @@ public class SetupGameInfoPatch
                 break;
             case Platforms.IPhone:
                 color = "#e3e3e3";
-                platform = GetString("IPhone");
+                platform = GetString("Platform.IPhone");
                 break;
             case Platforms.Android:
                 color = "#1EA21A";
-                platform = GetString("Android");
+                platform = GetString("Platform.Android");
                 break;
             case Platforms.Switch:
                 var halfLength = trueHostName.Length / 2;

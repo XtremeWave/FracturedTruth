@@ -79,12 +79,12 @@ public static class FAC
                             if (reason == "Hacking")
                                 reason = GetString("Unknown");
                             NotificationPopperPatch.NotificationPop(
-                                string.Format(GetString("FAC.CheatDetected.UsingCheat"), pc.GetColoredName(), reason));
+                                string.Format(GetString("CheatDetected.UseCheat"), pc.GetColoredName(), reason));
                             return true;
                         }
 
                         NotificationPopperPatch.NotificationPop(
-                            string.Format(GetString("FAC.CheatDetected.MayUseCheat"), pc.GetColoredName(), reason));
+                            string.Format(GetString("CheatDetected.MayUseCheat"), pc.GetColoredName(), reason));
                         return false;
                     }
 

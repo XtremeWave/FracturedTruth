@@ -89,7 +89,7 @@ public class ClientActionItem
                 2.2f - 0.5f * (numItems / 2),
                 -6f);
             ToggleButton.name = name;
-            ToggleButton.Text.text = GetString(name);
+            ToggleButton.Text.text = GetString("ClientOption." + name);
             ToggleButton.Background.color = Color.white;
             var passiveButton = ToggleButton.GetComponent<PassiveButton>();
             passiveButton.OnClick = new Button.ButtonClickedEvent();

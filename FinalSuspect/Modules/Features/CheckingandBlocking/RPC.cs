@@ -108,14 +108,14 @@ internal class RPCHandlerPatch
             if (notify)
             {
                 NotificationPopperPatch.NotificationPop(
-                    string.Format(GetString("Warning.InvalidSlothRPC"), player.GetRealName(),
+                    string.Format(GetString("CheatDetected.InvalidSlothRPC"), player.GetRealName(),
                         $"{callId}({RPC.GetRpcName(callId)})"));
             }
         }
         else if (notify)
         {
             NotificationPopperPatch.NotificationPop(
-                string.Format(GetString("Warning.InvalidSlothRPC_NotHost"), player.GetRealName(),
+                string.Format(GetString("CheatDetected.InvalidSlothRPC_NotHost"), player.GetRealName(),
                     $"{callId}({RPC.GetRpcName(callId)})"));
         }
     }

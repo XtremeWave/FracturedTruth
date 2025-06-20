@@ -29,8 +29,8 @@ public class Main : BasePlugin
     // == 程序基本设定 / Program Config ==
     public const string ModName = "Final Suspect";
     public const string ForkId = "Final Suspect";
-    public const string PluginVersion = "1.1.3.10";
-    public const string PluginGuid = "cn.finalsuspect.xtremewave";
+    public const string PluginVersion = "1.1.100";
+    public const string PluginGuid = "cn.xtremewave.finalsuspect";
     public const int PluginCreation = 0;
     public const string DebugKeyHash = "c0fd562955ba56af3ae20d7ec9e64c664f0facecef4b3e366e109306adeae29d";
     public const string DebugKeySalt = "59687b";
@@ -72,7 +72,7 @@ public class Main : BasePlugin
 
     public static readonly string[] OutfitType =
     [
-        "BeanMode", "HorseMode", "LongMode"
+        "AprilFoolsMode.BeanMode", "AprilFoolsMode.HorseMode", "AprilFoolsMode.LongMode"
     ];
 
     public static Dictionary<RoleTypes, string> roleColors;
@@ -126,7 +126,7 @@ public class Main : BasePlugin
     public static ConfigEntry<bool> DisableFAC { get; private set; }
     public static ConfigEntry<bool> ShowPlayerInfo { get; private set; }
     public static ConfigEntry<bool> UseModCursor { get; private set; }
-    public static ConfigEntry<bool> FastBoot { get; private set; }
+    public static ConfigEntry<bool> FastLaunchMode { get; private set; }
     public static ConfigEntry<bool> VersionCheat { get; private set; }
     public static ConfigEntry<bool> GodMode { get; private set; }
     public static ConfigEntry<bool> NoGameEnd { get; private set; }
@@ -138,6 +138,7 @@ public class Main : BasePlugin
     public static ConfigEntry<string> WebhookURL { get; private set; }
     public static ConfigEntry<bool> EnableFinalSuspect { get; private set; }
     public static ConfigEntry<string> LastStartVersion { get; private set; }
+    public static ConfigEntry<BypassType> LanguageUpdateBypass { get; private set; }
 
     public static IEnumerable<PlayerControl> AllPlayerControls =>
         PlayerControl.AllPlayerControls.ToArray().Where(p => p);
@@ -154,13 +155,14 @@ public class Main : BasePlugin
     {
         Instance = this;
 
-        //Client Options
+        //Configs
         HideName = Config.Bind("Xtreme System", "Hide Game Code Name", "Final Suspect");
         HideColor = Config.Bind("Xtreme System", "Hide Game Code Color", $"{ColorHelper.ModColor}");
         EnableFinalSuspect = Config.Bind("Xtreme System", "Enable Final Suspect", true);
         ShowResults = Config.Bind("Xtreme System", "Show Results", true);
         LastStartVersion = Config.Bind("Xtreme System", "Last Start Version", "0.0.0");
-
+        LanguageUpdateBypass = Config.Bind("Xtreme System", "Language Update Bypass", BypassType.Dont);
+        
         DebugKeyInput = Config.Bind("Authentication", "Debug Key", "");
 
         UnlockFPS = Config.Bind("Client Options", "Unlock FPS", false);
@@ -176,7 +178,7 @@ public class Main : BasePlugin
         //PrunkMode = Config.Bind("Client Options", "Prunk Mode", false);
         ShowPlayerInfo = Config.Bind("Client Options", "Show Player Info", true);
         UseModCursor = Config.Bind("Client Options", "Use Mod Cursor", true);
-        FastBoot = Config.Bind("Client Options", "Fast Boot", false);
+        FastLaunchMode = Config.Bind("Client Options", "Fast Boot", false);
         VersionCheat = Config.Bind("Client Options", "Version Cheat", false);
         GodMode = Config.Bind("Client Options", "God Mode", false);
         NoGameEnd = Config.Bind("Client Options", "No Game End", false);
@@ -303,4 +305,11 @@ public enum VersionTypes
     /// 除此之外若要发行，全部使用OpenBeta。
     /// </summary>
     Release,
+}
+
+public enum BypassType
+{
+    Dont,
+    Once,
+    LongTerm,
 }

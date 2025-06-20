@@ -21,12 +21,12 @@ public class SetNameHandler : IRpcHandler
         if (++_counters[sender.PlayerId] <= 3) return false;
         if (AmongUsClient.Instance.AmHost)
         {
-            HandleCheat(sender, GetString("Warning.SetName"));
+            HandleCheat(sender, GetString("CheatDetected.SetName"));
             WarnHost();
         }
         else if (!OtherModHost)
         {
-            HandleCheat(sender, GetString("Warning.SetName_NotHost"));
+            HandleCheat(sender, GetString("CheatDetected.SetName_NotHost"));
         }
 
         ban = true;

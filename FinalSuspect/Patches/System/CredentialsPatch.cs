@@ -194,7 +194,7 @@ public class VersionShowerStartPatch
         VisitText.alignment = TextAlignmentOptions.Left;
         VisitText.text = VersionChecker.isChecked
             ? string.Format(GetString("FinalSuspectWelcomeText"), ColorHelper.ModColor)
-            : GetString("ConnectToFinalSuspectServerFailed");
+            : GetString("RetrieveVersionInfoFailed");
         VisitText.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
         VisitText.enabled = GameObject.Find("FinalSuspect Background");
 

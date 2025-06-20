@@ -15,7 +15,7 @@ public class NotificationPopperPatch
         return true;
     }
 
-    public static void AddItem(string text)
+    private static void AddItem(string text)
     {
         WaitToSend.Add(text);
         if (DestroyableSingleton<HudManager>._instance)

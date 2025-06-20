@@ -23,7 +23,7 @@ public static class VersionChecker
             {
                 _ = SpamManager.Init();
                 _ = ModNewsHistory.LoadModAnnouncements();
-                CustomPopup.Show(GetString("updateCheckPopupTitle"), GetString("LoadingWithDot"), null);
+                CustomPopup.Show(GetString("UpdateCheck.Popup_Title"), GetString("Tip.LoadingWithDot"), null);
             }
 
             ModUpdater.SetUpdateButtonStatus();
@@ -68,7 +68,7 @@ public static class VersionChecker
     private static void Retry()
     {
         retried++;
-        CustomPopup.Show(GetString("updateCheckPopupTitle"), GetString("PleaseWait"), null);
+        CustomPopup.Show(GetString("UpdateCheck.Popup_Title"), GetString("Tip.PleaseWait"), null);
         _ = new LateTask(() => _ = CheckForUpdate(), 0.3f, "Retry Check Update");
     }
 
@@ -117,17 +117,17 @@ public static class VersionChecker
             else
             {
                 if (retried >= 2)
-                    CustomPopup.Show(GetString("updateCheckPopupTitle"), GetString("updateCheckFailedExit"),
+                    CustomPopup.Show(GetString("UpdateCheck.Popup_Title"), GetString("UpdateCheck.Failed_Exit"),
                         [(GetString(StringNames.Okay), null)]);
                 else
-                    CustomPopup.Show(GetString("updateCheckPopupTitle"), GetString("updateCheckFailedRetry"),
+                    CustomPopup.Show(GetString("UpdateCheck.Popup_Title"), GetString("UpdateCheck.Failed_Retry"),
                         [(GetString("Retry"), Retry)]);
             }
 
             ModUpdater.SetUpdateButtonStatus();
             VersionShowerStartPatch.VisitText.text = isChecked
                 ? string.Format(GetString("FinalSuspectWelcomeText"), ColorHelper.ModColor)
-                : GetString("ConnectToFinalSuspectServerFailed");
+                : GetString("RetrieveVersionInfoFailed");
         }, "Check For Update");
     }
 

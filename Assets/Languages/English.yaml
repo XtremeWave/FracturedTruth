@@ -191,8 +191,6 @@ Message.BanedByFACList: "[{0}] has been banned because he is in FAC list of Bann
 Message.DumpfileSaved: "The log file was successfully saved to the desktop, filename: {0}"
 Message.KickedByNoFriendCode: "[{0}] was kicked because their friend code does not exist."
 Message.AddedPlayerToBanList: "Added [{0}] to the ban list"
-Message.KickedByFAC: "[{0}]Kicked by FAC, reason: {1}"
-Message.BanedByFAC: "[{0}]Kicked by FAC, reason:{1}"
 
 # 通知 / Notifications
 PlayerLeft: "[{0}] left the game"

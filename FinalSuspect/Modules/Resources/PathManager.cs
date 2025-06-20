@@ -130,11 +130,6 @@ public static class PathManager
         }
     }
 
-    public static string GetBypassFileType(FileType fileType, BypassType bypassType)
-    {
-        return GetLocalPath(LocalType.Bypass) + $"BypassCheck_{fileType}_{bypassType}.xwc";
-    }
-
     private static IReadOnlyList<string> URLs => new List<string>
     {
 #if DEBUG
@@ -182,10 +177,4 @@ public enum LocalType
     Resources,
     BepInEx,
     Bypass
-}
-
-public enum BypassType
-{
-    Once,
-    Longterm,
 }

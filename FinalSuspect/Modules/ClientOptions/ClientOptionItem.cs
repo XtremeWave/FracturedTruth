@@ -119,18 +119,20 @@ public sealed class ClientOptionItem_String : ClientActionItem
         if (!ToggleButton) return;
 
         var color = Config.Value == selections[0] ? Palette.Purple : Color.magenta;
-        if (Config.Value == "HorseMode")
+        if (Config.Value == "AprilFoolsMode.HorseMode")
             color = Color.gray;
         ToggleButton.Background.color = color;
         ToggleButton.Rollover?.ChangeOutColor(color);
     }
 
-    public void UpdateName(string name)
+    public void UpdateName(string name = "")
     {
+        if (name == "")
+            ToggleButton.Text.text = GetString(Config.Value);
         if (!ToggleButton) return;
 
         ToggleButton.Text.text = GetString(name);
-        if (Config.Value == "HorseMode")
+        if (Config.Value == "AprilFoolsMode.HorseMode")
             ToggleButton.Text.text += $"({GetString("Broken")})";
     }
 }

@@ -211,15 +211,15 @@ public static class HudManagerPatch
                     var setToActive = !roleSummary.gameObject.activeSelf;
                     roleSummary.gameObject.SetActive(setToActive);
                     Main.ShowResults.Value = setToActive;
-                    showHideButton.Label.text = GetString(setToActive ? "HideResults" : "ShowResults");
+                    showHideButton.Label.text = GetString(setToActive ? "Summary.HideResults" : "Summary.ShowResults");
                 },
-                GetString(showInitially ? "HideResults" : "ShowResults"))
+                GetString(showInitially ? "Summary.HideResults" : "Summary.ShowResults"))
             {
                 Scale = new Vector2(1.5f, 0.5f),
                 FontSize = 2f,
             };
 
-        StringBuilder sb = new($"{GetString("RoleSummaryText")}{LastGameResult}");
+        StringBuilder sb = new($"{GetString("Summary.Text")}{LastGameResult}");
         if (IsInGame)
         {
             LastRoomCode = GameCode.IntToGameName(AmongUsClient.Instance.GameId);

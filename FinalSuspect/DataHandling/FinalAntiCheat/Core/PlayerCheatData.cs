@@ -53,7 +53,7 @@ public class PlayerCheatData
         _lastHandleCheater = GetTimeStamp();
         if (!AmongUsClient.Instance.AmHost)
         {
-            NotificationPopperPatch.NotificationPop(string.Format(GetString("Warning.Cheater_NotHost"),
+            NotificationPopperPatch.NotificationPop(string.Format(GetString("CheatDetected.Cheater_NotHost"),
                 _player.GetColoredName()));
             return;
         }

@@ -60,7 +60,7 @@ public static class MyMusicPanel
             var stopButtonScale = stopButton.transform.localScale;
             stopButton.transform.localScale = stopButtonScale;
             stopButton.name = "stopButton";
-            stopButton.Text.text = GetString("Stop");
+            stopButton.Text.text = GetString("MusPlay.Stop");
             stopButton.Background.color = Color.white;
 
             var stopPassiveButton = stopButton.GetComponent<PassiveButton>();
@@ -193,21 +193,21 @@ public static class MyMusicPanel
             switch (audio.CurrectAudioStates)
             {
                 case AudiosStates.IsPlaying:
-                    preview = GetString("Playing");
+                    preview = GetString("Tip.Playing");
                     color = ColorHelper.ModColor32;
                     break;
                 case AudiosStates.IsDownLoading:
                     color = ColorHelper.DownloadYellow;
-                    preview = GetString("DownloadingAudios");
+                    preview = GetString("Tip.Downloading");
                     break;
                 case AudiosStates.IsLoading:
                     color = ColorHelper.ClientOptionColor;
-                    preview = GetString("Parsing");
+                    preview = GetString("Tip.Parsing");
                     break;
                 case AudiosStates.DownLoadSucceedNotice:
                 case AudiosStates.Exist:
                     color = audio.UnOfficial ? Color.green : ColorHelper.ClientFeatureColor;
-                    preview = GetString("CanPlay");
+                    preview = GetString("MusPlay.CanPlay");
                     enable = true;
                     break;
                 case AudiosStates.NotExist:
@@ -215,7 +215,7 @@ public static class MyMusicPanel
                 default:
                 {
                     color = ColorHelper.ClientFeatureColor_CanNotUse;
-                    preview = GetString("NoFound");
+                    preview = GetString("MusPlay.NoFound");
                     break;
                 }
             }

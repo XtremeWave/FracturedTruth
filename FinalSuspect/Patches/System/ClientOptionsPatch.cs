@@ -15,7 +15,7 @@ public static class OptionsMenuBehaviourStartPatch
 {
     private static ClientOptionItem_Boolean UnlockFPS;
     private static ClientOptionItem_String ChangeOutfit;
-    private static ClientOptionItem_Boolean KickPlayerFriendCodeNotExist;
+    private static ClientOptionItem_Boolean KickPlayerWithAbnormalFriendCode;
     private static ClientOptionItem_Boolean KickPlayerWithDenyName;
     private static ClientOptionItem_Boolean KickPlayerInBanList;
     private static ClientOptionItem_Boolean SpamDenyWord;
@@ -28,7 +28,7 @@ public static class OptionsMenuBehaviourStartPatch
     private static ClientOptionItem_Boolean DisableFAC;
     private static ClientOptionItem_Boolean ShowPlayerInfo;
     private static ClientOptionItem_Boolean UseModCursor;
-    private static ClientOptionItem_Boolean FastBoot;
+    private static ClientOptionItem_Boolean FastLaunchMode;
     private static ClientFeatureItem ClearAutoLogs;
     private static ClientFeatureItem DumpLog;
     private static ClientFeatureItem UnloadMod;
@@ -81,7 +81,7 @@ public static class OptionsMenuBehaviourStartPatch
         CreateOptionItem(ref UnlockFPS, "UnlockFPS", Main.UnlockFPS, __instance, UnlockFPSButtonToggle);
         CreateOptionItem(ref ChangeOutfit, "ChangeOutfit", Main.ChangeOutfit, __instance, Main.OutfitType,
             SwitchHorseMode);
-        CreateOptionItem(ref KickPlayerFriendCodeNotExist, "KickPlayerFriendCodeNotExist",
+        CreateOptionItem(ref KickPlayerWithAbnormalFriendCode, "KickPlayerWithAbnormalFriendCode",
             Main.KickPlayerWithAbnormalFriendCode, __instance);
         CreateOptionItem(ref KickPlayerInBanList, "KickPlayerInBanList", Main.KickPlayerInBanList, __instance);
         CreateOptionItem(ref KickPlayerWithDenyName, "KickPlayerWithDenyName", Main.KickPlayerWithDenyName, __instance);
@@ -101,7 +101,7 @@ public static class OptionsMenuBehaviourStartPatch
         CreateOptionItem(ref DisableFAC, "DisableFAC", Main.DisableFAC, __instance);
         CreateOptionItem(ref ShowPlayerInfo, "ShowPlayerInfo", Main.ShowPlayerInfo, __instance);
         CreateOptionItem(ref UseModCursor, "UseModCursor", Main.UseModCursor, __instance, SetCursor);
-        CreateOptionItem(ref FastBoot, "FastBoot", Main.FastBoot, __instance);
+        CreateOptionItem(ref FastLaunchMode, "FastLaunchMode", Main.FastLaunchMode, __instance);
         if (DebugModeManager.AmDebugger)
         {
             CreateOptionItem(ref VersionCheat, "VersionCheat", Main.VersionCheat, __instance);
@@ -173,6 +173,7 @@ public static class OptionsMenuBehaviourStartPatch
         {
             item = ClientOptionItem_String.Create(name, value.Value ?? options[0], value, instance, options,
                 toggleAction);
+            item.UpdateName();
         }
     }
 
@@ -209,7 +210,7 @@ public static class OptionsMenuBehaviourStartPatch
 
     private static void SetFeatureItemTextAndColor(ClientFeatureItem item, string text)
     {
-        item.ToggleButton.Text.text = GetString(text);
+        item.ToggleButton.Text.text = GetString("ClientFeature." + text);
         item.ToggleButton.GetComponent<PassiveButton>().enabled = true;
         item.ToggleButton.Background.color = ColorHelper.ClientFeatureColor;
     }
@@ -224,7 +225,7 @@ public static class OptionsMenuBehaviourStartPatch
 */
     private static void SetOptionItemDisabled_Menu(ClientOptionItem_String item)
     {
-        item.ToggleButton.Text.text = GetString(item.Name) + $"\n|{GetString("OnlyAvailableInMainMenu")}|";
+        item.ToggleButton.Text.text = GetString("ClientOption." + item.Name) + $"\n|{GetString("Tip.OnlyAvailableInMainMenu")}|";
         item.ToggleButton.GetComponent<PassiveButton>().enabled = false;
         item.ToggleButton.Background.color = ColorHelper.ClientOptionColor_CanNotUse;
     }
@@ -251,7 +252,7 @@ public static class OptionsMenuBehaviourStartPatch
     private static void UnlockFPSButtonToggle()
     {
         Application.targetFrameRate = Main.UnlockFPS.Value ? 165 : 60;
-        SendInGame(string.Format(GetString("FPSSetTo"), Application.targetFrameRate));
+        SendInGame(string.Format(GetString("Notification.FPSSetTo"), Application.targetFrameRate));
     }
 
     private static void SwitchHorseMode()

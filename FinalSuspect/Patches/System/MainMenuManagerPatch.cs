@@ -143,7 +143,7 @@ public class MainMenuManagerPatch
                 }
                 else
                 {
-                    CustomPopup.Show(GetString("UpdateBySelfTitle"), GetString("UpdateBySelfText"),
+                    CustomPopup.Show(GetString("UpdateRemind.BySelf_Title"), GetString("UpdateRemind.BySelf_Text"),
                         [(GetString(StringNames.Okay), null)]);
                 }
             }));

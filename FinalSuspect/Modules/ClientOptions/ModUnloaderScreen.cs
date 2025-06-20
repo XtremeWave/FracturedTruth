@@ -77,12 +77,12 @@ public static class ModUnloaderScreen
 
         if (AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Started)
         {
-            WarnText.text = GetString("CannotUnloadDuringGame");
+            WarnText.text = GetString("Tip.CannotUnloadDuringGame");
             UnloadButton.gameObject.SetActive(false);
         }
         else
         {
-            WarnText.text = GetString("UnloadWarning");
+            WarnText.text = GetString("Tip.UnloadWarning");
             UnloadButton.gameObject.SetActive(true);
         }
     }

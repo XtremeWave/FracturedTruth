@@ -49,18 +49,18 @@ internal class IntroCutscenePatch
             ? ColorHelper.ColorToHex(Palette.DisabledGrey)
             : ColorHelper.ColorToHex(Palette.ImpostorRed);
         __instance.TeamTitle.text = onlyImp
-            ? GetString("TeamImpostorOnly")
-            : GetString("TeamImpostor");
+            ? GetString("Team.Imp_Only")
+            : GetString("Team.Imp");
 
         __instance.TeamTitle.color = color;
         __instance.ImpostorText.text = $"<color=#{colorcode}>";
         __instance.ImpostorText.text += onlyImp
-            ? GetString("ImpostorNumImpOnly")
-            : $"{string.Format(GetString("ImpostorNumImp"), GameManager.Instance.LogicOptions.GetAdjustedNumImpostors(GameData.Instance.PlayerCount))}";
+            ? GetString("ImpostorNum.Imp_Only")
+            : $"{string.Format(GetString("ImpostorNum.Imp"), GameManager.Instance.LogicOptions.GetAdjustedNumImpostors(GameData.Instance.PlayerCount))}";
 
         __instance.ImpostorText.text += "\n" + (onlyImp
-            ? GetString("ImpostorIntroTextOnly")
-            : GetString("ImpostorIntroText"));
+            ? GetString("IntroText.Imp_Only")
+            : GetString("IntroText.Imp"));
 
         __instance.BackgroundBar.material.color = Palette.DisabledGrey;
 
@@ -72,10 +72,10 @@ internal class IntroCutscenePatch
     {
         if (!Main.EnableFinalSuspect.Value) return;
 
-        __instance.TeamTitle.text = $"{GetString("TeamCrewmate")}";
+        __instance.TeamTitle.text = $"{GetString("Team.Crew")}";
         __instance.ImpostorText.text =
-            $"{string.Format(GetString("ImpostorNumCrew"), GameManager.Instance.LogicOptions.GetAdjustedNumImpostors(GameData.Instance.PlayerCount))}";
-        __instance.ImpostorText.text += "\n" + GetString("CrewmateIntroText");
+            $"{string.Format(GetString("ImpostorNum.Crew"), GameManager.Instance.LogicOptions.GetAdjustedNumImpostors(GameData.Instance.PlayerCount))}";
+        __instance.ImpostorText.text += "\n" + GetString("IntroText.Crewmate");
         __instance.TeamTitle.color = new Color32(140, 255, 255, byte.MaxValue);
 
         StartFadeIntro(__instance, new Color32(140, 255, 255, byte.MaxValue), PlayerControl.LocalPlayer.GetRoleColor());

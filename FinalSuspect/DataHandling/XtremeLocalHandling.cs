@@ -116,7 +116,7 @@ public static class XtremeLocalHandling
                     break;
                 case Platforms.StandaloneWin10:
                     color = "#0078d4";
-                    name = GetString("MicrosoftStore");
+                    name = GetString("Platform.MicrosoftStore");
                     break;
                 case Platforms.StandaloneItch:
                     color = "#E35F5F";
@@ -124,11 +124,11 @@ public static class XtremeLocalHandling
                     break;
                 case Platforms.IPhone:
                     color = "#e3e3e3";
-                    name = GetString("IPhone");
+                    name = GetString("Platform.IPhone");
                     break;
                 case Platforms.Android:
                     color = "#1EA21A";
-                    name = GetString("Android");
+                    name = GetString("Platform.Android");
                     break;
                 case Platforms.Switch:
                     name = "<color=#00B2FF>Nintendo</color><color=#ff0000>Switch</color>";

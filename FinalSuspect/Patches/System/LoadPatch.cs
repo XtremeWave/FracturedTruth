@@ -109,51 +109,51 @@ public static class LoadPatch
 
         private static IEnumerator HandleCoreLoadingProcess()
         {
-            var fastBoot = CheckFastBootCondition() && !_firstLaunch;
+            var fastLaunchMode = CheckFastLaunchModeCondition() && !_firstLaunch;
 
-            yield return fastBoot ? HandleFastBoot() : HandleNormalBoot();
+            yield return fastLaunchMode ? HandleFastLaunchMode() : HandleNormalBoot();
             yield return LoadEssentialResources();
-            yield return HandlePostDownloadProcess(fastBoot);
+            yield return HandlePostDownloadProcess(fastLaunchMode);
         }
 
-        private static bool CheckFastBootCondition()
+        private static bool CheckFastLaunchModeCondition()
         {
             var currentVersion = $"{Main.PluginVersion}|{Main.DisplayedVersion}|{Main.GitCommit}-{Main.GitBranch}";
-            var bypassPathOnce = GetBypassFileType(FileType.Languages, BypassType.Once);
-            var bypassPathLongTerm = GetBypassFileType(FileType.Languages, BypassType.Longterm);
+            var bypassType = Main.LanguageUpdateBypass.Value;
+            
+            _reloadLanguage = currentVersion != Main.LastStartVersion.Value 
+                              && bypassType == BypassType.Dont;
 
-            _reloadLanguage = currentVersion != Main.LastStartVersion.Value &&
-                              !(File.Exists(bypassPathOnce) || File.Exists(bypassPathLongTerm));
-
-            if (File.Exists(bypassPathOnce) || File.Exists(bypassPathLongTerm))
+            switch (bypassType)
             {
-                if (File.Exists(bypassPathOnce))
-                {
-                    File.Delete(bypassPathOnce);
-                }
-            }
-            else
-            {
-                Main.LastStartVersion.Value = currentVersion;
+                case BypassType.Dont:
+                    Main.LastStartVersion.Value = currentVersion;
+                    break;
+                case BypassType.Once:
+                    Main.LanguageUpdateBypass.Value = BypassType.Dont;
+                    break;
+                case BypassType.LongTerm:
+                default:
+                    break;
             }
 
-            return Main.FastBoot.Value && !_reloadLanguage;
+            return Main.FastLaunchMode.Value && !_reloadLanguage;
         }
 
         #endregion
 
         #region Boot Handlers
 
-        private static IEnumerator HandleFastBoot()
+        private static IEnumerator HandleFastLaunchMode()
         {
-            SetFastBootVisuals();
+            SetFastLaunchModeVisuals();
             TranslatorInit();
-            UpdateProcessText(GetString("FastBoot"), Color.green);
+            UpdateProcessText(GetString("ClientOption.FastLaunchMode"), Color.green);
             yield return new WaitForSeconds(1f);
             _skipLoadAnimation = true;
         }
 
-        private static void SetFastBootVisuals()
+        private static void SetFastLaunchModeVisuals()
         {
             _teamLogo.color = Color.white;
             _teamLogo.transform.localPosition = new Vector3(0, 1.7f, -5f);
@@ -249,14 +249,14 @@ public static class LoadPatch
             TranslatorInit();
         }
 
-        private static IEnumerator HandlePostDownloadProcess(bool fastBoot)
+        private static IEnumerator HandlePostDownloadProcess(bool fastLaunchMode)
         {
-            if (fastBoot) yield break;
+            if (fastLaunchMode) yield break;
 
             if (TranslationController.Instance.currentLanguage.languageID != SupportedLangs.English)
             {
                 yield return FadeText(_loadText, false);
-                _loadText.text = GetString("Loading");
+                _loadText.text = GetString("Tip.Loading");
                 _loadText.color = Color.white;
                 yield return FadeText(_loadText, true);
             }
@@ -268,7 +268,7 @@ public static class LoadPatch
 
         private static IEnumerator VerifyAdditionalResources()
         {
-            UpdateProcessText(GetString("CheckingForFiles"), Color.blue.AlphaMultiplied(0.75f));
+            UpdateProcessText(GetString("Tip.CheckingForFiles"), Color.blue.AlphaMultiplied(0.75f));
             yield return FadeText(_processText, true);
 
             CheckForListResources(ref ResourcesHelper.RemoteImageList, FileType.Images);
@@ -284,14 +284,14 @@ public static class LoadPatch
             var downloadCount = ResourcesHelper.RemoteImageList.Count;
             var progress = 0;
 
-            UpdateProcessText($"{GetString("DownloadingResources")}({progress}/{downloadCount})",
+            UpdateProcessText($"{GetString("Tip.Downloading")}({progress}/{downloadCount})",
                 ColorHelper.DownloadYellow);
             yield return FadeText(_processText, true);
 
             var updateProgress = new Action(() =>
             {
                 progress++;
-                _processText.text = $"{GetString("DownloadingResources")}({progress}/{downloadCount})";
+                _processText.text = $"{GetString("Tip.Downloading")}({progress}/{downloadCount})";
             });
 
             yield return DownloadResources(ResourcesHelper.RemoteImageList, FileType.Images, updateProgress);
@@ -301,7 +301,7 @@ public static class LoadPatch
         private static IEnumerator ShowDownloadCompletion()
         {
             yield return FadeText(_processText, false);
-            UpdateProcessText(GetString("DownLoadSucceedNotice"), ColorHelper.DownloadYellow);
+            UpdateProcessText(GetString("Tip.DownLoadFinished"), ColorHelper.DownloadYellow);
             yield return FadeText(_processText, true);
             yield return new WaitForSeconds(0.5f);
             yield return FadeText(_processText, false);
@@ -315,7 +315,7 @@ public static class LoadPatch
 
             Color green = ColorHelper.LoadCompleteGreen;
             _loadText.color = green.AlphaMultiplied(0.75f);
-            _loadText.text = GetString("LoadingComplete");
+            _loadText.text = GetString("Tip.LoadingComplete");
 
             for (var i = 0; i < 3; i++)
             {

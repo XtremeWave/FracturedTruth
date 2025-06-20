@@ -49,8 +49,8 @@ internal class SetEverythingUpPatch
         var CustomWinnerColor = DidHumansWin ? "#8CFFFF" : "#FF1919";
         __instance.BackgroundBar.material.color = __instance.WinText.color =
             WinnerText.color = DidHumansWin ? Palette.CrewmateBlue : Palette.ImpostorRed;
-        __instance.WinText.text = DidHumansWin ? GetString("CrewmatesWin") : GetString("ImpostorsWin");
-        WinnerText.text = DidHumansWin ? GetString("CrewmatesWinBlurb") : GetString("ImpostorsWinBlurb");
+        __instance.WinText.text = DidHumansWin ? GetString("Outro.Crews_Win") : GetString("Outro.Imps_Win");
+        WinnerText.text = DidHumansWin ? GetString("Outro.Crews_WinBlurb") : GetString("Outro.Imps_WinBlurb");
 
         __instance.WinText.gameObject.SetActive(!showInitially);
         WinnerTextObject.SetActive(!showInitially);
@@ -70,23 +70,23 @@ internal class SetEverythingUpPatch
                     Main.ShowResults.Value = setToActive;
                     __instance.WinText.gameObject.SetActive(!setToActive);
                     WinnerTextObject.SetActive(!setToActive);
-                    showHideButton.Label.text = GetString(setToActive ? "HideResults" : "ShowResults");
+                    showHideButton.Label.text = GetString(setToActive ? "Summary.HideResults" : "Summary.ShowResults");
                 },
-                GetString(showInitially ? "HideResults" : "ShowResults"))
+                GetString(showInitially ? "Summary.HideResults" : "Summary.ShowResults"))
             {
                 Scale = new Vector2(1.5f, 0.5f),
                 FontSize = 2f,
             };
-        var lastgameresult = DidHumansWin ? GetString("CrewsWin") : GetString("ImpsWin");
+        var lastgameresult = DidHumansWin ? GetString("Summary.CrewsWin") : GetString("Summary.ImpsWin");
         HudManagerPatch.LastGameResult = lastgameresult;
-        StringBuilder sb = new($"{GetString("RoleSummaryText")}{lastgameresult}");
+        StringBuilder sb = new($"{GetString("Summary.Text")}{lastgameresult}");
         var gamecode = StringHelper.ColorString(
             ColorHelper.ModColor32,
             DataManager.Settings.Gameplay.StreamerMode
                 ? new string('*', HudManagerPatch.LastRoomCode.Length)
                 : HudManagerPatch.LastRoomCode);
         sb.Append("\n" + HudManagerPatch.LastServer + "  " + gamecode);
-        sb.Append("\n" + GetString("HideSummaryTextToShowWinText"));
+        sb.Append("\n" + GetString("Tip.HideSummaryTextToShowWinText"));
 
         StringBuilder sb2 = new();
         foreach (var data in XtremePlayerData.AllPlayerData.Where(x => x.IsImpostor != DidHumansWin))
