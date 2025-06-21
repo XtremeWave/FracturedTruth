@@ -14,6 +14,6 @@ public class HostGuard : IRpcHandler
         ref bool notify, ref string reason, ref bool ban)
     {
         reason = "HostGuard";
-        return true;
+        return false;
     }
 }
