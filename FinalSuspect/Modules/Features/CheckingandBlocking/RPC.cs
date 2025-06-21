@@ -38,10 +38,13 @@ internal class RPCHandlerPatch
         if (!__instance) return true;
 
         var player = GetPlayerFromInstance(__instance, reader);
-        if (player?.GetCheatData()?.InComingOverloaded != true)
+        if (!player) return true;
+        if (OnPlayerLeftPatch.ClientsProcessed.Contains(player.PlayerId)) return false;
+        
+        if (player.GetCheatData()?.InComingOverloaded != true)
         {
-            var cd = player?.GetCheatData();
-            Info(player && player.Data
+            var cd = player.GetCheatData();
+            Info(player.Data
                 ? $"{player.Data.PlayerId}(" +
                   $"Name: {player.Data.PlayerName}," +
                   $"FriendCode: {cd?.FriendCode}," +
@@ -50,10 +53,7 @@ internal class RPCHandlerPatch
                   $"{(player.IsHost() ? "Host" : "")}:{callId}({RPC.GetRpcName(callId)})"
                 : $"Call from {__instance.name}:{callId}({RPC.GetRpcName(callId)})", "ReceiveRPC");
         }
-
-        if (!player) return true;
-
-        if (OnPlayerLeftPatch.ClientsProcessed.Contains(player.PlayerId)) return false;
+        
 
         HandleCheatDetection(player, callId, reader);
 
@@ -353,27 +353,22 @@ public static class MessageReaderGuard
     
     public static bool Prefix(InnerNetClient __instance, [HarmonyArgument(0)] MessageReader parentReader)
     {
-        if (!IsLobby || IsNotJoined || OnGameJoinedPatch.JoinedCompleted) return true;
+        if (!IsLobby || IsNotJoined || !OnGameJoinedPatch.JoinedCompleted) return true;
         
         try
         {
             if (parentReader.Length < 1) return false; 
-            Test(0);
             var messageReader = MessageReader.Get(parentReader);
             var reader = messageReader.ReadMessageAsNewBuffer();
             if (reader.Length < 1) return false;
-            Test(1);
             var sr1 = MessageReader.Get(reader);
             var sr2 = MessageReader.Get(reader);
             int id;
             PlayerControl _player;
-            Test(2);
 
             try
             {
-                Test(3);
                 var num1 = sr1.ReadPackedUInt32();
-                Test(4);
                 if (__instance.allObjects.AllObjectsFast.TryGetValue(num1, out var obj))
                 {
                     _player = RPCHandlerPatch.GetPlayerFromInstance(obj, sr1);
@@ -385,9 +380,8 @@ public static class MessageReaderGuard
             {
                 /* ignored */
             }
-            Test(5);
+
             var num2 = sr2.ReadPackedInt32();
-            Test(6);
             var clientData = __instance.FindClientById(num2);
             id = clientData.Id;
             
@@ -396,7 +390,6 @@ public static class MessageReaderGuard
             if (_msgRecords.TryGetValue(id, out var record))
             {
                 if (_msgRecords[id].InComingOverloaded) return false;
-                Test(7);
                 _player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => x.CheatData.ClientData.Id == id)?.Player;
                 var timeDiff = currentTime - record.LastReceivedTime;
                 if (timeDiff > 1000)
@@ -409,9 +402,9 @@ public static class MessageReaderGuard
                     record.Count++;
                     if (record.Count > 40)
                     {
-                        _player?.MarkAsCheater();
                         record.Count = 0;
                         _msgRecords[id].InComingOverloaded = true;
+                        _player?.MarkAsCheater();
                         Warn($"InComingMsg Overloaded: {_player.GetDataName() ?? ""}", "FAC");
                         return false;
                     }
@@ -453,23 +446,19 @@ public static class MessageReaderGuard_Inner
     
     public static bool Prefix(InnerNetClient._HandleGameDataInner_d__165 __instance)
     {
-        if (!IsLobby || IsNotJoined || OnGameJoinedPatch.JoinedCompleted) return true;
+        if (!IsLobby || IsNotJoined || !OnGameJoinedPatch.JoinedCompleted) return true;
         
         try
         {
             var innerNetClient = __instance.__4__this;
             if (__instance.reader.Length < 1) return false;
-            Test(0);
             var sr1 = MessageReader.Get(__instance.reader);
             var sr2 = MessageReader.Get(__instance.reader);
             int id;
             PlayerControl _player;
-            Test(1);
             try
             {
-                Test(2);
                 var num1 = sr1.ReadPackedUInt32();
-                Test(3);
                 if (innerNetClient.allObjects.AllObjectsFast.TryGetValue(num1, out var obj))
                 {
                     _player = RPCHandlerPatch.GetPlayerFromInstance(obj, sr1);
@@ -481,9 +470,8 @@ public static class MessageReaderGuard_Inner
             {
                 /* ignored */
             }
-            Test(4);
+            
             var num2 = sr2.ReadPackedInt32();
-            Test(5);
             var clientData = innerNetClient.FindClientById(num2);
             id = clientData.Id;
 
@@ -491,11 +479,9 @@ public static class MessageReaderGuard_Inner
             var currentTime = GetCurrentTimestamp();
             if (_msgRecords.TryGetValue(id, out var record))
             {
-                Test(6);
                 if (_msgRecords[id].InComingOverloaded) return false;
                 _player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => x.CheatData.ClientData.Id == id)?.Player;
                 var timeDiff = currentTime - record.LastReceivedTime;
-                Test(7);
                 if (timeDiff > 1000)
                 {
                     record.Count = 1;
@@ -506,10 +492,10 @@ public static class MessageReaderGuard_Inner
                     record.Count++;
                     if (record.Count > 40)
                     {
-                        _player?.MarkAsCheater();
                         record.Count = 0;
                         _msgRecords[id].InComingOverloaded = true;
                         Warn($"InComingMsg_Inner Overloaded: {_player?.GetDataName() ?? ""}", "FAC");
+                        _player?.MarkAsCheater();
                         return false;
                     }
                 }
