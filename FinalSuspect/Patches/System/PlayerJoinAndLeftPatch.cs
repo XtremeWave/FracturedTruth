@@ -30,7 +30,7 @@ public class OnGameJoinedPatch
         _ = new LateTask(() =>
         {
             JoinedCompleted = true;
-        }, 0.1f, "SyncJoined");
+        }, 1f, "SyncJoined");
         
         if (AmongUsClient.Instance.AmHost)
         {
