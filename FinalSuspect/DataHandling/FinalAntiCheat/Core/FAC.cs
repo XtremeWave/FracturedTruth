@@ -65,44 +65,41 @@ public static class FAC
 
             var sr = MessageReader.Get(reader);
 
-            var handlers = _handlers.FirstOrDefault(x => x.TargetRpcs.Contains(callId))?.Handlers;
-
-            if (handlers != null)
-                foreach (var handler in handlers)
+            foreach (var handler in _handlers.Where(handlers => handlers.TargetRpcs.Contains(callId)).SelectMany(handlers => handlers.Handlers))
+            {
+                if (!Enum.IsDefined(typeof(RpcCalls), callId))
                 {
-                    if (!Enum.IsDefined(typeof(RpcCalls), callId))
+                    notify = false;
+                    if (handler.HandleInvalidRPC(pc, sr, ref notify, ref reason, ref ban))
                     {
-                        notify = false;
-                        if (handler.HandleInvalidRPC(pc, sr, ref notify, ref reason, ref ban))
-                        {
-                            ban = true;
-                            if (reason == "Hacking")
-                                reason = GetString("Unknown");
-                            NotificationPopperPatch.NotificationPop(
-                                string.Format(GetString("CheatDetected.UseCheat"), pc.GetColoredName(), reason));
-                            return true;
-                        }
-
+                        ban = true;
+                        if (reason == "Hacking")
+                            reason = GetString("Unknown");
                         NotificationPopperPatch.NotificationPop(
-                            string.Format(GetString("CheatDetected.MayUseCheat"), pc.GetColoredName(), reason));
-                        return false;
-                    }
-
-                    if (handler.HandleAll(pc, sr, ref notify, ref reason, ref ban))
-                        return true;
-
-                    if (IsLobby && handler.HandleLobby(pc, sr, ref notify, ref reason, ref ban))
-                    {
-                        if (AmongUsClient.Instance.AmHost) return true;
-                        NotificationPopperPatch.NotificationPop(GetString("Warning.RoomBroken"));
-                        notify = false;
+                            string.Format(GetString("CheatDetected.UseCheat"), pc.GetColoredName(), reason));
                         return true;
                     }
 
-                    return (IsInGame && handler.HandleGame_All(pc, sr, ref notify, ref reason, ref ban))
-                           || (IsInTask && handler.HandleGame_InTask(pc, sr, ref notify, ref reason, ref ban))
-                           || (IsMeeting && handler.HandleGame_InMeeting(pc, sr, ref notify, ref reason, ref ban));
+                    NotificationPopperPatch.NotificationPop(
+                        string.Format(GetString("CheatDetected.MayUseCheat"), pc.GetColoredName(), reason));
+                    return false;
                 }
+
+                if (handler.HandleAll(pc, sr, ref notify, ref reason, ref ban))
+                    return true;
+
+                if (IsLobby && handler.HandleLobby(pc, sr, ref notify, ref reason, ref ban))
+                {
+                    if (AmongUsClient.Instance.AmHost) return true;
+                    NotificationPopperPatch.NotificationPop(GetString("Warning.RoomBroken"));
+                    notify = false;
+                    return true;
+                }
+
+                return (IsInGame && handler.HandleGame_All(pc, sr, ref notify, ref reason, ref ban))
+                       || (IsInTask && handler.HandleGame_InTask(pc, sr, ref notify, ref reason, ref ban))
+                       || (IsMeeting && handler.HandleGame_InMeeting(pc, sr, ref notify, ref reason, ref ban));
+            }
         }
         catch (Exception e)
         {

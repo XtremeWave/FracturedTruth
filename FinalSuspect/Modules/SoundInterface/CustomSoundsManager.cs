@@ -30,7 +30,7 @@ public static class CustomSoundsManager
 
                 SoundManager.ReloadTag();
                 MyMusicPanel.RefreshTagList();
-                SoundManagementPanel.RefreshTagList();
+                //SoundManagementPanel.RefreshTagList();
                 global::SoundManager.Instance.CrossFadeSound(audio.FileName, audio.Clip, 1f);
                 Msg($"播放声音：{audio.Name}", "CustomSounds");
             }, "Playing Sfx");
@@ -52,7 +52,7 @@ public static class CustomSoundsManager
         _ = new MainThreadTask(() =>
         {
             MyMusicPanel.RefreshTagList();
-            SoundManagementPanel.RefreshTagList();
+            //SoundManagementPanel.RefreshTagList();
         }, "Refresh Tag List");
         if (Main.DisableVanillaSound.Value)
         {

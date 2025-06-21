@@ -57,7 +57,6 @@ internal class DisconnectInternalPatch
             ErrorText.Instance.CheatDetected = false;
             ErrorText.Instance.SBDetected = false;
             ErrorText.Instance.Clear();
-            OnGameJoinedPatch.JoinedCompleted = false;
             //Cloud.StopConnect();
         }
         catch

@@ -77,7 +77,7 @@ public static class PathManager
         CheckAndCreate(GetLocalPath(LocalType.Resources), false);
         CheckAndCreate(GetLocalPath(LocalType.Resources) + "Sounds", false);
         CheckAndCreate(GetLocalPath(LocalType.Resources) + "Images");
-        CheckAndCreate(GetLocalPath(LocalType.Resources) + "Languages");
+        CheckAndCreate(GetLocalPath(LocalType.Resources) + "Languages", false);
         CheckAndCreate(LANGUAGE_FOLDER_NAME, false);
 
         CheckAndCreate(GetLocalPath(LocalType.Ban));

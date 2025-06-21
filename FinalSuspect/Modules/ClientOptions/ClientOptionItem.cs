@@ -127,10 +127,13 @@ public sealed class ClientOptionItem_String : ClientActionItem
 
     public void UpdateName(string name = "")
     {
-        if (name == "")
-            ToggleButton.Text.text = GetString(Config.Value);
-        if (!ToggleButton) return;
 
+        if (!ToggleButton) return;
+        if (name == "")
+        {
+            ToggleButton.Text.text = GetString(Config.Value);
+            return;
+        }
         ToggleButton.Text.text = GetString(name);
         if (Config.Value == "AprilFoolsMode.HorseMode")
             ToggleButton.Text.text += $"({GetString("Broken")})";

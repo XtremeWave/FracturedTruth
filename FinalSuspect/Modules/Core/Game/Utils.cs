@@ -84,7 +84,7 @@ public static class Utils
         return GetString($"{text}{Info}");
     }
 
-    public static void KickPlayer(int clientId, bool ban, string reason = "", KickLevel level = KickLevel.Message)
+    public static void KickPlayer(int clientId, bool ban, string reason = "", KickLevel level = KickLevel.CheatDetected)
     {
         var client = GetClientById(clientId);
         Info($"try to kick {client?.Character?.GetRealName()} Due to {reason}", "Kick Player");
@@ -104,7 +104,7 @@ public static class Utils
         }
     }
 
-    public static void KickPlayer(byte playerId, bool ban, string reason = "", KickLevel level = KickLevel.Message)
+    public static void KickPlayer(byte playerId, bool ban, string reason = "", KickLevel level = KickLevel.CheatDetected)
     {
         try
         {
@@ -562,7 +562,6 @@ public static class Utils
 public enum KickLevel
 {
     None,
-    Message,
-    Warning,
+    Notification,
     CheatDetected
 }

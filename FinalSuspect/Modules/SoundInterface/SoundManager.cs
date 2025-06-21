@@ -12,8 +12,6 @@ namespace FinalSuspect.Modules.SoundInterface;
 #nullable enable
 public static class SoundManager
 {
-    public static readonly string TAGS_PATH = GetResourceFilesPath(FileType.Sounds, "SoundsName.txt");
-
     public static List<string> CustomAudios = [];
 
     public static void ReloadTag(bool official = true)
@@ -28,12 +26,19 @@ public static class SoundManager
 
         try
         {
-            using StreamReader sr = new(TAGS_PATH);
-            while (sr.ReadLine() is { } line)
+            var files = Directory.GetFiles(GetLocalPath(LocalType.Resources) + "Sounds");
+    
+            foreach (var filePath in files)
             {
-                if (string.IsNullOrWhiteSpace(line)) continue;
-                XtremeMusic.CreateMusic(line);
-                Info($"Audio Loaded: {line}", "AudioManager");
+                var fileName = Path.GetFileName(filePath);
+                if (EnumHelper.GetAllNames<SupportedMusics>().Skip(1).Any(x => fileName.Contains(x))) 
+                    continue;
+        
+                if (string.IsNullOrWhiteSpace(fileName)) 
+                    continue;
+        
+                XtremeMusic.CreateMusic(fileName);
+                Info($"Audio Loaded: {fileName}", "AudioManager");
             }
         }
         catch (Exception ex)
@@ -42,11 +47,8 @@ public static class SoundManager
         }
     }
 
-    public static void Init()
+    private static void Init()
     {
-        if (!File.Exists(TAGS_PATH)) File.Create(TAGS_PATH).Close();
-        var attributes = File.GetAttributes(TAGS_PATH);
-        File.SetAttributes(TAGS_PATH, attributes | FileAttributes.Hidden);
         XtremeMusic.InitializeAll();
     }
 
@@ -78,30 +80,28 @@ public static class SoundManager
 
     public static void PlaySound(byte playerID, Sounds sound)
     {
-        if (PlayerControl.LocalPlayer.PlayerId == playerID)
+        if (PlayerControl.LocalPlayer.PlayerId != playerID) return;
+        switch (sound)
         {
-            switch (sound)
-            {
-                case Sounds.KillSound:
-                    global::SoundManager.Instance.PlaySound(PlayerControl.LocalPlayer.KillSfx, false);
-                    break;
-                case Sounds.TaskComplete:
-                    global::SoundManager.Instance.PlaySound(DestroyableSingleton<HudManager>.Instance.TaskCompleteSound,
-                        false);
-                    break;
-                case Sounds.TaskUpdateSound:
-                    global::SoundManager.Instance.PlaySound(DestroyableSingleton<HudManager>.Instance.TaskUpdateSound,
-                        false);
-                    break;
-                case Sounds.ImpTransform:
-                    global::SoundManager.Instance.PlaySound(
-                        DestroyableSingleton<HnSImpostorScreamSfx>.Instance.HnSOtherImpostorTransformSfx, false, 0.8f);
-                    break;
-                case Sounds.Yeehawfrom:
-                    global::SoundManager.Instance.PlaySound(
-                        DestroyableSingleton<HnSImpostorScreamSfx>.Instance.HnSLocalYeehawSfx, false, 0.8f);
-                    break;
-            }
+            case Sounds.KillSound:
+                global::SoundManager.Instance.PlaySound(PlayerControl.LocalPlayer.KillSfx, false);
+                break;
+            case Sounds.TaskComplete:
+                global::SoundManager.Instance.PlaySound(DestroyableSingleton<HudManager>.Instance.TaskCompleteSound,
+                    false);
+                break;
+            case Sounds.TaskUpdateSound:
+                global::SoundManager.Instance.PlaySound(DestroyableSingleton<HudManager>.Instance.TaskUpdateSound,
+                    false);
+                break;
+            case Sounds.ImpTransform:
+                global::SoundManager.Instance.PlaySound(
+                    DestroyableSingleton<HnSImpostorScreamSfx>.Instance.HnSOtherImpostorTransformSfx, false, 0.8f);
+                break;
+            case Sounds.Yeehawfrom:
+                global::SoundManager.Instance.PlaySound(
+                    DestroyableSingleton<HnSImpostorScreamSfx>.Instance.HnSLocalYeehawSfx, false, 0.8f);
+                break;
         }
     }
 }
@@ -114,21 +114,24 @@ public enum SupportedMusics
     GongXiFaCai__Andy_Lau,
     NeverGonnaGiveYouUp__Rick_Astley,
     CountingStars__One_Republic,
-
-    //20250214
-
+    
     // ## Mod Music
+    // 专辑
+    ChasingDawn__Slok,
+    ReturnToSimplicity2__Slok,
+    
+    //
+    Affinity__Slok,
     TidalSurge__Slok,
+    ReturnToSimplicity__Slok,
+    
+    // 这里是EmberVeins的Demo曲
     TrailOfTruth__Slok,
     Interlude__Slok,
-    Fractured__Slok,
+    Fractured__Slok, // 这首会有大用
+    StruggleAgainstFadingFlame__Slok,
     ElegyOfFracturedVow__Slok,
     VestigiumSplendoris__Slok,
-    ReturnToSimplicity__Slok,
-
-    //20250214
-    Affinity__Slok,
-    Inceps_Plus_InProgress__Slok
 }
 
 public enum AudiosStates
@@ -144,7 +147,7 @@ public enum AudiosStates
 
 public class XtremeMusic
 {
-    public static List<XtremeMusic> musics = [];
+    public static readonly List<XtremeMusic> musics = [];
 
     public string Name;
     public string FileName;
@@ -157,7 +160,7 @@ public class XtremeMusic
     public AudiosStates LastAudioStates;
 
     public bool UnOfficial;
-    public bool unpublished;
+    //public bool unpublished;
 
 
     public static void InitializeAll()
@@ -166,26 +169,6 @@ public class XtremeMusic
         {
             CreateMusic(music: file);
         }
-
-        var soundnum = 0;
-        try
-        {
-            using StreamReader sr = new(SoundManager.TAGS_PATH);
-            string line;
-            while ((line = sr.ReadLine()) != null)
-            {
-                if (string.IsNullOrWhiteSpace(line)) continue;
-                CreateMusic(line);
-                Info($"Sound Loaded: {line}", "AudioManager");
-                soundnum++;
-            }
-        }
-        catch (Exception ex)
-        {
-            Error("Load Audio Failed\n" + ex, "AudioManager", false);
-        }
-
-        Msg($"{soundnum} Custom Sounds Loaded", "AudioManager");
     }
 
     private static readonly object finalMusicsLock = new();

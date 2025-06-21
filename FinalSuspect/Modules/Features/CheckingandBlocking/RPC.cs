@@ -353,20 +353,27 @@ public static class MessageReaderGuard
     
     public static bool Prefix(InnerNetClient __instance, [HarmonyArgument(0)] MessageReader parentReader)
     {
-        if (IsNotJoined) return true;
+        if (!IsLobby || IsNotJoined || OnGameJoinedPatch.JoinedCompleted) return true;
+        
         try
         {
-            if (parentReader.Length < 1) return false;
+            if (parentReader.Length < 1) return false; 
+            Test(0);
             var messageReader = MessageReader.Get(parentReader);
             var reader = messageReader.ReadMessageAsNewBuffer();
             if (reader.Length < 1) return false;
+            Test(1);
             var sr1 = MessageReader.Get(reader);
             var sr2 = MessageReader.Get(reader);
             int id;
             PlayerControl _player;
+            Test(2);
+
             try
             {
+                Test(3);
                 var num1 = sr1.ReadPackedUInt32();
+                Test(4);
                 if (__instance.allObjects.AllObjectsFast.TryGetValue(num1, out var obj))
                 {
                     _player = RPCHandlerPatch.GetPlayerFromInstance(obj, sr1);
@@ -378,19 +385,20 @@ public static class MessageReaderGuard
             {
                 /* ignored */
             }
-        
+            Test(5);
             var num2 = sr2.ReadPackedInt32();
+            Test(6);
             var clientData = __instance.FindClientById(num2);
             id = clientData.Id;
-
+            
             CheckForRecords:
             var currentTime = GetCurrentTimestamp();
             if (_msgRecords.TryGetValue(id, out var record))
             {
                 if (_msgRecords[id].InComingOverloaded) return false;
+                Test(7);
                 _player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => x.CheatData.ClientData.Id == id)?.Player;
                 var timeDiff = currentTime - record.LastReceivedTime;
-
                 if (timeDiff > 1000)
                 {
                     record.Count = 1;
@@ -399,8 +407,6 @@ public static class MessageReaderGuard
                 else
                 {
                     record.Count++;
-                    Test($"{record.Count} {40}");
-                    
                     if (record.Count > 40)
                     {
                         _player?.MarkAsCheater();
@@ -410,7 +416,7 @@ public static class MessageReaderGuard
                         return false;
                     }
                 }
-                
+
                 _msgRecords[id] = record;
             }
             else
@@ -424,10 +430,11 @@ public static class MessageReaderGuard
 
             return true;
         }
-        catch
-        {
+        catch 
+        { 
             _msgRecords = new Dictionary<int, MsgRecord>();
-            return !OnGameJoinedPatch.JoinedCompleted;
+
+            return PlayerControl.LocalPlayer?.GetClient() == null;
         }
     }
 }
@@ -446,18 +453,23 @@ public static class MessageReaderGuard_Inner
     
     public static bool Prefix(InnerNetClient._HandleGameDataInner_d__165 __instance)
     {
-        if (IsNotJoined) return true;
+        if (!IsLobby || IsNotJoined || OnGameJoinedPatch.JoinedCompleted) return true;
+        
         try
         {
             var innerNetClient = __instance.__4__this;
             if (__instance.reader.Length < 1) return false;
+            Test(0);
             var sr1 = MessageReader.Get(__instance.reader);
             var sr2 = MessageReader.Get(__instance.reader);
             int id;
             PlayerControl _player;
+            Test(1);
             try
             {
+                Test(2);
                 var num1 = sr1.ReadPackedUInt32();
+                Test(3);
                 if (innerNetClient.allObjects.AllObjectsFast.TryGetValue(num1, out var obj))
                 {
                     _player = RPCHandlerPatch.GetPlayerFromInstance(obj, sr1);
@@ -469,8 +481,9 @@ public static class MessageReaderGuard_Inner
             {
                 /* ignored */
             }
-        
+            Test(4);
             var num2 = sr2.ReadPackedInt32();
+            Test(5);
             var clientData = innerNetClient.FindClientById(num2);
             id = clientData.Id;
 
@@ -478,10 +491,11 @@ public static class MessageReaderGuard_Inner
             var currentTime = GetCurrentTimestamp();
             if (_msgRecords.TryGetValue(id, out var record))
             {
+                Test(6);
                 if (_msgRecords[id].InComingOverloaded) return false;
                 _player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => x.CheatData.ClientData.Id == id)?.Player;
                 var timeDiff = currentTime - record.LastReceivedTime;
-
+                Test(7);
                 if (timeDiff > 1000)
                 {
                     record.Count = 1;
@@ -490,7 +504,6 @@ public static class MessageReaderGuard_Inner
                 else
                 {
                     record.Count++;
-                    Test($"{record.Count} {40}");
                     if (record.Count > 40)
                     {
                         _player?.MarkAsCheater();
@@ -517,7 +530,7 @@ public static class MessageReaderGuard_Inner
         catch
         {
             _msgRecords = new Dictionary<int, MsgRecord>();
-            return !OnGameJoinedPatch.JoinedCompleted;
+            return PlayerControl.LocalPlayer?.GetClient() == null;
         }
     }
 }

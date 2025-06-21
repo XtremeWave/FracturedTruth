@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.IO;
 using FinalSuspect.Modules.Features;
 using FinalSuspect.Modules.Resources;
@@ -124,7 +124,7 @@ public static class SoundManagementPanel
 
             var audioExist = audio.CurrectAudioStates is not AudiosStates.NotExist ||
                              SoundInterface.SoundManager.CustomAudios.Contains(filename);
-            var unpublished = audio.unpublished;
+            // var unpublished = audio.unpublished;
 
             switch (audio.CurrectAudioStates)
             {
@@ -163,11 +163,11 @@ public static class SoundManagementPanel
                 }
             }
 
-            if (unpublished)
-            {
-                buttonColor = Palette.DisabledGrey;
-                enable = false;
-            }
+            //if (unpublished)
+            //{
+            //    buttonColor = Palette.DisabledGrey;
+            //    enable = false;
+            //}
 
             var preview = audio.Name;
 
@@ -271,4 +271,4 @@ public static class SoundManagementPanel
         var path = GetResourceFilesPath(FileType.Sounds, sound + ".wav");
         File.Delete(path);
     }
-}
+}*/

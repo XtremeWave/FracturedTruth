@@ -32,6 +32,8 @@ public interface IRpcHandler
 
     int MaxiReceivedNumPerSecond() => 5;
 
+    bool Condition(PlayerControl player) => true;
+
     void Dispose(byte id)
     {
     }

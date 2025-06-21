@@ -57,7 +57,7 @@ public class PlayerCheatData
             return;
         }
 
-        KickPlayer(_player.PlayerId, false, "Cheater", KickLevel.Warning);
+        KickPlayer(_player.PlayerId, false, "Cheater");
     }
 
     private readonly Dictionary<byte, RpcRecord> _rpcRecords = new();
@@ -106,7 +106,12 @@ public class PlayerCheatData
             {
                 LastReceivedTime = currentTime,
                 Count = 1,
-                MaxiCount = _handlers.FirstOrDefault(x => x.TargetRpcs.Contains(rpcId))?.Handlers.FirstOrDefault()?.MaxiReceivedNumPerSecond() ?? 5
+                MaxiCount = _handlers.Where(handlers => handlers.TargetRpcs.Contains(rpcId))
+                    .SelectMany(handlers => handlers.Handlers)
+                    .Where(handler => handler.Condition(_player))
+                    .Select(handler => handler.MaxiReceivedNumPerSecond())
+                    .Prepend(5)
+                    .Max()
             };
         }
 

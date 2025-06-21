@@ -1,4 +1,5 @@
 using System;
+using AmongUs.Data;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Features;
 using FinalSuspect.Modules.Resources;
@@ -100,6 +101,7 @@ public class MainMenuManagerPatch
     [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start)), HarmonyPostfix]
     public static void Start_Postfix(MainMenuManager __instance)
     {
+        DataManager.Player.Ban.BanPoints = 0;
         Instance = __instance;
 
         SimpleButton.SetBase(__instance.quitButton);
