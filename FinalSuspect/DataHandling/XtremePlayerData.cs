@@ -205,6 +205,7 @@ public class XtremePlayerData : IDisposable
     {
         Info($"Disposing XtremePlayerData For {Name}", "Data");
         Player = null;
+        CheatData.Dispose();
         CheatData = null;
         Name = null;
         ColorId = -1;

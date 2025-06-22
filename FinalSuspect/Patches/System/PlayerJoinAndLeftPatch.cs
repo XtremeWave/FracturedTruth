@@ -20,7 +20,6 @@ public class OnGameJoinedPatch
         XtremeGameData.PlayerVersion.playerVersion = new Dictionary<byte, XtremeGameData.PlayerVersion>();
         SoundManager.Instance.ChangeAmbienceVolume(DataManager.Settings.Audio.AmbienceVolume);
         XtremePlayerData.InitializeAll();
-        _ = RPC.RpcVersionCheck();
         InGame = false;
         ErrorText.Instance.Clear();
         ServerAddManager.SetServerName();
@@ -76,8 +75,31 @@ public class OnPlayerJoinedPatch
         BanManager.CheckFriendCode(client);
         BanManager.CheckBanPlayer(client);
         BanManager.CheckDenyNamePlayer(client);
+        KickUnspawnedPlayers(client);
+    }
 
-        _ = RPC.RpcVersionCheck();
+    private static void KickUnspawnedPlayers(ClientData client)
+    {
+        _ = new LateTask(() =>
+        {
+            try
+            {
+                Test(!AmongUsClient.Instance.AmHost);
+                Test(AmongUsClient.Instance.allClients.Contains(client));
+                Test(!client.Character.Data.IsIncomplete);
+                if (!AmongUsClient.Instance.AmHost || AmongUsClient.Instance.allClients.Contains(client) ||
+                    !client.Character.Data.IsIncomplete) return;
+                SendInGame(GetString("Warning.InvalidColor") + $" {client.PlayerName}(ClientID:{client.Id}/FriendCode:{client.FriendCode})");
+                AmongUsClient.Instance.KickPlayer(client.Id, false);
+                Info($"Kicked {client.PlayerName}(ClientID:{client.Id}/FriendCode:{client.FriendCode}) due to it was unspawned",
+                    "OnPlayerJoinedPatchPostfix");
+                return;
+            }
+            catch
+            {
+                /* ignored */
+            }
+        }, 4.5f, "Kick Unspawned Players");
     }
 }
 
@@ -136,6 +158,8 @@ internal class OnPlayerLeftPatch
             }
 
             Dispose(data.Character?.PlayerId ?? 255);
+            //MessageReaderGuard._msgRecords.Remove(data.Id);
+            //MessageReaderGuard_Inner._msgRecords.Remove(data.Id);
 
             XtremeGameData.PlayerVersion.playerVersion.Remove(data.Character?.PlayerId ?? 255);
             ClientsProcessed.Remove(data.Id);

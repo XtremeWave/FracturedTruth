@@ -45,13 +45,13 @@ public static class FAC
             ErrorText.Instance.Clear();
     }
 
-    public static bool ReceiveRpc(PlayerControl pc, byte callId, MessageReader reader, out bool notify,
+    public static bool ReceiveRpc(PlayerControl pc, byte callId, MessageReader reader, out bool notify, 
         out string reason, out bool ban)
     {
         notify = true;
         reason = "Hacking";
         ban = false;
-
+        
         if (Main.DisableFAC.Value || !pc || reader == null || pc.AmOwner)
             return false;
 
@@ -59,6 +59,9 @@ public static class FAC
         {
             if (pc.GetCheatData().HandleIncomingRpc(callId))
             {
+                NotificationPopperPatch.NotificationPop(AmongUsClient.Instance.AmHost
+                    ? string.Format(GetString("CheatDetected.Overload"), pc.GetColoredName())
+                    : string.Format(GetString("CheatDetected.Overload_NotHost"), pc.GetColoredName()));
                 ban = true;
                 return true;
             }
@@ -76,12 +79,18 @@ public static class FAC
                         if (reason == "Hacking")
                             reason = GetString("Unknown");
                         NotificationPopperPatch.NotificationPop(
-                            string.Format(GetString("CheatDetected.UseCheat"), pc.GetColoredName(), reason));
+                            string.Format(GetString("CheatDetected.UseCheat"), 
+                                pc.GetColoredName(), 
+                                reason));
                         return true;
                     }
 
+                    if (reason == "Hacking")
+                        reason = GetString("Unknown");
                     NotificationPopperPatch.NotificationPop(
-                        string.Format(GetString("CheatDetected.MayUseCheat"), pc.GetColoredName(), reason));
+                        string.Format(GetString("CheatDetected.MayUseCheat"), 
+                            pc.GetColoredName(), 
+                            reason));
                     return false;
                 }
 

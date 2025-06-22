@@ -1,3 +1,4 @@
+using System;
 using FinalSuspect.Modules.Core.Game;
 using FinalSuspect.Modules.Features.CheckingandBlocking;
 using FinalSuspect.Patches.Game_Vanilla;
@@ -5,7 +6,7 @@ using InnerNet;
 
 namespace FinalSuspect.DataHandling.FinalAntiCheat.Core;
 
-public class PlayerCheatData
+public class PlayerCheatData : IDisposable
 {
     public bool IsSuspectCheater { get; private set; }
     public ClientData ClientData { get; private set; }
@@ -15,6 +16,8 @@ public class PlayerCheatData
 
     private readonly PlayerControl _player;
 
+    private readonly Dictionary<byte, RpcRecord> _rpcRecords = new();
+    
     public PlayerCheatData(PlayerControl player)
     {
         _player = player;
@@ -59,8 +62,6 @@ public class PlayerCheatData
 
         KickPlayer(_player.PlayerId, false, "Cheater");
     }
-
-    private readonly Dictionary<byte, RpcRecord> _rpcRecords = new();
 
     private struct RpcRecord
     {
@@ -131,5 +132,13 @@ public class PlayerCheatData
         {
             /* ignored */
         }
+    }
+
+    public void Dispose()
+    {
+        IsSuspectCheater = false;
+        ClientData = null;
+        InComingOverloaded = false;
+        _rpcRecords.Clear();
     }
 }

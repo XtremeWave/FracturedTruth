@@ -86,9 +86,9 @@ public static class Utils
 
     public static void KickPlayer(int clientId, bool ban, string reason = "", KickLevel level = KickLevel.CheatDetected)
     {
+        if (OnPlayerLeftPatch.ClientsProcessed.Contains(clientId)) return;
         var client = GetClientById(clientId);
         Info($"try to kick {client?.Character?.GetRealName()} Due to {reason}", "Kick Player");
-
         var _player = XtremePlayerData.AllPlayerData.FirstOrDefault(p => p.CheatData?.ClientData?.Id == clientId)?.Player;
         try
         {
