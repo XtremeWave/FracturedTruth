@@ -30,7 +30,6 @@ public static class SpamManager
             {
                 foreach (var url in GetInfoFileUrlList())
                 {
-                    Test(url);
                     var task = GetConfigs(url + "Assets/Configs/" + target, target);
                     await task;
                     if (!task.Result) continue;

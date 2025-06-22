@@ -3,6 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game;
 using InnerNet;
 
@@ -33,7 +34,8 @@ public static class BanManager
         if (!player.IsBannedPlayer())
         {
             File.AppendAllText(BAN_LIST_PATH, $"{player.FriendCode},{player.GetHashedPuid()},{player.PlayerName}\n");
-            SendInGame(string.Format(GetString("Notification.AddedPlayerToBanList"), player.PlayerName));
+            SendInGame(string.Format(GetString("Notification.AddedPlayerToBanList"),
+                StringHelper.ColorString(Palette.PlayerColors[player.ColorId], player.PlayerName)));
         }
         else Info($"{player.FriendCode},{player?.GetHashedPuid()},{player.PlayerName} 已经被加入封禁名单", "AddBanPlayer");
     }

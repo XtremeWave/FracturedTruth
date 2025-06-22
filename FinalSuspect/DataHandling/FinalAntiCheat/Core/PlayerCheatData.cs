@@ -97,8 +97,7 @@ public class PlayerCheatData : IDisposable
                     return true;
                 }
             }
-
-            Test($"{record.Count} {record.MaxiCount}");
+            
             _rpcRecords[rpcId] = record;
         }
         else

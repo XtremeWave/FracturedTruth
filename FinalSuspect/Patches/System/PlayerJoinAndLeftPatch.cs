@@ -84,9 +84,6 @@ public class OnPlayerJoinedPatch
         {
             try
             {
-                Test(!AmongUsClient.Instance.AmHost);
-                Test(AmongUsClient.Instance.allClients.Contains(client));
-                Test(!client.Character.Data.IsIncomplete);
                 if (!AmongUsClient.Instance.AmHost || AmongUsClient.Instance.allClients.Contains(client) ||
                     !client.Character.Data.IsIncomplete) return;
                 SendInGame(GetString("Warning.InvalidColor") + $" {client.PlayerName}(ClientID:{client.Id}/FriendCode:{client.FriendCode})");
@@ -126,11 +123,8 @@ internal class OnPlayerLeftPatch
 
             data.Character?.SetDisconnected();
 
-            Info(
-                $"{data.PlayerName}(ClientID:{data.Id}/FriendCode:{data.FriendCode})断开连接(理由:{reason}，Ping:{AmongUsClient.Instance.Ping})",
-                "Session");
-            var id = data.Character?.Data?.DefaultOutfit?.ColorId ?? XtremePlayerData.AllPlayerData
-                .Where(playerData => playerData.CheatData.ClientData.Id == data.Id).FirstOrDefault()!.ColorId;
+            Info($"{data.PlayerName}(ClientID:{data.Id}/FriendCode:{data.FriendCode})断开连接(理由:{reason}，Ping:{AmongUsClient.Instance.Ping})", "Session");
+            var id = data.ColorId;
             var color = Palette.PlayerColors[id];
             var name = StringHelper.ColorString(color, data.PlayerName);
             

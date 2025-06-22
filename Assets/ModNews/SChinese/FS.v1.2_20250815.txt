@@ -2,7 +2,7 @@
 #Title:终极嫌疑 v1.2
 #SubTitle:★★★★完全体诞生！★★★★
 #ShortTitle:★版本更新v1.2
-#Date:2025-07-10T00:00:00Z
+#Date:2025-08-15T00:00:00Z
 #-----------------------------
 # 简体中文
 自 v1.2 正式版起，「Final Suspect 终极嫌疑」的功能开发已正式完成！
@@ -20,7 +20,7 @@
 - 构建号: 1
 
 ## 更新内容
-- 修正: 13
+- 修正: 15
 - 优化: 8
 - 更改: 10
 - 新增: 11
@@ -30,10 +30,10 @@
 ## 团队参与者
 - [Slok]("https://github.com/Slok7565/")
 - [Elinmei]("https://github.com/linmeideli")
+- [Nonalus]("https://github.com/Reborn5537/")
 
 ## 贡献者
 - [LezaiYa]("https://github.com/NewLezaiYa")
-- [Nonalus]("https://github.com/Reborn5537/")
 
 ## 修正
 - 修复了快速启动模式失效的问题
@@ -47,6 +47,8 @@
 - 修复了加载屏蔽词时崩溃的问题
 - 修复了通讯破坏时任务栏错误显示的问题
 - 修复了大厅搜索信息失效的问题
+- 修复了Among Us左下角提示信息显示错误的问题
+- 修复了左下角提示信息中玩家名称无颜色的问题
 修复: Slok
 - 修复了封禁名单不工作的问题
 修复：LezaiYa

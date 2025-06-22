@@ -189,13 +189,11 @@ internal class RPCHandlerPatch
             case RpcCalls.CancelPet:
                 try
                 {
-                    Test(0);
                     var version = Version.Parse(reader.ReadString());
                     var tag = reader.ReadString();
                     var forkId = reader.ReadString();
 
                     _ = RPC.RpcVersionCheck();
-                    Test(1);
                     XtremeGameData.PlayerVersion.playerVersion[player.PlayerId] = new XtremeGameData.PlayerVersion(version, tag, forkId);
 
                     if (Main.VersionCheat.Value && AmongUsClient.Instance.AmHost)
