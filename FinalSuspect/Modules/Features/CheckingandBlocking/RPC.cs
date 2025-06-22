@@ -47,9 +47,9 @@ internal class RPCHandlerPatch
             var cd = player.GetCheatData();
             Info(player.Data
                 ? $"{player.Data.PlayerId}(" +
-                  $"Name: {player.Data.PlayerName}," +
-                  $"FriendCode: {cd?.FriendCode}," +
-                  $"Puid: {cd?.Puid}," +
+                  $"Name: {player.Data.PlayerName}/" +
+                  $"FriendCode: {cd?.FriendCode}/" +
+                  $"Puid: {cd?.Puid}" +
                   $")" +
                   $"{(player.IsHost() ? "Host" : "")}:{callId}({RPC.GetRpcName(callId)})"
                 : $"Call from {__instance.name}:{callId}({RPC.GetRpcName(callId)})", "ReceiveRPC");
