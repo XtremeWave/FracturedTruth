@@ -280,8 +280,8 @@ FinalSuspectWelcomeText: "Желаем вам <color={0}>приятной игр
 ConnectToFinalSuspectServerFailed: "Не удалось подключиться к серверу FinalSuspect"
 Website: "Официальный сайт"
 MainMenuCredential: "{0} © 2025"
-LShift: "Предыдущий зал [LShift]"
-RShift: "Лобби клипборда [RShift]"
+LShift: "Предыдущий зал"
+RShift: "Лобби клипборда"
 LobbyTimeDisplayText: "Прошедшее время существования"
 
 # 客户端平台 / Platform

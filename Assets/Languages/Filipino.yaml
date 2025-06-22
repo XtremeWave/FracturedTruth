@@ -280,8 +280,8 @@ FinalSuspectWelcomeText: "Wishing you a pleasant <color={0}>gaming experience</c
 ConnectToFinalSuspectServerFailed: "Failed to connect to FinalSuspect server"
 Website: "Official Website"
 MainMenuCredential: "{0} © 2025"
-LShift: "Nakaraang Lobby [LShift]"
-RShift: "Clipboard Lobby [RShift]"
+LShift: "Nakaraang Lobby"
+RShift: "Clipboard Lobby"
 LobbyTimeDisplayText: "Panahon ng pag iral"
 
 # 客户端平台 / Platform

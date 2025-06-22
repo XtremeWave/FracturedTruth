@@ -280,8 +280,8 @@ FinalSuspectWelcomeText: "Auguri per una <color={0}>esperienza di gioco</color> 
 ConnectToFinalSuspectServerFailed: "Connessione al server di FinalSuspect non riuscita"
 Website: "Sito ufficiale"
 MainMenuCredential: "{0} © 2025"
-LShift: "Sala precedente [LShift]"
-RShift: "Appunti Lobby [RShift]"
+LShift: "Sala precedente"
+RShift: "Appunti Lobby"
 LobbyTimeDisplayText: "Tempo di esistenza trascorso"
 
 # 客户端平台 / Platform

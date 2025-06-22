@@ -278,8 +278,8 @@ FinalSuspectWelcomeText: "Wishing you a pleasant <color={0}>gaming experience</c
 ConnectToFinalSuspectServerFailed: "Failed to connect to FinalSuspect server"
 Website: "Official Website"
 MainMenuCredential: "{0} © 2025"
-LShift: "Last Lobby [LShift]"
-RShift: "Clipboard Lobby [RShift]"
+LShift: "Last Lobby"
+RShift: "Clipboard Lobby"
 LobbyTimeDisplayText: "LobbyTimeDisplay"
 
 # 客户端平台 / Platform
