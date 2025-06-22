@@ -133,6 +133,7 @@ internal class OnPlayerLeftPatch
                 .Where(playerData => playerData.CheatData.ClientData.Id == data.Id).FirstOrDefault()!.ColorId;
             var color = Palette.PlayerColors[id];
             var name = StringHelper.ColorString(color, data.PlayerName);
+            
             // 附加描述掉线原因
             switch (reason)
             {
@@ -145,9 +146,6 @@ internal class OnPlayerLeftPatch
                 case DisconnectReasons.Kicked:
                 case DisconnectReasons.Banned:
                     break;
-                case DisconnectReasons.ExitGame:
-                    NotificationPopperPatch.NotificationPop(string.Format(GetString("Notification.PlayerLeft"), name));
-                    break;
                 case DisconnectReasons.ClientTimeout:
                     NotificationPopperPatch.NotificationPop(string.Format(GetString("Notification.PlayerLeftCuzTimeout"), name));
                     break;
@@ -158,8 +156,6 @@ internal class OnPlayerLeftPatch
             }
 
             Dispose(data.Character?.PlayerId ?? 255);
-            //MessageReaderGuard._msgRecords.Remove(data.Id);
-            //MessageReaderGuard_Inner._msgRecords.Remove(data.Id);
 
             XtremeGameData.PlayerVersion.playerVersion.Remove(data.Character?.PlayerId ?? 255);
             ClientsProcessed.Remove(data.Id);

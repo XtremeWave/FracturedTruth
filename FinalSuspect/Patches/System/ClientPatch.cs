@@ -121,20 +121,17 @@ internal class KickPlayerPatch
                 return false;
             }
 
-            if (!OnPlayerLeftPatch.ClientsProcessed.Contains(clientId))
+            OnPlayerLeftPatch.Add(clientId);
+            if (ban)
             {
-                OnPlayerLeftPatch.Add(clientId);
-                if (ban)
-                {
-                    BanManager.AddBanPlayer(AmongUsClient.Instance.GetRecentClient(clientId));
-                    NotificationPopperPatch.NotificationPop(string.Format(GetString("Notification.PlayerBanByHost"),
-                        AmongUsClient.Instance.GetRecentClient(clientId).PlayerName));
-                }
-                else
-                {
-                    NotificationPopperPatch.NotificationPop(string.Format(GetString("Notification.PlayerKickByHost"),
-                        AmongUsClient.Instance.GetRecentClient(clientId).PlayerName));
-                }
+                BanManager.AddBanPlayer(AmongUsClient.Instance.GetRecentClient(clientId));
+                NotificationPopperPatch.NotificationPop(string.Format(GetString("Notification.PlayerBanByHost"),
+                    AmongUsClient.Instance.GetRecentClient(clientId).PlayerName));
+            }
+            else
+            {
+                NotificationPopperPatch.NotificationPop(string.Format(GetString("Notification.PlayerKickByHost"),
+                    AmongUsClient.Instance.GetRecentClient(clientId).PlayerName));
             }
         }
         catch
