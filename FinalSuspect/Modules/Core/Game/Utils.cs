@@ -92,6 +92,9 @@ public static class Utils
         var _player = XtremePlayerData.AllPlayerData.FirstOrDefault(p => p.CheatData?.ClientData?.Id == clientId)?.Player;
         try
         {
+#if DEBUG
+            ban = false;
+#endif
             OnPlayerLeftPatch.Add(clientId);
             AmongUsClient.Instance.KickPlayer(clientId, ban);
             if (level != KickLevel.None)
