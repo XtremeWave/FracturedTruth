@@ -280,8 +280,8 @@ FinalSuspectWelcomeText: "Souhaitant une agréable <color={0}>expérience de jeu
 ConnectToFinalSuspectServerFailed: "Échec de la connexion au serveur de FinalSuspect"
 Website: "Site officiel"
 MainMenuCredential: "{0} © 2025"
-LShift: "Salle précédente"
-RShift: "Clipboard Lobby"
+LShift: "Salle précédente [LShift]"
+RShift: "Clipboard Lobby [RShift]"
 LobbyTimeDisplayText: "Temps d’existence"
 
 # 大厅列表显示 / Liste des salles

@@ -280,8 +280,8 @@ FinalSuspectWelcomeText: "Ag iarraidh go mbeidh tú ag imirt go hiontach <color=
 ConnectToFinalSuspectServerFailed: "Theip ar an nasc chuig an bhfreastalaí FinalSuspect"
 Website: "Suíomh Oifigiúil"
 MainMenuCredential: "{0} © 2025"
-LShift: "Roimhe Seo Halla"
-RShift: "Halla an Bhoird Lomadh"
+LShift: "Roimhe Seo Halla [LShift]"
+RShift: "Halla an Bhoird Lomadh [RShift]"
 LobbyTimeDisplayText: "Tempus existentiae"
 
 # 客户端平台 / Platform

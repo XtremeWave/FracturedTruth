@@ -254,6 +254,7 @@ Website: "模组官网"
 MainMenuCredential: "{0} © 2025"
 LShift: "上一个大厅"
 RShift: "剪切板大厅"
+LobbyTimeDisplayText: "生存期间"
 
 # 客户端平台 / Platform
 Platform.IPhone: "苹果"

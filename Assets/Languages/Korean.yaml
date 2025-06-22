@@ -280,8 +280,8 @@ FinalSuspectWelcomeText: "쾌적한 <color={0}>게임 경험</color>을 기원�
 ConnectToFinalSuspectServerFailed: "FinalSuspect 서버에 연결할 수 없습니다"
 Website: "공식 웹사이트"
 MainMenuCredential: "{0} © 2025"
-LShift: "이전 방"
-RShift: "클립보드 룸"
+LShift: "이전 방 [LShift]"
+RShift: "클립보드 룸 [RShift]"
 LobbyTimeDisplayText: "존재 경과 시간"
 
 # 룸 리스트 표시 / Lobby List

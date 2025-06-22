@@ -280,8 +280,8 @@ FinalSuspectWelcomeText: "pleasant <color={0}>ゲーム体験</color>をお祈�
 ConnectToFinalSuspectServerFailed: "FinalSuspect サーバーへの接続に失敗しました"
 Website: "公式ウェブサイト"
 MainMenuCredential: "{0} © 2025"
-LShift: "前のホール"
-RShift: "まな板の部屋"
+LShift: "前のホール [LShift］"
+RShift: "まな板の部屋 [RShift]"
 LobbyTimeDisplayText: "生存期間"
 
 # ロビーリスト表示 / Lobby List

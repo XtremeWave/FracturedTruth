@@ -280,8 +280,8 @@ FinalSuspectWelcomeText: "¡Deseándote una <color={0}>experiencia de juego</col
 ConnectToFinalSuspectServerFailed: "Fallo al conectar con el servidor de FinalSuspect"
 Website: "Sitio Oficial"
 MainMenuCredential: "{0} © 2025"
-LShift: "Sala anterior"
-RShift: "Portapapeles Lobby"
+LShift: "Sala anterior [LShift]"
+RShift: "Portapapeles Lobby [RShift]"
 LobbyTimeDisplayText: "Tiempo de existencia transcurrido"
 
 # 客户端平台 / Platform
