@@ -11,9 +11,10 @@ public class HostRpcHandler : IRpcHandler
         (byte)RpcCalls.SetName,
         (byte)RpcCalls.SetTasks,
         (byte)RpcCalls.SetStartCounter,
+        (byte)RpcCalls.SyncSettings,
     ];
-    
+
     public int MaxiReceivedNumPerSecond() => 999;
-    
+
     public bool Condition(PlayerControl player) => player.IsHost();
 }
