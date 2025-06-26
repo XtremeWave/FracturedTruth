@@ -1,6 +1,8 @@
 using System.Text.RegularExpressions;
 using AmongUs.Data;
+using AsmResolver.IO;
 using FinalSuspect.Helpers;
+using FinalSuspect.Modules.Core.Game;
 using InnerNet;
 using TMPro;
 using UnityEngine;
@@ -13,6 +15,10 @@ public sealed class LobbyJoinBind
     private static int GameId;
     public static Color Color = ColorHelper.LoadCompleteGreen;
     public static GameObject LobbyText;
+    public static GameObject LeftShiftSprite;
+    public static GameObject RightShiftSprite;
+    public static GameObject KeyBindBackground;
+    public static GameObject KeyBindBackground_Clone;
 
     [HarmonyPatch(typeof(InnerNetClient), nameof(InnerNetClient.JoinGame))]
     [HarmonyPostfix]
@@ -38,8 +44,44 @@ public sealed class LobbyJoinBind
             comp.fontSize = 2.5f;
             comp.outlineWidth = -2f;
             var lastY = code2 == "" ? -0.15f : 0.1f;
-            LobbyText.transform.localPosition = new Vector3(8f, lastY, 0);
+            LobbyText.transform.localPosition = new Vector3(8.3f, lastY, 0);
             LobbyText.SetActive(true);
+            //LeftShift Sprite
+            LeftShiftSprite = new GameObject("LeftShiftSprite");
+            LeftShiftSprite.transform.SetParent(GameObject.Find("RightPanel").transform, false);
+            var LSsp = LeftShiftSprite.AddComponent<SpriteRenderer>();
+            LSsp.sprite = LoadSprite("KeyLeftShift.png", 115f);
+            if (LobbyText != null)
+            {
+                LeftShiftSprite.SetActive(true);
+            }
+            //RightSgift Sprite
+            RightShiftSprite = new GameObject("RightShiftSprite");
+            RightShiftSprite.transform.SetParent(GameObject.Find("RightPanel").transform, false);
+            var RSsp = RightShiftSprite.AddComponent<SpriteRenderer>();
+            RSsp.sprite = LoadSprite("KeyRightShift.png", 115f);
+            if (LobbyText != null)
+            {
+                RightShiftSprite.SetActive(true);
+            }
+            //KeyBindBackGround Belong to Left Shift
+            KeyBindBackground = new GameObject("KeyBindBackground");
+            KeyBindBackground.transform.SetParent(GameObject.Find("RightPanel").transform, false);
+            var KeyBindSp = KeyBindBackground.AddComponent<SpriteRenderer>();
+            KeyBindSp.GetComponent<SpriteRenderer>().sprite = LoadSprite("KeyBackground.png", 100f);
+            if (LeftShiftSprite != null)
+            {
+                KeyBindBackground.SetActive(true);
+            }
+            //KeyBindBackGround Belong to Right Shift
+            KeyBindBackground_Clone = new GameObject("KeyBindBackground_Clone");
+            KeyBindBackground_Clone.transform.SetParent(GameObject.Find("RightPanel").transform, false);
+            var KeyBindSp_Clone = KeyBindBackground_Clone.AddComponent<SpriteRenderer>();
+            KeyBindSp_Clone.GetComponent<SpriteRenderer>().sprite = LoadSprite("KeyBackground.png", 100f);
+            if (RightShiftSprite != null)
+            {
+                KeyBindBackground_Clone.SetActive(true);
+            }
         }
     }
 
@@ -67,20 +109,45 @@ public sealed class LobbyJoinBind
         if (LobbyText)
         {
             LobbyText.GetComponent<TextMeshPro>().text = "";
+            LeftShiftSprite.SetActive(false);
+            RightShiftSprite.SetActive(false);
+            KeyBindBackground.SetActive(false);
+            KeyBindBackground_Clone.SetActive(false);
             if (GameId != 0 && GameId != 32)
             {
                 var code = GameCode.IntToGameName(GameId);
+
                 if (code != "")
                 {
                     code = DataManager.Settings.Gameplay.StreamerMode ? new string('*', code.Length) : code;
+                    LeftShiftSprite.transform.localPosition = new Vector3(-1.9f, 2.05f, -1);
+                    KeyBindBackground.transform.localPosition = new Vector3(LeftShiftSprite.transform.localPosition.x, LeftShiftSprite.transform.localPosition.y, -0.5f);
+                    KeyBindBackground.SetActive(true);
+                    LeftShiftSprite.SetActive(true);
+                    if (code != "" && code2 != "")
+                    {
+                        LeftShiftSprite.transform.localPosition = new Vector3(-1.9f, 2.45f, -1);
+                        RightShiftSprite.transform.localPosition = new Vector3(-1.9f, 2.15f, -1);
+                        KeyBindBackground.transform.localPosition = new Vector3(LeftShiftSprite.transform.localPosition.x, LeftShiftSprite.transform.localPosition.y, -0.5f);
+                        KeyBindBackground_Clone.transform.localPosition = new Vector3(RightShiftSprite.transform.localPosition.x, RightShiftSprite.transform.localPosition.y, -0.5f);
+                        LeftShiftSprite.SetActive(true);
+                        RightShiftSprite.SetActive(true);
+                        KeyBindBackground.SetActive(true);
+                        KeyBindBackground_Clone.SetActive(true);
+                    }
                     LobbyText.GetComponent<TextMeshPro>().text =
                         string.Format($"{GetString("LShift")}：<color={ColorHelper.ModColor}>{code}</color>");
                 }
             }
-
             if (code2 != "")
+            {
+                RightShiftSprite.transform.localPosition = new Vector3(-1.9f, 2.05f, -1);
+                KeyBindBackground_Clone.transform.localPosition = new Vector3(RightShiftSprite.transform.localPosition.x, RightShiftSprite.transform.localPosition.y, -0.5f);
+                RightShiftSprite.SetActive(true);
+                KeyBindBackground_Clone.SetActive(true);
                 LobbyText.GetComponent<TextMeshPro>().text +=
                     string.Format($"\n{GetString("RShift")}：<color={ColorHelper.ModColor}>{code2Disp}</color>");
+            }
         }
     }
 }
