@@ -247,7 +247,7 @@ Outro.Crews_Win: "船员胜利"
 Outro.Crews_WinBlurb: "真理的光芒在希望中闪耀！"
 Summary.ImpsWin: "<color=#ff1919>伪装者阵营胜利</color>"
 Outro.Imps_Win: "伪装者胜利"
-Outro.Imps_Win:Blurb: "邪恶将真理化为灰烬"
+Outro.Imps_WinBlurb: "邪恶将真理化为灰烬"
 
 # 主页 / Main UI
 FinalSuspectWelcomeText: "祝愿您拥有一场愉快的<color={0}>游戏体验</color>！"
