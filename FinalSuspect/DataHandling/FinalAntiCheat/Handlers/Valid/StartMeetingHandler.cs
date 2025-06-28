@@ -1,4 +1,5 @@
 using FinalSuspect.DataHandling.FinalAntiCheat.Interfaces;
+using FinalSuspect.Patches.System;
 using Hazel;
 
 namespace FinalSuspect.DataHandling.FinalAntiCheat.Handlers.Valid;

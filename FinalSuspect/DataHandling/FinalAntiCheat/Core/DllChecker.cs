@@ -6,7 +6,7 @@ using BepInEx.Unity.IL2CPP;
 namespace FinalSuspect.DataHandling.FinalAntiCheat.Core;
 
 [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
-public static class DllChecker
+internal static class DllChecker
 {
     private static void Prefix(MainMenuManager __instance)
     {
