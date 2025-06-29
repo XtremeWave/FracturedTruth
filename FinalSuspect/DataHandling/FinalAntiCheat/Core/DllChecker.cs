@@ -5,10 +5,9 @@ using BepInEx.Unity.IL2CPP;
 
 namespace FinalSuspect.DataHandling.FinalAntiCheat.Core;
 
-[HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
 internal static class DllChecker
 {
-    private static void Prefix(MainMenuManager __instance)
+    internal static void Init()
     {
         // SM的文件名是写死的
         string[] SuspiciousFiles = { "SickoMenu.dll", "version.dll" };
@@ -39,11 +38,6 @@ internal static class DllChecker
                 Environment.Exit(1);
             }
         }
-    }
-
-    public static void Init()
-    {
-        // 什么都不干，只是让main.cs有个引用防止被反编译大蛇删除
     }
 }
 
