@@ -17,7 +17,7 @@ public static class Zoom
         {
             var canZoom = IsShip || IsLobby || IsFreePlay;
 
-            if (!canZoom || !CanSeeOthersRole() || IsMeeting || !IsCanMove || InGameRoleInfoMenu.Showing)
+            if (!canZoom || !CanSeeOthersRole() || IsMeeting || !IsCanMove || InGameRoleInfoMenu.Showing || InGameSettingsMenu.Showing)
             {
                 Flag.Run(() => { SetZoomSize(reset: true); }, "Zoom");
                 return;

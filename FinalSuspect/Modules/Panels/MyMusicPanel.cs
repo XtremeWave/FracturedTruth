@@ -213,11 +213,11 @@ public static class MyMusicPanel
                 case AudiosStates.NotExist:
                 case AudiosStates.DownLoadFailureNotice:
                 default:
-                {
-                    color = ColorHelper.ClientFeatureColor_CanNotUse;
-                    preview = GetString("MusPlay.NoFound");
-                    break;
-                }
+                    {
+                        color = ColorHelper.ClientFeatureColor_CanNotUse;
+                        preview = GetString("MusPlay.NoFound");
+                        break;
+                    }
             }
 
             previewText.text = preview;

@@ -120,13 +120,13 @@ public sealed class LobbyJoinBind
                 if (code != "")
                 {
                     code = DataManager.Settings.Gameplay.StreamerMode ? new string('*', code.Length) : code;
-                    LeftShiftSprite.transform.localPosition = new Vector3(-1.9f, 2.05f, -1);
+                    LeftShiftSprite.transform.localPosition = new Vector3(-1.9f, 2.1f, -1);
                     KeyBindBackground.transform.localPosition = new Vector3(LeftShiftSprite.transform.localPosition.x, LeftShiftSprite.transform.localPosition.y, -0.5f);
                     KeyBindBackground.SetActive(true);
                     LeftShiftSprite.SetActive(true);
                     if (code != "" && code2 != "")
                     {
-                        LeftShiftSprite.transform.localPosition = new Vector3(-1.9f, 2.45f, -1);
+                        LeftShiftSprite.transform.localPosition = new Vector3(-1.9f, 2.4f, -1);
                         RightShiftSprite.transform.localPosition = new Vector3(-1.9f, 2.15f, -1);
                         KeyBindBackground.transform.localPosition = new Vector3(LeftShiftSprite.transform.localPosition.x, LeftShiftSprite.transform.localPosition.y, -0.5f);
                         KeyBindBackground_Clone.transform.localPosition = new Vector3(RightShiftSprite.transform.localPosition.x, RightShiftSprite.transform.localPosition.y, -0.5f);
@@ -141,7 +141,7 @@ public sealed class LobbyJoinBind
             }
             if (code2 != "")
             {
-                RightShiftSprite.transform.localPosition = new Vector3(-1.9f, 2.05f, -1);
+                RightShiftSprite.transform.localPosition = new Vector3(-1.9f, 2.1f, -1);
                 KeyBindBackground_Clone.transform.localPosition = new Vector3(RightShiftSprite.transform.localPosition.x, RightShiftSprite.transform.localPosition.y, -0.5f);
                 RightShiftSprite.SetActive(true);
                 KeyBindBackground_Clone.SetActive(true);

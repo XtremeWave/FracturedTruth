@@ -23,13 +23,21 @@ internal class ControllerManagerUpdatePatch
                     InGameRoleInfoMenu.SetRoleInfoRef(PlayerControl.LocalPlayer);
                 InGameRoleInfoMenu.Show();
             }
+            else if (Input.GetKey(KeyCode.F2))
+            {
+                if (!InGameSettingsMenu.Showing)
+                    InGameSettingsMenu.SetSettingsRef(PlayerControl.LocalPlayer);
+                InGameSettingsMenu.Show();
+            }
             else
             {
+                InGameSettingsMenu.Hide();
                 InGameRoleInfoMenu.Hide();
             }
         }
         else
         {
+            InGameSettingsMenu.Hide();
             InGameRoleInfoMenu.Hide();
         }
 
@@ -41,6 +49,7 @@ internal class ControllerManagerUpdatePatch
             ResolutionManager.SetResolution(resolutions[resolutionIndex].Item1, resolutions[resolutionIndex].Item2,
                 false);
         }
+        
 
         //重新加载自定义翻译
         if (GetKeysDown(KeyCode.F5, KeyCode.T))
