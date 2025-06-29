@@ -180,8 +180,6 @@ Notification.PlayerLeftByAU-Anticheat: "【{0}】被AmongUs官方的反作弊踢
 Notification.KickBecauseDifferentVersionOrMod: "【{0}】因安装了不同版本的模组被请离房间"
 ## 模组
 Notification.KickedByDenyName: "【{0}】因其昵称包含违禁词被踢出"
-Notification.BanedByBanList: "【{0}】因在封禁名单内被踢出"
-Notification.BanedByFACList: "【{0}】因在FAC封禁名单内被踢出"
 Notification.DumpfileSaved: "日志文件已成功保存到桌面上了，文件名为：{0}"
 Notification.KickedByAbnormalFriendCode: "【{0}】因该房禁止好友代码异常的玩家被请离"
 Notification.AddedPlayerToBanList: "【{0}】被添加至黑名单"
@@ -216,6 +214,8 @@ CheatDetected.Overload: "【{0}】因为发起了过载攻击被踢出"
 CheatDetected.Overload_NotHost: "【{0}】发起了过载攻击，本房间损坏，请到其他房间进行游戏"
 CheatDetected.Cheater: "【{0}】 因为疑似使用作弊程序被踢出"
 CheatDetected.Cheater_NotHost: "【{0}】 疑似使用了作弊程序，请提醒房主及时将其踢出"
+CheatDetected.BanedByBanList: "【{0}】因在封禁名单内被踢出"
+CheatDetected.BanedByFACList: "【{0}】因在FAC封禁名单内被踢出"
 
 # 模组信息 / Mod Infos
 ModInfo.Contributors: "贡献者"
