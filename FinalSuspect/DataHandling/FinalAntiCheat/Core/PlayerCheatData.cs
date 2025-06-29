@@ -17,7 +17,7 @@ public class PlayerCheatData : IDisposable
     private readonly PlayerControl _player;
 
     private readonly Dictionary<byte, RpcRecord> _rpcRecords = new();
-    
+
     public PlayerCheatData(PlayerControl player)
     {
         _player = player;
@@ -97,7 +97,7 @@ public class PlayerCheatData : IDisposable
                     return true;
                 }
             }
-            
+
             _rpcRecords[rpcId] = record;
         }
         else

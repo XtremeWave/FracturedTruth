@@ -41,7 +41,7 @@ internal class RPCHandlerPatch
         var player = GetPlayerFromInstance(__instance, reader);
         if (!player) return true;
         if (OnPlayerLeftPatch.ClientsProcessed.Contains(player.PlayerId)) return false;
-        
+
         if (player.GetCheatData()?.InComingOverloaded != true)
         {
             var cd = player.GetCheatData();
@@ -54,7 +54,6 @@ internal class RPCHandlerPatch
                   $"{(player.IsHost() ? "Host" : "")}:{callId}({RPC.GetRpcName(callId)})"
                 : $"Call from {__instance.name}:{callId}({RPC.GetRpcName(callId)})", "ReceiveRPC");
         }
-        
 
         HandleCheatDetection(player, callId, reader);
 

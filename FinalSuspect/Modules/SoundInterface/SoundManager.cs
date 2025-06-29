@@ -27,16 +27,16 @@ public static class SoundManager
         try
         {
             var files = Directory.GetFiles(GetLocalPath(LocalType.Resources) + "Sounds");
-    
+
             foreach (var filePath in files)
             {
                 var fileName = Path.GetFileName(filePath);
-                if (EnumHelper.GetAllNames<SupportedMusics>().Skip(1).Any(x => fileName.Contains(x))) 
+                if (EnumHelper.GetAllNames<SupportedMusics>().Skip(1).Any(x => fileName.Contains(x)))
                     continue;
-        
-                if (string.IsNullOrWhiteSpace(fileName)) 
+
+                if (string.IsNullOrWhiteSpace(fileName))
                     continue;
-        
+
                 XtremeMusic.CreateMusic(fileName);
                 Info($"Audio Loaded: {fileName}", "AudioManager");
             }
@@ -124,7 +124,7 @@ public enum SupportedMusics
     Affinity__Slok,
     TidalSurge__Slok,
     ReturnToSimplicity__Slok,
-    
+
     // 这里是EmberVeins的Demo曲
     TrailOfTruth__Slok,
     Interlude__Slok,

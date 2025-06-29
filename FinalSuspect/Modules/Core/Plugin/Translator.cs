@@ -25,42 +25,42 @@ public static class Translator
     {
         var langDir = Path.Combine(GetLocalPath(LocalType.Resources), "Languages");
         if (!Directory.Exists(langDir)) return;
-        
+
         foreach (var filePath in Directory.GetFiles(langDir))
         {
             var fileName = Path.GetFileNameWithoutExtension(filePath);
             var langId = -1;
-                
+
             foreach (var lang in EnumHelper.GetAllValues<SupportedLangs>())
             {
                 if (fileName == lang.ToString())
                     langId = (int)lang;
             }
-            
-            if (langId == -1) 
+
+            if (langId == -1)
                 continue;
             try
             {
                 using var reader = new StreamReader(filePath);
                 var yaml = new YamlStream();
                 yaml.Load(new StringReader(reader.ReadToEnd()));
-            
+
                 var dic = new Dictionary<string, string>();
                 var mapping = (YamlMappingNode)yaml.Documents[0].RootNode;
-                
+
                 foreach (var entry in mapping.Children)
                 {
                     var keyNode = (YamlScalarNode)entry.Key;
                     var valueNode = (YamlScalarNode)entry.Value;
-                    
+
                     if (keyNode.Value == "LangID") continue;
-                
+
                     if (!dic.TryAdd(keyNode.Value, valueNode.Value))
                     {
                         Warn($"翻译文件 [{fileName}] 出现重复字符串: {keyNode.Value}", "Translator");
                     }
                 }
-                
+
                 // 更新翻译映射
                 TranslateMaps[langId] = dic;
                 Info($"成功加载语言: {fileName} ({dic.Count} 个条目)", "Translator");
@@ -74,7 +74,7 @@ public static class Translator
         // 处理自定义翻译
         CreateTemplateFile();
         var customLangDir = Path.Combine(".", LANGUAGE_FOLDER_NAME);
-    
+
         if (Directory.Exists(customLangDir))
         {
             foreach (var lang in Enum.GetValues(typeof(SupportedLangs)).Cast<SupportedLangs>())
