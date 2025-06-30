@@ -38,7 +38,7 @@ public class SendQuickChatHandler : IRpcHandler
                 }
 
                 Warn(
-                    $"{sender.GetDataName()}({sender.GetCheatData().FriendCode})({sender.GetCheatData().Puid})一秒内多次发送快捷消息",
+                    $"{sender.GetDataName()}({sender.GetCheatData().FriendCode})({sender.GetCheatData().Puid}) 一秒内多次发送快捷消息",
                     "FAC");
                 ban = true;
                 notify = false;

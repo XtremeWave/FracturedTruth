@@ -1,4 +1,3 @@
-using FinalSuspect.DataHandling.FinalAntiCheat.Core;
 using FinalSuspect.DataHandling.FinalAntiCheat.Interfaces;
 
 namespace FinalSuspect.DataHandling.FinalAntiCheat.Handlers.Valid;
@@ -9,6 +8,6 @@ public class SnapToHandler : IRpcHandler
     [
         (byte)RpcCalls.SnapTo
     ];
-    
+
     public int MaxiReceivedNumPerSecond() => 30;
 }

@@ -1,8 +1,6 @@
 using System.Text.RegularExpressions;
 using AmongUs.Data;
-using AsmResolver.IO;
 using FinalSuspect.Helpers;
-using FinalSuspect.Modules.Core.Game;
 using InnerNet;
 using TMPro;
 using UnityEngine;

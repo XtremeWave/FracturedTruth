@@ -51,7 +51,7 @@ public static class FAC
         notify = true;
         reason = "Hacking";
         ban = false;
-        
+
         if (Main.DisableFAC.Value || !pc || reader == null || pc.AmOwner)
             return false;
 
@@ -79,8 +79,8 @@ public static class FAC
                         if (reason == "Hacking")
                             reason = GetString("Unknown");
                         NotificationPopperPatch.NotificationPop(
-                            string.Format(GetString("CheatDetected.UseCheat"), 
-                                pc.GetColoredName(), 
+                            string.Format(GetString("CheatDetected.UseCheat"),
+                                pc.GetColoredName(),
                                 reason));
                         return true;
                     }
@@ -88,8 +88,8 @@ public static class FAC
                     if (reason == "Hacking")
                         reason = GetString("Unknown");
                     NotificationPopperPatch.NotificationPop(
-                        string.Format(GetString("CheatDetected.MayUseCheat"), 
-                            pc.GetColoredName(), 
+                        string.Format(GetString("CheatDetected.MayUseCheat"),
+                            pc.GetColoredName(),
                             reason));
                     return false;
                 }
