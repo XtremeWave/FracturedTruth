@@ -3,7 +3,7 @@ using System.IO;
 using BepInEx.Configuration;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.ClientOptions;
-using FinalSuspect.Modules.Panels;
+//using FinalSuspect.Modules.Panels;
 using FinalSuspect.Modules.SoundInterface;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -36,7 +36,7 @@ public static class OptionsMenuBehaviourStartPatch
     private static ClientOptionItem_Boolean GodMode;
     private static ClientOptionItem_Boolean NoGameEnd;
 
-    public static ClientFeatureItem SoundBtn;
+    //public static ClientFeatureItem SoundBtn;
     //public static ClientFeatureItem AudioManagementBtn;
     public static OptionsMenuBehaviour Instance { get; private set; }
     private static bool reseted;
@@ -65,7 +65,7 @@ public static class OptionsMenuBehaviourStartPatch
             Object.Destroy(ClientFeatureItem.CustomBackground);
 
             Object.Destroy(ModUnloaderScreen.Popup);
-            Object.Destroy(MyMusicPanel.CustomBackground);
+            //Object.Destroy(MyMusicPanel.CustomBackground);
             //Object.Destroy(SoundManagementPanel.CustomBackground);
             ClientActionItem.ModOptionsButton = null;
             ClientActionItem.CustomBackground = null;
@@ -74,7 +74,7 @@ public static class OptionsMenuBehaviourStartPatch
             ClientFeatureItem.CustomBackground = null;
 
             ModUnloaderScreen.Popup = null;
-            MyMusicPanel.CustomBackground = null;
+            //MyMusicPanel.CustomBackground = null;
             //SoundManagementPanel.CustomBackground = null;
         }
 
@@ -117,12 +117,12 @@ public static class OptionsMenuBehaviourStartPatch
         }, __instance);
         CreateFeatureItem(ref UnloadMod, "UnloadMod", ModUnloaderScreen.Show, __instance);
 
-        CreateFeatureItem(ref SoundBtn, "SoundOption",
-            () => { MyMusicPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
+        //CreateFeatureItem(ref SoundBtn, "SoundOption",
+        //    () => { MyMusicPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
         //CreateFeatureItem(ref AudioManagementBtn, "SoundManager",
             //() => { SoundManagementPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
 
-        SetFeatureItemTextAndColor(SoundBtn, "SoundOptions");
+        //SetFeatureItemTextAndColor(SoundBtn, "SoundOptions");
         //SetFeatureItemTextAndColor(AudioManagementBtn, "AudioManagementOptions");
 
         if (!IsNotJoined)
@@ -137,7 +137,7 @@ public static class OptionsMenuBehaviourStartPatch
         }
 
         Modules.SoundInterface.SoundManager.ReloadTag();
-        MyMusicPanel.Init(__instance);
+        //MyMusicPanel.Init(__instance);
         //SoundManagementPanel.Init(__instance);
 
         if (!ModUnloaderScreen.Popup)
@@ -299,7 +299,7 @@ public static class OptionsMenuBehaviourClosePatch
         ClientActionItem.CustomBackground?.gameObject.SetActive(false);
         ClientFeatureItem.CustomBackground?.gameObject.SetActive(false);
         ModUnloaderScreen.Hide();
-        MyMusicPanel.Hide();
+        //MyMusicPanel.Hide();
         //SoundManagementPanel.Hide();
     }
 }

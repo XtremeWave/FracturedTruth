@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Features.CheckingandBlocking;
-using FinalSuspect.Modules.Panels;
+//using FinalSuspect.Modules.Panels;
 using FinalSuspect.Modules.Resources;
 using UnityEngine;
 
@@ -193,7 +193,7 @@ public class XtremeMusic
         _ = new MainThreadTask(() =>
         {
             LastAudioStates = CurrectAudioStates = AudiosStates.IsLoading;
-            MyMusicPanel.RefreshTagList();
+            //MyMusicPanel.RefreshTagList();
         }, "Update Audio States");
         await task;
         _ = new MainThreadTask(() =>
@@ -201,7 +201,7 @@ public class XtremeMusic
             if (task.Result)
                 Clip = task.Result;
             LastAudioStates = CurrectAudioStates = Clip ? AudiosStates.Exist : AudiosStates.NotExist;
-            MyMusicPanel.RefreshTagList();
+            //MyMusicPanel.RefreshTagList();
         }, "Update Audio States");
     }
 

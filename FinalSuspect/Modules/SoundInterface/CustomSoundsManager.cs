@@ -1,5 +1,4 @@
-﻿using FinalSuspect.Modules.Panels;
-using UnityEngine;
+﻿using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Modules.SoundInterface;
@@ -29,7 +28,7 @@ public static class CustomSoundsManager
                 }
 
                 SoundManager.ReloadTag();
-                MyMusicPanel.RefreshTagList();
+                //MyMusicPanel.RefreshTagList();
                 //SoundManagementPanel.RefreshTagList();
                 global::SoundManager.Instance.CrossFadeSound(audio.FileName, audio.Clip, 1f);
                 Msg($"播放声音：{audio.Name}", "CustomSounds");
@@ -51,7 +50,7 @@ public static class CustomSoundsManager
         });
         _ = new MainThreadTask(() =>
         {
-            MyMusicPanel.RefreshTagList();
+            //MyMusicPanel.RefreshTagList();
             //SoundManagementPanel.RefreshTagList();
         }, "Refresh Tag List");
         if (Main.DisableVanillaSound.Value)

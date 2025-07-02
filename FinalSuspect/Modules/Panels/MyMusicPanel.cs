@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Diagnostics.CodeAnalysis;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.SoundInterface;
@@ -133,7 +133,7 @@ public static class MyMusicPanel
         //    Object.Destroy(ChangePlayMode.gameObject);
         //    AddChangePlayModeButton(OptionsMenuBehaviourNow);
         //}));
-    }*/
+    }#1#
     public static void RefreshTagList()
     {
         Items?.Do(Object.Destroy);
@@ -242,4 +242,4 @@ public static class MyMusicPanel
             numItems++;
         }
     }
-}
+}*/
