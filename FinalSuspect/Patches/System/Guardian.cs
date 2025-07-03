@@ -5,17 +5,6 @@ using System;
 
 namespace FinalSuspect.Patches.System;
 
-[HarmonyPatch(typeof(MessageReader), nameof(MessageReader.ReadUInt16))]
-[HarmonyPatch(typeof(MessageReader), nameof(MessageReader.ReadPackedUInt32))]
-[HarmonyPriority(Priority.First)]
-internal class HazelPatch
-{
-    public static bool Prefix(MessageReader __instance)
-    {
-        return __instance.Length > 0;
-    }
-}
-
 [HarmonyPatch(typeof(InnerNetClient), nameof(InnerNetClient.HandleGameData))]
 public static class HandleGameDataPatch
 {

@@ -381,6 +381,8 @@ public static class HudManagerPatch
                 UpdateResult(__instance);
                 SetChatBG(__instance);
                 SetAbilityButtonColor(__instance);
+                if (!ControllerManagerUpdatePatch.ShowSettingsPanel && IsInGame)
+                    DestroyableSingleton<LobbyInfoPane>.Instance.gameObject.SetActive(false);
             }
             catch
             {

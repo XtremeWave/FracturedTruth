@@ -1,5 +1,6 @@
 using System;
 using AmongUs.Data;
+using FinalSuspect.Attributes;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Resources;
 using InnerNet;
@@ -29,7 +30,7 @@ public static class GameStartManagerUpdatePatch
     }
 }
 
-public class GameStartManagerPatch
+public static class GameStartManagerPatch
 {
     private static float timer = 600f;
     private static Vector3 GameStartTextlocalPosition;
@@ -38,6 +39,18 @@ public class GameStartManagerPatch
     private static TextMeshPro warningText;
     public static TextMeshPro HideName;
 
+    [GameModuleInitializer]
+    public static void Init()
+    {
+        DestroyableSingleton<GameStartManager>.Instance.transform.gameObject.ForEachChild(
+            (Action<GameObject>)HideAllBtns);
+    }
+
+    private static void HideAllBtns(GameObject obj)
+    {
+        obj.SetActive(false);
+    }
+    
     [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.Start))]
     public class GameStartManagerStartPatch
     {

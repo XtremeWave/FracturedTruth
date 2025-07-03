@@ -1,4 +1,5 @@
 using AmongUs.GameOptions;
+using FinalSuspect.Attributes;
 using FinalSuspect.Helpers;
 using Il2CppSystem;
 using TMPro;
@@ -7,9 +8,17 @@ using UnityEngine;
 namespace FinalSuspect.Patches.System;
 
 [HarmonyPatch(typeof(LobbyInfoPane), nameof(LobbyInfoPane.Update))]
-internal class LobbyInfoPanePatch
+internal class LobbyInfoPaneUpdatePatch
 {
-    public static void Postfix()
+    [GameModuleInitializer]
+    public static void Init()
+    {
+        var trans = DestroyableSingleton<LobbyInfoPane>.Instance.transform.FindChild("AspectSize").FindChild("GameSettingsButtons");
+        trans.FindChild("Host Buttons").gameObject.SetActive(false);
+        trans.FindChild("Client Buttons").gameObject.SetActive(true);
+    }
+    
+    public static void Postfix(LobbyInfoPane __instance)
     {
         var AspectSize = GameObject.Find("AspectSize");
         AspectSize.transform.FindChild("Background").gameObject.GetComponent<SpriteRenderer>().color =

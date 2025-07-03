@@ -11,7 +11,8 @@ internal class ControllerManagerUpdatePatch
         [(480, 270), (640, 360), (800, 450), (1280, 720), (1600, 900), (1920, 1080)];
 
     private static int resolutionIndex;
-
+    public static bool ShowSettingsPanel = true;
+    
     public static void Postfix(ControllerManager __instance)
     {
         //职业介绍
@@ -23,22 +24,15 @@ internal class ControllerManagerUpdatePatch
                     InGameRoleInfoMenu.SetRoleInfoRef(PlayerControl.LocalPlayer);
                 InGameRoleInfoMenu.Show();
             }
-            else if (Input.GetKey(KeyCode.F2))
-            {
-                if (!InGameSettingsMenu.Showing)
-                    InGameSettingsMenu.SetSettingsRef(PlayerControl.LocalPlayer);
-                InGameSettingsMenu.Show();
-            }
-            else
-            {
-                InGameSettingsMenu.Hide();
-                InGameRoleInfoMenu.Hide();
-            }
         }
         else
         {
-            InGameSettingsMenu.Hide();
             InGameRoleInfoMenu.Hide();
+        }
+
+        if (Input.GetKey(KeyCode.F2))
+        {
+            ShowSettingsPanel = !ShowSettingsPanel;
         }
 
         //更改分辨率
