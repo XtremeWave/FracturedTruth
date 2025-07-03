@@ -78,8 +78,8 @@ FinalSuspectFeatures: "Final Suspect 功能"
 ClientFeature.UnloadMod: "切换原版"
 ClientFeature.DumpLog: "输出日志"
 ClientFeature.ClearAutoLogs: "清空自动日志"
-ClientFeature.SoundOptions: "我的音乐"
-ClientFeature.AudioManagementOptions: "音频管理"
+ClientFeature.MyMusic: "我的音乐"
+ClientFeature.ResourceManager: "资源管理"
 
 # 愚人节相关 / AprilFoolsMode
 AprilFoolsMode.BeanMode: "经典豆子模式"
@@ -95,6 +95,7 @@ Tip.Updating: "更新中……"
 Tip.DownLoadFinished: "下载完成"
 Tip.DownLoadSucceeded: "下载成功！"
 Tip.DownLoadFailed: "下载失败=("
+Tip.PackageExists: "资源包已安装"
 
 Tip.LanguageFilesLoadingComplete: "语言文件加载完成"
 Tip.CheckingForFiles: "校验资源文件完整性……"
@@ -106,6 +107,13 @@ Tip.UnloadWarning: "<color=#ffff00><size=200%>警告</size></color>\n如果您�
 Tip.CannotUnloadDuringGame: "游戏中不能切换为原版"
 Tip.OnlyAvailableInMainMenu: "仅在主页使用"
 Tip.HideSummaryTextToShowWinText: "<color=#ffff00>隐藏复盘信息查看胜利文本</color>"
+  
+Tip.ResourceManager: "您可以在「资源管理」中下载本模组的配套以及扩展资源\n以\"Pre-\"开头的文件为预下载资源包"
+Tip.MyMusic: "您可以在「资源管理」中下载本模组支持的音乐或在文件夹(AmongUs/Final Suspect_Data/Musics)中添加自己喜爱的音频文件，如果音乐本地资源路径不存在则会显示「【文件丢失】」"
+Tip.Incomplete_Music: "检测到当前音乐文件不完整"
+Tip.Incomplete_SoundEffect: "检测到当前音效文件不完整"
+Tip.Incomplete_Image: "检测到当前音乐文件不完整"
+Tip.Incomplete: "如果您希望提高您的游戏体验，请在「主页-设置-更多功能-资源管理」下载模组配套资源包"
 
 # 更新结果
 UpdateResult.Succeed_Title: "更新成功"
@@ -145,13 +153,6 @@ MusPlay.Mode3: "顺序播放"
 MusPlay.Stop: "停止播放"
 MusPlay.CanPlay: "←点击播放"
 MusPlay.NoFound: "【文件丢失】"
-
-# 界面提示 / Interface Tips
-CustomSoundHelp: "您可以在「音频管理」中下载XtremeWave支持的音乐或添加自己的音乐，如果音乐本地资源路径不存在则会显示「【文件丢失】」"
-
-# 主界面音乐提醒 / Main Menu Music Reminder
-MusicNotYet: "检测到当前音乐文件不完整"
-AudioNYPro: "如果您希望提高您的游戏体验，请在「主页-设置-更多功能-音频管理」下载我们的音频"
 
 # 官方音乐 / Musics
 Mus.GongXiFaCai: "恭喜发财"
@@ -243,9 +244,9 @@ Summary.ShowResults: "显示复盘信息"
 Summary.HideResults: "隐藏复盘信息"
 Summary.NoInfoExists: "没有存在有效的复盘信息"
 Summary.CrewsWin: "<color=#8cffff>船员阵营胜利</color>"
+Summary.ImpsWin: "<color=#ff1919>伪装者阵营胜利</color>"
 Outro.Crews_Win: "船员胜利"
 Outro.Crews_WinBlurb: "真理的光芒在希望中闪耀！"
-Summary.ImpsWin: "<color=#ff1919>伪装者阵营胜利</color>"
 Outro.Imps_Win: "伪装者胜利"
 Outro.Imps_WinBlurb: "邪恶将真理化为灰烬"
 
@@ -256,7 +257,6 @@ Website: "模组官网"
 MainMenuCredential: "{0} © 2025"
 LShift: "上一个大厅"
 RShift: "剪切板大厅"
-LobbyTimeDisplayText: "生存期间"
 
 # 客户端平台 / Platform
 Platform.IPhone: "苹果"
@@ -282,7 +282,10 @@ Unload: "切换"
 Retry: "重试"
 PreviousPage: "上一页"
 NextPage: "下一页"
+Download: "下载"
 
 # 身份 / Identity
-Host: "房主"
-Cheater: "作弊者"
+Id.Host: "房主"
+Id.Cheater: "作弊者"
+Id.Developer: "开发者"
+Id.Contributor: "贡献者"

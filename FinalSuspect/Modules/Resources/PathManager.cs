@@ -27,6 +27,11 @@ public static class PathManager
     {
         return GetRemoteUrl(fileType, remoteType) + file;
     }
+    
+    public static string GetPackageFile(string packageName, RemoteType remoteType, string file)
+    {
+        return "https://" + GetRemoteBase(remoteType) + packageName + "/" + file;
+    }
 
     private static string GetRemoteUrl(FileType fileType, RemoteType remoteType)
     {
@@ -75,7 +80,8 @@ public static class PathManager
     public static void InitializePaths()
     {
         CheckAndCreate(GetLocalPath(LocalType.Resources), false);
-        CheckAndCreate(GetLocalPath(LocalType.Resources) + "Sounds", false);
+        CheckAndCreate(GetLocalPath(LocalType.Resources) + "Musics", false);
+        CheckAndCreate(GetLocalPath(LocalType.Resources) + "SoundEffects");
         CheckAndCreate(GetLocalPath(LocalType.Resources) + "Images");
         CheckAndCreate(GetLocalPath(LocalType.Resources) + "Languages", false);
         CheckAndCreate(LANGUAGE_FOLDER_NAME, false);
@@ -84,7 +90,7 @@ public static class PathManager
         CheckAndCreate(BANEDWORDS_FILE_PATH, false, true);
         CheckAndCreate(DENY_NAME_LIST_PATH, false, true);
 
-        CheckAndCreate(GetLocalPath(LocalType.Bypass), false);
+        CheckAndCreate(GetLocalPath(LocalType.DisplayName));
 
 
         // 防止崩溃的必要措施
@@ -157,11 +163,14 @@ public static class PathManager
 
 public enum FileType
 {
+    Unknown,
     Images,
-    Sounds,
+    Musics,
+    SoundEffects,
     Depends,
     ModNews,
-    Languages
+    Languages,
+    DisplayName
 }
 
 public enum RemoteType
@@ -176,5 +185,5 @@ public enum LocalType
     Ban,
     Resources,
     BepInEx,
-    Bypass
+    DisplayName
 }

@@ -111,11 +111,11 @@ public static class BanManager
         if (!AmongUsClient.Instance.AmHost && !Main.KickPlayerInBanList.Value) return;
         if (player.IsBannedPlayer() || DestroyableSingleton<FriendsListManager>.Instance.IsPlayerBlockedUsername(player.FriendCode))
         {
-            KickPlayer(player.Id, true, "BanedByBanList");
+            KickPlayer(player.Id, true, "BanedByBanList", KickLevel.CheatDetected);
         }
         else if (player.IsFACPlayer())
         {
-            KickPlayer(player.Id, true, "BanedByFACList");
+            KickPlayer(player.Id, true, "BanedByFACList", KickLevel.CheatDetected);
         }
     }
 

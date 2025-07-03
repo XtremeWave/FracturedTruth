@@ -3,6 +3,8 @@ using System.IO;
 using BepInEx.Configuration;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.ClientOptions;
+using FinalSuspect.Modules.ClientOptions.FeatureItems;
+using FinalSuspect.Modules.ClientOptions.FeatureItems.Resources;
 //using FinalSuspect.Modules.Panels;
 using FinalSuspect.Modules.SoundInterface;
 using UnityEngine;
@@ -38,6 +40,8 @@ public static class OptionsMenuBehaviourStartPatch
 
     //public static ClientFeatureItem SoundBtn;
     //public static ClientFeatureItem AudioManagementBtn;
+    public static ClientFeatureItem ResourceBtn;
+    //public static ClientFeatureItem DisplayNameBtn;
     public static OptionsMenuBehaviour Instance { get; private set; }
     private static bool reseted;
     public static bool recreate;
@@ -121,13 +125,18 @@ public static class OptionsMenuBehaviourStartPatch
         //    () => { MyMusicPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
         //CreateFeatureItem(ref AudioManagementBtn, "SoundManager",
             //() => { SoundManagementPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
-
+        CreateFeatureItem(ref ResourceBtn, "ResourceManager",
+            () => { ResourcesPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
+        //CreateFeatureItem(ref DisplayNameBtn, "DisplayName",
+          //  () => { NameTagPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
+        
         //SetFeatureItemTextAndColor(SoundBtn, "SoundOptions");
         //SetFeatureItemTextAndColor(AudioManagementBtn, "AudioManagementOptions");
-
+        SetFeatureItemTextAndColor(ResourceBtn, "ResourceManager");
         if (!IsNotJoined)
         {
             SetOptionItemDisabled_Menu(ChangeOutfit);
+            SetFeatureItemDisabled_Menu(ResourceBtn);
             //SetFeatureItemDisabled_Menu(AudioManagementBtn);
         }
 
@@ -139,7 +148,8 @@ public static class OptionsMenuBehaviourStartPatch
         Modules.SoundInterface.SoundManager.ReloadTag();
         //MyMusicPanel.Init(__instance);
         //SoundManagementPanel.Init(__instance);
-
+        ResourcesPanel.Init(__instance);
+        
         if (!ModUnloaderScreen.Popup)
             ModUnloaderScreen.Init(__instance);
         recreate = false;
@@ -299,6 +309,7 @@ public static class OptionsMenuBehaviourClosePatch
         ClientActionItem.CustomBackground?.gameObject.SetActive(false);
         ClientFeatureItem.CustomBackground?.gameObject.SetActive(false);
         ModUnloaderScreen.Hide();
+        ResourcesPanel.Hide(); 
         //MyMusicPanel.Hide();
         //SoundManagementPanel.Hide();
     }

@@ -26,7 +26,7 @@ public static class SoundManager
 
         try
         {
-            var files = Directory.GetFiles(GetLocalPath(LocalType.Resources) + "Sounds");
+            var files = Directory.GetFiles(GetLocalPath(LocalType.Resources) + "Musics");
 
             foreach (var filePath in files)
             {
@@ -224,7 +224,7 @@ public class XtremeMusic
 
         UnOfficial = music == SupportedMusics.UnOfficial;
         CurrectAudio = music;
-        Path = GetResourceFilesPath(FileType.Sounds, FileName + ".wav");
+        Path = GetResourceFilesPath(FileType.Musics, FileName + ".wav");
         CurrectAudioStates = LastAudioStates =
             SoundManager.ConvertExtension(ref Path) ? AudiosStates.Exist : AudiosStates.NotExist;
 

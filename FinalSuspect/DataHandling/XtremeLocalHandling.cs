@@ -47,7 +47,7 @@ public static class XtremeLocalHandling
         SpamManager.CheckSpam(ref name);
         if (!player.GetCheatData().IsSuspectCheater || Main.DisableFAC.Value) return name;
         topcolor = ColorHelper.FaultColor;
-        toptext = toptext.CheckAndAppendText(GetString("Cheater"));
+        toptext = toptext.CheckAndAppendText(GetString("Id.Cheater"));
         return name;
     }
 
@@ -57,7 +57,8 @@ public static class XtremeLocalHandling
         if (!IsLobby) return;
         var player = data.Player;
 
-        if (player.IsHost()) toptext = toptext.CheckAndAppendText(GetString("Host"));
+        if (player.IsHost()) toptext = toptext.CheckAndAppendText(GetString("Id.Host"));
+        //toptext.CheckAndAppendText(NameTagManager.GetDisplayName(player).Apply(player.GetDataName()).upper);
         if (GetPlayerVersion(player.PlayerId, out var ver))
         {
             if (Main.ForkId != ver.forkId)

@@ -3,6 +3,7 @@ using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FinalSuspect.Helpers;
+using FinalSuspect.Modules.ClientOptions.FeatureItems.Resources;
 using FinalSuspect.Modules.Features;
 using FinalSuspect.Modules.Features.CheckingandBlocking;
 using FinalSuspect.Patches.System;
@@ -21,13 +22,30 @@ public static class VersionChecker
             CustomPopup.Init();
             if (firstStart)
             {
-                _ = SpamManager.Init();
-                _ = ModNewsHistory.LoadModAnnouncements();
+                StartTasks();
+                
                 CustomPopup.Show(GetString("UpdateCheck.Popup_Title"), GetString("Tip.LoadingWithDot"), null);
             }
 
             ModUpdater.SetUpdateButtonStatus();
             firstStart = false;
+        }
+    }
+
+    private static async void StartTasks()
+    {
+        try
+        {
+            _ = ModNewsHistory.LoadModAnnouncements();
+            
+            await SpamManager.Init();
+            await Task.Delay(100);
+            await ResourcesManager.CheckForResources();
+            await CheckForUpdate();
+        }
+        catch 
+        {
+            
         }
     }
 
@@ -129,6 +147,7 @@ public static class VersionChecker
                 ? string.Format(GetString("FinalSuspectWelcomeText"), ColorHelper.ModColor)
                 : GetString("RetrieveVersionInfoFailed");
         }, "Check For Update");
+        
     }
 
     private static async Task<bool> GetVersionInfo(string url)

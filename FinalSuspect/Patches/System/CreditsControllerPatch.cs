@@ -12,7 +12,7 @@ public class CreditsControllerPatch
             $"<size=120%><color={ColorHelper.ModColor}>{Main.ModName}</color></size>",
             $"<color=#fffcbe>By</color> <color={ColorHelper.TeamColor}>XtremeWave</color>",
             //Others
-            $"<size=120%>{GetString("ModInfo.Contributors")}</size>",
+            $"<size=120%>{GetString("Id.Contributor")}</size>",
             "- LezaiYa",
             "- Nonalus",
             "- KARPED1EM",

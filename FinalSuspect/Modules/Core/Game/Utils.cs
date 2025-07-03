@@ -84,7 +84,7 @@ public static class Utils
         return GetString($"{text}{Info}");
     }
 
-    public static void KickPlayer(int clientId, bool ban, string reason = "", KickLevel level = KickLevel.CheatDetected)
+    public static void KickPlayer(int clientId, bool ban, string reason = "", KickLevel level = KickLevel.Notification)
     {
         if (OnPlayerLeftPatch.ClientsProcessed.Contains(clientId)) return;
         var client = GetClientById(clientId);

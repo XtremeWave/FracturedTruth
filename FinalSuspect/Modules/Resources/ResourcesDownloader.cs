@@ -15,7 +15,7 @@ public class ResourcesDownloader
         switch (fileType)
         {
             case FileType.Images:
-            case FileType.Sounds:
+            case FileType.Musics:
             case FileType.ModNews:
             case FileType.Languages:
                 filePath = GetResourceFilesPath(fileType, file);
@@ -42,6 +42,72 @@ public class ResourcesDownloader
             };
 
         var url = GetFile(fileType, remoteType, file);
+
+        if (!IsValidUrl(url))
+        {
+            Error($"Invalid URL: {url}", "Download Resources", false);
+            return false;
+        }
+
+        File.Create(DownloadFileTempPath).Close();
+
+        Msg("Start Downloading from: " + url, "Download Resources");
+        Msg("Saving file to: " + filePath, "Download Resources");
+
+        try
+        {
+            using var client = new HttpClientDownloadWithProgress(url, DownloadFileTempPath);
+            await client.StartDownload();
+            Thread.Sleep(100);
+            File.Delete(filePath);
+            File.Move(DownloadFileTempPath, filePath);
+            Warn($"Succeed in {url}", "Download Resources");
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Error($"Failed to download\n{ex.Message}", "Download Resources", false);
+            File.Delete(DownloadFileTempPath);
+            retrytimes++;
+            if (retrytimes < 3)
+                goto retry;
+            return false;
+        }
+    }
+    
+    public static async Task<bool> StartDownloadAsPackage(string packageName, FileType fileType, string file)
+    {
+        string filePath;
+        switch (fileType)
+        {
+            case FileType.Images:
+            case FileType.Musics:
+            case FileType.ModNews:
+            case FileType.Languages:
+                filePath = GetResourceFilesPath(fileType, file);
+                break;
+            case FileType.Depends:
+                filePath = GetLocalPath(LocalType.BepInEx) + file;
+                break;
+            default:
+                return false;
+        }
+
+        var DownloadFileTempPath = filePath + ".xwr";
+
+        var retrytimes = 0;
+        var remoteType = RemoteType.Github;
+        retry:
+        if (IsChineseLanguageUser)
+            remoteType = retrytimes switch
+            {
+                0 => RemoteType.Gitee,
+                1 => RemoteType.XtremeApi,
+                2 => RemoteType.Github,
+                _ => remoteType
+            };
+
+        var url = GetPackageFile(packageName, remoteType, file);
 
         if (!IsValidUrl(url))
         {

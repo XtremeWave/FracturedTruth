@@ -41,8 +41,6 @@ public static class SpamManager
         {
             Error(ex.ToString(), "SpamManager");
         }
-
-        _ = VersionChecker.CheckForUpdate();
     }
 
 

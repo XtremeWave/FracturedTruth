@@ -55,6 +55,10 @@
         <PackageReference Include="YamlDotNet" Version="16.3.0"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Modules\ClientOptions\FeatureItems\DisplayName&amp;Title\" />
+    </ItemGroup>
+
     <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">
         <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(AmongUs)/BepInEx/plugins/" Condition="'$(Configuration)' == 'Debug'"/>
     </Target>
