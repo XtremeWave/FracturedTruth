@@ -24,13 +24,17 @@ internal class ControllerManagerUpdatePatch
                     InGameRoleInfoMenu.SetRoleInfoRef(PlayerControl.LocalPlayer);
                 InGameRoleInfoMenu.Show();
             }
+            else
+            {
+                InGameRoleInfoMenu.Hide();
+            }
         }
         else
         {
             InGameRoleInfoMenu.Hide();
         }
 
-        if (Input.GetKey(KeyCode.F2))
+        if (Input.GetKeyDown(KeyCode.F2))
         {
             ShowSettingsPanel = !ShowSettingsPanel;
         }

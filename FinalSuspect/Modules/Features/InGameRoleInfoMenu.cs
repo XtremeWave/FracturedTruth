@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using FinalSuspect.Attributes;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game;
 using TMPro;
@@ -21,6 +22,7 @@ public static class InGameRoleInfoMenu
 
     public static TextMeshPro RoleInfoTMP => RoleInfo.GetComponent<TextMeshPro>();
 
+    [GameModuleInitializer]
     public static void Init()
     {
         var DOBScreen = AccountManager.Instance.transform.FindChild("DOBEnterScreen");
@@ -52,6 +54,8 @@ public static class InGameRoleInfoMenu
         RoleIllustration.transform.SetParent(Menu.transform);
         RoleIllustration.AddComponent<SpriteRenderer>();
         RoleIllustration.transform.localPosition = new Vector3(2.3f, 0.8f, 4f);
+
+        ForceHide();
     }
 
     public static void SetRoleInfoRef(PlayerControl player)
@@ -77,21 +81,24 @@ public static class InGameRoleInfoMenu
     public static void Show()
     {
         if (!Fill || !Menu) Init();
-        if (!Showing)
-        {
-            Fill?.SetActive(true);
-            Menu?.SetActive(true);
-        }
+        if (Showing) return;
+        Fill?.SetActive(true);
+        Menu?.SetActive(true);
         //HudManager.Instance?.gameObject.SetActive(false);
     }
 
     public static void Hide()
     {
-        if (Showing)
-        {
-            Fill?.SetActive(false);
-            Menu?.SetActive(false);
-        }
+        if (!Showing) return;
+        Fill?.SetActive(false);
+        Menu?.SetActive(false);
+        //HudManager.Instance?.gameObject?.SetActive(true);
+    }
+    
+    public static void ForceHide()
+    {
+        Fill?.SetActive(false);
+        Menu?.SetActive(false);
         //HudManager.Instance?.gameObject?.SetActive(true);
     }
 
