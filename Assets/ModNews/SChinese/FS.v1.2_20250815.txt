@@ -83,7 +83,7 @@
 制作: Slok
 - 将国内Gitee下载优先于国内API下载
 制作: LezaiYa
-- 允许游戏内切换外观形象
+- 允许游戏内使用「切换外观形象」
 来源: Town Of Host:Enhanced
 
 ## 新增

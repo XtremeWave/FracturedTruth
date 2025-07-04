@@ -1,6 +1,7 @@
 using System;
 using BepInEx.Configuration;
 using FinalSuspect.Helpers;
+using UnityEngine;
 
 namespace FinalSuspect.Modules.ClientOptions;
 
@@ -76,7 +77,19 @@ public sealed class ClientOptionItem<T> : ClientActionItem
                 var allValues = (T[])Enum.GetValues(typeof(T));
                 if (allValues.Length == 0) break;
                 var currentIndex = Array.IndexOf(allValues, Config.Value);
-                color = ColorHelper.ShadeColor(ColorHelper.ClientOptionColor, currentIndex * 0.025f);
+
+                var baseColor = ColorHelper.ClientOptionColor;
+                var factor = allValues.Length > 1 
+                    ? currentIndex / (float)(allValues.Length - 1) 
+                    : 0f;
+                var newRed = (byte)Mathf.Clamp(baseColor.r - (byte)(factor * 70), 0, 255);
+                color = new Color32(
+                    newRed, 
+                    baseColor.g, 
+                    baseColor.b,
+                    baseColor.a
+                );
+    
                 Config.Value = allValues[currentIndex];
                 Rename();
                 ToggleButton.Text.text += $"\n|{GetString($"Value.{Config.Value.ToString()}")}|";
@@ -87,6 +100,7 @@ public sealed class ClientOptionItem<T> : ClientActionItem
         ToggleButton.Rollover?.ChangeOutColor(color);
     }
 }
+
 
 /*public sealed class ClientOptionItem_String : ClientActionItem
 {
