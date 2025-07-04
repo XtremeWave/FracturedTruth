@@ -1,14 +1,8 @@
-using Newtonsoft.Json.Linq;
 using System;
-using UnityEngine;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Net.Http;
 using System.IO;
+using System.Net.Http;
 using System.Text.Json;
-using FinalSuspect.Modules.Resources;
-using Il2CppSystem.Linq;
+using System.Threading.Tasks;
 
 namespace FinalSuspect.Modules.ClientOptions.FeatureItems.Resources;
 

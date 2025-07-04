@@ -70,11 +70,6 @@ public class Main : BasePlugin
     public static bool ExceptionMessageIsShown;
     public static string CredentialsText;
 
-    public static readonly string[] OutfitType =
-    [
-        "AprilFoolsMode.BeanMode", "AprilFoolsMode.HorseMode", "AprilFoolsMode.LongMode"
-    ];
-
     public static Dictionary<RoleTypes, string> roleColors;
     public static List<int> clientIdList = [];
 
@@ -119,7 +114,7 @@ public class Main : BasePlugin
     public static ConfigEntry<bool> KickPlayerInBanList { get; private set; }
     public static ConfigEntry<bool> SpamDenyWord { get; private set; }
     public static ConfigEntry<bool> UnlockFPS { get; private set; }
-    public static ConfigEntry<string> ChangeOutfit { get; private set; }
+    public static ConfigEntry<OutfitType> SwitchOutfitType { get; private set; }
     public static ConfigEntry<bool> AutoStartGame { get; private set; }
     public static ConfigEntry<bool> AutoEndGame { get; private set; }
     public static ConfigEntry<bool> DisableVanillaSound { get; private set; }
@@ -166,7 +161,7 @@ public class Main : BasePlugin
         DebugKeyInput = Config.Bind("Authentication", "Debug Key", "");
 
         UnlockFPS = Config.Bind("Client Options", "Unlock FPS", false);
-        ChangeOutfit = Config.Bind("Client Options", "Change Outfit", OutfitType[0]);
+        SwitchOutfitType = Config.Bind("Client Options", "Switch Outfit", OutfitType.BeanMode);
         KickPlayerWithAbnormalFriendCode = Config.Bind("Client Options", "Kick Player FriendCode Not Exist", true);
         KickPlayerInBanList = Config.Bind("Client Options", "Kick Player In BanList", true);
         KickPlayerWithDenyName = Config.Bind("Client Options", "Kick Player With Deny Name", true);
@@ -178,7 +173,7 @@ public class Main : BasePlugin
         //PrunkMode = Config.Bind("Client Options", "Prunk Mode", false);
         ShowPlayerInfo = Config.Bind("Client Options", "Show Player Info", true);
         UseModCursor = Config.Bind("Client Options", "Use Mod Cursor", true);
-        FastLaunchMode = Config.Bind("Client Options", "Fast Boot", false);
+        FastLaunchMode = Config.Bind("Client Options", "Fast Launch Mode", false);
         VersionCheat = Config.Bind("Client Options", "Version Cheat", false);
         GodMode = Config.Bind("Client Options", "God Mode", false);
         NoGameEnd = Config.Bind("Client Options", "No Game End", false);
@@ -312,4 +307,11 @@ public enum BypassType
     Dont,
     Once,
     LongTerm,
+}
+
+public enum OutfitType
+{
+    BeanMode,
+    HorseMode,
+    LongMode
 }

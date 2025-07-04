@@ -5,7 +5,6 @@ using FinalSuspect.Helpers;
 using FinalSuspect.Modules.ClientOptions;
 using FinalSuspect.Modules.ClientOptions.FeatureItems;
 using FinalSuspect.Modules.ClientOptions.FeatureItems.Resources;
-//using FinalSuspect.Modules.Panels;
 using FinalSuspect.Modules.SoundInterface;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -15,33 +14,31 @@ namespace FinalSuspect.Patches.System;
 [HarmonyPatch(typeof(OptionsMenuBehaviour), nameof(OptionsMenuBehaviour.Start))]
 public static class OptionsMenuBehaviourStartPatch
 {
-    private static ClientOptionItem_Boolean UnlockFPS;
-    private static ClientOptionItem_String ChangeOutfit;
-    private static ClientOptionItem_Boolean KickPlayerWithAbnormalFriendCode;
-    private static ClientOptionItem_Boolean KickPlayerWithDenyName;
-    private static ClientOptionItem_Boolean KickPlayerInBanList;
-    private static ClientOptionItem_Boolean SpamDenyWord;
-    private static ClientOptionItem_Boolean AutoStartGame;
-
-    private static ClientOptionItem_Boolean AutoEndGame;
-
-    //private static ClientOptionItem_Boolean PrunkMode;
-    private static ClientOptionItem_Boolean DisableVanillaSound;
-    private static ClientOptionItem_Boolean DisableFAC;
-    private static ClientOptionItem_Boolean ShowPlayerInfo;
-    private static ClientOptionItem_Boolean UseModCursor;
-    private static ClientOptionItem_Boolean FastLaunchMode;
+    private static ClientOptionItem<bool> UnlockFPS;
+    private static ClientOptionItem<OutfitType> SwitchOutfitType;
+    private static ClientOptionItem<bool> KickPlayerWithAbnormalFriendCode;
+    private static ClientOptionItem<bool> KickPlayerWithDenyName;
+    private static ClientOptionItem<bool> KickPlayerInBanList;
+    private static ClientOptionItem<bool> SpamDenyWord;
+    private static ClientOptionItem<bool> AutoStartGame;
+    private static ClientOptionItem<bool> AutoEndGame;
+    
+    private static ClientOptionItem<bool> DisableVanillaSound;
+    private static ClientOptionItem<bool> DisableFAC;
+    private static ClientOptionItem<bool> ShowPlayerInfo;
+    private static ClientOptionItem<bool> UseModCursor;
+    private static ClientOptionItem<bool> FastLaunchMode;
     private static ClientFeatureItem ClearAutoLogs;
     private static ClientFeatureItem DumpLog;
     private static ClientFeatureItem UnloadMod;
-    private static ClientOptionItem_Boolean VersionCheat;
-    private static ClientOptionItem_Boolean GodMode;
-    private static ClientOptionItem_Boolean NoGameEnd;
+    private static ClientOptionItem<bool> VersionCheat;
+    private static ClientOptionItem<bool> GodMode;
+    private static ClientOptionItem<bool> NoGameEnd;
 
     //public static ClientFeatureItem SoundBtn;
     //public static ClientFeatureItem AudioManagementBtn;
-    public static ClientFeatureItem ResourceBtn;
-    //public static ClientFeatureItem DisplayNameBtn;
+    private static ClientFeatureItem ResourceBtn;
+    private static ClientFeatureItem DisplayNameBtn;
     public static OptionsMenuBehaviour Instance { get; private set; }
     private static bool reseted;
     public static bool recreate;
@@ -83,8 +80,7 @@ public static class OptionsMenuBehaviourStartPatch
         }
 
         CreateOptionItem(ref UnlockFPS, "UnlockFPS", Main.UnlockFPS, __instance, UnlockFPSButtonToggle);
-        CreateOptionItem(ref ChangeOutfit, "ChangeOutfit", Main.ChangeOutfit, __instance, Main.OutfitType,
-            SwitchHorseMode);
+        CreateOptionItem(ref SwitchOutfitType, "SwitchOutfitType", Main.SwitchOutfitType, __instance, SwitchMode);
         CreateOptionItem(ref KickPlayerWithAbnormalFriendCode, "KickPlayerWithAbnormalFriendCode",
             Main.KickPlayerWithAbnormalFriendCode, __instance);
         CreateOptionItem(ref KickPlayerInBanList, "KickPlayerInBanList", Main.KickPlayerInBanList, __instance);
@@ -92,7 +88,7 @@ public static class OptionsMenuBehaviourStartPatch
         CreateOptionItem(ref SpamDenyWord, "SpamDenyWord", Main.SpamDenyWord, __instance);
         CreateOptionItem(ref AutoStartGame, "AutoStartGame", Main.AutoStartGame, __instance, AutoStartButtonToggle);
         CreateOptionItem(ref AutoEndGame, "AutoEndGame", Main.AutoEndGame, __instance);
-        //CreateOptionItem(ref PrunkMode, "PrunkMode", Main.PrunkMode, __instance);
+        //CreateOptionItem<bool>(ref PrunkMode, "PrunkMode", Main.PrunkMode, __instance);
         CreateOptionItem(ref DisableVanillaSound, "DisableVanillaSound", Main.DisableVanillaSound, __instance, () =>
         {
             if (Main.DisableVanillaSound.Value)
@@ -135,7 +131,7 @@ public static class OptionsMenuBehaviourStartPatch
         SetFeatureItemTextAndColor(ResourceBtn, "ResourceManager");
         if (!IsNotJoined)
         {
-            SetOptionItemDisabled_Menu(ChangeOutfit);
+            //SetOptionItemDisabled_Menu(SwitchOutfitType);
             SetFeatureItemDisabled_Menu(ResourceBtn);
             //SetFeatureItemDisabled_Menu(AudioManagementBtn);
         }
@@ -155,7 +151,7 @@ public static class OptionsMenuBehaviourStartPatch
         recreate = false;
     }
 
-    private static void CreateOptionItem(ref ClientOptionItem_Boolean item, string name, ConfigEntry<bool> value,
+    private static void CreateOptionItem<T>(ref ClientOptionItem<T> item, string name, ConfigEntry<T> value,
         OptionsMenuBehaviour instance, Action toggleAction = null)
     {
         if (recreate)
@@ -166,24 +162,7 @@ public static class OptionsMenuBehaviourStartPatch
 
         if (item == null || !item.ToggleButton)
         {
-            item = ClientOptionItem_Boolean.Create(name, value, instance, toggleAction);
-        }
-    }
-
-    private static void CreateOptionItem(ref ClientOptionItem_String item, string name, ConfigEntry<string> value,
-        OptionsMenuBehaviour instance, string[] options, Action toggleAction = null)
-    {
-        if (recreate)
-        {
-            Object.Destroy(item.ToggleButton.gameObject);
-            item = null;
-        }
-
-        if (item == null || !item.ToggleButton)
-        {
-            item = ClientOptionItem_String.Create(name, value.Value ?? options[0], value, instance, options,
-                toggleAction);
-            item.UpdateName();
+            item = ClientOptionItem<T>.Create(name, value, instance, toggleAction);
         }
     }
 
@@ -233,16 +212,17 @@ public static class OptionsMenuBehaviourStartPatch
         item.ToggleButton.Background.color = ColorHelper.ClientOptionColor_CanNotUse;
     }
 */
-    private static void SetOptionItemDisabled_Menu(ClientOptionItem_String item)
+    private static void SetOptionItemDisabled_Menu<T>(ClientOptionItem<T> item)
     {
-        item.ToggleButton.Text.text = GetString("ClientOption." + item.Name) + $"\n|{GetString("Tip.OnlyAvailableInMainMenu")}|";
+        item.Rename();
+        item.ToggleButton.Text.text += $"\n|{GetString("Tip.OnlyAvailableInMainMenu")}|";
         item.ToggleButton.GetComponent<PassiveButton>().enabled = false;
         item.ToggleButton.Background.color = ColorHelper.ClientOptionColor_CanNotUse;
     }
 
     private static void SetFeatureItemDisabled_Menu(ClientFeatureItem item)
     {
-        item.ToggleButton.Text.text += $"\n|{GetString("OnlyAvailableInMainMenu")}|";
+        item.ToggleButton.Text.text += $"\n|{GetString("Tip.OnlyAvailableInMainMenu")}|";
         SetFeatureItemDisabled(item);
     }
 
@@ -265,18 +245,13 @@ public static class OptionsMenuBehaviourStartPatch
         SendInGame(string.Format(GetString("Notification.FPSSetTo"), Application.targetFrameRate));
     }
 
-    private static void SwitchHorseMode()
+    private static void SwitchMode()
     {
-        ChangeOutfit.UpdateToggle(Main.OutfitType);
-        //if (Main.ChangeOutfit.Value == Main.changeOutfit[1])
-        //foreach (var pc in PlayerControl.AllPlayerControls)
-        //{
-        //    pc.MyPhysics.SetBodyType(pc.BodyType);
-        //    if (pc.BodyType == PlayerBodyTypes.Normal)
-        //    {
-        //        pc.cosmetics.currentBodySprite.BodySprite.transform.localScale = new(0.5f, 0.5f, 1f);
-        //    }
-        //}
+        foreach (var pc in Main.AllPlayerControls)
+        {
+            pc.MyPhysics.SetBodyType(pc.BodyType);
+            if (pc.BodyType == PlayerBodyTypes.Normal) pc.cosmetics.currentBodySprite.BodySprite.transform.localScale = new(0.5f, 0.5f, 1f);
+        }
     }
 
     private static void AutoStartButtonToggle()

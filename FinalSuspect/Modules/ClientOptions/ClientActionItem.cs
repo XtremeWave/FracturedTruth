@@ -14,6 +14,7 @@ public class ClientActionItem
     public static SpriteRenderer CustomBackground { get; set; }
     public static ToggleButtonBehaviour ModOptionsButton { get; set; }
     private static int numItems;
+    private string Name;
 
     protected ClientActionItem(string name, OptionsMenuBehaviour optionsMenuBehaviour)
     {
@@ -89,7 +90,7 @@ public class ClientActionItem
                 2.2f - 0.5f * (numItems / 2),
                 -6f);
             ToggleButton.name = name;
-            ToggleButton.Text.text = GetString("ClientOption." + name);
+            Rename(name);
             ToggleButton.Background.color = Color.white;
             var passiveButton = ToggleButton.GetComponent<PassiveButton>();
             passiveButton.OnClick = new Button.ButtonClickedEvent();
@@ -122,5 +123,13 @@ public class ClientActionItem
     private void OnClick()
     {
         OnClickAction?.Invoke();
+    }
+
+    public void Rename(string name = null)
+    {
+        if (name != null)
+            Name = name;
+        name ??= Name;
+        ToggleButton.Text.text = GetString("ClientOption." + name);
     }
 }

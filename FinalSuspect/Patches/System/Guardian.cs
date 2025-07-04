@@ -1,7 +1,7 @@
+using System;
 using FinalSuspect.Modules.Core.Game;
 using Hazel;
 using InnerNet;
-using System;
 
 namespace FinalSuspect.Patches.System;
 

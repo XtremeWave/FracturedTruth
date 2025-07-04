@@ -4,9 +4,9 @@ using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using FinalSuspect.Modules.Resources;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using StringWriter = Il2CppSystem.IO.StringWriter;
 
 namespace FinalSuspect.Modules.Features.CheckingandBlocking;
 
@@ -216,7 +216,7 @@ public static class SpamManager
 
         _ = new MainThreadTask(() =>
         {
-            Il2CppSystem.IO.StringWriter sw = new();
+            StringWriter sw = new();
             JsonWriter jsonWriter = new JsonTextWriter(sw);
 
             jsonWriter.WriteStartArray();

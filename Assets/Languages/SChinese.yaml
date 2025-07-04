@@ -55,7 +55,7 @@ DeathReason.Disconnect: "断连"
 # 客户端选项 / Client Options
 FinalSuspectOptions: "Final Suspect 选项"
 ClientOption.UnlockFPS: "解锁帧数限制"
-ClientOption.ChangeOutfit: "切换形象"
+ClientOption.SwitchOutfitTypeType: "切换外观形象"
 ClientOption.KickPlayerWithAbnormalFriendCode: "踢出好友代码异常的玩家"
 ClientOption.KickPlayerWithDenyName: "踢出使用违规昵称的玩家"
 ClientOption.KickPlayerInBanList: "踢出被封禁的玩家"
@@ -73,6 +73,13 @@ ClientOption.GodMode: "上帝模式"
 ClientOption.NoGameEnd: "测试模式"
 ClientOption.EnableFinalSuspect: "启用「终极嫌疑」"
 
+## 客户端选项值 / Client Options Values
+### 愚人节相关 / AprilFoolsMode
+Value.BeanMode: "经典豆子模式"
+Value.HorseMode: "愚人节牧马模式"
+Value.LongMode: "愚人节长颈豆模式"
+
+
 # 客户端功能 / Client Features
 FinalSuspectFeatures: "Final Suspect 功能"
 ClientFeature.UnloadMod: "切换原版"
@@ -80,11 +87,6 @@ ClientFeature.DumpLog: "输出日志"
 ClientFeature.ClearAutoLogs: "清空自动日志"
 ClientFeature.MyMusic: "我的音乐"
 ClientFeature.ResourceManager: "资源管理"
-
-# 愚人节相关 / AprilFoolsMode
-AprilFoolsMode.BeanMode: "经典豆子模式"
-AprilFoolsMode.HorseMode: "愚人节牧马模式"
-AprilFoolsMode.LongMode: "愚人节长颈豆模式"
 
 # 提示 / Tips
 Tip.Downloading: "下载中……"

@@ -252,7 +252,6 @@ public static class LoadPatch
         private static IEnumerator HandlePostDownloadProcess(bool fastLaunchMode)
         {
             if (fastLaunchMode) yield break;
-
             if (TranslationController.Instance.currentLanguage.languageID != SupportedLangs.English)
             {
                 yield return FadeText(_loadText, false);
