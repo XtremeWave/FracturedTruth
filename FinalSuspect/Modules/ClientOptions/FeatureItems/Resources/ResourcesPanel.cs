@@ -18,13 +18,13 @@ public static class ResourcesPanel
     private static GameObject Slider { get; set; }
     private static Dictionary<string, GameObject> Items { get; set; }
     private static int numItems;
-    
+
     public static void Hide()
     {
         if (CustomBackground != null)
             CustomBackground?.gameObject.SetActive(false);
     }
-    
+
     public static void Init(OptionsMenuBehaviour optionsMenuBehaviour)
     {
         var mouseMoveToggle = optionsMenuBehaviour.DisableMouseMovement;
@@ -88,9 +88,9 @@ public static class ResourcesPanel
         DownLoadFailed,
         Complete
     }
-    
+
     private static readonly Dictionary<string, CurrentState> PackageStates = new();
-    
+
     public static void RefreshTagList()
     {
         if (!IsNotJoined) return;
@@ -103,7 +103,7 @@ public static class ResourcesPanel
 
         Items?.Values.Do(Object.Destroy);
         Items = new Dictionary<string, GameObject>();
-        
+
         foreach (var (packageName, fileList) in AllResources)
         {
             PackageStates.TryAdd(packageName, CurrentState.None);
@@ -163,7 +163,7 @@ public static class ResourcesPanel
                     buttonColor = Color.green;
                     break;
             }
-            
+
             var passiveButton = button.GetComponent<PassiveButton>();
             passiveButton.OnClick = new Button.ButtonClickedEvent();
             passiveButton.OnClick.AddListener(new Action(() =>

@@ -30,7 +30,7 @@ public class OnGameJoinedPatch
         {
             JoinedCompleted = true;
         }, 1f, "SyncJoined");
-        
+
         if (AmongUsClient.Instance.AmHost)
         {
             GameStartManagerPatch.GameStartManagerUpdatePatch.exitTimer = -1;
@@ -127,7 +127,7 @@ internal class OnPlayerLeftPatch
             var id = data.ColorId;
             var color = Palette.PlayerColors[id];
             var name = StringHelper.ColorString(color, data.PlayerName);
-            
+
             // 附加描述掉线原因
             switch (reason)
             {

@@ -17,7 +17,7 @@ internal class LobbyInfoPaneUpdatePatch
         trans.FindChild("Host Buttons").gameObject.SetActive(false);
         trans.FindChild("Client Buttons").gameObject.SetActive(true);
     }
-    
+
     public static void Postfix(LobbyInfoPane __instance)
     {
         var AspectSize = GameObject.Find("AspectSize");

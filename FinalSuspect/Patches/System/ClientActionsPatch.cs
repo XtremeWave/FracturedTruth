@@ -22,7 +22,7 @@ public static class OptionsMenuBehaviourStartPatch
     private static ClientOptionItem<bool> SpamDenyWord;
     private static ClientOptionItem<bool> AutoStartGame;
     private static ClientOptionItem<bool> AutoEndGame;
-    
+
     private static ClientOptionItem<bool> DisableVanillaSound;
     private static ClientOptionItem<bool> DisableFAC;
     private static ClientOptionItem<bool> ShowPlayerInfo;
@@ -118,14 +118,14 @@ public static class OptionsMenuBehaviourStartPatch
         CreateFeatureItem(ref UnloadMod, "UnloadMod", ModUnloaderScreen.Show, __instance);
 
         //CreateFeatureItem(ref SoundBtn, "SoundOption",
-        //    () => { MyMusicPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
+            //() => { MyMusicPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
         //CreateFeatureItem(ref AudioManagementBtn, "SoundManager",
             //() => { SoundManagementPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
         CreateFeatureItem(ref ResourceBtn, "ResourceManager",
             () => { ResourcesPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
         //CreateFeatureItem(ref DisplayNameBtn, "DisplayName",
-          //  () => { NameTagPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
-        
+            //() => { NameTagPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
+
         //SetFeatureItemTextAndColor(SoundBtn, "SoundOptions");
         //SetFeatureItemTextAndColor(AudioManagementBtn, "AudioManagementOptions");
         SetFeatureItemTextAndColor(ResourceBtn, "ResourceManager");
@@ -145,7 +145,7 @@ public static class OptionsMenuBehaviourStartPatch
         //MyMusicPanel.Init(__instance);
         //SoundManagementPanel.Init(__instance);
         ResourcesPanel.Init(__instance);
-        
+
         if (!ModUnloaderScreen.Popup)
             ModUnloaderScreen.Init(__instance);
         recreate = false;
@@ -166,8 +166,7 @@ public static class OptionsMenuBehaviourStartPatch
         }
     }
 
-/*
-    private static void CreateActionItem(ref ClientActionItem item, string name, Action action, OptionsMenuBehaviour instance)
+    /*private static void CreateActionItem(ref ClientActionItem item, string name, Action action, OptionsMenuBehaviour instance)
     {
         if (recreate)
         {
@@ -179,8 +178,7 @@ public static class OptionsMenuBehaviourStartPatch
         {
             item = ClientActionItem.Create(name, action, instance);
         }
-    }
-*/
+    }*/
 
     private static void CreateFeatureItem(ref ClientFeatureItem item, string name, Action action,
         OptionsMenuBehaviour instance)
@@ -204,14 +202,13 @@ public static class OptionsMenuBehaviourStartPatch
         item.ToggleButton.Background.color = ColorHelper.ClientFeatureColor;
     }
 
-/*
-    private static void SetOptionItemDisabled(ClientOptionItem_Boolean item)
+    /*private static void SetOptionItemDisabled(ClientOptionItem_Boolean item)
     {
         item.ToggleButton.Text.text += $"\n|{GetString("OnlyAvailableInMainMenu")}|";
         item.ToggleButton.GetComponent<PassiveButton>().enabled = false;
         item.ToggleButton.Background.color = ColorHelper.ClientOptionColor_CanNotUse;
-    }
-*/
+    }*/
+
     private static void SetOptionItemDisabled_Menu<T>(ClientOptionItem<T> item)
     {
         item.Rename();
@@ -232,13 +229,12 @@ public static class OptionsMenuBehaviourStartPatch
         item.ToggleButton.Background.color = ColorHelper.ClientFeatureColor_CanNotUse;
     }
 
-/*
-    private static void SetFeatureItemEnable(ClientFeatureItem item)
+    /*private static void SetFeatureItemEnable(ClientFeatureItem item)
     {
         item.ToggleButton.GetComponent<PassiveButton>().enabled = true;
         item.ToggleButton.Background.color = ColorHelper.ClientFeatureColor;
-    }
-*/
+    }*/
+
     private static void UnlockFPSButtonToggle()
     {
         Application.targetFrameRate = Main.UnlockFPS.Value ? 165 : 60;
@@ -284,7 +280,7 @@ public static class OptionsMenuBehaviourClosePatch
         ClientActionItem.CustomBackground?.gameObject.SetActive(false);
         ClientFeatureItem.CustomBackground?.gameObject.SetActive(false);
         ModUnloaderScreen.Hide();
-        ResourcesPanel.Hide(); 
+        ResourcesPanel.Hide();
         //MyMusicPanel.Hide();
         //SoundManagementPanel.Hide();
     }

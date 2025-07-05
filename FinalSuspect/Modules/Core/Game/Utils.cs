@@ -300,7 +300,7 @@ public static class Utils
     public static bool IsDev(this PlayerControl pc) => IsDev(pc.FriendCode);
 
     public static bool IsDev(string friendCode) => friendCode
-        is "teamelder#5856" //Slok
+        is "teamelder#5856"  //Slok
         or "cloakhazy#9133"; //LezaiYa
 
     public static void AddChatMessage(string text, string title = "")

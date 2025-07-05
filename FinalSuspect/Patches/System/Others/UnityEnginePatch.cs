@@ -2,8 +2,7 @@ using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Patches.System.Others;
 
-[HarmonyPatch(typeof(Object), nameof(Object.Destroy), typeof(Object) 
-)]
+[HarmonyPatch(typeof(Object), nameof(Object.Destroy), typeof(Object))]
 public class UnityEnginePatch
 {
     public static bool Prefix([HarmonyArgument(0)] Object obj)
@@ -12,7 +11,7 @@ public class UnityEnginePatch
         {
             return obj.name is not "LobbyInfoPane" and not "GameStartManager";
         }
-        catch 
+        catch
         {
             return true;
         }

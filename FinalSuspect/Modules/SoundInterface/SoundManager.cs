@@ -5,7 +5,6 @@ using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Features.CheckingandBlocking;
 using FinalSuspect.Modules.Resources;
 using UnityEngine;
-//using FinalSuspect.Modules.Panels;
 
 namespace FinalSuspect.Modules.SoundInterface;
 
@@ -114,12 +113,12 @@ public enum SupportedMusics
     GongXiFaCai__Andy_Lau,
     NeverGonnaGiveYouUp__Rick_Astley,
     CountingStars__One_Republic,
-    
+
     // ## Mod Music
     // 专辑
     ChasingDawn__Slok,
     ReturnToSimplicity2__Slok,
-    
+
     //
     Affinity__Slok,
     TidalSurge__Slok,

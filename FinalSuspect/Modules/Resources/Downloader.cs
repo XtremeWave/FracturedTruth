@@ -62,7 +62,9 @@ public class HttpClientDownloadWithProgress(string downloadUrl, string destinati
 
             if (readCount % 100 == 0)
                 TriggerProgressChanged(totalDownloadSize, totalBytesRead);
-        } while (isMoreToRead);
+        }
+
+        while (isMoreToRead);
     }
 
     private void TriggerProgressChanged(long? totalDownloadSize, long totalBytesRead)

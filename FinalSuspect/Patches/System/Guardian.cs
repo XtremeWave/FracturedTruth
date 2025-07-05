@@ -11,16 +11,16 @@ public static class HandleGameDataPatch
     public static bool Prefix(InnerNetClient __instance, [HarmonyArgument(0)] MessageReader parentReader)
     {
         if (!IsLobby || IsNotJoined || !OnGameJoinedPatch.JoinedCompleted) return true;
-        
+
         try
         {
-            if (parentReader.Length < 1) return false; 
+            if (parentReader.Length < 1) return false;
             var messageReader = MessageReader.Get(parentReader);
             var reader = messageReader.ReadMessageAsNewBuffer();
             return reader.Length >= 1;
         }
-        catch 
-        { 
+        catch
+        {
             return PlayerControl.LocalPlayer?.GetClient() == null;
         }
     }
@@ -32,7 +32,7 @@ public static class HandleGameDataInnerPatch
     public static bool Prefix(InnerNetClient._HandleGameDataInner_d__165 __instance)
     {
         if (!IsLobby || IsNotJoined || !OnGameJoinedPatch.JoinedCompleted) return true;
-        
+
         try
         {
             return __instance.reader.Length >= 1;
@@ -56,12 +56,12 @@ internal class HandleMessagePatch
             counter = new RpcCounter();
             playerRpcCounters[client.Id] = counter;
         }
-        
+
         if (counter.IncomingOverload) return false;
         counter.Update(reader.Tag);
 
         if (counter.TotalRpcLastSecond <= 100 && counter.GetRpcCount(reader.Tag) <= 20) return true;
-        
+
         counter.IncomingOverload = true;
         var _player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => x.CheatData.ClientData.Id == client.Id)?.Player;
         Warn($"Incoming Msg Overloaded: {_player?.GetDataName() ?? ""}", "FAC");

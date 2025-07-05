@@ -47,7 +47,7 @@ public sealed class ClientOptionItem<T> : ClientActionItem
                     var allValues = (T[])Enum.GetValues(typeof(T));
                     if (allValues.Length == 0) break;
                     var currentIndex = Array.IndexOf(allValues, config.Value);
-                    if (currentIndex < 0) 
+                    if (currentIndex < 0)
                         currentIndex = 0;
                     else
                         currentIndex = (currentIndex + 1) % allValues.Length;
@@ -55,8 +55,7 @@ public sealed class ClientOptionItem<T> : ClientActionItem
                     item.ToggleButton.Text.text += $"\n|{GetString(config.Value.ToString())}|";
                     break;
             }
-            
-            
+
             item.UpdateToggle();
             additionalOnClickAction?.Invoke();
         };
@@ -79,28 +78,27 @@ public sealed class ClientOptionItem<T> : ClientActionItem
                 var currentIndex = Array.IndexOf(allValues, Config.Value);
 
                 var baseColor = ColorHelper.ClientOptionColor;
-                var factor = allValues.Length > 1 
-                    ? currentIndex / (float)(allValues.Length - 1) 
+                var factor = allValues.Length > 1
+                    ? currentIndex / (float)(allValues.Length - 1)
                     : 0f;
                 var newRed = (byte)Mathf.Clamp(baseColor.r - (byte)(factor * 70), 0, 255);
                 color = new Color32(
-                    newRed, 
-                    baseColor.g, 
+                    newRed,
+                    baseColor.g,
                     baseColor.b,
                     baseColor.a
                 );
-    
+
                 Config.Value = allValues[currentIndex];
                 Rename();
                 ToggleButton.Text.text += $"\n|{GetString($"Value.{Config.Value.ToString()}")}|";
                 break;
         }
-        
+
         ToggleButton.Background.color = color;
         ToggleButton.Rollover?.ChangeOutColor(color);
     }
 }
-
 
 /*public sealed class ClientOptionItem_String : ClientActionItem
 {

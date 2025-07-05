@@ -94,7 +94,7 @@ public static class InGameRoleInfoMenu
         Menu?.SetActive(false);
         //HudManager.Instance?.gameObject?.SetActive(true);
     }
-    
+
     public static void ForceHide()
     {
         Fill?.SetActive(false);

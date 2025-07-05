@@ -27,7 +27,7 @@ public static class PathManager
     {
         return GetRemoteUrl(fileType, remoteType) + file;
     }
-    
+
     public static string GetPackageFile(string packageName, RemoteType remoteType, string file)
     {
         return "https://" + GetRemoteBase(remoteType) + packageName + "/" + file;
@@ -47,6 +47,7 @@ public static class PathManager
             RemoteType.XtremeApi => "api.xtreme.net.cn/FinalSuspect/download/Assets/",
             _ => "127.0.0.1"
         };
+
         return remoteBase;
     }
 
@@ -91,7 +92,6 @@ public static class PathManager
         CheckAndCreate(DENY_NAME_LIST_PATH, false, true);
 
         CheckAndCreate(GetLocalPath(LocalType.DisplayName));
-
 
         // 防止崩溃的必要措施
         CheckAndDeleteXWR(LocalPath_Data);

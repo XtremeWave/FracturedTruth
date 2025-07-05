@@ -79,8 +79,8 @@ public static class CustomSoundsManager
             global::SoundManager.Instance.CrossFadeSound("MainBG",
                 DestroyableSingleton<JoinGameButton>.Instance.IntroMusic, 1f);
     }
-    /*
-    public static void AutoPlay(string sound, string name)
+
+    /*public static void AutoPlay(string sound, string name)
     {
         Play(sound);
         MusicNow = name;

@@ -120,7 +120,7 @@ public static class LoadPatch
         {
             var currentVersion = $"{Main.PluginVersion}|{Main.DisplayedVersion}|{Main.GitCommit}-{Main.GitBranch}";
             var bypassType = Main.LanguageUpdateBypass.Value;
-            
+
             _reloadLanguage = currentVersion != Main.LastStartVersion.Value 
                               && bypassType == BypassType.Dont;
 

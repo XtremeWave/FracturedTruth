@@ -31,7 +31,7 @@ public class ResourcesDownloader
 
         var retrytimes = 0;
         var remoteType = RemoteType.Github;
-        retry:
+    retry:
         if (IsChineseLanguageUser)
             remoteType = retrytimes switch
             {
@@ -74,7 +74,7 @@ public class ResourcesDownloader
             return false;
         }
     }
-    
+
     public static async Task<bool> StartDownloadAsPackage(string packageName, FileType fileType, string file)
     {
         string filePath;
@@ -97,7 +97,7 @@ public class ResourcesDownloader
 
         var retrytimes = 0;
         var remoteType = RemoteType.Github;
-        retry:
+    retry:
         if (IsChineseLanguageUser)
             remoteType = retrytimes switch
             {
@@ -147,11 +147,6 @@ public class ResourcesDownloader
         return Regex.IsMatch(url, pattern);
     }
 
-    /*private static void OnDownloadProgressChanged(long? totalFileSize, long totalBytesDownloaded, double? progressPercentage)
-    {
-        var msg = $"\n{totalFileSize / 1000}KB / {totalBytesDownloaded / 1000}KB  -  {(int)progressPercentage}%";
-        Info(msg, "Download Resources");
-    }*/
     public static string GetMD5HashFromFile(string fileName)
     {
         try
@@ -167,7 +162,14 @@ public class ResourcesDownloader
             return "";
         }
     }
-    /*public static async Task<bool> IsUrl404Async(FileType fileType, string file)
+
+    /*private static void OnDownloadProgressChanged(long? totalFileSize, long totalBytesDownloaded, double? progressPercentage)
+    {
+        var msg = $"\n{totalFileSize / 1000}KB / {totalBytesDownloaded / 1000}KB  -  {(int)progressPercentage}%";
+        Info(msg, "Download Resources");
+    }
+
+    public static async Task<bool> IsUrl404Async(FileType fileType, string file)
     {
         return false;
             using var client = new HttpClient();

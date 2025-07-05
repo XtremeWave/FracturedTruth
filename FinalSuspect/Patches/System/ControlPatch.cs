@@ -12,7 +12,7 @@ internal class ControllerManagerUpdatePatch
 
     private static int resolutionIndex;
     public static bool ShowSettingsPanel = true;
-    
+
     public static void Postfix(ControllerManager __instance)
     {
         //职业介绍
@@ -47,7 +47,6 @@ internal class ControllerManagerUpdatePatch
             ResolutionManager.SetResolution(resolutions[resolutionIndex].Item1, resolutions[resolutionIndex].Item2,
                 false);
         }
-        
 
         //重新加载自定义翻译
         if (GetKeysDown(KeyCode.F5, KeyCode.T))
@@ -155,7 +154,5 @@ internal class ControllerManagerUpdatePatch
         return false;
     }
 
-/*
-    private static bool ORGetKeysDown(params KeyCode[] keys) => keys.Any(Input.GetKeyDown);
-*/
+   // private static bool ORGetKeysDown(params KeyCode[] keys) => keys.Any(Input.GetKeyDown);
 }

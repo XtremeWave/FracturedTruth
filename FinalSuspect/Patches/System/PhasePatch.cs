@@ -1,7 +1,5 @@
 using FinalSuspect.Attributes;
 
-//using InnerNet;
-
 namespace FinalSuspect.Patches.System;
 
 [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.Start))]

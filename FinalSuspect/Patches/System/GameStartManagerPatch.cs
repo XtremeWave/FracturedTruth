@@ -18,15 +18,15 @@ public static class GameStartManagerUpdatePatch
     {
         __instance.MinPlayers = 1;
 
-        //Scrapped
-        //if (CreateOptionsPickerPatch.SetDleks && AmongUsClient.Instance.AmHost)
-        //{
-        //    if (IsNormalGame)
-        //        Main.NormalOptions.MapId = 3;
+        /*Scrapped
+        if (CreateOptionsPickerPatch.SetDleks && AmongUsClient.Instance.AmHost)
+        {
+            if (IsNormalGame)
+                Main.NormalOptions.MapId = 3;
 
-        //    else if (IsHideNSeek)
-        //        Main.HideNSeekOptions.MapId = 3;
-        //}
+            else if (IsHideNSeek)
+                Main.HideNSeekOptions.MapId = 3;
+        }*/
     }
 }
 
@@ -50,7 +50,7 @@ public static class GameStartManagerPatch
     {
         obj.SetActive(false);
     }
-    
+
     [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.Start))]
     public class GameStartManagerStartPatch
     {
@@ -241,15 +241,14 @@ public static class GameStartManagerPatch
             if (timer <= 60) countDown = StringHelper.ColorString(Color.red, countDown);
             timerText.text = countDown;
         }
-/*
-        private static bool MatchVersions(byte playerId, bool acceptVanilla = false)
+
+        /*private static bool MatchVersions(byte playerId, bool acceptVanilla = false)
         {
             if (!XtremeGameData.PlayerVersion.playerVersion.TryGetValue(playerId, out var version)) return acceptVanilla;
             return Main.ForkId == version.forkId
                    && Main.version.CompareTo(version.version) == 0
                    && version.tag == $"{Main.GitCommit}({Main.GitBranch})";
-        }
-*/
+        }*/
     }
 }
 

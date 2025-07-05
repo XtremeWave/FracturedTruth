@@ -23,7 +23,6 @@ public static class VersionChecker
             if (firstStart)
             {
                 StartTasks();
-                
                 CustomPopup.Show(GetString("UpdateCheck.Popup_Title"), GetString("Tip.LoadingWithDot"), null);
             }
 
@@ -37,15 +36,15 @@ public static class VersionChecker
         try
         {
             _ = ModNewsHistory.LoadModAnnouncements();
-            
+
             await SpamManager.Init();
             await Task.Delay(100);
             await ResourcesManager.CheckForResources();
             await CheckForUpdate();
         }
-        catch 
+        catch
         {
-            
+            /* ignored */
         }
     }
 
@@ -147,7 +146,6 @@ public static class VersionChecker
                 ? string.Format(GetString("FinalSuspectWelcomeText"), ColorHelper.ModColor)
                 : GetString("RetrieveVersionInfoFailed");
         }, "Check For Update");
-        
     }
 
     private static async Task<bool> GetVersionInfo(string url)

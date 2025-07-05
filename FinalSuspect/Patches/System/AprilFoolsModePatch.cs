@@ -49,7 +49,7 @@ public static class GetHnsBodyType_Patch
                     return;
             }
         }
-        
+
         switch (Main.SwitchOutfitType.Value)
         {
             case OutfitType.HorseMode when player.Data.Role.IsImpostor:
@@ -72,7 +72,7 @@ public static class GetHnsBodyType_Patch
                     __result = PlayerBodyTypes.Seeker;
                     return;
                 }
-                
+
                 __result = PlayerBodyTypes.Normal;
                 return;
             }
@@ -109,7 +109,7 @@ public static class LongBoiPatches
         {
             __instance.cosmeticLayer.SetHatVisorVisible(false);
         }
-        
+
         __instance.SetupNeckGrowth();
         if (__instance.isExiledPlayer)
         {
@@ -119,15 +119,15 @@ public static class LongBoiPatches
                 __instance.cosmeticLayer.AdjustCosmeticRotations(-17.75f);
             }
         }
-        
+
         if (!__instance.isPoolablePlayer)
         {
             __instance.cosmeticLayer.ValidateCosmetics();
         }
-        
+
         return false;
     }
-    
+
     // Fix System.IndexOutOfRangeException: Index was outside the bounds of the array
     // When colorIndex is 255 them heightsPerColor[255] gets exception
     [HarmonyPatch(nameof(LongBoiPlayerBody.SetHeightFromColor))]
@@ -136,7 +136,7 @@ public static class LongBoiPatches
     {
         return colorIndex != byte.MaxValue;
     }
-    
+
     [HarmonyPatch(nameof(LongBoiPlayerBody.SetHeighFromDistanceHnS))]
     [HarmonyPrefix]
     public static bool LongBoyNeckSize_Prefix(LongBoiPlayerBody __instance, ref float distance)
@@ -165,7 +165,7 @@ public static class LongBoiPatches
             __result = false;
             return false;
         }
-        
+
         __result = true;
         return false;
     }

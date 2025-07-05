@@ -121,13 +121,12 @@ internal class KickPlayerPatch
                 SendInGame(GetString("Warning.CantKickDev"));
                 return false;
             }
-            
+
             OnPlayerLeftPatch.Add(clientId);
             var color = Palette.PlayerColors[AmongUsClient.Instance.GetRecentClient(clientId).ColorId];
             var name = AmongUsClient.Instance.GetRecentClient(clientId).PlayerName;
             if (ban)
             {
-                
                 BanManager.AddBanPlayer(AmongUsClient.Instance.GetRecentClient(clientId));
                 NotificationPopperPatch.NotificationPop(string.Format(GetString("Notification.PlayerBanByHost"),
                     StringHelper.ColorString(color, name)));

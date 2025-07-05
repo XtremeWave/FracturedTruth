@@ -36,7 +36,7 @@ public class Main : BasePlugin
     public const string DebugKeySalt = "59687b";
 
     // == 版本相关设定 / Version Config ==
-    public const string LowestSupportedVersion = "2025.6.10"; // 16.0.5
+    public const string LowestSupportedVersion = "2025.6.10"; // 16.1.0
 
     private const string DisplayedVersion_Head = "1.2";
 
@@ -157,7 +157,7 @@ public class Main : BasePlugin
         ShowResults = Config.Bind("Xtreme System", "Show Results", true);
         LastStartVersion = Config.Bind("Xtreme System", "Last Start Version", "0.0.0");
         LanguageUpdateBypass = Config.Bind("Xtreme System", "Language Update Bypass", BypassType.Dont);
-        
+
         DebugKeyInput = Config.Bind("Authentication", "Debug Key", "");
 
         UnlockFPS = Config.Bind("Client Options", "Unlock FPS", false);
