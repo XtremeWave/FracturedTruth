@@ -9,7 +9,6 @@ namespace FinalSuspect.Modules.ClientActions.FeatureItems.NameTag;
 
 public static class NameTagPanel
 {
-    public static ToggleButtonBehaviour TagOptionsButton { get; private set; }
     public static SpriteRenderer CustomBackground { get; private set; }
     public static GameObject Slider { get; private set; }
     public static Dictionary<string, GameObject> Items { get; private set; }
@@ -25,34 +24,21 @@ public static class NameTagPanel
     public static void Init(OptionsMenuBehaviour optionsMenuBehaviour)
     {
         var mouseMoveToggle = optionsMenuBehaviour.DisableMouseMovement;
-
-        UiElement[] selectableButtons = optionsMenuBehaviour.ControllerSelectable.ToArray();
-        PassiveButton leaveButton = null;
-        PassiveButton returnButton = null;
-        for (int i = 0; i < selectableButtons.Length; i++)
-        {
-            var button = selectableButtons[i];
-            if (button == null) continue;
-            if (button.name == "LeaveGameButton") leaveButton = button.GetComponent<PassiveButton>();
-            else if (button.name == "ReturnToGameButton") returnButton = button.GetComponent<PassiveButton>();
-        }
-
-        var generalTab = mouseMoveToggle.transform.parent.parent.parent;
-
+        
         if (CustomBackground == null)
         {
             numItems = 0;
             CustomBackground = Object.Instantiate(optionsMenuBehaviour.Background, optionsMenuBehaviour.transform);
             CustomBackground.name = "Name Tag Panel Background";
             CustomBackground.transform.localScale = new(0.9f, 0.9f, 1f);
-            CustomBackground.transform.localPosition += Vector3.back * 8;
+            CustomBackground.transform.localPosition += Vector3.back * 18;
             CustomBackground.gameObject.SetActive(false);
 
             var closeButton = Object.Instantiate(mouseMoveToggle, CustomBackground.transform);
             closeButton.transform.localPosition = new(1.3f, -2.43f, -6f);
             closeButton.name = "Close";
             closeButton.Text.text = GetString("Close");
-            closeButton.Background.color = Palette.DisabledGrey;
+            closeButton.Background.color = Color.red;
             var closePassiveButton = closeButton.GetComponent<PassiveButton>();
             closePassiveButton.OnClick = new();
             closePassiveButton.OnClick.AddListener(new Action(() => { CustomBackground.gameObject.SetActive(false); }));

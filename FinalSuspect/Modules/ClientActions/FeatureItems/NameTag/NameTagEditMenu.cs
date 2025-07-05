@@ -45,11 +45,11 @@ public static class NameTagEditMenu
 
     private enum ComponentType
     {
+        DisplayName,
         Title,
         Prefix,
         Suffix,
         Name,
-        DisplayName,
         LastTag
     }
 
@@ -85,13 +85,13 @@ public static class NameTagEditMenu
 
     private static void SetButtonHighlight(GameObject obj)
     {
-        EditTitleButton.transform.FindChild("Text_TMP").GetComponent<TextMeshPro>().color = Palette.DisabledGrey;
-        EditPrefixButton.transform.FindChild("Text_TMP").GetComponent<TextMeshPro>().color = Palette.DisabledGrey;
-        EditSuffixButton.transform.FindChild("Text_TMP").GetComponent<TextMeshPro>().color = Palette.DisabledGrey;
-        EditNameButton.transform.FindChild("Text_TMP").GetComponent<TextMeshPro>().color = Palette.DisabledGrey;
         EditDisplayNameButton.transform.FindChild("Text_TMP").GetComponent<TextMeshPro>().color = Palette.DisabledGrey;
-        EditLastTagButton.transform.FindChild("Text_TMP").GetComponent<TextMeshPro>().color = Palette.DisabledGrey;
-        obj.transform.FindChild("Text_TMP").GetComponent<TextMeshPro>().color = new Color32(0, 164, 255, 255);
+        //EditTitleButton.transform.FindChild("Text_TMP").GetComponent<TextMeshPro>().color = Palette.DisabledGrey;
+        //EditPrefixButton.transform.FindChild("Text_TMP").GetComponent<TextMeshPro>().color = Palette.DisabledGrey;
+        //EditSuffixButton.transform.FindChild("Text_TMP").GetComponent<TextMeshPro>().color = Palette.DisabledGrey;
+        //EditNameButton.transform.FindChild("Text_TMP").GetComponent<TextMeshPro>().color = Palette.DisabledGrey;
+        //EditLastTagButton.transform.FindChild("Text_TMP").GetComponent<TextMeshPro>().color = Palette.DisabledGrey;
+        obj.transform.FindChild("Text_TMP").GetComponent<TextMeshPro>().color = ColorHelper.ClientFeatureColor_ClickType;
     }
 
     private static void LoadComponent(Component? com, ComponentType type, bool name = false)
@@ -126,9 +126,8 @@ public static class NameTagEditMenu
     private static void UpdatePreview()
     {
         if (!Menu.active || CacheTag == null || Preview == null) return;
-        // 只显示DisplayName组件
-        var displayName = CacheTag.DisplayName?.Generate() ?? "";
-        Preview.GetComponent<TextMeshPro>().text = displayName;
+        var displayName = CacheTag.Apply(DataManager.player.Customization.Name);
+        Preview.GetComponent<TextMeshPro>().text = displayName.title;
     }
 
     private static void SaveToCache(ComponentType type)
@@ -296,11 +295,11 @@ public static class NameTagEditMenu
         float buttonSpacing = 1.2f * offset;
 
         // 创建所有组件编辑按钮
+        EditDisplayNameButton = CreateComponentButton("DisplayName", buttonPrefab, -3.6f + buttonSpacing * editButtonNum++, offset);
         EditTitleButton = CreateComponentButton("Title", buttonPrefab, -3.6f + buttonSpacing * editButtonNum++, offset);
         EditPrefixButton = CreateComponentButton("Prefix", buttonPrefab, -3.6f + buttonSpacing * editButtonNum++, offset);
         EditSuffixButton = CreateComponentButton("Suffix", buttonPrefab, -3.6f + buttonSpacing * editButtonNum++, offset);
         EditNameButton = CreateComponentButton("Name", buttonPrefab, -3.6f + buttonSpacing * editButtonNum++, offset);
-        EditDisplayNameButton = CreateComponentButton("DisplayName", buttonPrefab, -3.6f + buttonSpacing * editButtonNum++, offset);
         EditLastTagButton = CreateComponentButton("LastTag", buttonPrefab, -3.6f + buttonSpacing * editButtonNum++, offset);
 
         PreviewButton = Object.Instantiate(buttonPrefab, Menu.transform);
@@ -419,7 +418,7 @@ public static class NameTagEditMenu
             CurrentComponent = type;
         }));
         var buttonTmp = button.transform.FindChild("Text_TMP").GetComponent<TextMeshPro>();
-        buttonTmp.text = GetString(componentName);
+        buttonTmp.text = componentName;
         return button;
     }
 
@@ -427,11 +426,11 @@ public static class NameTagEditMenu
     {
         return type switch
         {
+            ComponentType.DisplayName => tag.DisplayName,
             ComponentType.Title => tag.Title,
             ComponentType.Prefix => tag.Prefix,
             ComponentType.Suffix => tag.Suffix,
             ComponentType.Name => tag.Name,
-            ComponentType.DisplayName => tag.DisplayName,
             ComponentType.LastTag => tag.LastTag,
             _ => null
         };

@@ -178,32 +178,30 @@ public static class NameTagManager
     public class NameTag
     {
         public bool Isinternal { get; set; } = false;
+        public Component? DisplayName { get; set; }
         public Component? Title { get; set; }
         public Component? Prefix { get; set; }
         public Component? Suffix { get; set; }
         public Component? Name { get; set; }
-        public Component? DisplayName { get; set; }
         public Component? LastTag { get; set; }
 
         public (string title, string prefix, string suffix, string name, string displayName, string lastTag) 
             Apply(string name, bool preview = false)
         {
-            if (preview)
-            {
-                if (Name != null) name = Name.Generate(false);
-                name = $"{Prefix?.Generate()}{name}{Suffix?.Generate()}";
-                var title = Title?.Generate(false);
-                return (title != null ? $"{title}\r\n{name}" : name, "", "", "", "", "");
-            }
+            if (!preview)
+                return (
+                    Title?.Generate(false) ?? "",
+                    Prefix?.Generate(false) ?? "",
+                    Suffix?.Generate(false) ?? "",
+                    Name?.Generate(false) ?? "",
+                    DisplayName?.Generate(false) ?? "",
+                    LastTag?.Generate(false) ?? ""
+                );
             
-            return (
-                Title?.Generate(false) ?? "",
-                Prefix?.Generate(false) ?? "",
-                Suffix?.Generate(false) ?? "",
-                Name?.Generate(false) ?? "",
-                DisplayName?.Generate(false) ?? "",
-                LastTag?.Generate(false) ?? ""
-            );
+            if (Name != null) name = Name.Generate(false);
+            name = $"{Prefix?.Generate()}{name}{Suffix?.Generate()}";
+            var title = $"({DisplayName?.Generate(false)})";
+            return ($"{title}\r\n{name}", "", "", "", "", "");
         }
     }
 
@@ -220,7 +218,7 @@ public static class NameTagManager
             if (string.IsNullOrEmpty(Text)) return "";
             
             var result = Text;
-            if (Gradient != null && Gradient.IsValid) 
+            if (Gradient is { IsValid: true }) 
                 result = Gradient.Apply(result);
             else if (TextColor != null) 
                 result = StringHelper.ColorString(TextColor.Value, result);
@@ -249,9 +247,14 @@ public static class NameTagManager
 
         public string Apply(string input)
         {
-            if (input.Length == 0) return input;
-            if (input.Length == 1) return StringHelper.ColorString(Colors[0], input);
-            
+            switch (input.Length)
+            {
+                case 0:
+                    return input;
+                case 1:
+                    return StringHelper.ColorString(Colors[0], input);
+            }
+
             var step = 1f / (input.Length - 1);
             var sb = new StringBuilder();
             
