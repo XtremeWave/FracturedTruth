@@ -38,7 +38,7 @@ public static class OptionsMenuBehaviourStartPatch
     //public static ClientFeatureItem SoundBtn;
     //public static ClientFeatureItem AudioManagementBtn;
     private static ClientFeatureItem ResourceBtn;
-    private static ClientFeatureItem DisplayNameBtn;
+    //private static ClientFeatureItem DisplayNameBtn;
     public static OptionsMenuBehaviour Instance { get; private set; }
     private static bool reseted;
     public static bool recreate;
