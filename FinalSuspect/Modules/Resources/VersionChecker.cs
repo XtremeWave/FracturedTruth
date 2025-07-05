@@ -3,6 +3,7 @@ using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FinalSuspect.Helpers;
+using FinalSuspect.Modules.ClientActions.FeatureItems.NameTag;
 using FinalSuspect.Modules.ClientActions.FeatureItems.Resources;
 using FinalSuspect.Modules.Features;
 using FinalSuspect.Modules.Features.CheckingandBlocking;
@@ -25,7 +26,8 @@ public static class VersionChecker
                 StartTasks();
                 CustomPopup.Show(GetString("UpdateCheck.Popup_Title"), GetString("Tip.LoadingWithDot"), null);
             }
-
+            
+            NameTagManager.ReloadTag(null);
             ModUpdater.SetUpdateButtonStatus();
             firstStart = false;
         }

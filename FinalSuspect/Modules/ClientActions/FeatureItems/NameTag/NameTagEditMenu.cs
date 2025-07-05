@@ -36,7 +36,7 @@ public static class NameTagEditMenu
     private const float ButtonStartX = -3.8f;
     private const float ButtonStartY = 2.1f;
     
-    private enum ComponentType
+    public enum ComponentType
     {
         DisplayName,
         Title,
@@ -99,7 +99,7 @@ public static class NameTagEditMenu
         
         if (com?.Gradient?.IsValid ?? false)
         {
-            for (int i = 0; i < Mathf.Min(3, com.Gradient.Colors.Count); i++)
+            for (var i = 0; i < Mathf.Min(3, com.Gradient.Colors.Count); i++)
             {
                 var color = com.Gradient.Colors[i];
                 var textBox = i switch
@@ -129,10 +129,10 @@ public static class NameTagEditMenu
     private static void SaveToCache(ComponentType type)
     {
         var com = new Component();
-        string text = Text_Enter.GetComponent<TextBoxTMP>().text.Trim();
+        var text = Text_Enter.GetComponent<TextBoxTMP>().text.Trim();
         if (text != "" && type != ComponentType.Name) com.Text = text;
         
-        string size = Size_Enter.GetComponent<TextBoxTMP>().text.Trim();
+        var size = Size_Enter.GetComponent<TextBoxTMP>().text.Trim();
         if (size != "" && float.TryParse(size, out var sizef)) com.SizePercentage = sizef;
         
         List<Color> colors = new();
@@ -157,7 +157,7 @@ public static class NameTagEditMenu
 
     private static void AddColorIfValid(GameObject input, List<Color> colors)
     {
-        string colorHex = input.GetComponent<TextBoxTMP>().text.Trim();
+        var colorHex = input.GetComponent<TextBoxTMP>().text.Trim();
         if (!string.IsNullOrEmpty(colorHex) 
             && ColorUtility.DoTryParseHtmlColor("#" + colorHex, out var color))
         {
@@ -202,7 +202,7 @@ public static class NameTagEditMenu
                 
             if (com.Gradient != null && com.Gradient.IsValid)
             {
-                string colors = string.Join(",", 
+                var colors = string.Join(",", 
                     com.Gradient.Colors.Select(c => "#" + ColorUtility.ToHtmlStringRGBA(c)[..6]));
                 writer.WritePropertyName("Gradient");
                 writer.WriteValue(colors);
@@ -223,7 +223,7 @@ public static class NameTagEditMenu
         }
         writer.WriteEndObject();
 
-        string fileName = Path.Combine(NameTagManager.TAGS_DIRECTORY_PATH, friendCode.Trim() + ".json");
+        var fileName = Path.Combine(TAGS_DIRECTORY_PATH, friendCode.Trim() + ".json");
         File.WriteAllText(fileName, sw.ToString());
         return true;
     }
@@ -272,9 +272,9 @@ public static class NameTagEditMenu
 
     private static void CreateComponentButton(ComponentType type, int col, int row)
     {
-        float x = ButtonStartX + col * ButtonSpacing;
-        float y = ButtonStartY - row * ButtonRowHeight;
-        float offset = UiHelper.GetResolutionOffset();
+        var x = ButtonStartX + col * ButtonSpacing;
+        var y = ButtonStartY - row * ButtonRowHeight;
+        var offset = UiHelper.GetResolutionOffset();
         
         var button = UiHelper.CreateButton(
             Menu.transform.Find("Button Prefab").gameObject,
@@ -300,14 +300,14 @@ public static class NameTagEditMenu
 
     private static void CreateActionButtons()
 {
-    float offset = UiHelper.GetResolutionOffset();
+    var offset = UiHelper.GetResolutionOffset();
     
     // 预览按钮
     var previewButton = UiHelper.CreateButton(
         Menu.transform.Find("Button Prefab").gameObject,
         Menu.transform,
         new Vector3(1.2f * offset, -2.5f * offset, 0f),
-        GetString("RefreshPreview"),
+        "RefreshPreview",
         offset
     );
     previewButton.name = "RefreshPreviewButton";
@@ -328,7 +328,7 @@ public static class NameTagEditMenu
         Menu.transform.Find("Button Prefab").gameObject,
         Menu.transform,
         new Vector3(3.5f * offset, -2.5f * offset, 0f),
-        GetString("SaveAndClose"),
+        "SaveAndClose",
         offset
     );
     saveButton.name = "SaveAndExitButton";
@@ -355,7 +355,8 @@ public static class NameTagEditMenu
         Menu.transform,
         new Vector3(-3.5f * offset, -2.5f * offset, 0f),
         GetString("Delete"),
-        offset
+        offset,
+        false
     );
     deleteButton.name = "DeleteButton";
     
@@ -374,7 +375,7 @@ public static class NameTagEditMenu
         {
             if (string.IsNullOrEmpty(FriendCode)) return;
             
-            string fileName = Path.Combine(NameTagManager.TAGS_DIRECTORY_PATH, $"{FriendCode.Trim()}.json");
+            var fileName = Path.Combine(TAGS_DIRECTORY_PATH, $"{FriendCode.Trim()}.json");
             if (File.Exists(fileName))
             {
                 try
@@ -395,7 +396,7 @@ public static class NameTagEditMenu
 
     private static void CreatePreviewSection()
     {
-        float offset = UiHelper.GetResolutionOffset();
+        var offset = UiHelper.GetResolutionOffset();
         
         Preview = UiHelper.CreateText(
             Menu.transform.Find("Title Prefab").gameObject,
@@ -409,7 +410,7 @@ public static class NameTagEditMenu
 
     private static void CreateInputFields()
     {
-        float offset = UiHelper.GetResolutionOffset();
+        var offset = UiHelper.GetResolutionOffset();
         
         // 文本输入区域
         Text_Enter = UiHelper.CreateInputField(
@@ -450,9 +451,9 @@ public static class NameTagEditMenu
         Color3_Enter.name = "Edit Color 3 Enter Box";
         
         // 创建标签文本
-        CreateLabel(GetString("TextContent"), new Vector3(-2.95f * offset, 0f, 0f));
-        CreateLabel(GetString("TextSizeDescription"), new Vector3(-2.95f * offset, -1.2f * offset, 0f));
-        CreateLabel(GetString("TextColorDescription"), new Vector3(1.95f * offset, 0f, 0f));
+        CreateLabel(GetString("Tip.TextContent"), new Vector3(-2.95f * offset, 0f, 0f));
+        CreateLabel(GetString("Tip.TextSizeDescription"), new Vector3(-2.95f * offset, -1.2f * offset, 0f));
+        CreateLabel(GetString("Tip.TextColorDescription"), new Vector3(1.95f * offset, 0.2f, 0f));
     }
 
     private static void CreateLabel(string text, Vector3 position)

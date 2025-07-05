@@ -65,7 +65,7 @@ public static class NameTagManager
         }
 
         NameTags.Remove(friendCode);
-        string path = Path.Combine(TAGS_DIRECTORY_PATH, $"{friendCode}.json");
+        var path = Path.Combine(TAGS_DIRECTORY_PATH, $"{friendCode}.json");
         if (File.Exists(path))
         {
             try { ReadTagsFromFile(path); }
@@ -83,7 +83,7 @@ public static class NameTagManager
         if (!Directory.Exists(TAGS_DIRECTORY_PATH)) 
             Directory.CreateDirectory(TAGS_DIRECTORY_PATH);
         
-        foreach (string file in Directory.EnumerateFiles(TAGS_DIRECTORY_PATH, "*.json", SearchOption.AllDirectories))
+        foreach (var file in Directory.EnumerateFiles(TAGS_DIRECTORY_PATH, "*.json", SearchOption.AllDirectories))
         {
             if (file.Contains("template", StringComparison.OrdinalIgnoreCase)) continue;
             
@@ -100,7 +100,7 @@ public static class NameTagManager
         var text = File.ReadAllText(path);
         var obj = JObject.Parse(text);
         var tag = GetTagFromJObject(obj);
-        string friendCode = Path.GetFileNameWithoutExtension(path);
+        var friendCode = Path.GetFileNameWithoutExtension(path);
         
         if (tag != null && !string.IsNullOrEmpty(friendCode))
         {
@@ -264,7 +264,7 @@ public static class NameTagManager
             var step = 1f / (input.Length - 1);
             var sb = new System.Text.StringBuilder();
             
-            for (int i = 0; i < input.Length; i++)
+            for (var i = 0; i < input.Length; i++)
             {
                 var color = Evaluate(step * i);
                 sb.Append(StringHelper.ColorString(color, input[i].ToString()));
@@ -276,13 +276,13 @@ public static class NameTagManager
         public Color Evaluate(float percent)
         {
             percent = Mathf.Clamp01(percent);
-            int indexLow = Mathf.FloorToInt(percent / Spacing);
+            var indexLow = Mathf.FloorToInt(percent / Spacing);
             
             if (indexLow >= Colors.Count - 1) 
                 return Colors[^1];
             
-            int indexHigh = indexLow + 1;
-            float t = (percent - indexLow * Spacing) / Spacing;
+            var indexHigh = indexLow + 1;
+            var t = (percent - indexLow * Spacing) / Spacing;
             
             return Color.Lerp(Colors[indexLow], Colors[indexHigh], t);
         }

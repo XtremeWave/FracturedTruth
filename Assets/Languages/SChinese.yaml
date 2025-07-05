@@ -87,6 +87,7 @@ ClientFeature.DumpLog: "输出日志"
 ClientFeature.ClearAutoLogs: "清空自动日志"
 ClientFeature.MyMusic: "我的音乐"
 ClientFeature.ResourceManager: "资源管理"
+ClientFeature.NameTagManager: "标识管理"
 
 # 提示 / Tips
 Tip.Downloading: "下载中……"
@@ -111,11 +112,21 @@ Tip.OnlyAvailableInMainMenu: "仅在主页使用"
 Tip.HideSummaryTextToShowWinText: "<color=#ffff00>隐藏复盘信息查看胜利文本</color>"
   
 Tip.ResourceManager: "您可以在「资源管理」中下载本模组的配套以及扩展资源\n以\"Pre-\"开头的文件为预下载资源包"
+
 Tip.MyMusic: "您可以在「资源管理」中下载本模组支持的音乐或在文件夹(AmongUs/Final Suspect_Data/Musics)中添加自己喜爱的音频文件，如果音乐本地资源路径不存在则会显示「【文件丢失】」"
 Tip.Incomplete_Music: "检测到当前音乐文件不完整"
 Tip.Incomplete_SoundEffect: "检测到当前音效文件不完整"
 Tip.Incomplete_Image: "检测到当前音乐文件不完整"
 Tip.Incomplete: "如果您希望提高您的游戏体验，请在「主页-设置-更多功能-资源管理」下载模组配套资源包"
+
+Tip.TextContent: "文本内容"
+Tip.TextSizeDescription: "文本大小<size=60%>（默认100%）</size>"
+Tip.TextColorDescription: "文本颜色<size=60%>（Hex 颜色代码）\n不需要请留空，填写多个则自动渐变</size>\n"
+Tip.PleaseEnterFriendCode: "请输入新名称标识绑定的好友代码"
+Tip.FriendCodeAlreadyExist: "该好友代码已拥有名称标识"
+Tip.FriendCodeIncorrect: "请输入正确的好友代码"
+Tip.CustomNameTagHelp: "您可以为任意玩家添加名称标识，标识会在绑定好友代码的玩家加入后自动发放\n非会员用户仅可添加备注(会员功能暂未开发)"
+
 
 # 更新结果
 UpdateResult.Succeed_Title: "更新成功"
@@ -146,6 +157,19 @@ UpdateSource.XtremeApi: "Api（境内首选）"
 CanNotJoinPublicRoomNoLatest: "我们有一个重要的更新，请更新本模组\n否则您无法加入公开房间"
 ModBrokenMessage: "模组文件损坏，请重启游戏或重装本模组"
 UnsupportedVersion: "您的 AmongUs 版本与 FinalSuspect 不兼容\n请更新游戏"
+
+# 名称标签
+NameTag.DisplayName: "备注"
+NameTag.Title: "头衔"
+NameTag.Prefix: "前缀"
+NameTag.Suffix: "后缀"
+NameTag.Name: "名称"
+NameTag.LastTag: "附加缀"
+NameTag.PreviewNotAvailable: " (不支持预览) "
+NameTag.CanNotEdit: " (不可修改) "
+NameTag.RefreshPreview: "刷新预览"
+NameTag.SaveAndClose: "保存并退出"
+NameTag.NewNameTag: "新建"
 
 # 音频播放 / Audio Playback
 MusPlay.Mode0: "单次播放"
@@ -285,6 +309,8 @@ Retry: "重试"
 PreviousPage: "上一页"
 NextPage: "下一页"
 Download: "下载"
+Disable: "禁用"
+Delete: "删除"
 
 # 身份 / Identity
 Id.Host: "房主"

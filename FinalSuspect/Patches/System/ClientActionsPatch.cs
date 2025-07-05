@@ -39,7 +39,7 @@ public static class OptionsMenuBehaviourStartPatch
     //public static ClientFeatureItem SoundBtn;
     //public static ClientFeatureItem AudioManagementBtn;
     private static ClientFeatureItem ResourceBtn;
-    private static ClientFeatureItem DisplayNameBtn;
+    private static ClientFeatureItem NameTagBtn;
     public static OptionsMenuBehaviour Instance { get; private set; }
     private static bool reseted;
     public static bool recreate;
@@ -124,13 +124,13 @@ public static class OptionsMenuBehaviourStartPatch
             //() => { SoundManagementPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
         CreateFeatureItem(ref ResourceBtn, "ResourceManager",
             () => { ResourcesPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
-        CreateFeatureItem(ref DisplayNameBtn, "DisplayName",
+        CreateFeatureItem(ref NameTagBtn, "NameTagManager",
             () => { NameTagPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
 
         //SetFeatureItemTextAndColor(SoundBtn, "SoundOptions");
         //SetFeatureItemTextAndColor(AudioManagementBtn, "AudioManagementOptions");
         SetFeatureItemTextAndColor(ResourceBtn, "ResourceManager");
-        SetFeatureItemTextAndColor(DisplayNameBtn, "NameTagPanel");
+        SetFeatureItemTextAndColor(NameTagBtn, "NameTagManager");
         if (!IsNotJoined)
         {
             //SetOptionItemDisabled_Menu(SwitchOutfitType);

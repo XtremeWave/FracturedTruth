@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using FinalSuspect.Modules.ClientActions.FeatureItems.NameTag;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,7 +12,7 @@ public static class UiHelper
 {
     public static float GetResolutionOffset()
     {
-        float aspectRatio = (float)Screen.width / Screen.height;
+        var aspectRatio = (float)Screen.width / Screen.height;
         return Mathf.Clamp(aspectRatio / (16f / 9f), 0.8f, 1.2f);
     }
 
@@ -22,7 +23,7 @@ public static class UiHelper
         window.name = name;
         window.transform.localPosition += Vector3.forward * zOffset;
         
-        float offset = GetResolutionOffset();
+        var offset = GetResolutionOffset();
         var background = window.transform.Find("Background");
         if (background != null)
             background.localScale = background.localScale * scale * offset;
@@ -42,7 +43,7 @@ public static class UiHelper
         return window;
     }
 
-    public static GameObject CreateCloseButton(Transform parent, System.Action onClick)
+    public static GameObject CreateCloseButton(Transform parent, Action onClick)
     {
         var template = parent.parent.Find("CloseButton");
         if (template == null) return null;
@@ -61,7 +62,7 @@ public static class UiHelper
         return button;
     }
 
-    public static GameObject CreateButton(GameObject template, Transform parent, Vector3 position, string text, float scale)
+    public static GameObject CreateButton(GameObject template, Transform parent, Vector3 position, string text, float scale, bool getString = true)
     {
         var button = Object.Instantiate(template, parent);
         button.name = $"Button_{text}";
@@ -71,16 +72,19 @@ public static class UiHelper
         
         var passiveButton = button.GetComponent<PassiveButton>();
         if (passiveButton != null)
-            passiveButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
+            passiveButton.OnClick = new Button.ButtonClickedEvent();
         
         var textComp = button.transform.Find("Text_TMP")?.GetComponent<TextMeshPro>();
-        if (textComp != null) textComp.text = GetString(text);
-        if (text != "DisplayName")
+        if (textComp == null) return button;
+        if (getString)
+            text = "NameTag." + text;
+        textComp.text = getString ? GetString(text) : text;
+        if (EnumHelper.GetAllNames<NameTagEditMenu.ComponentType>().Contains(text.Replace("NameTag.", "")) && text.Replace("NameTag.", "") != "DisplayName")
         {
-            textComp.text += GetString("Disable");
+            textComp.text += $"({GetString("Disable")})";
             passiveButton.enabled = false;
         }
-        
+
         return button;
     }
 

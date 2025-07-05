@@ -54,7 +54,7 @@ public static class NameTagNewWindow
             Window.transform.Find("Info Prefab").gameObject,
             Window.transform,
             new Vector3(0f, 0.1f, 0f) * UiHelper.GetResolutionOffset(),
-            GetString("PleaseEnterFriendCode"),
+            GetString("Tip.PleaseEnterFriendCode"),
             1f
         );
         Info.name = "Enter Friend Code Description";
@@ -82,7 +82,8 @@ public static class NameTagNewWindow
             Window.transform,
             new Vector3(0, -0.8f, 0f) * UiHelper.GetResolutionOffset(),
             GetString(StringNames.Confirm),
-            UiHelper.GetResolutionOffset()
+            UiHelper.GetResolutionOffset(),
+            false
         );
         ConfirmButton.name = "Confirm Button";
         
@@ -97,13 +98,13 @@ public static class NameTagNewWindow
         
         if (!FriendCodeRegex.IsMatch(code))
         {
-            ShowError(infoTmp, GetString("FriendCodeIncorrect"));
+            ShowError(infoTmp, GetString("Tip.FriendCodeIncorrect"));
             return;
         }
         
         if (NameTagManager.AllNameTags.ContainsKey(code))
         {
-            ShowError(infoTmp, GetString("FriendCodeAlreadyExist"));
+            ShowError(infoTmp, GetString("Tip.FriendCodeAlreadyExist"));
             return;
         }
         
@@ -128,7 +129,7 @@ public static class NameTagNewWindow
         
         new LateTask(() => 
         {
-            text.text = GetString("PleaseEnterFriendCode");
+            text.text = GetString("Tip.PleaseEnterFriendCode");
             text.color = Color.white;
             ConfirmButton.SetActive(true);
         }, 1.2f, "Reactivate Enter Box");

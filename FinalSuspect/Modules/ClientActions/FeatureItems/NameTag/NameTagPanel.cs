@@ -75,7 +75,7 @@ public static class NameTagPanel
         var newButton = Object.Instantiate(template, CustomBackground.transform);
         newButton.transform.localPosition = new Vector3(1.3f, -1.88f, -6f);
         newButton.name = "New Tag";
-        newButton.Text.text = GetString("NewNameTag");
+        newButton.Text.text = GetString("NameTag.NewNameTag");
         newButton.Background.color = Palette.White;
         
         var newPassiveButton = newButton.GetComponent<PassiveButton>();
@@ -96,7 +96,7 @@ public static class NameTagPanel
         helpText.transform.localScale = new Vector3(1f, 1f, 1f);
         
         var helpTextTMP = helpText.GetComponent<TextMeshPro>();
-        helpTextTMP.text = GetString("CustomNameTagHelp");
+        helpTextTMP.text = GetString("Tip.CustomNameTagHelp");
         helpText.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(2.45f, 1f);
     }
 
@@ -143,8 +143,8 @@ public static class NameTagPanel
             numItems = 0;
             
             // 计算起始索引
-            int startIndex = (CurrentPage - 1) * ItemsPerPage;
-            int count = 0;
+            var startIndex = (CurrentPage - 1) * ItemsPerPage;
+            var count = 0;
             
             // 创建标签项
             foreach (var nameTag in AllNameTags)
@@ -169,7 +169,7 @@ public static class NameTagPanel
         if (ButtonTemplate == null || CustomBackground == null) return;
         
         // 1. 计算位置 - 完全匹配MyMusicPanel
-        float posY = 2.2f - 0.5f * numItems;
+        var posY = 2.2f - 0.5f * numItems;
         
         // 2. 创建标签按钮 - 完全匹配MyMusicPanel
         var button = Object.Instantiate(ButtonTemplate, CustomBackground.transform);
