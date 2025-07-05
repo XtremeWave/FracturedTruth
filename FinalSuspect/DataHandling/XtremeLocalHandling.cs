@@ -46,6 +46,8 @@ public static class XtremeLocalHandling
         data.GetLobbyText(ref topcolor, ref bottomcolor, ref toptext, ref bottomtext);
         data.GetGameText(ref topcolor, ref toptext, topswap);
         SpamManager.CheckSpam(ref name);
+        var ap = NameTagManager.ApplyFor(player).displayName;
+        name += (ap.RemoveHtmlTags() == "" ? "" : $" ({ap})");
         if (!player.GetCheatData().IsSuspectCheater || Main.DisableFAC.Value) return name;
         topcolor = ColorHelper.FaultColor;
         toptext = toptext.CheckAndAppendText(GetString("Id.Cheater"));
@@ -57,9 +59,7 @@ public static class XtremeLocalHandling
     {
         if (!IsLobby) return;
         var player = data.Player;
-
         if (player.IsHost()) toptext = toptext.CheckAndAppendText(GetString("Id.Host"));
-        toptext.CheckAndAppendText($"({NameTagManager.ApplyFor(player).displayName}");
         if (GetPlayerVersion(player.PlayerId, out var ver))
         {
             if (Main.ForkId != ver.forkId)
@@ -89,7 +89,7 @@ public static class XtremeLocalHandling
             else if (player.IsHost()) topcolor = ColorHelper.HostNameColor;
             else topcolor = ColorHelper.ClientlessColor;
         }
-
+        
         if (!Main.ShowPlayerInfo.Value) return;
         bottomtext = bottomtext.CheckAndAppendText($"{player.GetPlatform()} {player.GetClient().FriendCode}");
         bottomcolor = ColorHelper.DownloadYellow;
@@ -189,7 +189,7 @@ public static class XtremeLocalHandling
     public static string CheckAndAppendText(this string toptext, string extratext)
     {
         if (toptext != "")
-            toptext += " ";
+            toptext += "\n";
         toptext += extratext;
         return toptext;
     }

@@ -1,6 +1,6 @@
-﻿// NameTagNewWindow.cs
-using System;
+﻿using System;
 using System.Text.RegularExpressions;
+using FinalSuspect.Helpers;
 using TMPro;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -13,105 +13,124 @@ public static class NameTagNewWindow
     public static GameObject Info { get; private set; }
     public static GameObject EnterBox { get; private set; }
     public static GameObject ConfirmButton { get; private set; }
+    
+    private static readonly Regex FriendCodeRegex = 
+        new Regex(@"^[a-z]+#[0-9]{4}$", RegexOptions.Compiled);
 
     public static void Open()
     {
+        if (NameTagEditMenu.Menu?.activeSelf ?? false) return;
         if (Window == null) Init();
-        if (Window == null) return;
-        if (NameTagEditMenu.Menu?.active ?? false) return;
-        Window.SetActive(true);
-        EnterBox.GetComponent<TextBoxTMP>().Clear();
+        Window?.SetActive(true);
+        EnterBox?.GetComponent<TextBoxTMP>()?.Clear();
     }
 
     public static void Init()
     {
-        Window = Object.Instantiate(AccountManager.Instance.transform.FindChild("InfoTextBox").gameObject,
-            NameTagPanel.CustomBackground.transform.parent);
-        Window.name = "New Name Tag Window";
-        Window.transform.FindChild("Background").localScale *= 0.7f * GetResolutionOffset();
+        Window = UiHelper.CreateBaseWindow(
+            "New Name Tag Window",
+            NameTagPanel.CustomBackground.transform.parent,
+            -10,
+            0.7f
+        );
+        
+        CreateCloseButton();
+        CreateInfoText();
+        CreateInputField();
+        CreateConfirmButton();
+        
+        UiHelper.HideTemplateObjects(Window.transform);
+    }
 
-        Object.Destroy(Window.transform.FindChild("Button2").gameObject);
+    private static void CreateCloseButton()
+    {
+        var closeButton = UiHelper.CreateCloseButton(Window.transform, () => Window.SetActive(false));
+        closeButton.transform.localPosition = new Vector3(2.4f, 1.2f, -1f) * UiHelper.GetResolutionOffset();
+    }
 
-        var closeButton = Object.Instantiate(Window.transform.parent.FindChild("CloseButton"), Window.transform);
-        closeButton.transform.localPosition = new Vector3(2.4f, 1.2f, -1f) * GetResolutionOffset();
-        closeButton.transform.localScale = Vector3.one;
-        closeButton.GetComponent<PassiveButton>().OnClick = new();
-        closeButton.GetComponent<PassiveButton>().OnClick.AddListener((Action)(() => { Window.SetActive(false); }));
-
-        var titlePrefab = Window.transform.FindChild("TitleText_TMP").gameObject;
-        titlePrefab.name = "Title Prefab";
-        var infoPrefab = Window.transform.FindChild("InfoText_TMP").gameObject;
-        infoPrefab.name = "Info Prefab";
-        var buttonPrefab = Window.transform.FindChild("Button1").gameObject;
-        buttonPrefab.name = "Button Prefab";
-        buttonPrefab.GetComponent<PassiveButton>().OnClick = new();
-        var enterPrefab =
-            Object.Instantiate(
-                AccountManager.Instance.transform.FindChild("PremissionRequestWindow/GuardianEmailConfirm").gameObject,
-                Window.transform);
-        enterPrefab.name = "Enter Box Prefab";
-        enterPrefab.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f) * GetResolutionOffset();
-        Object.Destroy(enterPrefab.GetComponent<EmailTextBehaviour>());
-
-        Info = Object.Instantiate(infoPrefab, Window.transform);
+    private static void CreateInfoText()
+    {
+        Info = UiHelper.CreateText(
+            Window.transform.Find("Info Prefab").gameObject,
+            Window.transform,
+            new Vector3(0f, 0.1f, 0f) * UiHelper.GetResolutionOffset(),
+            GetString("PleaseEnterFriendCode"),
+            1f
+        );
         Info.name = "Enter Friend Code Description";
-        Info.transform.localPosition = new Vector3(0f, 0.1f, 0f) * GetResolutionOffset();
-        var colorInfoTmp = Info.GetComponent<TextMeshPro>();
-        colorInfoTmp.text = GetString("PleaseEnterFriendCode");
+    }
 
-        EnterBox = Object.Instantiate(enterPrefab, Window.transform);
+    private static void CreateInputField()
+    {
+        EnterBox = UiHelper.CreateInputField(
+            Window.transform,
+            new Vector3(0f, -0.04f, 0f) * UiHelper.GetResolutionOffset(),
+            true
+        );
         EnterBox.name = "Enter Friend Code Box";
-        EnterBox.transform.localPosition = new Vector3(0f, -0.04f, 0f) * GetResolutionOffset();
+        
         var enterBoxTBT = EnterBox.GetComponent<TextBoxTMP>();
         enterBoxTBT.AllowEmail = false;
         enterBoxTBT.AllowSymbols = true;
         enterBoxTBT.AllowPaste = true;
-
-        ConfirmButton = Object.Instantiate(buttonPrefab, Window.transform);
-        ConfirmButton.name = "Confirm Button";
-        ConfirmButton.transform.localPosition = new Vector3(0, -0.8f, 0f) * GetResolutionOffset();
-        ConfirmButton.GetComponent<PassiveButton>().OnClick.AddListener((Action)(() =>
-        {
-            var code = EnterBox.GetComponent<TextBoxTMP>().text.ToLower().Trim().Replace("-", "#").Replace("—", "#")
-                .Replace(" ", string.Empty);
-            var reg = new Regex(@"^[a-z]+#[0-9]{4}$");
-            if (NameTagManager.AllNameTags.TryGetValue(code, out var tag) && !tag.Isinternal)
-            {
-                ConfirmButton.SetActive(false);
-                colorInfoTmp.text = GetString("FriendCodeAlreadyExist");
-                colorInfoTmp.color = Color.blue;
-            }
-            else if (!reg.Match(code).Success)
-            {
-                ConfirmButton.SetActive(false);
-                colorInfoTmp.text = GetString("FriendCodeIncorrect");
-                colorInfoTmp.color = Color.red;
-            }
-            else
-            {
-                Window.SetActive(false);
-                NameTagEditMenu.Toggle(code, true);
-                return;
-            }
-
-            new LateTask(() =>
-            {
-                colorInfoTmp.text = GetString("PleaseEnterFriendCode");
-                colorInfoTmp.color = Color.white;
-                ConfirmButton.SetActive(true);
-            }, 1.2f, "Reactivate Enter Box");
-        }));
-        var upperButtonTmp = ConfirmButton.transform.FindChild("Text_TMP").GetComponent<TextMeshPro>();
-        upperButtonTmp.text = GetString(StringNames.Confirm);
-
-        titlePrefab.SetActive(false);
-        infoPrefab.SetActive(false);
-        buttonPrefab.SetActive(false);
-        enterPrefab.SetActive(false);
     }
-    
-    public static float GetResolutionOffset()
+
+    private static void CreateConfirmButton()
     {
-        return Mathf.Clamp((float)Screen.width / Screen.height / (16f / 9f), 0.8f, 1.2f);
+        ConfirmButton = UiHelper.CreateButton(
+            Window.transform.Find("Button Prefab").gameObject,
+            Window.transform,
+            new Vector3(0, -0.8f, 0f) * UiHelper.GetResolutionOffset(),
+            GetString(StringNames.Confirm),
+            UiHelper.GetResolutionOffset()
+        );
+        ConfirmButton.name = "Confirm Button";
+        
+        ConfirmButton.GetComponent<PassiveButton>().OnClick.AddListener((Action)(OnConfirmClicked));
+    }
+
+    private static void OnConfirmClicked()
+    {
+        var input = EnterBox.GetComponent<TextBoxTMP>().text;
+        var code = NormalizeFriendCode(input);
+        var infoTmp = Info.GetComponent<TextMeshPro>();
+        
+        if (!FriendCodeRegex.IsMatch(code))
+        {
+            ShowError(infoTmp, GetString("FriendCodeIncorrect"));
+            return;
+        }
+        
+        if (NameTagManager.AllNameTags.ContainsKey(code))
+        {
+            ShowError(infoTmp, GetString("FriendCodeAlreadyExist"));
+            return;
+        }
+        
+        Window.SetActive(false);
+        NameTagEditMenu.Toggle(code, true);
+    }
+
+    private static string NormalizeFriendCode(string input)
+    {
+        return input.ToLower()
+            .Replace("-", "#")
+            .Replace("—", "#")
+            .Replace(" ", string.Empty)
+            .Trim();
+    }
+
+    private static void ShowError(TextMeshPro text, string message)
+    {
+        ConfirmButton.SetActive(false);
+        text.text = message;
+        text.color = message.Contains("Incorrect") ? Color.red : Color.blue;
+        
+        new LateTask(() => 
+        {
+            text.text = GetString("PleaseEnterFriendCode");
+            text.color = Color.white;
+            ConfirmButton.SetActive(true);
+        }, 1.2f, "Reactivate Enter Box");
     }
 }

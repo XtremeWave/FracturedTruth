@@ -1,25 +1,24 @@
-﻿// NameTagManager.cs
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Text;
+using System.Linq;
 using AmongUs.Data;
 using FinalSuspect.Helpers;
+using FinalSuspect.Modules.Resources;
+using Il2CppSystem.Linq;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace FinalSuspect.Modules.ClientActions.FeatureItems.NameTag;
 
-#nullable enable
 public static class NameTagManager
 {
-    public static readonly string TAGS_DIRECTORY_PATH = @"./TONX_Data/NameTags/";
+    public static readonly string TAGS_DIRECTORY_PATH = GetLocalPath(LocalType.NameTag);
     private static Dictionary<string, NameTag> NameTags = new();
     public static IReadOnlyDictionary<string, NameTag> AllNameTags => NameTags;
-
-    public static IReadOnlyDictionary<string, NameTag> AllInternalNameTags =>
+    public static IReadOnlyDictionary<string, NameTag> AllInternalNameTags => 
         AllNameTags.Where(t => t.Value.Isinternal).ToDictionary(x => x.Key, x => x.Value);
-
-    public static IReadOnlyDictionary<string, NameTag> AllExternalNameTags =>
+    public static IReadOnlyDictionary<string, NameTag> AllExternalNameTags => 
         AllNameTags.Where(t => !t.Value.Isinternal).ToDictionary(x => x.Key, x => x.Value);
 
     public static NameTag DeepClone(NameTag tag)
@@ -34,7 +33,7 @@ public static class NameTagManager
             LastTag = CloneCom(tag.LastTag)
         };
 
-        static Component? CloneCom(Component? com)
+        static Component CloneCom(Component com)
         {
             return com == null ? null : new Component
             {
@@ -50,12 +49,14 @@ public static class NameTagManager
     public static (string title, string prefix, string suffix, string name, string displayName, string lastTag) 
         ApplyFor(PlayerControl player)
     {
-        return AllNameTags.TryGetValue(player.FriendCode, out var tag) 
+        var a = AllNameTags.TryGetValue(player.FriendCode, out var tag);
+        
+        return a
             ? tag.Apply(player.GetDataName()) 
             : ("", "", "", "", "", "");
     }
 
-    public static void ReloadTag(string? friendCode)
+    public static void ReloadTag(string friendCode)
     {
         if (friendCode == null)
         {
@@ -64,7 +65,7 @@ public static class NameTagManager
         }
 
         NameTags.Remove(friendCode);
-        string path = $"{TAGS_DIRECTORY_PATH}{friendCode}.json";
+        string path = Path.Combine(TAGS_DIRECTORY_PATH, $"{friendCode}.json");
         if (File.Exists(path))
         {
             try { ReadTagsFromFile(path); }
@@ -77,13 +78,15 @@ public static class NameTagManager
 
     public static void Init()
     {
-        NameTags = new();
+        NameTags = new Dictionary<string, NameTag>();
 
         if (!Directory.Exists(TAGS_DIRECTORY_PATH)) 
             Directory.CreateDirectory(TAGS_DIRECTORY_PATH);
         
         foreach (string file in Directory.EnumerateFiles(TAGS_DIRECTORY_PATH, "*.json", SearchOption.AllDirectories))
         {
+            if (file.Contains("template", StringComparison.OrdinalIgnoreCase)) continue;
+            
             try { ReadTagsFromFile(file); }
             catch (Exception ex)
             {
@@ -94,123 +97,131 @@ public static class NameTagManager
 
     public static void ReadTagsFromFile(string path)
     {
-        if (path.ToLower().Contains("template")) return;
         var text = File.ReadAllText(path);
         var obj = JObject.Parse(text);
         var tag = GetTagFromJObject(obj);
         string friendCode = Path.GetFileNameWithoutExtension(path);
         
-        if (tag != null && friendCode != null)
+        if (tag != null && !string.IsNullOrEmpty(friendCode))
         {
             NameTags[friendCode] = tag;
             Info($"Name Tag Loaded: {friendCode}", "NameTagManager");
         }
     }
 
-    public static NameTag? GetTagFromJObject(JObject obj)
+    public static NameTag GetTagFromJObject(JObject obj)
     {
         var tag = new NameTag();
+        var componentMap = new Dictionary<string, Action<JToken>>
+        {
+            ["Title"] = token => tag.Title = GetComponent(token),
+            ["Prefix"] = token => tag.Prefix = GetComponent(token),
+            ["Suffix"] = token => tag.Suffix = GetComponent(token),
+            ["Name"] = token => tag.Name = GetComponent(token, true),
+            ["DisplayName"] = token => tag.DisplayName = GetComponent(token, true),
+            ["LastTag"] = token => tag.LastTag = GetComponent(token, true)
+        };
 
-        if (obj.TryGetValue("Title", out var upper))
-            tag.Title = GetComponent(upper);
-
-        if (obj.TryGetValue("Prefix", out var prefix))
-            tag.Prefix = GetComponent(prefix);
-
-        if (obj.TryGetValue("Suffix", out var suffix))
-            tag.Suffix = GetComponent(suffix);
-
-        if (obj.TryGetValue("Name", out var name))
-            tag.Name = GetComponent(name, true);
-
-        if (obj.TryGetValue("DisplayName", out var displayName))
-            tag.DisplayName = GetComponent(displayName, true);
-
-        if (obj.TryGetValue("LastTag", out var lastTag))
-            tag.LastTag = GetComponent(lastTag, true);
+        foreach (var prop in obj.Properties().ToList())
+        {
+            if (componentMap.TryGetValue(prop.Name, out var action))
+                action(prop.Value);
+        }
 
         return tag;
+    }
 
-        static Component? GetComponent(JToken token, bool force = false)
+    private static Component GetComponent(JToken token, bool force = false)
+    {
+        if (token == null) return null;
+        return new Component
         {
-            if (token == null) return null;
-            var com = new Component
-            {
-                Text = token["Text"]?.ToString(),
-                SizePercentage = ParseSize(token["SizePercentage"]?.ToString()),
-                TextColor = ParseColor(token["Color"]?.ToString()),
-                Gradient = ParseGradient(token["Gradient"]?.ToString()),
-                Spaced = token["Spaced"]?.ToString()?.ToLower() == "true"
-            };
-            return (com.Text != null || force) ? com : null;
-        }
+            Text = token["Text"]?.ToString(),
+            SizePercentage = ParseSize(token["SizePercentage"]?.ToString()),
+            TextColor = ParseColor(token["Color"]?.ToString()),
+            Gradient = ParseGradient(token["Gradient"]?.ToString()),
+            Spaced = token["Spaced"]?.ToString()?.Equals("true", StringComparison.OrdinalIgnoreCase) ?? false
+        };
+    }
 
-        static float? ParseSize(string? str)
-        {
-            return float.TryParse(str, out var size) ? size : 90f;
-        }
+    private static float? ParseSize(string str) => 
+        float.TryParse(str, out var size) ? size : 90f;
 
-        static Color32? ParseColor(string? str)
-        {
-            if (string.IsNullOrEmpty(str)) return null;
-            if (!str.StartsWith("#")) str = "#" + str;
-            return ColorUtility.TryParseHtmlString(str, out var color) ? color : null;
-        }
+    private static Color32? ParseColor(string str)
+    {
+        if (string.IsNullOrEmpty(str)) return null;
+        if (!str.StartsWith("#")) str = "#" + str;
+        return ColorUtility.TryParseHtmlString(str, out var color) ? color : null;
+    }
 
-        static ColorGradient? ParseGradient(string? str)
+    private static ColorGradient ParseGradient(string str)
+    {
+        if (string.IsNullOrEmpty(str)) return null;
+        
+        var colors = new List<Color>();
+        foreach (var colorStr in str.Split(',', '，'))
         {
-            if (string.IsNullOrEmpty(str)) return null;
-            var args = str.Split(',', '，');
-            if (args.Length < 2) return null;
+            var trimmed = colorStr.Trim();
+            if (string.IsNullOrEmpty(trimmed)) continue;
             
-            var colors = new List<Color>();
-            foreach (var arg in args)
-            {
-                var colorStr = arg.StartsWith("#") ? arg : "#" + arg;
-                if (ColorUtility.TryParseHtmlString(colorStr, out var color))
-                    colors.Add(color);
-            }
-            
-            return colors.Count >= 2 ? new ColorGradient(colors.ToArray()) : null;
+            var formatted = trimmed.StartsWith("#") ? trimmed : "#" + trimmed;
+            if (ColorUtility.TryParseHtmlString(formatted, out var color))
+                colors.Add(color);
         }
+        
+        return colors.Count >= 2 ? new ColorGradient(colors.ToArray()) : null;
     }
 
     public class NameTag
     {
         public bool Isinternal { get; set; } = false;
-        public Component? DisplayName { get; set; }
-        public Component? Title { get; set; }
-        public Component? Prefix { get; set; }
-        public Component? Suffix { get; set; }
-        public Component? Name { get; set; }
-        public Component? LastTag { get; set; }
+        public Component DisplayName { get; set; }
+        public Component Title { get; set; }
+        public Component Prefix { get; set; }
+        public Component Suffix { get; set; }
+        public Component Name { get; set; }
+        public Component LastTag { get; set; }
 
         public (string title, string prefix, string suffix, string name, string displayName, string lastTag) 
             Apply(string name, bool preview = false)
         {
+            if (Name != null && Name.Text != "")
+            {
+                name = Name.Generate(false);
+            }
+            
+            if (name == "")
+                name = DataManager.player.Customization.Name;
+            else if (name != "" && Name is { Text: "" }) 
+                Name.Text = name;
+            
+            
             if (!preview)
+            {
                 return (
                     Title?.Generate(false) ?? "",
                     Prefix?.Generate(false) ?? "",
                     Suffix?.Generate(false) ?? "",
-                    Name?.Generate(false) ?? "",
+                    name,
                     DisplayName?.Generate(false) ?? "",
                     LastTag?.Generate(false) ?? ""
                 );
+            }
             
-            if (Name != null) name = Name.Generate(false);
+            
             name = $"{Prefix?.Generate()}{name}{Suffix?.Generate()}";
-            var title = $"({DisplayName?.Generate(false)})";
-            return ($"{title}\r\n{name}", "", "", "", "", "");
+            var dp = DisplayName?.Generate(false);
+            var title = dp.RemoveHtmlTags() == "" ? "" : $"({dp})";
+            return ($"{name}{title}", "", "", "", "", "");
         }
     }
 
     public class Component
     {
         public float? SizePercentage { get; set; } = 90f;
-        public string? Text { get; set; }
+        public string Text { get; set; }
         public Color32? TextColor { get; set; }
-        public ColorGradient? Gradient { get; set; }
+        public ColorGradient Gradient { get; set; }
         public bool Spaced { get; set; } = true;
 
         public string Generate(bool applySpace = true, bool applySize = true)
@@ -247,16 +258,11 @@ public static class NameTagManager
 
         public string Apply(string input)
         {
-            switch (input.Length)
-            {
-                case 0:
-                    return input;
-                case 1:
-                    return StringHelper.ColorString(Colors[0], input);
-            }
+            if (input.Length == 0) return input;
+            if (input.Length == 1) return StringHelper.ColorString(Colors[0], input);
 
             var step = 1f / (input.Length - 1);
-            var sb = new StringBuilder();
+            var sb = new System.Text.StringBuilder();
             
             for (int i = 0; i < input.Length; i++)
             {
@@ -282,4 +288,3 @@ public static class NameTagManager
         }
     }
 }
-#nullable disable

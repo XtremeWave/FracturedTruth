@@ -1,5 +1,6 @@
 using AmongUs.GameOptions;
 using FinalSuspect.Modules.Core.Game;
+using TMPro;
 using UnityEngine;
 
 namespace FinalSuspect.Patches.Game_Vanilla;
@@ -42,6 +43,7 @@ internal class PlayerStartPatch
         topText.text = "TopText";
         topText.gameObject.name = "TopText";
         topText.enabled = false;
+        topText.alignment = TextAlignmentOptions.Bottom;
 
         var bottomText = Object.Instantiate(__instance.cosmetics.nameText, __instance.cosmetics.nameText.transform, true);
         bottomText.transform.localPosition = new Vector3(0f, 0.2f, 0f);
