@@ -8,9 +8,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
-using static FinalSuspect.Modules.ClientOptions.FeatureItems.Resources.ResourcesManager;
+using static FinalSuspect.Modules.ClientActions.FeatureItems.Resources.ResourcesManager;
 
-namespace FinalSuspect.Modules.ClientOptions.FeatureItems.Resources;
+namespace FinalSuspect.Modules.ClientActions.FeatureItems.Resources;
 
 public static class ResourcesPanel
 {

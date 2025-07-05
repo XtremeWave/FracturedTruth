@@ -2,9 +2,10 @@ using System;
 using System.IO;
 using BepInEx.Configuration;
 using FinalSuspect.Helpers;
-using FinalSuspect.Modules.ClientOptions;
-using FinalSuspect.Modules.ClientOptions.FeatureItems;
-using FinalSuspect.Modules.ClientOptions.FeatureItems.Resources;
+using FinalSuspect.Modules.ClientActions;
+using FinalSuspect.Modules.ClientActions.FeatureItems;
+using FinalSuspect.Modules.ClientActions.FeatureItems.NameTag;
+using FinalSuspect.Modules.ClientActions.FeatureItems.Resources;
 using FinalSuspect.Modules.SoundInterface;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -38,7 +39,7 @@ public static class OptionsMenuBehaviourStartPatch
     //public static ClientFeatureItem SoundBtn;
     //public static ClientFeatureItem AudioManagementBtn;
     private static ClientFeatureItem ResourceBtn;
-    //private static ClientFeatureItem DisplayNameBtn;
+    private static ClientFeatureItem DisplayNameBtn;
     public static OptionsMenuBehaviour Instance { get; private set; }
     private static bool reseted;
     public static bool recreate;
@@ -123,12 +124,13 @@ public static class OptionsMenuBehaviourStartPatch
             //() => { SoundManagementPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
         CreateFeatureItem(ref ResourceBtn, "ResourceManager",
             () => { ResourcesPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
-        //CreateFeatureItem(ref DisplayNameBtn, "DisplayName",
-            //() => { NameTagPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
+        CreateFeatureItem(ref DisplayNameBtn, "DisplayName",
+            () => { NameTagPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
 
         //SetFeatureItemTextAndColor(SoundBtn, "SoundOptions");
         //SetFeatureItemTextAndColor(AudioManagementBtn, "AudioManagementOptions");
         SetFeatureItemTextAndColor(ResourceBtn, "ResourceManager");
+        SetFeatureItemTextAndColor(DisplayNameBtn, "NameTagPanel");
         if (!IsNotJoined)
         {
             //SetOptionItemDisabled_Menu(SwitchOutfitType);
@@ -145,6 +147,7 @@ public static class OptionsMenuBehaviourStartPatch
         //MyMusicPanel.Init(__instance);
         //SoundManagementPanel.Init(__instance);
         ResourcesPanel.Init(__instance);
+        NameTagPanel.Init(__instance);
 
         if (!ModUnloaderScreen.Popup)
             ModUnloaderScreen.Init(__instance);
@@ -281,6 +284,7 @@ public static class OptionsMenuBehaviourClosePatch
         ClientFeatureItem.CustomBackground?.gameObject.SetActive(false);
         ModUnloaderScreen.Hide();
         ResourcesPanel.Hide();
+        NameTagPanel.Hide();
         //MyMusicPanel.Hide();
         //SoundManagementPanel.Hide();
     }

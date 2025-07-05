@@ -1,4 +1,5 @@
 using FinalSuspect.Helpers;
+using FinalSuspect.Modules.ClientActions.FeatureItems.NameTag;
 using FinalSuspect.Modules.Core.Game;
 using FinalSuspect.Modules.Features.CheckingandBlocking;
 using TMPro;
@@ -58,7 +59,7 @@ public static class XtremeLocalHandling
         var player = data.Player;
 
         if (player.IsHost()) toptext = toptext.CheckAndAppendText(GetString("Id.Host"));
-        //toptext.CheckAndAppendText(NameTagManager.GetDisplayName(player).Apply(player.GetDataName()).upper);
+        toptext.CheckAndAppendText($"({NameTagManager.ApplyFor(player).displayName}");
         if (GetPlayerVersion(player.PlayerId, out var ver))
         {
             if (Main.ForkId != ver.forkId)

@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 
+namespace FinalSuspect.DataHandling.FinalAntiCheat.Core;
+
 [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
 internal static class Git
 {

@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace FinalSuspect.Modules.ClientOptions.FeatureItems;
+namespace FinalSuspect.Modules.ClientActions.FeatureItems;
 
 public static class ModUnloaderScreen
 {

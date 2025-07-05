@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 using AmongUs.GameOptions;
 using FinalSuspect.Attributes;
 using FinalSuspect.DataHandling.FinalAntiCheat.Core;
@@ -189,6 +190,22 @@ public class XtremePlayerData : IDisposable
         {
             var colorId = player.Data.DefaultOutfit.ColorId;
             playername ??= player.GetRealName();
+            playername = playername.TrimEnd();
+            playername = playername.Replace(" ", "_");
+
+            var existingNames = new HashSet<string>(AllPlayerData.Select(data => data.Name));
+            var baseName = playername; 
+            var suffix = 0;
+
+            while (existingNames.Contains(playername))
+            {
+                suffix++;
+                playername = $"{baseName}_{suffix}";
+
+                if (suffix <= 1000) continue;
+                playername = $"{baseName}_{Guid.NewGuid().ToString("N")[..4]}";
+                break;
+            }
 
             AllPlayerData.Add(new XtremePlayerData(player, playername, colorId));
             Info(

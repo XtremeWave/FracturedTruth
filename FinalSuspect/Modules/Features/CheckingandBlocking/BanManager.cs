@@ -45,12 +45,12 @@ public static class BanManager
         if (!AmongUsClient.Instance.AmHost || !Main.KickPlayerWithDenyName.Value) return;
         try
         {
-            using StreamReader sr = new(DENY_NAME_LIST_PATH);
-            while (sr.ReadLine() is { } line)
+            var existingNames = SpamManager.ReturnAllNewLinesInFile(DENY_NAME_LIST_PATH);
+
+            foreach (var line in from line in existingNames where !Main.AllPlayerControls.Any(p => p.IsDev() && line.Contains(p.FriendCode)) where Regex.IsMatch(player.PlayerName, line) where line != "" select line)
             {
-                if (line == "") continue;
-                if (Main.AllPlayerControls.Any(p => p.IsDev() && line.Contains(p.FriendCode))) continue;
-                if (!Regex.IsMatch(player.PlayerName, line)) continue;
+                Test(line);
+                Test(player.PlayerName);
                 KickPlayer(player.Id, false, "KickedByDenyName");
                 return;
             }

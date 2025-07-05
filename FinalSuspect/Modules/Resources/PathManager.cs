@@ -91,7 +91,7 @@ public static class PathManager
         CheckAndCreate(BANEDWORDS_FILE_PATH, false, true);
         CheckAndCreate(DENY_NAME_LIST_PATH, false, true);
 
-        CheckAndCreate(GetLocalPath(LocalType.DisplayName));
+        CheckAndCreate(GetLocalPath(LocalType.NameTag));
 
         // 防止崩溃的必要措施
         CheckAndDeleteXWR(LocalPath_Data);
@@ -170,7 +170,6 @@ public enum FileType
     Depends,
     ModNews,
     Languages,
-    DisplayName
 }
 
 public enum RemoteType
@@ -185,5 +184,5 @@ public enum LocalType
     Ban,
     Resources,
     BepInEx,
-    DisplayName
+    NameTag
 }

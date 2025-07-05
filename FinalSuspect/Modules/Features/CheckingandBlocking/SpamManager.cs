@@ -44,7 +44,7 @@ public static class SpamManager
     }
 
 
-    private static List<string> ReturnAllNewLinesInFile(string filepath)
+    public static List<string> ReturnAllNewLinesInFile(string filepath)
     {
         if (!File.Exists(filepath)) return [];
         var json = File.ReadAllText(filepath);
