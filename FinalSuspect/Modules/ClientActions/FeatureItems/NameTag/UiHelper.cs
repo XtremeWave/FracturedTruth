@@ -10,12 +10,6 @@ namespace FinalSuspect.Helpers;
 
 public static class UiHelper
 {
-    public static float GetResolutionOffset()
-    {
-        var aspectRatio = (float)Screen.width / Screen.height;
-        return Mathf.Clamp(aspectRatio / (16f / 9f), 0.8f, 1.2f);
-    }
-
     public static GameObject CreateBaseWindow(string name, Transform parent, float zOffset, float scale)
     {
         var template = AccountManager.Instance.transform.Find("InfoTextBox").gameObject;
@@ -43,9 +37,13 @@ public static class UiHelper
         return window;
     }
 
+    private static Transform TempCB;
     public static GameObject CreateCloseButton(Transform parent, Action onClick)
     {
         var template = parent.parent.Find("CloseButton");
+        if (template != null)
+            TempCB = template;
+        template ??= TempCB;
         if (template == null) return null;
         
         var button = Object.Instantiate(template, parent).gameObject;

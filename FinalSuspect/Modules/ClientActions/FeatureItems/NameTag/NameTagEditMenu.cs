@@ -140,7 +140,7 @@ public static class NameTagEditMenu
         AddColorIfValid(Color2_Enter, colors);
         AddColorIfValid(Color3_Enter, colors);
         
-        if (colors.Count > 1) com.Gradient = new(colors.ToArray());
+        if (colors.Count > 1) com.Gradient = new ColorGradient(colors.ToArray());
         else if (colors.Count == 1) com.TextColor = colors[0];
         com.Spaced = default;
 
@@ -237,23 +237,12 @@ public static class NameTagEditMenu
             1.4f
         );
         
-        // 创建关闭按钮
         var closeButton = UiHelper.CreateCloseButton(Menu.transform, () => Toggle(null, false));
-        closeButton.transform.localPosition = new Vector3(4.9f, 2.5f, -1f) * UiHelper.GetResolutionOffset();
-        
-        // 创建两行组件按钮
+        closeButton.transform.localPosition = new Vector3(4.9f, 2.5f, -1f) * GetResolutionOffset();
         CreateComponentButtons();
-        
-        // 创建操作按钮
         CreateActionButtons();
-        
-        // 创建预览区域
         CreatePreviewSection();
-        
-        // 创建输入区域
         CreateInputFields();
-        
-        // 隐藏模板对象
         UiHelper.HideTemplateObjects(Menu.transform);
     }
 
@@ -274,7 +263,7 @@ public static class NameTagEditMenu
     {
         var x = ButtonStartX + col * ButtonSpacing;
         var y = ButtonStartY - row * ButtonRowHeight;
-        var offset = UiHelper.GetResolutionOffset();
+        var offset = GetResolutionOffset();
         
         var button = UiHelper.CreateButton(
             Menu.transform.Find("Button Prefab").gameObject,
@@ -299,109 +288,109 @@ public static class NameTagEditMenu
     }
 
     private static void CreateActionButtons()
-{
-    var offset = UiHelper.GetResolutionOffset();
-    
-    // 预览按钮
-    var previewButton = UiHelper.CreateButton(
-        Menu.transform.Find("Button Prefab").gameObject,
-        Menu.transform,
-        new Vector3(1.2f * offset, -2.5f * offset, 0f),
-        "RefreshPreview",
-        offset
-    );
-    previewButton.name = "RefreshPreviewButton";
-    
-    var previewPassive = previewButton.GetComponent<PassiveButton>();
-    if (previewPassive != null)
     {
-        previewPassive.OnClick.RemoveAllListeners();
-        previewPassive.OnClick.AddListener((Action)(() => 
-        {
-            SaveToCache(CurrentComponent);
-            UpdatePreview();
-        }));
-    }
+        var offset = GetResolutionOffset();
     
-    // 保存按钮
-    var saveButton = UiHelper.CreateButton(
-        Menu.transform.Find("Button Prefab").gameObject,
-        Menu.transform,
-        new Vector3(3.5f * offset, -2.5f * offset, 0f),
-        "SaveAndClose",
-        offset
-    );
-    saveButton.name = "SaveAndExitButton";
+        var previewButton = UiHelper.CreateButton(
+            Menu.transform.Find("Button Prefab").gameObject,
+            Menu.transform,
+            new Vector3(1.2f * offset, -2.5f * offset, 0f),
+            "RefreshPreview",
+            offset
+        );
+        previewButton.name = "RefreshPreviewButton";
     
-    var savePassive = saveButton.GetComponent<PassiveButton>();
-    if (savePassive != null)
-    {
-        savePassive.OnClick.RemoveAllListeners();
-        savePassive.OnClick.AddListener((Action)(() => 
+        var previewPassive = previewButton.GetComponent<PassiveButton>();
+        if (previewPassive != null)
         {
-            SaveToCache(CurrentComponent);
-            if (SaveToFile(FriendCode, CacheTag))
+            previewPassive.OnClick.RemoveAllListeners();
+            previewPassive.OnClick.AddListener((Action)(() => 
             {
-                ReloadTag(FriendCode);
-                NameTagPanel.RefreshTagList();
-            }
-            Toggle(null, false);
-        }));
-    }
+                SaveToCache(CurrentComponent);
+                UpdatePreview();
+            }));
+        }
     
-    // 删除按钮
-    var deleteButton = UiHelper.CreateButton(
-        Menu.transform.Find("Button Prefab").gameObject,
-        Menu.transform,
-        new Vector3(-3.5f * offset, -2.5f * offset, 0f),
-        GetString("Delete"),
-        offset,
-        false
-    );
-    deleteButton.name = "DeleteButton";
+        // 保存按钮
+        var saveButton = UiHelper.CreateButton(
+            Menu.transform.Find("Button Prefab").gameObject,
+            Menu.transform,
+            new Vector3(3.5f * offset, -2.5f * offset, 0f),
+            "SaveAndClose",
+            offset
+        );
+        saveButton.name = "SaveAndExitButton";
     
-    // 设置删除按钮文本为红色
-    var deleteText = deleteButton.transform.Find("Text_TMP")?.GetComponent<TextMeshPro>();
-    if (deleteText != null)
-    {
-        deleteText.color = Color.red;
-    }
-    
-    var deletePassive = deleteButton.GetComponent<PassiveButton>();
-    if (deletePassive != null)
-    {
-        deletePassive.OnClick.RemoveAllListeners();
-        deletePassive.OnClick.AddListener((Action)(() => 
+        var savePassive = saveButton.GetComponent<PassiveButton>();
+        if (savePassive != null)
         {
-            if (string.IsNullOrEmpty(FriendCode)) return;
-            
-            var fileName = Path.Combine(TAGS_DIRECTORY_PATH, $"{FriendCode.Trim()}.json");
-            if (File.Exists(fileName))
+            savePassive.OnClick.RemoveAllListeners();
+            savePassive.OnClick.AddListener((Action)(() => 
             {
-                try
+                SaveToCache(CurrentComponent);
+                if (SaveToFile(FriendCode, CacheTag))
                 {
-                    File.Delete(fileName);
                     ReloadTag(FriendCode);
                     NameTagPanel.RefreshTagList();
-                    Toggle(null, false);
                 }
-                catch (Exception ex)
+                
+                Toggle(null, false);
+            }));
+        }
+    
+        // 删除按钮
+        var deleteButton = UiHelper.CreateButton(
+            Menu.transform.Find("Button Prefab").gameObject,
+            Menu.transform,
+            new Vector3(-3.5f * offset, -2.5f * offset, 0f),
+            GetString("Delete"),
+            offset,
+            false
+        );
+        deleteButton.name = "DeleteButton";
+    
+        // 设置删除按钮文本为红色
+        var deleteText = deleteButton.transform.Find("Text_TMP")?.GetComponent<TextMeshPro>();
+        if (deleteText != null)
+        {
+            deleteText.color = Color.red;
+        }
+    
+        var deletePassive = deleteButton.GetComponent<PassiveButton>();
+        if (deletePassive != null)
+        {
+            deletePassive.OnClick.RemoveAllListeners();
+            deletePassive.OnClick.AddListener((Action)(() => 
+            {
+                if (string.IsNullOrEmpty(FriendCode)) return;
+            
+                var fileName = Path.Combine(TAGS_DIRECTORY_PATH, $"{FriendCode.Trim()}.json");
+                if (File.Exists(fileName))
                 {
-                    Error($"Delete name tag failed: {ex}", "NameTagEditMenu");
+                    try
+                    {
+                        File.Delete(fileName);
+                        ReloadTag(FriendCode);
+                        NameTagPanel.RefreshTagList();
+                        Toggle(null, false);
+                    }
+                    catch (Exception ex)
+                    {
+                        Error($"Delete name tag failed: {ex}", "NameTagEditMenu");
+                    }
                 }
-            }
-        }));
+            }));
+        }
     }
-}
 
     private static void CreatePreviewSection()
     {
-        var offset = UiHelper.GetResolutionOffset();
+        var offset = GetResolutionOffset();
         
         Preview = UiHelper.CreateText(
             Menu.transform.Find("Title Prefab").gameObject,
             Menu.transform,
-            new Vector3(2f, 1.5f * offset, 0f),
+            new Vector3(0f, 1.2f * offset, 0f),
             DataManager.player.Customization.Name,
             0.6f
         );
@@ -410,7 +399,7 @@ public static class NameTagEditMenu
 
     private static void CreateInputFields()
     {
-        var offset = UiHelper.GetResolutionOffset();
+        var offset = GetResolutionOffset();
         
         // 文本输入区域
         Text_Enter = UiHelper.CreateInputField(

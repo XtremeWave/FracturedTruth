@@ -45,7 +45,7 @@ public static class NameTagNewWindow
     private static void CreateCloseButton()
     {
         var closeButton = UiHelper.CreateCloseButton(Window.transform, () => Window.SetActive(false));
-        closeButton.transform.localPosition = new Vector3(2.4f, 1.2f, -1f) * UiHelper.GetResolutionOffset();
+        closeButton.transform.localPosition = new Vector3(2.4f, 1.2f, -1f) * GetResolutionOffset();
     }
 
     private static void CreateInfoText()
@@ -53,7 +53,7 @@ public static class NameTagNewWindow
         Info = UiHelper.CreateText(
             Window.transform.Find("Info Prefab").gameObject,
             Window.transform,
-            new Vector3(0f, 0.1f, 0f) * UiHelper.GetResolutionOffset(),
+            new Vector3(0f, 0.1f, 0f) * GetResolutionOffset(),
             GetString("Tip.PleaseEnterFriendCode"),
             1f
         );
@@ -64,7 +64,7 @@ public static class NameTagNewWindow
     {
         EnterBox = UiHelper.CreateInputField(
             Window.transform,
-            new Vector3(0f, -0.04f, 0f) * UiHelper.GetResolutionOffset(),
+            new Vector3(0f, -0.04f, 0f) * GetResolutionOffset(),
             true
         );
         EnterBox.name = "Enter Friend Code Box";
@@ -80,9 +80,9 @@ public static class NameTagNewWindow
         ConfirmButton = UiHelper.CreateButton(
             Window.transform.Find("Button Prefab").gameObject,
             Window.transform,
-            new Vector3(0, -0.8f, 0f) * UiHelper.GetResolutionOffset(),
+            new Vector3(0, -0.8f, 0f) * GetResolutionOffset(),
             GetString(StringNames.Confirm),
-            UiHelper.GetResolutionOffset(),
+            GetResolutionOffset(),
             false
         );
         ConfirmButton.name = "Confirm Button";

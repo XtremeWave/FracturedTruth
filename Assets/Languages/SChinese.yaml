@@ -55,7 +55,7 @@ DeathReason.Disconnect: "断连"
 # 客户端选项 / Client Options
 FinalSuspectOptions: "Final Suspect 选项"
 ClientOption.UnlockFPS: "解锁帧数限制"
-ClientOption.SwitchOutfitTypeType: "切换外观形象"
+ClientOption.SwitchOutfitType: "切换外观形象"
 ClientOption.KickPlayerWithAbnormalFriendCode: "踢出好友代码异常的玩家"
 ClientOption.KickPlayerWithDenyName: "踢出使用违规昵称的玩家"
 ClientOption.KickPlayerInBanList: "踢出被封禁的玩家"
@@ -78,7 +78,6 @@ ClientOption.EnableFinalSuspect: "启用「终极嫌疑」"
 Value.BeanMode: "经典豆子模式"
 Value.HorseMode: "愚人节牧马模式"
 Value.LongMode: "愚人节长颈豆模式"
-
 
 # 客户端功能 / Client Features
 FinalSuspectFeatures: "Final Suspect 功能"
@@ -125,7 +124,7 @@ Tip.TextColorDescription: "文本颜色<size=60%>（Hex 颜色代码）\n不需�
 Tip.PleaseEnterFriendCode: "请输入新名称标识绑定的好友代码"
 Tip.FriendCodeAlreadyExist: "该好友代码已拥有名称标识"
 Tip.FriendCodeIncorrect: "请输入正确的好友代码"
-Tip.CustomNameTagHelp: "您可以为任意玩家添加名称标识，标识会在绑定好友代码的玩家加入后自动发放\n非会员用户仅可添加备注(会员功能暂未开发)"
+Tip.CustomNameTagHelp: "您可以为任意玩家添加名称标识，标识会在绑定好友代码的玩家加入后自动发放，进入房间后不能编辑标识\n非会员用户仅可添加备注(会员功能暂未开发)"
 
 
 # 更新结果

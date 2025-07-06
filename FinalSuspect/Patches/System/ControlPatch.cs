@@ -34,7 +34,7 @@ internal class ControllerManagerUpdatePatch
             InGameRoleInfoMenu.Hide();
         }
 
-        if (Input.GetKeyDown(KeyCode.F2))
+        if (Input.GetKeyDown(KeyCode.F2) && IsInGame)
         {
             ShowSettingsPanel = !ShowSettingsPanel;
         }

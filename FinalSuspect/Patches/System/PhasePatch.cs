@@ -1,4 +1,5 @@
 using FinalSuspect.Attributes;
+using UnityEngine;
 
 namespace FinalSuspect.Patches.System;
 
@@ -47,6 +48,7 @@ internal class CoStartGamePatch
     {
         IntroCutsceneOnDestroyPatch.IntroDestroyed = false;
         GameModuleInitializerAttribute.InitializeAll();
+        DestroyableSingleton<LobbyInfoPane>.Instance.gameObject.GetComponent<AspectPosition>().DistanceFromEdge += Vector3.forward * -30;
     }
 }
 
