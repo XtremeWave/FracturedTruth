@@ -43,7 +43,7 @@ public class Main : BasePlugin
     private const string DisplayedVersion_Date = BuildTime.Date;
 
     /// <summary>
-    /// 表示当前显示的版本类型。
+    ///     表示当前显示的版本类型。
     /// </summary>
     private const VersionTypes DisplayedVersion_Type = VersionTypes.Alpha;
 
@@ -216,7 +216,7 @@ public class Main : BasePlugin
                 { RoleTypes.ImpostorGhost, "#FF1919" },
                 { RoleTypes.Impostor, "#FF1919" },
                 { RoleTypes.Shapeshifter, "#FF819E" },
-                { RoleTypes.Phantom, "#CA8AFF" },
+                { RoleTypes.Phantom, "#CA8AFF" }
             };
         }
         catch (ArgumentException ex)
@@ -270,7 +270,7 @@ public class Main : BasePlugin
 }
 
 /// <summary>
-/// 表示软件版本的不同类型。
+///     表示软件版本的不同类型。
 /// </summary>
 public enum VersionTypes
 {
@@ -296,17 +296,17 @@ public enum VersionTypes
     Scrapter,
 
     /// <summary>
-    /// 正式发行版。
-    /// 除此之外若要发行，全部使用OpenBeta。
+    ///     正式发行版。
+    ///     除此之外若要发行，全部使用OpenBeta。
     /// </summary>
-    Release,
+    Release
 }
 
 public enum BypassType
 {
     Dont,
     Once,
-    LongTerm,
+    LongTerm
 }
 
 public enum OutfitType

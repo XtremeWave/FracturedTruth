@@ -8,13 +8,18 @@ namespace FinalSuspect.Modules.Resources;
 // 来源：Town Of Next
 public class HttpClientDownloadWithProgress(string downloadUrl, string destinationFilePath) : IDisposable
 {
-    private readonly string _downloadUrl = downloadUrl;
+    public delegate void ProgressChangedHandler(long? totalFileSize, long totalBytesDownloaded,
+        double? progressPercentage);
+
     private readonly string _destinationFilePath = destinationFilePath;
+    private readonly string _downloadUrl = downloadUrl;
 
     private HttpClient _httpClient;
 
-    public delegate void ProgressChangedHandler(long? totalFileSize, long totalBytesDownloaded,
-        double? progressPercentage);
+    public void Dispose()
+    {
+        _httpClient?.Dispose();
+    }
 
     public event ProgressChangedHandler ProgressChanged;
 
@@ -62,9 +67,7 @@ public class HttpClientDownloadWithProgress(string downloadUrl, string destinati
 
             if (readCount % 100 == 0)
                 TriggerProgressChanged(totalDownloadSize, totalBytesRead);
-        }
-
-        while (isMoreToRead);
+        } while (isMoreToRead);
     }
 
     private void TriggerProgressChanged(long? totalDownloadSize, long totalBytesRead)
@@ -78,6 +81,4 @@ public class HttpClientDownloadWithProgress(string downloadUrl, string destinati
 
         ProgressChanged(totalDownloadSize, totalBytesRead, progressPercentage);
     }
-
-    public void Dispose() => _httpClient?.Dispose();
 }

@@ -8,11 +8,6 @@ namespace FinalSuspect.Modules.ClientActions;
 
 public class ClientFeatureItem
 {
-    public ToggleButtonBehaviour ToggleButton { get; set; }
-    public Action OnClickAction { get; protected set; }
-
-    public static SpriteRenderer CustomBackground { get; set; }
-    public static ToggleButtonBehaviour ModOptionsButton { get; set; }
     private static int numItems;
 
     protected ClientFeatureItem(string name, OptionsMenuBehaviour optionsMenuBehaviour)
@@ -49,19 +44,11 @@ public class ClientFeatureItem
                 for (var i = 0; i < selectableButtons.Length; i++)
                 {
                     var button = selectableButtons[i];
-                    if (button == null)
-                    {
-                        continue;
-                    }
+                    if (button == null) continue;
 
                     if (button.name == "LeaveGameButton")
-                    {
                         leaveButton = button.GetComponent<PassiveButton>();
-                    }
-                    else if (button.name == "ReturnToGameButton")
-                    {
-                        returnButton = button.GetComponent<PassiveButton>();
-                    }
+                    else if (button.name == "ReturnToGameButton") returnButton = button.GetComponent<PassiveButton>();
                 }
 
                 var generalTab = mouseMoveToggle.transform.parent.parent.parent;
@@ -80,15 +67,9 @@ public class ClientFeatureItem
                     CustomBackground.gameObject.SetActive(true);
                 }));
 
-                if (leaveButton)
-                {
-                    leaveButton.transform.localPosition = new Vector3(-1.35f, -2.411f, -1f);
-                }
+                if (leaveButton) leaveButton.transform.localPosition = new Vector3(-1.35f, -2.411f, -1f);
 
-                if (returnButton)
-                {
-                    returnButton.transform.localPosition = new Vector3(1.35f, -2.411f, -1f);
-                }
+                if (returnButton) returnButton.transform.localPosition = new Vector3(1.35f, -2.411f, -1f);
             }
 
             // ボタン生成
@@ -112,8 +93,14 @@ public class ClientFeatureItem
         }
     }
 
+    public ToggleButtonBehaviour ToggleButton { get; set; }
+    public Action OnClickAction { get; protected set; }
+
+    public static SpriteRenderer CustomBackground { get; set; }
+    public static ToggleButtonBehaviour ModOptionsButton { get; set; }
+
     /// <summary>
-    /// Modオプション画面に何かアクションを起こすボタンを追加します
+    ///     Modオプション画面に何かアクションを起こすボタンを追加します
     /// </summary>
     /// <param name="name">ボタンラベルの翻訳キーとボタンのオブジェクト名</param>
     /// <param name="onClickAction">クリック時に発火するアクション</param>

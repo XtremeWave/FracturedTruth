@@ -7,22 +7,38 @@ namespace FinalSuspect.DataHandling;
 
 public static partial class XtremeGameData
 {
-    public static bool OtherModClient(this PlayerControl player) =>
-        OtherModClient(player.PlayerId) ||
-        player.Data.OwnerId == -2
-        && !IsFinalSuspect(player.PlayerId)
-        && !IsFreePlay;
+    public static bool OtherModClient(this PlayerControl player)
+    {
+        return OtherModClient(player.PlayerId) ||
+               (player.Data.OwnerId == -2
+                && !IsFinalSuspect(player.PlayerId)
+                && !IsFreePlay);
+    }
 
-    public static bool OtherModClient(byte id) =>
-        GetPlayerVersion(id, out var ver) && Main.ForkId != ver.forkId;
+    public static bool OtherModClient(byte id)
+    {
+        return GetPlayerVersion(id, out var ver) && Main.ForkId != ver.forkId;
+    }
 
-    public static bool ModClient(this PlayerControl player) => ModClient(player.PlayerId);
-    public static bool ModClient(byte id) => GetPlayerVersion(id, out _);
+    public static bool ModClient(this PlayerControl player)
+    {
+        return ModClient(player.PlayerId);
+    }
 
-    public static bool IsFinalSuspect(this PlayerControl pc) => IsFinalSuspect(pc.PlayerId);
+    public static bool ModClient(byte id)
+    {
+        return GetPlayerVersion(id, out _);
+    }
 
-    public static bool IsFinalSuspect(byte id) =>
-        PlayerVersion.playerVersion.TryGetValue(id, out var ver) && Main.ForkId == ver.forkId;
+    public static bool IsFinalSuspect(this PlayerControl pc)
+    {
+        return IsFinalSuspect(pc.PlayerId);
+    }
+
+    public static bool IsFinalSuspect(byte id)
+    {
+        return PlayerVersion.playerVersion.TryGetValue(id, out var ver) && Main.ForkId == ver.forkId;
+    }
 
     public static class GameStates
     {

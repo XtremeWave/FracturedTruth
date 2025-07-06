@@ -64,10 +64,7 @@ public static class SoundManager
             var matchingKey = extensions.FirstOrDefault(currectpath.Contains);
             if (matchingKey is null) return false;
             var currentIndex = Array.IndexOf(extensionsArray, matchingKey);
-            if (currentIndex == -1)
-            {
-                return false;
-            }
+            if (currentIndex == -1) return false;
 
             var nextIndex = (currentIndex + 1) % extensionsArray.Length;
             path = path.Replace(matchingKey, extensionsArray[nextIndex]);
@@ -130,7 +127,7 @@ public enum SupportedMusics
     Fractured__Slok, // 这首会有大用
     StruggleAgainstFadingFlame__Slok,
     ElegyOfFracturedVow__Slok,
-    VestigiumSplendoris__Slok,
+    VestigiumSplendoris__Slok
 }
 
 public enum AudiosStates
@@ -141,22 +138,24 @@ public enum AudiosStates
     IsPlaying,
     DownLoadSucceedNotice,
     DownLoadFailureNotice,
-    IsLoading,
+    IsLoading
 }
 
 public class XtremeMusic
 {
     public static readonly List<XtremeMusic> musics = [];
 
-    public string Name;
-    public string FileName;
+    private static readonly object finalMusicsLock = new();
     public string Author;
-    public string Path;
     public AudioClip Clip;
 
     public SupportedMusics CurrectAudio;
     public AudiosStates CurrectAudioStates;
+    public string FileName;
     public AudiosStates LastAudioStates;
+
+    public string Name;
+    public string Path;
 
     public bool UnOfficial;
     //public bool unpublished;
@@ -164,13 +163,8 @@ public class XtremeMusic
 
     public static void InitializeAll()
     {
-        foreach (var file in EnumHelper.GetAllValues<SupportedMusics>().ToList())
-        {
-            CreateMusic(music: file);
-        }
+        foreach (var file in EnumHelper.GetAllValues<SupportedMusics>().ToList()) CreateMusic(music: file);
     }
-
-    private static readonly object finalMusicsLock = new();
 
     public static void CreateMusic(string name = "", SupportedMusics music = SupportedMusics.UnOfficial)
     {
@@ -235,12 +229,12 @@ public class XtremeMusic
                 file.Path = Path;
                 if (file.CurrectAudioStates is AudiosStates.DownLoadFailureNotice or AudiosStates.DownLoadSucceedNotice
                     || CurrectAudioStates is AudiosStates.NotExist)
-                {
                     file.CurrectAudioStates = file.LastAudioStates = CurrectAudioStates;
-                }
             }
             else if (Name != string.Empty)
+            {
                 musics.Add(this);
+            }
         }
     }
 }

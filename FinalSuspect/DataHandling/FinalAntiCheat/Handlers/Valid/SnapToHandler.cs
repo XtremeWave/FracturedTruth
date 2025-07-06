@@ -9,5 +9,8 @@ public class SnapToHandler : IRpcHandler
         (byte)RpcCalls.SnapTo
     ];
 
-    public int MaxiReceivedNumPerSecond() => 30;
+    public int MaxiReceivedNumPerSecond()
+    {
+        return 30;
+    }
 }

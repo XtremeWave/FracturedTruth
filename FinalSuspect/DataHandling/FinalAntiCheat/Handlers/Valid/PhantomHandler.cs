@@ -13,7 +13,7 @@ public class PhantomHandler : IRpcHandler
         (byte)RpcCalls.CheckVanish,
         (byte)RpcCalls.StartVanish,
         (byte)RpcCalls.CheckAppear,
-        (byte)RpcCalls.StartAppear,
+        (byte)RpcCalls.StartAppear
     ];
 
     public bool HandleLobby(PlayerControl sender, MessageReader reader,

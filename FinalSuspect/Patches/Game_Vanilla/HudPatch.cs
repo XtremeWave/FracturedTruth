@@ -29,6 +29,7 @@ internal class SetVentOutlinePatch
 internal class TaskPanelBehaviourPatch
 {
     private static bool even;
+
     public static void Postfix(TaskPanelBehaviour __instance)
     {
         if (!IsInGame) return;
@@ -50,8 +51,8 @@ internal class TaskPanelBehaviourPatch
             foreach (var eachLine in lines)
             {
                 var line = eachLine.Trim();
-                if ((line.StartsWith("<color=#FF1919FF>") || line.StartsWith("<color=#FF0000FF>")) && sb.Length < 1 &&
-                    !line.Contains('(') || line.Contains(GetString(StringNames.FixComms))) continue;
+                if (((line.StartsWith("<color=#FF1919FF>") || line.StartsWith("<color=#FF0000FF>")) && sb.Length < 1 &&
+                     !line.Contains('(')) || line.Contains(GetString(StringNames.FixComms))) continue;
                 sb.Append(line + "\r\n");
             }
 
@@ -151,13 +152,9 @@ public static class HudManagerPatch
         if (IsInGame)
         {
             if (PlayerControl.LocalPlayer.IsImpostor())
-            {
                 color = ColorHelper.ImpostorRedPale;
-            }
             else
-            {
                 color = GetRoleColor(RoleTypes.Crewmate);
-            }
         }
         else
         {
@@ -193,7 +190,7 @@ public static class HudManagerPatch
 
     public static void UpdateResult(HudManager __instance)
     {
-        if (IsFreePlay || !IsInGame && GetLineCount(LastResultText) < 6)
+        if (IsFreePlay || (!IsInGame && GetLineCount(LastResultText) < 6))
             return;
         var showInitially = Main.ShowResults.Value;
 
@@ -216,7 +213,7 @@ public static class HudManagerPatch
                 GetString(showInitially ? "Summary.HideResults" : "Summary.ShowResults"))
             {
                 Scale = new Vector2(1.5f, 0.5f),
-                FontSize = 2f,
+                FontSize = 2f
             };
 
         StringBuilder sb = new($"{GetString("Summary.Text")}{LastGameResult}");
@@ -236,9 +233,7 @@ public static class HudManagerPatch
         {
             StringBuilder sb2 = new();
             foreach (var data in XtremePlayerData.AllPlayerData)
-            {
                 sb2.Append("\n\u3000 ").Append(SummaryTexts(data.PlayerId));
-            }
 
             LastGameData = sb2.ToString();
         }
@@ -253,8 +248,8 @@ public static class HudManagerPatch
                 Color.white,
                 1.25f,
                 TextAlignmentOptions.TopLeft,
-                setActive: showInitially,
-                parent: showHideButton.Button.transform);
+                showInitially,
+                showHideButton.Button.transform);
             roleSummary.transform.localPosition = new Vector3(1.7f, -0.4f, -1f);
             roleSummary.transform.localScale = new Vector3(1.2f, 1.2f, 1f);
             roleSummary.fontStyle = FontStyles.Bold;
@@ -381,7 +376,8 @@ public static class HudManagerPatch
                 UpdateResult(__instance);
                 SetChatBG(__instance);
                 SetAbilityButtonColor(__instance);
-                if (!ControllerManagerUpdatePatch.ShowSettingsPanel && IsInGame && DestroyableSingleton<LobbyInfoPane>.Instance.gameObject.active)
+                if (!ControllerManagerUpdatePatch.ShowSettingsPanel && IsInGame &&
+                    DestroyableSingleton<LobbyInfoPane>.Instance.gameObject.active)
                     DestroyableSingleton<LobbyInfoPane>.Instance.gameObject.SetActive(false);
             }
             catch

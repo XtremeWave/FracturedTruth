@@ -8,7 +8,7 @@ public class SendChatHandler : IRpcHandler
 {
     public List<byte> TargetRpcs =>
     [
-        (byte)RpcCalls.SendChat,
+        (byte)RpcCalls.SendChat
     ];
 
     public bool HandleAll(PlayerControl sender, MessageReader reader,

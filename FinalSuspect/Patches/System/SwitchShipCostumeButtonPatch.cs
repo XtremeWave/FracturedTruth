@@ -9,7 +9,8 @@ public class SwitchShipCostumeButtonPatch
     private static int Costume;
     private static GameObject SwitchShipCostumeButton;
 
-    [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.Awake)), HarmonyPostfix]
+    [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.Awake))]
+    [HarmonyPostfix]
     public static void ShipStatusFixedUpdate(ShipStatus __instance)
     {
         var mapId = GameOptionsManager.Instance.CurrentGameOptions.MapId;
@@ -35,7 +36,8 @@ public class SwitchShipCostumeButtonPatch
         }
     }
 
-    [HarmonyPatch(typeof(SystemConsole), nameof(SystemConsole.Use)), HarmonyPrefix]
+    [HarmonyPatch(typeof(SystemConsole), nameof(SystemConsole.Use))]
+    [HarmonyPrefix]
     public static bool UseConsole(SystemConsole __instance)
     {
         if (__instance.name != "Switch Ship Costume Console") return true;

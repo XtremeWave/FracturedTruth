@@ -36,8 +36,10 @@ public class LoadingBarManagerPatch
             cr.transform.localPosition = new Vector3(LogoVector.x, LogoVector.y + 60, LogoVector.z);
             trans.localPosition = new Vector3(LogoVector.x, LogoVector.y + 60, LogoVector.z);
             cr.transform.localScale = new Vector3(0.3f, 0.3f, 1);
-            ModLogo.GetComponent<RectTransform>().localPosition = new Vector3(LogoVector.x, LogoVector.y - 80, LogoVector.z);
-            ModLogo.GetComponent<CanvasRenderer>().transform.localPosition = new Vector3(LogoVector.x, LogoVector.y - 80, LogoVector.z);
+            ModLogo.GetComponent<RectTransform>().localPosition =
+                new Vector3(LogoVector.x, LogoVector.y - 80, LogoVector.z);
+            ModLogo.GetComponent<CanvasRenderer>().transform.localPosition =
+                new Vector3(LogoVector.x, LogoVector.y - 80, LogoVector.z);
             ModLogo.GetComponent<RectTransform>().localScale = new Vector3(1.4f, 1.4f, 1);
             ModLogo.GetComponent<CanvasRenderer>().transform.localScale = new Vector3(1.4f, 1.4f, 1);
         }

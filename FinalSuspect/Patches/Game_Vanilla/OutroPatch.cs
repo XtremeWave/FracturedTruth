@@ -75,7 +75,7 @@ internal class SetEverythingUpPatch
                 GetString(showInitially ? "Summary.HideResults" : "Summary.ShowResults"))
             {
                 Scale = new Vector2(1.5f, 0.5f),
-                FontSize = 2f,
+                FontSize = 2f
             };
         var lastgameresult = DidHumansWin ? GetString("Summary.CrewsWin") : GetString("Summary.ImpsWin");
         HudManagerPatch.LastGameResult = lastgameresult;
@@ -90,15 +90,11 @@ internal class SetEverythingUpPatch
 
         StringBuilder sb2 = new();
         foreach (var data in XtremePlayerData.AllPlayerData.Where(x => x.IsImpostor != DidHumansWin))
-        {
             sb2.Append($"\n<color={CustomWinnerColor}>★</color> ")
                 .Append(AmongUsClientEndGamePatch.SummaryText[data.PlayerId]);
-        }
 
         foreach (var data in XtremePlayerData.AllPlayerData.Where(x => x.IsImpostor == DidHumansWin))
-        {
             sb2.Append("\n\u3000 ").Append(AmongUsClientEndGamePatch.SummaryText[data.PlayerId]);
-        }
 
         HudManagerPatch.LastGameData = sb2.ToString();
         sb.Append(sb2);
@@ -109,8 +105,8 @@ internal class SetEverythingUpPatch
             Color.white,
             1.25f,
             TextAlignmentOptions.TopLeft,
-            setActive: showInitially,
-            parent: showHideButton.Button.transform);
+            showInitially,
+            showHideButton.Button.transform);
         roleSummary.transform.localPosition = new Vector3(1.7f, -0.4f, -1f);
         roleSummary.transform.localScale = new Vector3(1.2f, 1.2f, 1f);
         roleSummary.fontStyle = FontStyles.Bold;

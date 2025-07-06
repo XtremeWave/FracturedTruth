@@ -12,7 +12,7 @@ public class ShapeShifterHandler : IRpcHandler
     [
         (byte)RpcCalls.Shapeshift,
         (byte)RpcCalls.CheckShapeshift,
-        (byte)RpcCalls.RejectShapeshift,
+        (byte)RpcCalls.RejectShapeshift
     ];
 
     public bool HandleLobby(PlayerControl sender, MessageReader reader,

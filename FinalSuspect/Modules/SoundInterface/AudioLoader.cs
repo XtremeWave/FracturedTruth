@@ -56,7 +56,7 @@ public class AudioLoader
 
     private static async Task<byte[]> ReadAllBytesAsync(string filePath)
     {
-        using var sourceStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, true);
+        await using var sourceStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, true);
         var buffer = new byte[sourceStream.Length];
         // ReSharper disable once MustUseReturnValue
         await sourceStream.ReadAsync(buffer.AsMemory(0, (int)sourceStream.Length)).ConfigureAwait(false);
@@ -74,11 +74,7 @@ public class AudioLoader
             fixed (float* floatPtr = floatData)
             {
                 var src = (short*)bytePtr;
-                var dst = floatPtr;
-                for (var i = 0; i < floatCount; i++)
-                {
-                    dst[i] = src[i] / 32768.0f;
-                }
+                for (var i = 0; i < floatCount; i++) floatPtr[i] = src[i] / 32768.0f;
             }
         }
 

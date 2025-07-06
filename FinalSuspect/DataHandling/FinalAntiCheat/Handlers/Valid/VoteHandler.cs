@@ -11,7 +11,7 @@ public class VoteHandler : IRpcHandler
         (byte)RpcCalls.VotingComplete,
         (byte)RpcCalls.CastVote,
         (byte)RpcCalls.ClearVote,
-        (byte)RpcCalls.AddVote,
+        (byte)RpcCalls.AddVote
     ];
 
     public bool HandleLobby(PlayerControl sender, MessageReader reader,

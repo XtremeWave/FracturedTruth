@@ -27,7 +27,7 @@ public static class ServerDropDownPatch
             .OrderBy(ServerManager.DefaultRegions.Contains).ToList();
         var totalColumns = Mathf.Max(1, Mathf.CeilToInt(regions.Count / (float)maxPerColumn));
         //int rowsInLastColumn = regions.Count % maxPerColumn;
-        var maxRows = (regions.Count > maxPerColumn) ? maxPerColumn : regions.Count;
+        var maxRows = regions.Count > maxPerColumn ? maxPerColumn : regions.Count;
 
         foreach (var regionInfo in regions)
         {
@@ -63,16 +63,13 @@ public static class ServerDropDownPatch
             __instance.controllerSelectable.Add(serverListButton.Button);
 
             num++;
-            if (num % maxPerColumn == 0)
-            {
-                column++;
-            }
+            if (num % maxPerColumn == 0) column++;
         }
 
         // 调整背景大小和位置
         var backgroundHeight = 1.2f + buttonSpacing * (maxRows - 1);
-        var backgroundWidth = (totalColumns > 1)
-            ? (columnWidth * (totalColumns - 1) + __instance.background.size.x)
+        var backgroundWidth = totalColumns > 1
+            ? columnWidth * (totalColumns - 1) + __instance.background.size.x
             : __instance.background.size.x;
 
         __instance.background.transform.localPosition = new Vector3(
@@ -118,7 +115,7 @@ public static class ServerDropDownPatch
         // 计算背景大小和位置
         var maxRows = Math.Min(buttonsPerColumn, allButtons.Count);
         var backgroundHeight = 1.2f + buttonSpacing * (maxRows - 1);
-        var backgroundWidth = (columnCount > 1) ? (columnSpacing * (columnCount - 1) + 5) : 5;
+        var backgroundWidth = columnCount > 1 ? columnSpacing * (columnCount - 1) + 5 : 5;
 
         __instance.background.transform.localPosition = new Vector3(
             0f,

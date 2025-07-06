@@ -8,7 +8,8 @@ public static class RegionMenuPatch
 {
     private static Scroller Scroller;
 
-    [HarmonyPatch(nameof(RegionMenu.Awake)), HarmonyPostfix]
+    [HarmonyPatch(nameof(RegionMenu.Awake))]
+    [HarmonyPostfix]
     public static void Awake_Postfix(RegionMenu __instance)
     {
         if (Scroller) return;
@@ -26,7 +27,10 @@ public static class RegionMenuPatch
         Scroller.allowY = true;
     }
 
-    [HarmonyPatch(nameof(RegionMenu.ChooseOption)), HarmonyPostfix]
+    [HarmonyPatch(nameof(RegionMenu.ChooseOption))]
+    [HarmonyPostfix]
     public static void ChooseOption_Postfix()
-        => ServerAddManager.SetServerName();
+    {
+        ServerAddManager.SetServerName();
+    }
 }

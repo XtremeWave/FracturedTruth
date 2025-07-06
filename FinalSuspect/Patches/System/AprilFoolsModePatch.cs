@@ -34,7 +34,6 @@ public static class GetHnsBodyType_Patch
     public static void Postfix(ref PlayerBodyTypes __result, [HarmonyArgument(0)] PlayerControl player)
     {
         if (player == null || player.Data == null || player.Data.Role == null)
-        {
             switch (Main.SwitchOutfitType.Value)
             {
                 case OutfitType.HorseMode:
@@ -48,7 +47,6 @@ public static class GetHnsBodyType_Patch
                     __result = PlayerBodyTypes.Normal;
                     return;
             }
-        }
 
         switch (Main.SwitchOutfitType.Value)
         {
@@ -94,7 +92,8 @@ public static class LongBoiPatches
         //Fixes base-game layer issues
         __instance.cosmeticLayer.OnSetBodyAsGhost += (Action)__instance.SetPoolableGhost;
         __instance.cosmeticLayer.OnColorChange += (Action<int>)__instance.SetHeightFromColor;
-        __instance.cosmeticLayer.OnCosmeticSet += (Action<string, int, CosmeticsLayer.CosmeticKind>)__instance.OnCosmeticSet;
+        __instance.cosmeticLayer.OnCosmeticSet +=
+            (Action<string, int, CosmeticsLayer.CosmeticKind>)__instance.OnCosmeticSet;
         __instance.gameObject.layer = 8;
         return false;
     }
@@ -105,25 +104,17 @@ public static class LongBoiPatches
     {
         //Fixes more runtime issues
         __instance.ShouldLongAround = true;
-        if (__instance.hideCosmeticsQC)
-        {
-            __instance.cosmeticLayer.SetHatVisorVisible(false);
-        }
+        if (__instance.hideCosmeticsQC) __instance.cosmeticLayer.SetHatVisorVisible(false);
 
         __instance.SetupNeckGrowth();
         if (__instance.isExiledPlayer)
         {
             var instance = ShipStatus.Instance;
             if (instance == null || instance.Type != ShipStatus.MapType.Fungle)
-            {
                 __instance.cosmeticLayer.AdjustCosmeticRotations(-17.75f);
-            }
         }
 
-        if (!__instance.isPoolablePlayer)
-        {
-            __instance.cosmeticLayer.ValidateCosmetics();
-        }
+        if (!__instance.isPoolablePlayer) __instance.cosmeticLayer.ValidateCosmetics();
 
         return false;
     }

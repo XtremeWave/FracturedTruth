@@ -16,7 +16,7 @@ public enum Sounds
     TaskComplete,
     TaskUpdateSound,
     ImpTransform,
-    Yeehawfrom,
+    Yeehawfrom
 }
 
 [HarmonyPatch]
@@ -89,21 +89,16 @@ internal class RPCHandlerPatch
 
     private static void HandleCheater(PlayerControl player, bool notify, string reason, bool ban, byte callId)
     {
-        if (!player.IsLocalPlayer())
-        {
-            player.MarkAsCheater();
-        }
+        if (!player.IsLocalPlayer()) player.MarkAsCheater();
 
         if (AmongUsClient.Instance.AmHost)
         {
             KickPlayer(player.PlayerId, ban, reason, KickLevel.None);
             WarnHost();
             if (notify)
-            {
                 NotificationPopperPatch.NotificationPop(
                     string.Format(GetString("CheatDetected.InvalidSlothRPC"), player.GetRealName(),
                         $"{callId}({RPC.GetRpcName(callId)})"));
-            }
         }
         else if (notify)
         {
@@ -192,7 +187,8 @@ internal class RPCHandlerPatch
                     var forkId = reader.ReadString();
 
                     _ = RPC.RpcVersionCheck();
-                    XtremeGameData.PlayerVersion.playerVersion[player.PlayerId] = new XtremeGameData.PlayerVersion(version, tag, forkId);
+                    XtremeGameData.PlayerVersion.playerVersion[player.PlayerId] =
+                        new XtremeGameData.PlayerVersion(version, tag, forkId);
 
                     if (Main.VersionCheat.Value && AmongUsClient.Instance.AmHost)
                         XtremeGameData.PlayerVersion.playerVersion[player.PlayerId] =
@@ -244,9 +240,7 @@ internal static class RPC
 
             if (PlayerControl.LocalPlayer == null ||
                 AmongUsClient.Instance == null)
-            {
                 return;
-            }
 
             if (!Main.VersionCheat.Value)
             {
@@ -261,14 +255,12 @@ internal static class RPC
             }
 
             if (XtremeGameData.PlayerVersion.playerVersion != null)
-            {
                 XtremeGameData.PlayerVersion.playerVersion[PlayerControl.LocalPlayer.PlayerId] =
                     new XtremeGameData.PlayerVersion(
                         Main.PluginVersion,
                         $"{Main.GitCommit}({Main.GitBranch})",
                         Main.ForkId
                     );
-            }
         }
         catch (OperationCanceledException)
         {

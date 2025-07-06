@@ -9,15 +9,19 @@ namespace FinalSuspect.Modules.Features;
 
 public static class InGameRoleInfoMenu
 {
-    public static bool Showing => Fill && Fill.active && Menu && Menu.active;
+    public const string FirstHeaderSize = "130%";
+    public const string SecondHeaderSize = "100%";
+    public const string BodySize = "70%";
+    public const string BlankLineSize = "30%";
 
     public static GameObject Fill;
-    public static SpriteRenderer FillSP => Fill.GetComponent<SpriteRenderer>();
 
     public static GameObject Menu;
 
     public static GameObject RoleInfo;
     public static GameObject RoleIllustration;
+    public static bool Showing => Fill && Fill.active && Menu && Menu.active;
+    public static SpriteRenderer FillSP => Fill.GetComponent<SpriteRenderer>();
     public static SpriteRenderer RoleIllustrationSP => RoleIllustration.GetComponent<SpriteRenderer>();
 
     public static TextMeshPro RoleInfoTMP => RoleInfo.GetComponent<TextMeshPro>();
@@ -101,9 +105,4 @@ public static class InGameRoleInfoMenu
         Menu?.SetActive(false);
         //HudManager.Instance?.gameObject?.SetActive(true);
     }
-
-    public const string FirstHeaderSize = "130%";
-    public const string SecondHeaderSize = "100%";
-    public const string BodySize = "70%";
-    public const string BlankLineSize = "30%";
 }

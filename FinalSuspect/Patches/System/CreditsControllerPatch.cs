@@ -19,7 +19,7 @@ public class CreditsControllerPatch
             "- Niko233",
             "- Amongus(水木年华)",
             "- Yu(Night_瓜)",
-            "- 天寸梦初",
+            "- 天寸梦初"
         };
 
         var credits = new List<CreditsController.CreditStruct>();
@@ -46,7 +46,7 @@ public class CreditsControllerPatch
             credits.Add(new CreditsController.CreditStruct
             {
                 format = "title",
-                columns = new[] { title },
+                columns = new[] { title }
             });
         }
 
@@ -59,13 +59,14 @@ public class CreditsControllerPatch
                 credits.Add(new CreditsController.CreditStruct
                 {
                     format = "person",
-                    columns = cols.ToArray(),
+                    columns = cols.ToArray()
                 });
             }
         }
     }
 
-    [HarmonyPatch(nameof(CreditsController.AddCredit)), HarmonyPrefix]
+    [HarmonyPatch(nameof(CreditsController.AddCredit))]
+    [HarmonyPrefix]
     public static void AddCreditPrefix(CreditsController __instance,
         [HarmonyArgument(0)] CreditsController.CreditStruct originalCredit)
     {

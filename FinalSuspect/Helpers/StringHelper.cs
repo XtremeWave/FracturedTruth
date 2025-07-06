@@ -21,17 +21,30 @@ public static class StringHelper
     }
 
     /// <summary>
-    /// 计算使用SJIS编码时的字节数
+    ///     计算使用SJIS编码时的字节数
     /// </summary>
-    public static int GetByteCount(this string self) => shiftJIS.GetByteCount(self);
+    public static int GetByteCount(this string self)
+    {
+        return shiftJIS.GetByteCount(self);
+    }
 
-    public static string RemoveHtmlTags(this string str) => Regex.Replace(str, "<[^>]*?>", string.Empty);
+    public static string RemoveHtmlTags(this string str)
+    {
+        return Regex.Replace(str, "<[^>]*?>", string.Empty);
+    }
 
-    public static string RemoveHtmlTagsExcept(this string str, string exceptionLabel) =>
-        Regex.Replace(str, "<(?!/*" + exceptionLabel + ")[^>]*?>", string.Empty);
+    public static string RemoveHtmlTagsExcept(this string str, string exceptionLabel)
+    {
+        return Regex.Replace(str, "<(?!/*" + exceptionLabel + ")[^>]*?>", string.Empty);
+    }
 
-    public static string RemoveColorTags(this string str) => Regex.Replace(str, "</?color(=#[0-9a-fA-F]*)?>", "");
+    public static string RemoveColorTags(this string str)
+    {
+        return Regex.Replace(str, "</?color(=#[0-9a-fA-F]*)?>", "");
+    }
 
-    public static string ColorString(Color32 color, string str) =>
-        $"<color=#{color.r:x2}{color.g:x2}{color.b:x2}{color.a:x2}>{str}</color>";
+    public static string ColorString(Color32 color, string str)
+    {
+        return $"<color=#{color.r:x2}{color.g:x2}{color.b:x2}{color.a:x2}>{str}</color>";
+    }
 }

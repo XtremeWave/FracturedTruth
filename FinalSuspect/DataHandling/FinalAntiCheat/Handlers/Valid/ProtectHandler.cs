@@ -9,7 +9,7 @@ public class ProtectHandler : IRpcHandler
     public List<byte> TargetRpcs =>
     [
         (byte)RpcCalls.ProtectPlayer,
-        (byte)RpcCalls.CheckProtect,
+        (byte)RpcCalls.CheckProtect
     ];
 
     public bool HandleLobby(PlayerControl sender, MessageReader reader,

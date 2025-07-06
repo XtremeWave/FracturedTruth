@@ -12,7 +12,7 @@ public class OutfitStrHandler : IRpcHandler
         (byte)RpcCalls.SetSkinStr,
         (byte)RpcCalls.SetPetStr,
         (byte)RpcCalls.SetVisorStr,
-        (byte)RpcCalls.SetNamePlateStr,
+        (byte)RpcCalls.SetNamePlateStr
     ];
 
     public bool HandleGame_All(PlayerControl sender, MessageReader reader,

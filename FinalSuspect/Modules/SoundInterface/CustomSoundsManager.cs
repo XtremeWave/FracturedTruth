@@ -23,9 +23,7 @@ public static class CustomSoundsManager
             _ = new MainThreadTask(() =>
             {
                 foreach (var file in XtremeMusic.musics.Where(file => file.FileName == audio.FileName))
-                {
                     file.CurrectAudioStates = AudiosStates.IsPlaying;
-                }
 
                 SoundManager.ReloadTag();
                 //MyMusicPanel.RefreshTagList();
@@ -54,13 +52,9 @@ public static class CustomSoundsManager
             //SoundManagementPanel.RefreshTagList();
         }, "Refresh Tag List");
         if (Main.DisableVanillaSound.Value)
-        {
             StopPlayVanilla();
-        }
         else
-        {
             StartPlayVanilla();
-        }
     }
 
     public static void StopPlayVanilla()
@@ -208,10 +202,7 @@ public class AudioManagementStopAllSoundPatch
         var keysToRemove = new List<AudioClip>();
         foreach (var (key, value) in __instance.allSources)
         {
-            if (XtremeMusic.musics.Any(x => x.Clip == key))
-            {
-                continue;
-            }
+            if (XtremeMusic.musics.Any(x => x.Clip == key)) continue;
 
             value.volume = 0f;
             value.Stop();
@@ -219,10 +210,7 @@ public class AudioManagementStopAllSoundPatch
             keysToRemove.Add(key);
         }
 
-        foreach (var key in keysToRemove)
-        {
-            __instance.allSources.Remove(key);
-        }
+        foreach (var key in keysToRemove) __instance.allSources.Remove(key);
 
         return false;
     }

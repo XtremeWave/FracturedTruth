@@ -49,10 +49,7 @@ public static class ResourcesManager
             }
 
             var data = JsonSerializer.Deserialize<Dictionary<string, List<string>>>(result);
-            foreach (var kvp in data)
-            {
-                AllResources.Add(kvp.Key, kvp.Value);
-            }
+            foreach (var kvp in data) AllResources.Add(kvp.Key, kvp.Value);
 
             return true;
         }

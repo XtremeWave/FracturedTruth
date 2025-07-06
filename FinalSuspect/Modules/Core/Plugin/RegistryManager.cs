@@ -7,9 +7,9 @@ namespace FinalSuspect.Modules.Core.Plugin;
 # pragma warning disable CA1416
 public static class RegistryManager
 {
-    public static RegistryKey SoftwareKeys => Registry.CurrentUser.OpenSubKey("Software", true);
     public static RegistryKey Keys = SoftwareKeys.OpenSubKey("AU-FinalSuspect", true);
     public static Version LastVersion;
+    public static RegistryKey SoftwareKeys => Registry.CurrentUser.OpenSubKey("Software", true);
 
     public static void Init()
     {
@@ -32,7 +32,7 @@ public static class RegistryManager
         Keys.SetValue("Last launched version", Main.version.ToString());
         Keys.SetValue("Path", Path.GetFullPath("./"));
 
-        List<string> FoldersNFileToDel = [@"./TOH_DATA",];
+        List<string> FoldersNFileToDel = [@"./TOH_DATA"];
 
         Info("上次启动的FinalSuspect版本：" + LastVersion, "Registry Manager");
 

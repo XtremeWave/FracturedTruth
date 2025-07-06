@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using AmongUs.Data;
 using FinalSuspect.Helpers;
-using FinalSuspect.Modules.Features;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,34 +10,38 @@ namespace FinalSuspect.Modules.ClientActions.FeatureItems.NameTag;
 
 public static class NameTagPanel
 {
-    public static SpriteRenderer CustomBackground { get; private set; }
-    public static List<GameObject> Items { get; private set; } = new List<GameObject>();
     private static int numItems;
     private static ToggleButtonBehaviour ButtonTemplate;
+    public static SpriteRenderer CustomBackground { get; private set; }
+    public static List<GameObject> Items { get; private set; } = new();
     public static int CurrentPage { get; private set; } = 1;
     public static int ItemsPerPage => 8;
-    public static int TotalPageCount => 
+
+    public static int TotalPageCount =>
         (AllNameTags.Count(kv => !kv.Value.Isinternal) + ItemsPerPage - 1) / ItemsPerPage;
 
-    public static void Hide() => CustomBackground?.gameObject?.SetActive(false);
+    public static void Hide()
+    {
+        CustomBackground?.gameObject?.SetActive(false);
+    }
 
     public static void Init(OptionsMenuBehaviour optionsMenuBehaviour)
     {
         if (CustomBackground != null) return;
-        
+
         var mouseMoveToggle = optionsMenuBehaviour.DisableMouseMovement;
         CustomBackground = CreateBackground(optionsMenuBehaviour);
         ButtonTemplate = mouseMoveToggle;
-        
+
         CreateCloseButton(mouseMoveToggle);
         CreateNewButton(mouseMoveToggle);
         CreateHelpText(optionsMenuBehaviour);
         CreatePageNavigationButtons(mouseMoveToggle);
-        
+
         ReloadTag(null);
         RefreshTagList();
     }
-    
+
     private static SpriteRenderer CreateBackground(OptionsMenuBehaviour options)
     {
         var bg = Object.Instantiate(options.Background, options.transform);
@@ -51,7 +51,7 @@ public static class NameTagPanel
         bg.gameObject.SetActive(false);
         return bg;
     }
-    
+
     private static void CreateCloseButton(ToggleButtonBehaviour template)
     {
         var closeButton = Object.Instantiate(template, CustomBackground.transform);
@@ -59,12 +59,12 @@ public static class NameTagPanel
         closeButton.name = "Close";
         closeButton.Text.text = GetString("Close");
         closeButton.Background.color = Color.red;
-        
+
         var closePassiveButton = closeButton.GetComponent<PassiveButton>();
         closePassiveButton.OnClick = new Button.ButtonClickedEvent();
         closePassiveButton.OnClick.AddListener(new Action(() => CustomBackground.gameObject.SetActive(false)));
     }
-    
+
     private static void CreateNewButton(ToggleButtonBehaviour template)
     {
         var newButton = Object.Instantiate(template, CustomBackground.transform);
@@ -72,29 +72,29 @@ public static class NameTagPanel
         newButton.name = "New Tag";
         newButton.Text.text = GetString("NameTag.NewNameTag");
         newButton.Background.color = IsNotJoined ? Palette.White : Palette.DisabledGrey;
-        
+
         var newPassiveButton = newButton.GetComponent<PassiveButton>();
         newPassiveButton.OnClick = new Button.ButtonClickedEvent();
         newPassiveButton.OnClick.AddListener(new Action(NameTagNewWindow.Open));
         newPassiveButton.enabled = IsNotJoined;
     }
-    
+
     private static void CreateHelpText(OptionsMenuBehaviour optionsMenuBehaviour)
     {
         var helpText = Object.Instantiate(
-            optionsMenuBehaviour.DisableMouseMovement.Text, 
+            optionsMenuBehaviour.DisableMouseMovement.Text,
             CustomBackground.transform
         );
-        
+
         helpText.name = "Help Text";
         helpText.transform.localPosition = new Vector3(-1.25f, -2.15f, -5f);
         helpText.transform.localScale = new Vector3(1f, 1f, 1f);
-        
+
         var helpTextTMP = helpText.GetComponent<TextMeshPro>();
         helpTextTMP.text = GetString("Tip.CustomNameTagHelp");
         helpText.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(2.45f, 1f);
     }
-    
+
     private static void CreatePageNavigationButtons(ToggleButtonBehaviour template)
     {
         var prevButton = Object.Instantiate(template, CustomBackground.transform);
@@ -102,29 +102,31 @@ public static class NameTagPanel
         prevButton.name = "PreviousPageButton";
         prevButton.Text.text = GetString("PreviousPage");
         prevButton.Background.color = Color.white;
-        
+
         var prevPassiveButton = prevButton.GetComponent<PassiveButton>();
         prevPassiveButton.OnClick = new Button.ButtonClickedEvent();
-        prevPassiveButton.OnClick.AddListener(new Action(() => {
-            CurrentPage = (CurrentPage - 1) <= 0 ? TotalPageCount : CurrentPage - 1;
+        prevPassiveButton.OnClick.AddListener(new Action(() =>
+        {
+            CurrentPage = CurrentPage - 1 <= 0 ? TotalPageCount : CurrentPage - 1;
             RefreshTagList();
         }));
-        
+
         // 下一页按钮
         var nextButton = Object.Instantiate(template, CustomBackground.transform);
         nextButton.transform.localPosition = new Vector3(1.3f, -1.33f, -6f);
         nextButton.name = "NextPageButton";
         nextButton.Text.text = GetString("NextPage");
         nextButton.Background.color = Color.white;
-        
+
         var nextPassiveButton = nextButton.GetComponent<PassiveButton>();
         nextPassiveButton.OnClick = new Button.ButtonClickedEvent();
-        nextPassiveButton.OnClick.AddListener(new Action(() => {
-            CurrentPage = (CurrentPage % TotalPageCount) + 1;
+        nextPassiveButton.OnClick.AddListener(new Action(() =>
+        {
+            CurrentPage = CurrentPage % TotalPageCount + 1;
             RefreshTagList();
         }));
     }
-    
+
     public static void RefreshTagList()
     {
         try
@@ -135,13 +137,13 @@ public static class NameTagPanel
 
             var startIndex = (CurrentPage - 1) * ItemsPerPage;
             var count = 0;
-            
+
             foreach (var nameTag in AllNameTags)
             {
                 if (nameTag.Value.Isinternal) continue;
                 if (count++ < startIndex) continue;
                 if (numItems >= ItemsPerPage) break;
-                
+
                 CreateTagItem(nameTag.Key, nameTag.Value);
                 numItems++;
             }
@@ -151,37 +153,38 @@ public static class NameTagPanel
             Error($"RefreshTagList failed: {ex}", "NameTagPanel");
         }
     }
-    
+
     private static void CreateTagItem(string key, NameTagManager.NameTag value)
     {
         if (ButtonTemplate == null || CustomBackground == null) return;
-        
+
         var posY = 2.2f - 0.5f * numItems;
-        
+
         var button = Object.Instantiate(ButtonTemplate, CustomBackground.transform);
         button.transform.localPosition = new Vector3(-1.3f, posY, -4f);
         button.name = "Btn-" + key;
         button.Text.text = key;
-        button.Background.color = IsNotJoined ? ColorHelper.ClientFeatureColor : ColorHelper.ClientFeatureColor_CanNotUse;
-        
+        button.Background.color =
+            IsNotJoined ? ColorHelper.ClientFeatureColor : ColorHelper.ClientFeatureColor_CanNotUse;
+
         var passiveButton = button.GetComponent<PassiveButton>();
         passiveButton.OnClick = new Button.ButtonClickedEvent();
         passiveButton.OnClick.AddListener(new Action(() => NameTagEditMenu.Toggle(key, true)));
         passiveButton.enabled = IsNotJoined;
-        
+
         var previewText = Object.Instantiate(
-            button.Text.gameObject, 
+            button.Text.gameObject,
             CustomBackground.transform
         );
-        
+
         previewText.name = "PreText-" + key;
         previewText.transform.localPosition = new Vector3(1.3f, posY, -6f);
-        
+
         var previewTMP = previewText.GetComponent<TextMeshPro>();
         previewTMP.text = value.Apply(null, true).title ?? GetString("PreviewNotAvailable");
         previewTMP.fontSize = 1.2f;
         previewTMP.alignment = TextAlignmentOptions.Center;
-        
+
         Items.Add(button.gameObject);
         Items.Add(previewText);
     }

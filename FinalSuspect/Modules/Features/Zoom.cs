@@ -25,21 +25,14 @@ public static class Zoom
 
             if (Camera.main?.orthographicSize > 3.0f) ResetButtons = true;
             if (Input.mouseScrollDelta.y > 0)
-            {
-                if (Camera.main?.orthographicSize > 3.0f) SetZoomSize(times: false);
-            }
+                if (Camera.main?.orthographicSize > 3.0f)
+                    SetZoomSize();
 
             if (Input.mouseScrollDelta.y < 0)
-            {
                 if (IsDead || IsFreePlay ||
                     DebugModeManager.AmDebugger || IsLobby || Main.GodMode.Value)
-                {
                     if (Camera.main?.orthographicSize < 18.0f)
-                    {
-                        SetZoomSize(times: true);
-                    }
-                }
-            }
+                        SetZoomSize(true);
 
             Flag.NewFlag("Zoom");
         }
@@ -84,8 +77,10 @@ public static class Zoom
     }
 
     public static void OnFixedUpdate()
-        => DestroyableSingleton<HudManager>.Instance?.ShadowQuad?.gameObject.SetActive(
+    {
+        DestroyableSingleton<HudManager>.Instance?.ShadowQuad?.gameObject.SetActive(
             Mathf.Approximately(Camera.main!.orthographicSize, 3.0f) && PlayerControl.LocalPlayer.IsAlive());
+    }
 }
 
 public static class Flag

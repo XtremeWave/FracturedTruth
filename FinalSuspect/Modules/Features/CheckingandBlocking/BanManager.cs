@@ -13,8 +13,15 @@ public static class BanManager
 {
     public static readonly List<string> FACList = [];
 
+    private static readonly Regex ValidFormatRegex = new(
+        @"^[a-z]{7,10}#\d{4}$",
+        RegexOptions.Compiled
+    );
+
     public static string GetHashedPuid(this PlayerControl player)
-        => player.GetClient().GetHashedPuid();
+    {
+        return player.GetClient().GetHashedPuid();
+    }
 
     public static string GetHashedPuid(this ClientData player)
     {
@@ -37,7 +44,10 @@ public static class BanManager
             SendInGame(string.Format(GetString("Notification.AddedPlayerToBanList"),
                 StringHelper.ColorString(Palette.PlayerColors[player.ColorId], player.PlayerName)));
         }
-        else Info($"{player.FriendCode},{player?.GetHashedPuid()},{player.PlayerName} 已经被加入封禁名单", "AddBanPlayer");
+        else
+        {
+            Info($"{player.FriendCode},{player?.GetHashedPuid()},{player.PlayerName} 已经被加入封禁名单", "AddBanPlayer");
+        }
     }
 
     public static void CheckDenyNamePlayer(ClientData player)
@@ -47,7 +57,11 @@ public static class BanManager
         {
             var existingNames = SpamManager.ReturnAllNewLinesInFile(DENY_NAME_LIST_PATH);
 
-            foreach (var line in from line in existingNames where !Main.AllPlayerControls.Any(p => p.IsDev() && line.Contains(p.FriendCode)) where Regex.IsMatch(player.PlayerName, line) where line != "" select line)
+            foreach (var line in from line in existingNames
+                     where !Main.AllPlayerControls.Any(p => p.IsDev() && line.Contains(p.FriendCode))
+                     where Regex.IsMatch(player.PlayerName, line)
+                     where line != ""
+                     select line)
             {
                 Test(line);
                 Test(player.PlayerName);
@@ -60,11 +74,6 @@ public static class BanManager
             Exception(ex, "CheckDenyNamePlayer");
         }
     }
-
-    private static readonly Regex ValidFormatRegex = new(
-        @"^[a-z]{7,10}#\d{4}$",
-        RegexOptions.Compiled
-    );
 
     public static void CheckFriendCode(ClientData player)
     {
@@ -109,21 +118,21 @@ public static class BanManager
     public static void CheckBanPlayer(ClientData player)
     {
         if (!AmongUsClient.Instance.AmHost && !Main.KickPlayerInBanList.Value) return;
-        if (player.IsBannedPlayer() || DestroyableSingleton<FriendsListManager>.Instance.IsPlayerBlockedUsername(player.FriendCode))
-        {
+        if (player.IsBannedPlayer() ||
+            DestroyableSingleton<FriendsListManager>.Instance.IsPlayerBlockedUsername(player.FriendCode))
             KickPlayer(player.Id, true, "BanedByBanList", KickLevel.CheatDetected);
-        }
-        else if (player.IsFACPlayer())
-        {
-            KickPlayer(player.Id, true, "BanedByFACList", KickLevel.CheatDetected);
-        }
+        else if (player.IsFACPlayer()) KickPlayer(player.Id, true, "BanedByFACList", KickLevel.CheatDetected);
     }
 
     public static bool IsBannedPlayer(this PlayerControl player)
-        => player?.GetClient()?.IsBannedPlayer() ?? false;
+    {
+        return player?.GetClient()?.IsBannedPlayer() ?? false;
+    }
 
     public static bool IsBannedPlayer(this ClientData player)
-        => CheckBanStatus(player?.FriendCode, player?.GetHashedPuid());
+    {
+        return CheckBanStatus(player?.FriendCode, player?.GetHashedPuid());
+    }
 
     private static bool CheckBanStatus(string friendCode, string hashedPuid)
     {
@@ -147,15 +156,21 @@ public static class BanManager
     }
 
     public static bool IsFACPlayer(this PlayerControl player)
-        => player?.GetClient()?.IsFACPlayer() ?? false;
+    {
+        return player?.GetClient()?.IsFACPlayer() ?? false;
+    }
 
     public static bool IsFACPlayer(this ClientData player)
-        => CheckFACStatus(player?.FriendCode, player?.GetHashedPuid());
+    {
+        return CheckFACStatus(player?.FriendCode, player?.GetHashedPuid());
+    }
 
     public static bool CheckFACStatus(string friendCode, string hashedPuid)
-        => FACList.Any(line =>
+    {
+        return FACList.Any(line =>
             !string.IsNullOrWhiteSpace(friendCode) && line.Contains(friendCode) ||
             !string.IsNullOrWhiteSpace(hashedPuid) && line.Contains(hashedPuid));
+    }
 }
 
 [HarmonyPatch(typeof(BanMenu), nameof(BanMenu.Select))]

@@ -12,7 +12,18 @@ public class NetRandomWrapper(System.Random instance) : IRandom
     {
     }
 
-    public int Next(int minValue, int maxValue) => wrapping.Next(minValue, maxValue);
-    public int Next(int maxValue) => wrapping.Next(maxValue);
-    public int Next() => wrapping.Next();
+    public int Next(int minValue, int maxValue)
+    {
+        return wrapping.Next(minValue, maxValue);
+    }
+
+    public int Next(int maxValue)
+    {
+        return wrapping.Next(maxValue);
+    }
+
+    public int Next()
+    {
+        return wrapping.Next();
+    }
 }

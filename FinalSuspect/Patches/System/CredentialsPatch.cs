@@ -36,13 +36,11 @@ internal class PingTrackerUpdatePatch
         }
 
         if (CreditTextCredentialAspectPos)
-        {
             CreditTextCredentialAspectPos.DistanceFromEdge =
                 DestroyableSingleton<HudManager>.InstanceExists &&
                 DestroyableSingleton<HudManager>.Instance.Chat.chatButton.gameObject.active
                     ? new Vector3(2.5f, 0f, -800f)
                     : new Vector3(1.8f, 0f, -800f);
-        }
 
         StringBuilder sb = new();
 
@@ -53,7 +51,7 @@ internal class PingTrackerUpdatePatch
             (GameSettingMenu.Instance?.gameObject.active ?? false)
             || IsMeeting
             || (FriendsListUI.Instance?.gameObject.active ?? false)
-            || (HudManagerPatch.showHideButton?.Button?.gameObject.active ?? false) && Main.ShowResults.Value)
+            || ((HudManagerPatch.showHideButton?.Button?.gameObject.active ?? false) && Main.ShowResults.Value))
             CreditTextCredential.text = "";
 
         var ping = AmongUsClient.Instance.Ping;
@@ -86,6 +84,8 @@ public class VersionShowerStartPatch
     public static GameObject ModLogo;
     public static GameObject TeamLogo;
 
+    private static VersionShower Instance;
+
     public static void Postfix(VersionShower __instance)
     {
         TMPTemplate.SetBase(__instance.text);
@@ -112,10 +112,7 @@ public class VersionShowerStartPatch
         if (Main.hasArgumentException && ErrorText.Instance)
             ErrorText.Instance.AddError(ErrorCode.Main_DictionaryError);
 
-        if ((OVersionShower = GameObject.Find("VersionShower")) && !VisitText)
-        {
-            CreateVisitText(__instance);
-        }
+        if ((OVersionShower = GameObject.Find("VersionShower")) && !VisitText) CreateVisitText(__instance);
 
         if ((OVersionShower = GameObject.Find("VersionShower")) && !CreditTextCredential)
         {
@@ -178,16 +175,12 @@ public class VersionShowerStartPatch
         ModLogo.SetActive(false);
     }
 
-    private static VersionShower Instance;
-
     public static void CreateVisitText(VersionShower __instance)
     {
         if (!__instance)
             __instance = Instance;
         else
-        {
             Instance = __instance;
-        }
 
         VisitText = Object.Instantiate(__instance.text);
         VisitText.name = "FinalSuspect VisitText";
@@ -211,7 +204,8 @@ public class VersionShowerStartPatch
     }
 }
 
-[HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start)), HarmonyPriority(Priority.First)]
+[HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
+[HarmonyPriority(Priority.First)]
 internal class TitleLogoPatch
 {
     public static GameObject ModStamp;
@@ -254,20 +248,18 @@ internal class TitleLogoPatch
             {
                 [friendsButton],
                 (minorActiveSprite, new Color(0.0235f, 0f, 0.8f, 0.8f), shade, Color.white, Color.white)
-            },
+            }
         };
 
         // ReSharper disable once UnusedParameter.Local
 
 
         foreach (var kvp in mainButtons)
-        {
             kvp.Key.Do(button =>
             {
                 FormatButtonColor(__instance, button, kvp.Value.Item2, kvp.Value.Item3, kvp.Value.Item4,
                     kvp.Value.Item5);
             });
-        }
 
         try
         {
@@ -334,7 +326,8 @@ internal class TitleLogoPatch
         var ttap = Tint.GetComponent<AspectPosition>();
         if (ttap) Object.Destroy(ttap);
         Tint.transform.SetParent(RightPanel.transform);
-        Tint.transform.localPosition = new Vector3(-0.0824f * GetResolutionOffset(), 0.0513f, Tint.transform.localPosition.z);
+        Tint.transform.localPosition =
+            new Vector3(-0.0824f * GetResolutionOffset(), 0.0513f, Tint.transform.localPosition.z);
         Tint.transform.localScale = new Vector3(1f, 1f, 1f);
 
         var creditsScreen = __instance.creditsScreen;
@@ -362,7 +355,11 @@ internal class TitleLogoPatch
         mainButtonsobj.transform.position = new Vector3(-3.4f * GetResolutionOffset(),
             mainButtonsobj.transform.position.y, mainButtonsobj.transform.position.z);
         return;
-        static void ResetParent(GameObject obj) => obj.transform.SetParent(LeftPanel.transform.parent);
+
+        static void ResetParent(GameObject obj)
+        {
+            obj.transform.SetParent(LeftPanel.transform.parent);
+        }
     }
 }
 
@@ -433,13 +430,11 @@ internal class ResolutionManagerPatch
                 }
 
                 var scale = MainMenuManagerPatch.Instance.quitButton.transform.localScale;
-                button.transform.localScale = new Vector3(scale.x * GetResolutionOffset(), button.transform.localScale.y);
+                button.transform.localScale =
+                    new Vector3(scale.x * GetResolutionOffset(), button.transform.localScale.y);
             }
 
-            foreach (var obj in nullObj)
-            {
-                MainMenuManagerPatch.MainMenuCustomButtons.Remove(obj);
-            }
+            foreach (var obj in nullObj) MainMenuManagerPatch.MainMenuCustomButtons.Remove(obj);
 
             TitleLogoPatch.CloseRightButton.transform.localPosition =
                 new Vector3(-4.78f * GetResolutionOffset(), 1.3f, 1f);

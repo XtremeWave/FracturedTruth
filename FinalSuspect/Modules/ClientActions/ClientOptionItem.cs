@@ -7,8 +7,6 @@ namespace FinalSuspect.Modules.ClientActions;
 
 public sealed class ClientOptionItem<T> : ClientActionItem
 {
-    public ConfigEntry<T> Config { get; private set; }
-
     private ClientOptionItem(
         string name,
         ConfigEntry<T> config,
@@ -21,8 +19,10 @@ public sealed class ClientOptionItem<T> : ClientActionItem
         UpdateToggle();
     }
 
+    public ConfigEntry<T> Config { get; }
+
     /// <summary>
-    /// Modオプション画面にconfigのトグルを追加します
+    ///     Modオプション画面にconfigのトグルを追加します
     /// </summary>
     /// <param name="name">ボタンラベルの翻訳キーとボタンのオブジェクト名</param>
     /// <param name="config">対応するconfig</param>

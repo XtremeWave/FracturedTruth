@@ -26,7 +26,8 @@ public static class HandleGameDataPatch
     }
 }
 
-[HarmonyPatch(typeof(InnerNetClient._HandleGameDataInner_d__165), nameof(InnerNetClient._HandleGameDataInner_d__165.MoveNext))]
+[HarmonyPatch(typeof(InnerNetClient._HandleGameDataInner_d__165),
+    nameof(InnerNetClient._HandleGameDataInner_d__165.MoveNext))]
 public static class HandleGameDataInnerPatch
 {
     public static bool Prefix(InnerNetClient._HandleGameDataInner_d__165 __instance)
@@ -63,7 +64,8 @@ internal class HandleMessagePatch
         if (counter.TotalRpcLastSecond <= 100 && counter.GetRpcCount(reader.Tag) <= 40) return true;
 
         counter.IncomingOverload = true;
-        var _player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => x.CheatData.ClientData.Id == client.Id)?.Player;
+        var _player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => x.CheatData.ClientData.Id == client.Id)
+            ?.Player;
         Warn($"Incoming Msg Overloaded: {_player?.GetDataName() ?? ""}", "FAC");
         _player?.MarkAsCheater();
         return false;
@@ -71,10 +73,10 @@ internal class HandleMessagePatch
 
     private class RpcCounter
     {
-        public int TotalRpcLastSecond;
         private readonly Dictionary<byte, int> RpcTypeCounts = new();
-        private DateTime lastReset = DateTime.UtcNow;
         public bool IncomingOverload;
+        private DateTime lastReset = DateTime.UtcNow;
+        public int TotalRpcLastSecond;
 
         public void Update(byte rpcType)
         {
@@ -89,6 +91,9 @@ internal class HandleMessagePatch
             RpcTypeCounts[rpcType] = RpcTypeCounts.TryGetValue(rpcType, out var count) ? count + 1 : 1;
         }
 
-        public int GetRpcCount(byte rpcType) => RpcTypeCounts.GetValueOrDefault(rpcType, 0);
+        public int GetRpcCount(byte rpcType)
+        {
+            return RpcTypeCounts.GetValueOrDefault(rpcType, 0);
+        }
     }
 }

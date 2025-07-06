@@ -10,7 +10,7 @@ public class MurderPlayerHandler : IRpcHandler
     public List<byte> TargetRpcs =>
     [
         (byte)RpcCalls.MurderPlayer,
-        (byte)RpcCalls.CheckMurder,
+        (byte)RpcCalls.CheckMurder
     ];
 
     public bool HandleGame_InTask(PlayerControl sender, MessageReader reader,

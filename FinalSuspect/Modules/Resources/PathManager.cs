@@ -11,17 +11,33 @@ public static class PathManager
     private const string DependsSavePath = "BepInEx/core/";
     public const string DownloadFileTempPath = "BepInEx/plugins/FinalSuspect.dll.temp";
     public const string BAN_LIST_PATH = LocalPath_Data + "BanList.txt";
-    public static readonly string BANEDWORDS_FILE_PATH = GetBanFilesPath("BanWords.json");
-    public static readonly string DENY_NAME_LIST_PATH = GetBanFilesPath("DenyName.json");
 
     public const string downloadUrl_github =
         "https://github.com/XtremeWave/FinalSuspect/releases/latest/download/FinalSuspect.dll";
 
+    public const string downloadUrl_xtremeapi =
+        "https://api.xtreme.net.cn/FinalSuspect/download/FinalSuspect.dll";
+
+    public static readonly string BANEDWORDS_FILE_PATH = GetBanFilesPath("BanWords.json");
+    public static readonly string DENY_NAME_LIST_PATH = GetBanFilesPath("DenyName.json");
+
     public static string downloadUrl_gitee =
         "https://gitee.com/LezaiYa/FinalSuspectAssets/releases/download/v{showVer}/FinalSuspect.dll";
 
-    public const string downloadUrl_xtremeapi =
-        "https://api.xtreme.net.cn/FinalSuspect/download/FinalSuspect.dll";
+    private static IReadOnlyList<string> URLs => new List<string>
+    {
+#if DEBUG
+        "https://raw.githubusercontent.com/XtremeWave/FinalSuspect/FinalSus/",
+        "https://raw.githubusercontent.com/XtremeWave/FinalSuspect_Dev/FS_Dev/",
+        "https://api.xtreme.net.cn/FinalSuspect/download/",
+        "https://gitee.com/LezaiYa/FinalSuspectAssets/raw/main/",
+        $"file:///{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop))}/",
+#else
+        "https://raw.githubusercontent.com/XtremeWave/FinalSuspect/FinalSus/",
+        "https://gitee.com/LezaiYa/FinalSuspectAssets/raw/main/",
+        "https://api.xtreme.net.cn/FinalSuspect/download/",
+#endif
+    };
 
     public static string GetFile(FileType fileType, RemoteType remoteType, string file)
     {
@@ -56,7 +72,7 @@ public static class PathManager
         return fileType switch
         {
             FileType.Depends => GetLocalPath(LocalType.BepInEx) + file,
-            _ => GetResourceFilesPath(fileType, file),
+            _ => GetResourceFilesPath(fileType, file)
         };
     }
 
@@ -125,31 +141,13 @@ public static class PathManager
         {
             var filesToDelete = Directory.GetFiles(targetFolder, "*.xwr", SearchOption.AllDirectories);
 
-            foreach (var file in filesToDelete)
-            {
-                File.Delete(file);
-            }
+            foreach (var file in filesToDelete) File.Delete(file);
         }
         catch
         {
             /* ignored */
         }
     }
-
-    private static IReadOnlyList<string> URLs => new List<string>
-    {
-#if DEBUG
-        "https://raw.githubusercontent.com/XtremeWave/FinalSuspect/FinalSus/",
-        "https://raw.githubusercontent.com/XtremeWave/FinalSuspect_Dev/FS_Dev/",
-        "https://api.xtreme.net.cn/FinalSuspect/download/",
-        "https://gitee.com/LezaiYa/FinalSuspectAssets/raw/main/",
-        $"file:///{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop))}/",
-#else
-        "https://raw.githubusercontent.com/XtremeWave/FinalSuspect/FinalSus/",
-        "https://gitee.com/LezaiYa/FinalSuspectAssets/raw/main/",
-        "https://api.xtreme.net.cn/FinalSuspect/download/",
-#endif
-    };
 
     public static IReadOnlyList<string> GetInfoFileUrlList(bool allowDesktop = false)
     {
@@ -169,7 +167,7 @@ public enum FileType
     SoundEffects,
     Depends,
     ModNews,
-    Languages,
+    Languages
 }
 
 public enum RemoteType

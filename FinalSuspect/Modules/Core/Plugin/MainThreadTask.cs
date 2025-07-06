@@ -9,7 +9,7 @@ public class MainThreadTask
     private readonly string name;
 
     /// <summary>
-    /// 用于异步线程的类型
+    ///     用于异步线程的类型
     /// </summary>
     /// <param name="action">需要转到主线程执行的行为</param>
     /// <param name="name">本次行为名称，会输出日志</param>

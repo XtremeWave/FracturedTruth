@@ -7,13 +7,15 @@ namespace FinalSuspect.Patches.Game_Vanilla;
 [HarmonyPatch]
 public class MapRealTimeLocationPatch
 {
-    [HarmonyPatch(typeof(MapBehaviour), nameof(MapBehaviour.Show)), HarmonyPostfix]
+    [HarmonyPatch(typeof(MapBehaviour), nameof(MapBehaviour.Show))]
+    [HarmonyPostfix]
     public static void ShowMapAfter(MapBehaviour __instance, [HarmonyArgument(0)] MapOptions opts)
     {
         XtremeLocalHandling.ShowMap(__instance, opts);
     }
 
-    [HarmonyPatch(typeof(MapBehaviour), nameof(MapBehaviour.Awake)), HarmonyPostfix]
+    [HarmonyPatch(typeof(MapBehaviour), nameof(MapBehaviour.Awake))]
+    [HarmonyPostfix]
     public static void AwakeAfter(MapBehaviour __instance)
     {
         AmongUsClient.Instance.StartCoroutine(CreateTargetRends(__instance));
@@ -32,13 +34,15 @@ public class MapRealTimeLocationPatch
         }
     }
 
-    [HarmonyPatch(typeof(MapBehaviour), nameof(MapBehaviour.FixedUpdate)), HarmonyPostfix]
+    [HarmonyPatch(typeof(MapBehaviour), nameof(MapBehaviour.FixedUpdate))]
+    [HarmonyPostfix]
     public static void FixedUpdateAfter(MapBehaviour __instance)
     {
         XtremeLocalHandling.UpdateMap();
     }
 
-    [HarmonyPatch(typeof(MapBehaviour), nameof(MapBehaviour.SetPreMeetingPosition)), HarmonyPostfix]
+    [HarmonyPatch(typeof(MapBehaviour), nameof(MapBehaviour.SetPreMeetingPosition))]
+    [HarmonyPostfix]
     public static void SetPreMeetingPositionAfter(MapBehaviour __instance,
         [HarmonyArgument(0)] Vector3 preMeetingPosition)
     {
@@ -49,7 +53,8 @@ public class MapRealTimeLocationPatch
         }
     }
 
-    [HarmonyPatch(typeof(MapBehaviour), nameof(MapBehaviour.GenericShow)), HarmonyPostfix]
+    [HarmonyPatch(typeof(MapBehaviour), nameof(MapBehaviour.GenericShow))]
+    [HarmonyPostfix]
     public static void GenericShowAfter(MapBehaviour __instance)
     {
         foreach (var data in XtremePlayerData.AllPlayerData)
@@ -59,12 +64,10 @@ public class MapRealTimeLocationPatch
         }
     }
 
-    [HarmonyPatch(typeof(MapBehaviour), nameof(MapBehaviour.Close)), HarmonyPostfix]
+    [HarmonyPatch(typeof(MapBehaviour), nameof(MapBehaviour.Close))]
+    [HarmonyPostfix]
     public static void CloseAfter(MapBehaviour __instance)
     {
-        foreach (var data in XtremePlayerData.AllPlayerData)
-        {
-            data.Rend.enabled = true;
-        }
+        foreach (var data in XtremePlayerData.AllPlayerData) data.Rend.enabled = true;
     }
 }

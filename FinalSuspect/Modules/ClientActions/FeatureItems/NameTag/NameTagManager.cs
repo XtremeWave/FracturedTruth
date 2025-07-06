@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Text;
 using AmongUs.Data;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Resources;
@@ -16,9 +15,11 @@ public static class NameTagManager
     public static readonly string TAGS_DIRECTORY_PATH = GetLocalPath(LocalType.NameTag);
     private static Dictionary<string, NameTag> NameTags = new();
     public static IReadOnlyDictionary<string, NameTag> AllNameTags => NameTags;
-    public static IReadOnlyDictionary<string, NameTag> AllInternalNameTags => 
+
+    public static IReadOnlyDictionary<string, NameTag> AllInternalNameTags =>
         AllNameTags.Where(t => t.Value.Isinternal).ToDictionary(x => x.Key, x => x.Value);
-    public static IReadOnlyDictionary<string, NameTag> AllExternalNameTags => 
+
+    public static IReadOnlyDictionary<string, NameTag> AllExternalNameTags =>
         AllNameTags.Where(t => !t.Value.Isinternal).ToDictionary(x => x.Key, x => x.Value);
 
     public static NameTag DeepClone(NameTag tag)
@@ -35,24 +36,26 @@ public static class NameTagManager
 
         static Component CloneCom(Component com)
         {
-            return com == null ? null : new Component
-            {
-                Text = com.Text,
-                SizePercentage = com.SizePercentage,
-                TextColor = com.TextColor,
-                Gradient = com.Gradient != null ? new ColorGradient(com.Gradient.Colors.ToArray()) : null,
-                Spaced = com.Spaced
-            };
+            return com == null
+                ? null
+                : new Component
+                {
+                    Text = com.Text,
+                    SizePercentage = com.SizePercentage,
+                    TextColor = com.TextColor,
+                    Gradient = com.Gradient != null ? new ColorGradient(com.Gradient.Colors.ToArray()) : null,
+                    Spaced = com.Spaced
+                };
         }
     }
 
-    public static (string title, string prefix, string suffix, string name, string displayName, string lastTag) 
+    public static (string title, string prefix, string suffix, string name, string displayName, string lastTag)
         ApplyFor(PlayerControl player)
     {
         var a = AllNameTags.TryGetValue(player.FriendCode, out var tag);
-        
+
         return a
-            ? tag.Apply(player.GetDataName()) 
+            ? tag.Apply(player.GetDataName())
             : ("", "", "", "", "", "");
     }
 
@@ -67,27 +70,31 @@ public static class NameTagManager
         NameTags.Remove(friendCode);
         var path = Path.Combine(TAGS_DIRECTORY_PATH, $"{friendCode}.json");
         if (File.Exists(path))
-        {
-            try { ReadTagsFromFile(path); }
+            try
+            {
+                ReadTagsFromFile(path);
+            }
             catch (Exception ex)
             {
                 Error($"Load Tag From: {path} Failed\n{ex}", "NameTagManager", false);
             }
-        }
     }
 
     public static void Init()
     {
         NameTags = new Dictionary<string, NameTag>();
 
-        if (!Directory.Exists(TAGS_DIRECTORY_PATH)) 
+        if (!Directory.Exists(TAGS_DIRECTORY_PATH))
             Directory.CreateDirectory(TAGS_DIRECTORY_PATH);
-        
+
         foreach (var file in Directory.EnumerateFiles(TAGS_DIRECTORY_PATH, "*.json", SearchOption.AllDirectories))
         {
             if (file.Contains("template", StringComparison.OrdinalIgnoreCase)) continue;
-            
-            try { ReadTagsFromFile(file); }
+
+            try
+            {
+                ReadTagsFromFile(file);
+            }
             catch (Exception ex)
             {
                 Error($"Load Tag From: {file} Failed\n{ex}", "NameTagManager", false);
@@ -101,7 +108,7 @@ public static class NameTagManager
         var obj = JObject.Parse(text);
         var tag = GetTagFromJObject(obj);
         var friendCode = Path.GetFileNameWithoutExtension(path);
-        
+
         if (tag != null && !string.IsNullOrEmpty(friendCode))
         {
             NameTags[friendCode] = tag;
@@ -123,10 +130,8 @@ public static class NameTagManager
         };
 
         foreach (var prop in obj.Properties().ToList())
-        {
             if (componentMap.TryGetValue(prop.Name, out var action))
                 action(prop.Value);
-        }
 
         return tag;
     }
@@ -144,8 +149,10 @@ public static class NameTagManager
         };
     }
 
-    private static float? ParseSize(string str) => 
-        float.TryParse(str, out var size) ? size : 90f;
+    private static float? ParseSize(string str)
+    {
+        return float.TryParse(str, out var size) ? size : 90f;
+    }
 
     private static Color32? ParseColor(string str)
     {
@@ -157,18 +164,18 @@ public static class NameTagManager
     private static ColorGradient ParseGradient(string str)
     {
         if (string.IsNullOrEmpty(str)) return null;
-        
+
         var colors = new List<Color>();
         foreach (var colorStr in str.Split(',', '，'))
         {
             var trimmed = colorStr.Trim();
             if (string.IsNullOrEmpty(trimmed)) continue;
-            
+
             var formatted = trimmed.StartsWith("#") ? trimmed : "#" + trimmed;
             if (ColorUtility.TryParseHtmlString(formatted, out var color))
                 colors.Add(color);
         }
-        
+
         return colors.Count >= 2 ? new ColorGradient(colors.ToArray()) : null;
     }
 
@@ -182,22 +189,18 @@ public static class NameTagManager
         public Component Name { get; set; }
         public Component LastTag { get; set; }
 
-        public (string title, string prefix, string suffix, string name, string displayName, string lastTag) 
+        public (string title, string prefix, string suffix, string name, string displayName, string lastTag)
             Apply(string name, bool preview = false)
         {
-            if (Name != null && Name.Text != "")
-            {
-                name = Name.Generate(false);
-            }
-            
+            if (Name != null && Name.Text != "") name = Name.Generate(false);
+
             if (name == "")
                 name = DataManager.player.Customization.Name;
-            else if (name != "" && Name is { Text: "" }) 
+            else if (name != "" && Name is { Text: "" })
                 Name.Text = name;
-            
-            
+
+
             if (!preview)
-            {
                 return (
                     Title?.Generate(false) ?? "",
                     Prefix?.Generate(false) ?? "",
@@ -206,9 +209,8 @@ public static class NameTagManager
                     DisplayName?.Generate(false) ?? "",
                     LastTag?.Generate(false) ?? ""
                 );
-            }
-            
-            
+
+
             name = $"{Prefix?.Generate()}{name}{Suffix?.Generate()}";
             var dp = DisplayName?.Generate(false);
             var title = dp.RemoveHtmlTags() == "" ? "" : $"({dp})";
@@ -227,32 +229,32 @@ public static class NameTagManager
         public string Generate(bool applySpace = true, bool applySize = true)
         {
             if (string.IsNullOrEmpty(Text)) return "";
-            
+
             var result = Text;
-            if (Gradient is { IsValid: true }) 
+            if (Gradient is { IsValid: true })
                 result = Gradient.Apply(result);
-            else if (TextColor != null) 
+            else if (TextColor != null)
                 result = StringHelper.ColorString(TextColor.Value, result);
-            
-            if (Spaced && applySpace) 
+
+            if (Spaced && applySpace)
                 result = $" {result} ";
-            if (SizePercentage != null && applySize) 
+            if (SizePercentage != null && applySize)
                 result = $"<size={SizePercentage}%>{result}</size>";
-            
+
             return result;
         }
     }
 
     public class ColorGradient
     {
-        public List<Color> Colors { get; }
-        private float Spacing { get; }
-
         public ColorGradient(params Color[] colors)
         {
             Colors = new List<Color>(colors);
             Spacing = Colors.Count > 1 ? 1f / (Colors.Count - 1) : 0f;
         }
+
+        public List<Color> Colors { get; }
+        private float Spacing { get; }
 
         public bool IsValid => Colors.Count >= 2;
 
@@ -262,8 +264,8 @@ public static class NameTagManager
             if (input.Length == 1) return StringHelper.ColorString(Colors[0], input);
 
             var step = 1f / (input.Length - 1);
-            var sb = new System.Text.StringBuilder();
-            
+            var sb = new StringBuilder();
+
             for (var i = 0; i < input.Length; i++)
             {
                 var color = Evaluate(step * i);
@@ -277,13 +279,13 @@ public static class NameTagManager
         {
             percent = Mathf.Clamp01(percent);
             var indexLow = Mathf.FloorToInt(percent / Spacing);
-            
-            if (indexLow >= Colors.Count - 1) 
+
+            if (indexLow >= Colors.Count - 1)
                 return Colors[^1];
-            
+
             var indexHigh = indexLow + 1;
             var t = (percent - indexLow * Spacing) / Spacing;
-            
+
             return Color.Lerp(Colors[indexLow], Colors[indexHigh], t);
         }
     }

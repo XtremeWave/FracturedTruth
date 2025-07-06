@@ -11,17 +11,14 @@ public class SendQuickChatHandler : IRpcHandler
 
     public List<byte> TargetRpcs =>
     [
-        (byte)RpcCalls.SendQuickChat,
+        (byte)RpcCalls.SendQuickChat
     ];
 
     public bool HandleAll(PlayerControl sender, MessageReader reader,
         ref bool notify, ref string reason, ref bool ban)
     {
         var current = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-        if (!_records.TryGetValue(sender.PlayerId, out var record))
-        {
-            record = (current, 0);
-        }
+        if (!_records.TryGetValue(sender.PlayerId, out var record)) record = (current, 0);
 
         if (current - record.timestamp < 3)
         {
@@ -29,13 +26,8 @@ public class SendQuickChatHandler : IRpcHandler
             if (record.count > 1)
             {
                 if (AmongUsClient.Instance.AmHost)
-                {
                     HandleCheat(sender, GetString("CheatDetected.SendQuickChat"));
-                }
-                else if (!OtherModHost)
-                {
-                    HandleCheat(sender, GetString("CheatDetected.SendQuickChat_NotHost"));
-                }
+                else if (!OtherModHost) HandleCheat(sender, GetString("CheatDetected.SendQuickChat_NotHost"));
 
                 Warn(
                     $"{sender.GetDataName()}({sender.GetCheatData().FriendCode})({sender.GetCheatData().Puid}) 一秒内多次发送快捷消息",

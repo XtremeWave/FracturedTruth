@@ -32,8 +32,12 @@ public static class CustomPopup
 
     private static bool busy;
 
+    private static (string title, string info, List<(string, Action)>? buttons)? waitToShow;
+
+    private static string waitToUpdateText = string.Empty;
+
     /// <summary>
-    /// 显示一个全屏信息显示界面
+    ///     显示一个全屏信息显示界面
     /// </summary>
     /// <param name="title">标题</param>
     /// <param name="info">内容</param>
@@ -55,7 +59,6 @@ public static class CustomPopup
         ActionButtons = [];
 
         if (buttons != null)
-        {
             foreach (var buttonInfo in buttons.Where(b => b.Item1.Trim() is not null and not ""))
             {
                 var (text, action) = buttonInfo;
@@ -77,7 +80,6 @@ public static class CustomPopup
                 button.gameObject.SetActive(true);
                 ActionButtons?.Add(button);
             }
-        }
 
         if (ActionButtons?.Count > 1)
         {
@@ -100,13 +102,15 @@ public static class CustomPopup
         busy = false;
     }
 
-    private static (string title, string info, List<(string, Action)>? buttons)? waitToShow;
-
-    public static void ShowLater(string title, string info, List<(string, Action)>? buttons) =>
+    public static void ShowLater(string title, string info, List<(string, Action)>? buttons)
+    {
         waitToShow = (title, info, buttons);
+    }
 
-    private static string waitToUpdateText = string.Empty;
-    public static void UpdateTextLater(string info) => waitToUpdateText = info;
+    public static void UpdateTextLater(string info)
+    {
+        waitToUpdateText = info;
+    }
 
     public static void Update()
     {

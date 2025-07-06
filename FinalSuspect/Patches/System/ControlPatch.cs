@@ -34,10 +34,7 @@ internal class ControllerManagerUpdatePatch
             InGameRoleInfoMenu.Hide();
         }
 
-        if (Input.GetKeyDown(KeyCode.F2) && IsInGame)
-        {
-            ShowSettingsPanel = !ShowSettingsPanel;
-        }
+        if (Input.GetKeyDown(KeyCode.F2) && IsInGame) ShowSettingsPanel = !ShowSettingsPanel;
 
         //更改分辨率
         if (Input.GetKeyDown(KeyCode.F11))
@@ -112,9 +109,7 @@ internal class ControllerManagerUpdatePatch
 
         //实名投票
         if (GetKeysDown(KeyCode.Return, KeyCode.V, KeyCode.LeftShift) && IsMeeting && !IsOnlineGame)
-        {
             MeetingHud.Instance.RpcClearVote(AmongUsClient.Instance.ClientId);
-        }
 
         //打开飞艇所有的门
         if (GetKeysDown(KeyCode.Return, KeyCode.D, KeyCode.LeftShift) && IsInGame)
@@ -127,9 +122,7 @@ internal class ControllerManagerUpdatePatch
 
         //将击杀冷却设定为0秒
         if (GetKeysDown(KeyCode.Return, KeyCode.K, KeyCode.LeftShift) && IsInGame)
-        {
             PlayerControl.LocalPlayer.Data.Object.SetKillTimer(0f);
-        }
 
         //开场动画测试
         if (Input.GetKeyDown(KeyCode.G))

@@ -11,7 +11,7 @@ public class SetNameHandler : IRpcHandler
     public List<byte> TargetRpcs =>
     [
         (byte)RpcCalls.CheckName,
-        (byte)RpcCalls.SetName,
+        (byte)RpcCalls.SetName
     ];
 
     public bool HandleAll(PlayerControl sender, MessageReader reader,

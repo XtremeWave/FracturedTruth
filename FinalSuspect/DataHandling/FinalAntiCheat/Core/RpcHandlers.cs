@@ -4,6 +4,6 @@ namespace FinalSuspect.DataHandling.FinalAntiCheat.Core;
 
 public class RpcHandlers(List<byte> targetRpcs)
 {
-    public readonly List<byte> TargetRpcs = targetRpcs;
     public readonly List<IRpcHandler> Handlers = [];
+    public readonly List<byte> TargetRpcs = targetRpcs;
 }

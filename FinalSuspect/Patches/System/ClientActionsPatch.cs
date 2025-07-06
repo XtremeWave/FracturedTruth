@@ -40,9 +40,9 @@ public static class OptionsMenuBehaviourStartPatch
     //public static ClientFeatureItem AudioManagementBtn;
     private static ClientFeatureItem ResourceBtn;
     private static ClientFeatureItem NameTagBtn;
-    public static OptionsMenuBehaviour Instance { get; private set; }
     private static bool reseted;
     public static bool recreate;
+    public static OptionsMenuBehaviour Instance { get; private set; }
 
     public static void Postfix(OptionsMenuBehaviour __instance)
     {
@@ -95,9 +95,7 @@ public static class OptionsMenuBehaviourStartPatch
             if (Main.DisableVanillaSound.Value)
                 CustomSoundsManager.StopPlayVanilla();
             else
-            {
                 CustomSoundsManager.StartPlayVanilla();
-            }
         });
         CreateOptionItem(ref DisableFAC, "DisableFAC", Main.DisableFAC, __instance);
         CreateOptionItem(ref ShowPlayerInfo, "ShowPlayerInfo", Main.ShowPlayerInfo, __instance);
@@ -119,9 +117,9 @@ public static class OptionsMenuBehaviourStartPatch
         CreateFeatureItem(ref UnloadMod, "UnloadMod", ModUnloaderScreen.Show, __instance);
 
         //CreateFeatureItem(ref SoundBtn, "SoundOption",
-            //() => { MyMusicPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
+        //() => { MyMusicPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
         //CreateFeatureItem(ref AudioManagementBtn, "SoundManager",
-            //() => { SoundManagementPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
+        //() => { SoundManagementPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
         CreateFeatureItem(ref ResourceBtn, "ResourceManager",
             () => { ResourcesPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
         CreateFeatureItem(ref NameTagBtn, "NameTagManager",
@@ -132,16 +130,11 @@ public static class OptionsMenuBehaviourStartPatch
         SetFeatureItemTextAndColor(ResourceBtn, "ResourceManager");
         SetFeatureItemTextAndColor(NameTagBtn, "NameTagManager");
         if (!IsNotJoined)
-        {
             //SetOptionItemDisabled_Menu(SwitchOutfitType);
             SetFeatureItemDisabled_Menu(ResourceBtn);
-            //SetFeatureItemDisabled_Menu(AudioManagementBtn);
-        }
-
+        //SetFeatureItemDisabled_Menu(AudioManagementBtn);
         if (Directory.GetFiles(GetLogFolder(true).FullName + "/Final Suspect-logs").Length <= 0)
-        {
             SetFeatureItemDisabled(ClearAutoLogs);
-        }
 
         Modules.SoundInterface.SoundManager.ReloadTag();
         //MyMusicPanel.Init(__instance);
@@ -163,10 +156,7 @@ public static class OptionsMenuBehaviourStartPatch
             item = null;
         }
 
-        if (item == null || !item.ToggleButton)
-        {
-            item = ClientOptionItem<T>.Create(name, value, instance, toggleAction);
-        }
+        if (item == null || !item.ToggleButton) item = ClientOptionItem<T>.Create(name, value, instance, toggleAction);
     }
 
     /*private static void CreateActionItem(ref ClientActionItem item, string name, Action action, OptionsMenuBehaviour instance)
@@ -192,10 +182,7 @@ public static class OptionsMenuBehaviourStartPatch
             item = null;
         }
 
-        if (item == null || !item.ToggleButton)
-        {
-            item = ClientFeatureItem.Create(name, action, instance);
-        }
+        if (item == null || !item.ToggleButton) item = ClientFeatureItem.Create(name, action, instance);
     }
 
     private static void SetFeatureItemTextAndColor(ClientFeatureItem item, string text)
@@ -249,16 +236,14 @@ public static class OptionsMenuBehaviourStartPatch
         foreach (var pc in Main.AllPlayerControls)
         {
             pc.MyPhysics.SetBodyType(pc.BodyType);
-            if (pc.BodyType == PlayerBodyTypes.Normal) pc.cosmetics.currentBodySprite.BodySprite.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
+            if (pc.BodyType == PlayerBodyTypes.Normal)
+                pc.cosmetics.currentBodySprite.BodySprite.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
         }
     }
 
     private static void AutoStartButtonToggle()
     {
-        if (Main.AutoStartGame.Value == false && IsCountDown)
-        {
-            GameStartManager.Instance.ResetStartState();
-        }
+        if (Main.AutoStartGame.Value == false && IsCountDown) GameStartManager.Instance.ResetStartState();
     }
 
     public static void SetCursor()

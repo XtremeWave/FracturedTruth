@@ -9,14 +9,16 @@ namespace FinalSuspect.Patches.Game_Vanilla;
 [HarmonyPatch]
 internal class IntroCutscenePatch
 {
-    [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.CoBegin)), HarmonyPrefix]
+    [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.CoBegin))]
+    [HarmonyPrefix]
     public static void CoBegin_Prefix()
     {
         InGame = true;
         Info("Game Start", "IntroCutscene");
     }
 
-    [HarmonyPatch(typeof(IntroCutscene._ShowRole_d__41), nameof(IntroCutscene._ShowRole_d__41.MoveNext)), HarmonyPostfix]
+    [HarmonyPatch(typeof(IntroCutscene._ShowRole_d__41), nameof(IntroCutscene._ShowRole_d__41.MoveNext))]
+    [HarmonyPostfix]
     public static void Postfix(IntroCutscene._ShowRole_d__41 __instance, ref bool __result)
     {
         if (!Main.EnableFinalSuspect.Value) return;
@@ -36,7 +38,8 @@ internal class IntroCutscenePatch
         }, "Override Role Text");
     }
 
-    [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginImpostor)), HarmonyPostfix]
+    [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginImpostor))]
+    [HarmonyPostfix]
     public static void BeginImpostor_Postfix(IntroCutscene __instance)
     {
         if (!Main.EnableFinalSuspect.Value) return;
@@ -67,7 +70,8 @@ internal class IntroCutscenePatch
         StartFadeIntro(__instance, Palette.DisabledGrey, Palette.ImpostorRed);
     }
 
-    [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginCrewmate)), HarmonyPostfix]
+    [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginCrewmate))]
+    [HarmonyPostfix]
     public static void BeginCrewmate_Postfix(IntroCutscene __instance)
     {
         if (!Main.EnableFinalSuspect.Value) return;

@@ -63,14 +63,12 @@ public class ModNewsHistory
     [HarmonyPostfix]
     public static void AnnouncementPopupPostfix()
     {
-        if (!AnnouncementLoadComplete)
-        {
-            MainMenuManagerPatch.Instance.announcementPopUp.Close();
-        }
+        if (!AnnouncementLoadComplete) MainMenuManagerPatch.Instance.announcementPopUp.Close();
     }
 
 
-    [HarmonyPatch(typeof(PlayerAnnouncementData), nameof(PlayerAnnouncementData.SetAnnouncements)), HarmonyPrefix]
+    [HarmonyPatch(typeof(PlayerAnnouncementData), nameof(PlayerAnnouncementData.SetAnnouncements))]
+    [HarmonyPrefix]
     public static bool SetModAnnouncements([HarmonyArgument(0)] ref Il2CppReferenceArray<Announcement> aRange)
     {
         try
@@ -85,9 +83,7 @@ public class ModNewsHistory
             FinalAllNews.Sort((a1, a2) =>
             {
                 if (string.IsNullOrEmpty(a1.Date) || string.IsNullOrEmpty(a2.Date))
-                {
                     return string.IsNullOrEmpty(a1.Date) ? 1 : -1;
-                }
 
                 return DateTime.Parse(a2.Date).CompareTo(DateTime.Parse(a1.Date));
             });
@@ -99,10 +95,7 @@ public class ModNewsHistory
             else
             {
                 aRange = new Il2CppReferenceArray<Announcement>(FinalAllNews.Count);
-                for (var i = 0; i < FinalAllNews.Count; i++)
-                {
-                    aRange[i] = FinalAllNews[i];
-                }
+                for (var i = 0; i < FinalAllNews.Count; i++) aRange[i] = FinalAllNews[i];
             }
         }
         catch (Exception ex)
@@ -114,7 +107,8 @@ public class ModNewsHistory
     }
 
     //Reference: https://github.com/Team-YuTeam/YuEzTools
-    [HarmonyPatch(typeof(AnnouncementPanel), nameof(AnnouncementPanel.SetUp)), HarmonyPostfix]
+    [HarmonyPatch(typeof(AnnouncementPanel), nameof(AnnouncementPanel.SetUp))]
+    [HarmonyPostfix]
     public static void SetUpPanel(AnnouncementPanel __instance, [HarmonyArgument(0)] Announcement announcement)
     {
         if (announcement.Number < 100000) return;
@@ -134,41 +128,32 @@ public class ModNewsHistory
             // 如果 AllModNews 为空，加载所有语言的 ModNews
             if (AllModNews.Count >= 1) return;
             foreach (var lang in EnumHelper.GetAllValues<SupportedLangs>())
+            foreach (var target in ResourcesHelper.RemoteModNewsList)
+            foreach (var url in GetInfoFileUrlList())
             {
-                foreach (var target in ResourcesHelper.RemoteModNewsList)
+                var task = GetAnnouncements(url + $"Assets/ModNews/{lang}/{target}", target);
+                await task;
+                var result = task.Result;
+                if (!result.Item1)
+                    continue;
+                try
                 {
-                    foreach (var url in GetInfoFileUrlList())
-                    {
-                        var task = GetAnnouncements(url + $"Assets/ModNews/{lang}/{target}", target);
-                        await task;
-                        var result = task.Result;
-                        if (!result.Item1)
-                            continue;
-                        try
-                        {
-                            var content = GetContentFromRes(result.Item2, lang);
-                            if (content != null && !string.IsNullOrEmpty(content.Date))
-                            {
-                                AllModNews.Add(content);
-                            }
-                        }
-                        catch
-                        {
-                            /* ignored */
-                        }
-
-                        break;
-                    }
+                    var content = GetContentFromRes(result.Item2, lang);
+                    if (content != null && !string.IsNullOrEmpty(content.Date)) AllModNews.Add(content);
                 }
+                catch
+                {
+                    /* ignored */
+                }
+
+                break;
             }
 
             // 对 AllModNews 进行排序，处理可能的空值
             AllModNews.Sort((a1, a2) =>
             {
                 if (string.IsNullOrEmpty(a1.Date) || string.IsNullOrEmpty(a2.Date))
-                {
                     return string.IsNullOrEmpty(a1.Date) ? 1 : -1;
-                }
 
                 return DateTime.Parse(a2.Date).CompareTo(DateTime.Parse(a1.Date));
             });
@@ -256,14 +241,38 @@ public class ModNewsHistory
         while (!reader.EndOfStream)
         {
             var line = reader.ReadLine();
-            if (line!.StartsWith("#Number:")) mn.Number = int.Parse(line.Replace("#Number:", string.Empty));
-            else if (line.StartsWith("#LangId:")) langId = uint.Parse(line.Replace("#LangId:", string.Empty));
-            else if (line.StartsWith("#Title:")) mn.Title = line.Replace("#Title:", string.Empty);
-            else if (line.StartsWith("#SubTitle:")) mn.SubTitle = line.Replace("#SubTitle:", string.Empty);
-            else if (line.StartsWith("#ShortTitle:")) mn.ShortTitle = line.Replace("#ShortTitle:", string.Empty);
-            else if (line.StartsWith("#Date:")) mn.Date = line.Replace("#Date:", string.Empty);
-            else if (line.StartsWith("#---")) continue;
-            else if (line.StartsWith("# ")) continue;
+            if (line!.StartsWith("#Number:"))
+            {
+                mn.Number = int.Parse(line.Replace("#Number:", string.Empty));
+            }
+            else if (line.StartsWith("#LangId:"))
+            {
+                langId = uint.Parse(line.Replace("#LangId:", string.Empty));
+            }
+            else if (line.StartsWith("#Title:"))
+            {
+                mn.Title = line.Replace("#Title:", string.Empty);
+            }
+            else if (line.StartsWith("#SubTitle:"))
+            {
+                mn.SubTitle = line.Replace("#SubTitle:", string.Empty);
+            }
+            else if (line.StartsWith("#ShortTitle:"))
+            {
+                mn.ShortTitle = line.Replace("#ShortTitle:", string.Empty);
+            }
+            else if (line.StartsWith("#Date:"))
+            {
+                mn.Date = line.Replace("#Date:", string.Empty);
+            }
+            else if (line.StartsWith("#---"))
+            {
+                continue;
+            }
+            else if (line.StartsWith("# "))
+            {
+                continue;
+            }
             else
             {
                 var pattern = @"\[(.*?)\]\((.*?)\)";

@@ -17,10 +17,16 @@ namespace FinalSuspect.Modules.Core.Game;
 public static class Utils
 {
     private static readonly DateTime timeStampStartTime = new(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+    public static Dictionary<string, Sprite> CachedSprites = new();
+
+    private static readonly Dictionary<byte, PlayerControl> cachedPlayers = new();
     public static long TimeStamp => (long)(DateTime.Now.ToUniversalTime() - timeStampStartTime).TotalSeconds;
 
-    public static long GetTimeStamp(DateTime? dateTime = null) =>
-        (long)((dateTime ?? DateTime.Now).ToUniversalTime() - timeStampStartTime).TotalSeconds;
+    public static long GetTimeStamp(DateTime? dateTime = null)
+    {
+        return (long)((dateTime ?? DateTime.Now).ToUniversalTime() - timeStampStartTime).TotalSeconds;
+    }
 
     public static float GetResolutionOffset()
     {
@@ -90,7 +96,8 @@ public static class Utils
         if (OnPlayerLeftPatch.ClientsProcessed.Contains(clientId)) return;
         var client = GetClientById(clientId);
         Info($"try to kick {client?.Character?.GetRealName()} Due to {reason}", "Kick Player");
-        var _player = XtremePlayerData.AllPlayerData.FirstOrDefault(p => p.CheatData?.ClientData?.Id == clientId)?.Player;
+        var _player = XtremePlayerData.AllPlayerData.FirstOrDefault(p => p.CheatData?.ClientData?.Id == clientId)
+            ?.Player;
         try
         {
 #if DEBUG
@@ -109,7 +116,8 @@ public static class Utils
         }
     }
 
-    public static void KickPlayer(byte playerId, bool ban, string reason = "", KickLevel level = KickLevel.CheatDetected)
+    public static void KickPlayer(byte playerId, bool ban, string reason = "",
+        KickLevel level = KickLevel.CheatDetected)
     {
         try
         {
@@ -132,10 +140,7 @@ public static class Utils
     public static DirectoryInfo GetLogFolder(bool auto = false)
     {
         var folder = Directory.CreateDirectory($"{Application.persistentDataPath}/FinalSuspect/Logs");
-        if (auto)
-        {
-            folder = Directory.CreateDirectory($"{folder.FullName}/AutoLogs");
-        }
+        if (auto) folder = Directory.CreateDirectory($"{folder.FullName}/AutoLogs");
 
         return folder;
     }
@@ -211,16 +216,12 @@ public static class Utils
         builder.Append(StringHelper.ColorString(GetRoleColor(oldrole), GetRoleString($"{oldrole}")));
 
         if (thisdata.IsDead && newrole != oldrole)
-        {
             builder.Append($"=> {StringHelper.ColorString(GetRoleColor(newrole), GetRoleString($"{newrole}"))}");
-        }
 
         builder.Append("</pos>");
 
         return builder.ToString();
     }
-
-    public static Dictionary<string, Sprite> CachedSprites = new();
 
     public static Sprite LoadSprite(string file, float pixelsPerUnit = 1f)
     {
@@ -252,10 +253,7 @@ public static class Utils
 
             var fileData = File.ReadAllBytes(path);
             var texture = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-            if (texture.LoadImage(fileData))
-            {
-                return texture;
-            }
+            if (texture.LoadImage(fileData)) return texture;
 
             Warn($"无法读取图片：{path}", "LoadTexture");
         }
@@ -284,9 +282,9 @@ public static class Utils
     }
 
     /// <summary>
-    /// 乱数の簡易的なヒストグラムを取得する関数
-    /// <params name="nums">生成した乱数を格納したint配列</params>
-    /// <params name="scale">ヒストグラムの倍率 大量の乱数を扱う場合、この値を下げることをお勧めします。</params>
+    ///     乱数の簡易的なヒストグラムを取得する関数
+    ///     <params name="nums">生成した乱数を格納したint配列</params>
+    ///     <params name="scale">ヒストグラムの倍率 大量の乱数を扱う場合、この値を下げることをお勧めします。</params>
     /// </summary>
     public static bool TryCast<T>(this Il2CppObjectBase obj, out T casted)
         where T : Il2CppObjectBase
@@ -298,12 +296,23 @@ public static class Utils
     //private const string ActiveSettingsSize = "70%";
     //private const string ActiveSettingsLineHeight = "55%";
 
-    public static bool AmDev() => IsDev(EOSManager.Instance.FriendCode);
-    public static bool IsDev(this PlayerControl pc) => IsDev(pc.FriendCode);
+    public static bool AmDev()
+    {
+        return IsDev(EOSManager.Instance.FriendCode);
+    }
 
-    public static bool IsDev(string friendCode) => friendCode
-        is "teamelder#5856"  //Slok
-        or "cloakhazy#9133"; //LezaiYa
+    public static bool IsDev(this PlayerControl pc)
+    {
+        return IsDev(pc.FriendCode);
+    }
+
+    public static bool IsDev(string friendCode)
+    {
+        return friendCode
+            is "teamelder#5856" //Slok
+            or "cloakhazy#9133";
+        //LezaiYa
+    }
 
     public static void AddChatMessage(string text, string title = "")
     {
@@ -315,16 +324,14 @@ public static class Utils
         player.SetName(name);
     }
 
-    private static Dictionary<byte, PlayerControl> cachedPlayers = new();
-
-    public static PlayerControl GetPlayerById(int playerId) => GetPlayerById((byte)playerId);
+    public static PlayerControl GetPlayerById(int playerId)
+    {
+        return GetPlayerById((byte)playerId);
+    }
 
     public static PlayerControl GetPlayerById(byte playerId)
     {
-        if (cachedPlayers.TryGetValue(playerId, out var cachedPlayer) && cachedPlayer)
-        {
-            return cachedPlayer;
-        }
+        if (cachedPlayers.TryGetValue(playerId, out var cachedPlayer) && cachedPlayer) return cachedPlayer;
 
         var player = Main.AllPlayerControls.FirstOrDefault(pc => pc.PlayerId == playerId);
         cachedPlayers[playerId] = player;
@@ -400,10 +407,7 @@ public static class Utils
     public static bool IsActive(SystemTypes type)
     {
         if (!IsNormalGame) return false;
-        if (!ShipStatus.Instance.Systems.ContainsKey(type))
-        {
-            return false;
-        }
+        if (!ShipStatus.Instance.Systems.ContainsKey(type)) return false;
 
         int mapId = Main.NormalOptions.MapId;
         switch (type)
@@ -468,7 +472,7 @@ public static class Utils
         return role switch
         {
             RoleTypes.Impostor or RoleTypes.Shapeshifter or RoleTypes.Phantom or RoleTypes.ImpostorGhost => true,
-            _ => false,
+            _ => false
         };
     }
 
@@ -477,7 +481,7 @@ public static class Utils
         return role switch
         {
             RoleTypes.ImpostorGhost or RoleTypes.CrewmateGhost or RoleTypes.GuardianAngel => true,
-            _ => false,
+            _ => false
         };
     }
 
@@ -490,7 +494,7 @@ public static class Utils
 
         return target.IsLocalPlayer() ||
                BothDeathCanSee ||
-               bothImp && LocalDead ||
+               (bothImp && LocalDead) ||
                Main.GodMode.Value ||
                IsFreePlay;
     }
@@ -502,7 +506,7 @@ public static class Utils
         var LocalDead = !PlayerControl.LocalPlayer.IsAlive();
         var IsAngel = PlayerControl.LocalPlayer.GetRoleType() is RoleTypes.GuardianAngel;
 
-        return !IsAngel && LocalDead ||
+        return (!IsAngel && LocalDead) ||
                Main.GodMode.Value ||
                IsFreePlay;
     }

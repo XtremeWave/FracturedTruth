@@ -13,7 +13,8 @@ internal class LobbyInfoPaneUpdatePatch
     [GameModuleInitializer]
     public static void Init()
     {
-        var trans = DestroyableSingleton<LobbyInfoPane>.Instance.transform.FindChild("AspectSize").FindChild("GameSettingsButtons");
+        var trans = DestroyableSingleton<LobbyInfoPane>.Instance.transform.FindChild("AspectSize")
+            .FindChild("GameSettingsButtons");
         trans.FindChild("Host Buttons").gameObject.SetActive(false);
         trans.FindChild("Client Buttons").gameObject.SetActive(true);
     }
@@ -32,12 +33,6 @@ internal class LobbyInfoPaneUpdatePatch
 [HarmonyPatch]
 internal class LobbyViewSettingsPanePatch
 {
-    [HarmonyPatch(typeof(LobbyViewSettingsPane), nameof(LobbyViewSettingsPane.Awake)), HarmonyPostfix]
-    private static void Awake()
-    {
-        GameObject.Find("RulesPopOutWindow").transform.localPosition += Vector3.left * 0.4f;
-    }
-
     private static readonly List<Color32> Normalbannercolors =
     [
         GetRoleColor(RoleTypes.Impostor),
@@ -71,7 +66,15 @@ internal class LobbyViewSettingsPanePatch
         Color.blue
     ];
 
-    [HarmonyPatch(typeof(LobbyViewSettingsPane), nameof(LobbyViewSettingsPane.Update)), HarmonyPostfix]
+    [HarmonyPatch(typeof(LobbyViewSettingsPane), nameof(LobbyViewSettingsPane.Awake))]
+    [HarmonyPostfix]
+    private static void Awake()
+    {
+        GameObject.Find("RulesPopOutWindow").transform.localPosition += Vector3.left * 0.4f;
+    }
+
+    [HarmonyPatch(typeof(LobbyViewSettingsPane), nameof(LobbyViewSettingsPane.Update))]
+    [HarmonyPostfix]
     private static void Update()
     {
         try
@@ -138,16 +141,13 @@ internal class LobbyViewSettingsPanePatch
                             SetColorForRolesBanner(banner.gameObject, rolecolors[bannerindex], roleColor);
                             if (banner.gameObject.transform.FindChild("LabelBackground").gameObject
                                     .GetComponent<SpriteRenderer>().color != new Color(0.3f, 0.3f, 0.3f, 1))
-                            {
                                 enableroleindex.Add(bannerindex);
-                            }
 
                             bannerindex++;
                         }
                     }
 
                     foreach (var banner in banners)
-                    {
                         if (banner.name == "AdvancedRoleViewPanel(Clone)")
                         {
                             var iconindex = enableroleindex.First();
@@ -157,7 +157,6 @@ internal class LobbyViewSettingsPanePatch
                             SetColorForIcon(banner.gameObject, rolecolors[iconindex], roleColor);
                             enableroleindex.RemoveAt(0);
                         }
-                    }
                 }
 
                 #endregion

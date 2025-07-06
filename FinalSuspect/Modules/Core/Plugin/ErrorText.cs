@@ -5,49 +5,13 @@ namespace FinalSuspect.Modules.Core.Plugin;
 
 public class ErrorText : MonoBehaviour
 {
-    #region Singleton
-
-    public static ErrorText Instance
-    {
-        get { return _instance; }
-    }
-
-    private static ErrorText _instance;
-
-    private void Awake()
-    {
-        if (_instance)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            _instance = this;
-            DontDestroyOnLoad(this);
-        }
-    }
-
-    #endregion
-
-    public static void Create(TextMeshPro baseText)
-    {
-        var Text = Instantiate(baseText);
-        Text.fontSizeMax = Text.fontSizeMin = 2f;
-        var instance = Text.gameObject.AddComponent<ErrorText>();
-        instance.Text = Text;
-        instance.name = "ErrorText";
-
-        Text.enabled = false;
-        Text.text = "NO ERROR";
-        Text.color = Color.red;
-        Text.outlineColor = Color.black;
-        Text.alignment = TextAlignmentOptions.Top;
-    }
-
     public TextMeshPro Text;
     public Camera Camera;
-    public List<ErrorData> AllErrors = [];
     public Vector3 TextOffset = new(0, 0.3f, -1000f);
+
+    public bool CheatDetected;
+    public bool SBDetected;
+    public List<ErrorData> AllErrors = [];
 
     public void Update()
     {
@@ -68,10 +32,23 @@ public class ErrorText : MonoBehaviour
         if (!Camera)
             Camera = !HudManager.InstanceExists ? Camera.main : HudManager.Instance.PlayerCam.GetComponent<Camera>();
         if (Camera)
-        {
             transform.position =
                 AspectPosition.ComputeWorldPosition(Camera, AspectPosition.EdgeAlignments.Top, TextOffset);
-        }
+    }
+
+    public static void Create(TextMeshPro baseText)
+    {
+        var Text = Instantiate(baseText);
+        Text.fontSizeMax = Text.fontSizeMin = 2f;
+        var instance = Text.gameObject.AddComponent<ErrorText>();
+        instance.Text = Text;
+        instance.name = "ErrorText";
+
+        Text.enabled = false;
+        Text.text = "NO ERROR";
+        Text.color = Color.red;
+        Text.outlineColor = Color.black;
+        Text.alignment = TextAlignmentOptions.Top;
     }
 
     public void AddError(ErrorCode code)
@@ -81,10 +58,8 @@ public class ErrorText : MonoBehaviour
         //    Error($"エラー発生: {error}: {error.Message}", "ErrorText");
 
         if (!AllErrors.Any(e => e.Code == code))
-        {
             //まだ出ていないエラー
             AllErrors.Add(error);
-        }
 
         UpdateText();
     }
@@ -125,11 +100,9 @@ public class ErrorText : MonoBehaviour
     public class ErrorData
     {
         public readonly ErrorCode Code;
+        public readonly int ErrorLevel;
         public readonly int ErrorType1;
         public readonly int ErrorType2;
-        public readonly int ErrorLevel;
-        public float Timer { get; private set; }
-        public string Message => GetString(ToString());
 
         public ErrorData(ErrorCode code)
         {
@@ -140,17 +113,39 @@ public class ErrorText : MonoBehaviour
             Timer = 0f;
         }
 
+        public float Timer { get; private set; }
+        public string Message => GetString(ToString());
+
         public override string ToString()
         {
             // ERR-xxx-yyy-z
             return $"ERR-{ErrorType1:000}-{ErrorType2:000}-{ErrorLevel:0}";
         }
 
-        public void IncreaseTimer() => Timer += Time.deltaTime;
+        public void IncreaseTimer()
+        {
+            Timer += Time.deltaTime;
+        }
     }
 
-    public bool CheatDetected;
-    public bool SBDetected;
+    #region Singleton
+
+    public static ErrorText Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+            DontDestroyOnLoad(this);
+        }
+    }
+
+    #endregion
 }
 
 public enum ErrorCode
@@ -179,5 +174,5 @@ public enum ErrorCode
     TestError2 = 0009202, // 000-920-2 Test Error 2
     TestError3 = 0009303, // 000-930-3 Test Error 3
     CheatDetected = 000_666_2, // 000-666-2 疑似存在作弊玩家
-    SBDetected = 000_666_1, // 000-666-1 傻逼外挂司马东西
+    SBDetected = 000_666_1 // 000-666-1 傻逼外挂司马东西
 }

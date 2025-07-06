@@ -8,11 +8,6 @@ namespace FinalSuspect.Modules.ClientActions;
 
 public class ClientActionItem
 {
-    public ToggleButtonBehaviour ToggleButton { get; private set; }
-    protected Action OnClickAction { get; set; }
-
-    public static SpriteRenderer CustomBackground { get; set; }
-    public static ToggleButtonBehaviour ModOptionsButton { get; set; }
     private static int numItems;
     private string Name;
 
@@ -48,10 +43,7 @@ public class ClientActionItem
                 PassiveButton leaveButton = null;
                 foreach (var button in selectableButtons)
                 {
-                    if (!button)
-                    {
-                        continue;
-                    }
+                    if (!button) continue;
 
                     switch (button.name)
                     {
@@ -102,8 +94,14 @@ public class ClientActionItem
         }
     }
 
+    public ToggleButtonBehaviour ToggleButton { get; }
+    protected Action OnClickAction { get; set; }
+
+    public static SpriteRenderer CustomBackground { get; set; }
+    public static ToggleButtonBehaviour ModOptionsButton { get; set; }
+
     /// <summary>
-    /// 在 Mod 选项界面中添加一个可执行操作的按钮
+    ///     在 Mod 选项界面中添加一个可执行操作的按钮
     /// </summary>
     /// <param name="name">按钮标签的翻译键和按钮对象名称</param>
     /// <param name="onClickAction">点击时触发的 Action</param>

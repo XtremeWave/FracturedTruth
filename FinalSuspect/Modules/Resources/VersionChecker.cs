@@ -15,41 +15,6 @@ namespace FinalSuspect.Modules.Resources;
 
 public static class VersionChecker
 {
-    [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start)), HarmonyPriority(Priority.LowerThanNormal)]
-    public class Start
-    {
-        public static void Postfix()
-        {
-            CustomPopup.Init();
-            if (firstStart)
-            {
-                StartTasks();
-                CustomPopup.Show(GetString("UpdateCheck.Popup_Title"), GetString("Tip.LoadingWithDot"), null);
-            }
-            
-            NameTagManager.ReloadTag(null);
-            ModUpdater.SetUpdateButtonStatus();
-            firstStart = false;
-        }
-    }
-
-    private static async void StartTasks()
-    {
-        try
-        {
-            _ = ModNewsHistory.LoadModAnnouncements();
-
-            await SpamManager.Init();
-            await Task.Delay(100);
-            await ResourcesManager.CheckForResources();
-            await CheckForUpdate();
-        }
-        catch
-        {
-            /* ignored */
-        }
-    }
-
     public static bool firstStart = true;
 
     public static bool hasUpdate;
@@ -68,20 +33,34 @@ public static class VersionChecker
     public static Version minimumVersion;
     public static int creation;
     public static string md5 = "";
-    public static bool IsSupported { get; private set; } = true;
 
     private static int retried;
     private static bool firstLaunch = true;
+    public static bool IsSupported { get; private set; } = true;
+
+    private static async void StartTasks()
+    {
+        try
+        {
+            _ = ModNewsHistory.LoadModAnnouncements();
+
+            await SpamManager.Init();
+            await Task.Delay(100);
+            await ResourcesManager.CheckForResources();
+            await CheckForUpdate();
+        }
+        catch
+        {
+            /* ignored */
+        }
+    }
 
     public static void Check()
     {
         var amongUsVersion = Version.Parse(Application.version);
         var lowestSupportedVersion = Version.Parse(Main.LowestSupportedVersion);
         IsSupported = amongUsVersion >= lowestSupportedVersion;
-        if (!IsSupported)
-        {
-            ErrorText.Instance.AddError(ErrorCode.UnsupportedVersion);
-        }
+        if (!IsSupported) ErrorText.Instance.AddError(ErrorCode.UnsupportedVersion);
     }
 
     private static void Retry()
@@ -210,6 +189,25 @@ public static class VersionChecker
         catch
         {
             return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
+    [HarmonyPriority(Priority.LowerThanNormal)]
+    public class Start
+    {
+        public static void Postfix()
+        {
+            CustomPopup.Init();
+            if (firstStart)
+            {
+                StartTasks();
+                CustomPopup.Show(GetString("UpdateCheck.Popup_Title"), GetString("Tip.LoadingWithDot"), null);
+            }
+
+            NameTagManager.ReloadTag(null);
+            ModUpdater.SetUpdateButtonStatus();
+            firstStart = false;
         }
     }
 }

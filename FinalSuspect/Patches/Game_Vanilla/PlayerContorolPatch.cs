@@ -45,7 +45,8 @@ internal class PlayerStartPatch
         topText.enabled = false;
         topText.alignment = TextAlignmentOptions.Bottom;
 
-        var bottomText = Object.Instantiate(__instance.cosmetics.nameText, __instance.cosmetics.nameText.transform, true);
+        var bottomText =
+            Object.Instantiate(__instance.cosmetics.nameText, __instance.cosmetics.nameText.transform, true);
         bottomText.transform.localPosition = new Vector3(0f, 0.2f, 0f);
         bottomText.transform.localScale = new Vector3(1f, 1f, 1f);
         bottomText.fontSize = Main.RoleTextSize;

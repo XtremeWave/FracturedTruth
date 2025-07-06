@@ -3,19 +3,17 @@ using System.Text.RegularExpressions;
 using FinalSuspect.Helpers;
 using TMPro;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Modules.ClientActions.FeatureItems.NameTag;
 
 public static class NameTagNewWindow
 {
+    private static readonly Regex FriendCodeRegex = new(@"^[a-z]+#[0-9]{4}$", RegexOptions.Compiled);
+
     public static GameObject Window { get; private set; }
     public static GameObject Info { get; private set; }
     public static GameObject EnterBox { get; private set; }
     public static GameObject ConfirmButton { get; private set; }
-    
-    private static readonly Regex FriendCodeRegex = 
-        new Regex(@"^[a-z]+#[0-9]{4}$", RegexOptions.Compiled);
 
     public static void Open()
     {
@@ -33,12 +31,12 @@ public static class NameTagNewWindow
             -10,
             0.7f
         );
-        
+
         CreateCloseButton();
         CreateInfoText();
         CreateInputField();
         CreateConfirmButton();
-        
+
         UiHelper.HideTemplateObjects(Window.transform);
     }
 
@@ -68,7 +66,7 @@ public static class NameTagNewWindow
             true
         );
         EnterBox.name = "Enter Friend Code Box";
-        
+
         var enterBoxTBT = EnterBox.GetComponent<TextBoxTMP>();
         enterBoxTBT.AllowEmail = false;
         enterBoxTBT.AllowSymbols = true;
@@ -86,8 +84,8 @@ public static class NameTagNewWindow
             false
         );
         ConfirmButton.name = "Confirm Button";
-        
-        ConfirmButton.GetComponent<PassiveButton>().OnClick.AddListener((Action)(OnConfirmClicked));
+
+        ConfirmButton.GetComponent<PassiveButton>().OnClick.AddListener((Action)OnConfirmClicked);
     }
 
     private static void OnConfirmClicked()
@@ -95,19 +93,19 @@ public static class NameTagNewWindow
         var input = EnterBox.GetComponent<TextBoxTMP>().text;
         var code = NormalizeFriendCode(input);
         var infoTmp = Info.GetComponent<TextMeshPro>();
-        
+
         if (!FriendCodeRegex.IsMatch(code))
         {
             ShowError(infoTmp, GetString("Tip.FriendCodeIncorrect"));
             return;
         }
-        
+
         if (NameTagManager.AllNameTags.ContainsKey(code))
         {
             ShowError(infoTmp, GetString("Tip.FriendCodeAlreadyExist"));
             return;
         }
-        
+
         Window.SetActive(false);
         NameTagEditMenu.Toggle(code, true);
     }
@@ -126,8 +124,8 @@ public static class NameTagNewWindow
         ConfirmButton.SetActive(false);
         text.text = message;
         text.color = message.Contains("Incorrect") ? Color.red : Color.blue;
-        
-        _ = new LateTask(() => 
+
+        _ = new LateTask(() =>
         {
             text.text = GetString("Tip.PleaseEnterFriendCode");
             text.color = Color.white;

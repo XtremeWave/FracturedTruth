@@ -14,10 +14,12 @@ namespace FinalSuspect.Modules.ClientActions.FeatureItems.Resources;
 
 public static class ResourcesPanel
 {
+    private static int numItems;
+
+    private static readonly Dictionary<string, CurrentState> PackageStates = new();
     public static SpriteRenderer CustomBackground { get; private set; }
     private static GameObject Slider { get; set; }
     private static Dictionary<string, GameObject> Items { get; set; }
-    private static int numItems;
 
     public static void Hide()
     {
@@ -46,10 +48,7 @@ public static class ResourcesPanel
             closeButton.Background.color = Color.red;
             var closePassiveButton = closeButton.GetComponent<PassiveButton>();
             closePassiveButton.OnClick = new Button.ButtonClickedEvent();
-            closePassiveButton.OnClick.AddListener(new Action(() =>
-            {
-                CustomBackground.gameObject.SetActive(false);
-            }));
+            closePassiveButton.OnClick.AddListener(new Action(() => { CustomBackground.gameObject.SetActive(false); }));
 
             if (CustomPopup.InfoTMP != null)
             {
@@ -62,7 +61,8 @@ public static class ResourcesPanel
                 helpText.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(2.45f, 1f);
             }
 
-            var sliderTemplate = AccountManager.Instance.transform.FindChild("MainSignInWindow/SignIn/AccountsMenu/Accounts/Slider").gameObject;
+            var sliderTemplate = AccountManager.Instance.transform
+                .FindChild("MainSignInWindow/SignIn/AccountsMenu/Accounts/Slider").gameObject;
             if (sliderTemplate != null && Slider == null)
             {
                 Slider = Object.Instantiate(sliderTemplate, CustomBackground.transform);
@@ -80,17 +80,6 @@ public static class ResourcesPanel
         RefreshTagList();
     }
 
-    private enum CurrentState
-    {
-        None,
-        IsDownloading,
-        DownLoadSucceeded,
-        DownLoadFailed,
-        Complete
-    }
-
-    private static readonly Dictionary<string, CurrentState> PackageStates = new();
-
     public static void RefreshTagList()
     {
         if (!IsNotJoined) return;
@@ -98,7 +87,8 @@ public static class ResourcesPanel
         var scroller = Slider.GetComponent<Scroller>();
         scroller.Inner.gameObject.ForEachChild((Action<GameObject>)DestroyObj);
 
-        var numberSetter = AccountManager.Instance.transform.FindChild("DOBEnterScreen/EnterAgePage/MonthMenu/Months").GetComponent<NumberSetter>();
+        var numberSetter = AccountManager.Instance.transform.FindChild("DOBEnterScreen/EnterAgePage/MonthMenu/Months")
+            .GetComponent<NumberSetter>();
         var buttonPrefab = numberSetter.ButtonPrefab.gameObject;
 
         Items?.Values.Do(Object.Destroy);
@@ -117,7 +107,8 @@ public static class ResourcesPanel
             var renderer = button.GetComponent<SpriteRenderer>();
             var rollover = button.GetComponent<ButtonRolloverHandler>();
 
-            var previewText = Object.Instantiate(button.transform.GetChild(0).GetComponent<TextMeshPro>(), button.transform);
+            var previewText =
+                Object.Instantiate(button.transform.GetChild(0).GetComponent<TextMeshPro>(), button.transform);
             previewText.transform.SetLocalX(1.9f);
             previewText.fontSize = 1f;
             previewText.name = "PreText-" + packageName;
@@ -171,7 +162,9 @@ public static class ResourcesPanel
                 PackageStates[packageName] = CurrentState.IsDownloading;
                 RefreshTagList();
 
-                var downloadTasks = (from fileName in fileList let type = GetType(fileName) select ResourcesDownloader.StartDownloadAsPackage(packageName, type, fileName)).ToList();
+                var downloadTasks = (from fileName in fileList
+                    let type = GetType(fileName)
+                    select ResourcesDownloader.StartDownloadAsPackage(packageName, type, fileName)).ToList();
                 var allSucceeded = false;
                 Task.Run(async () =>
                 {
@@ -182,7 +175,8 @@ public static class ResourcesPanel
                     }
                     finally
                     {
-                        PackageStates[packageName] = allSucceeded ? CurrentState.DownLoadSucceeded : CurrentState.DownLoadFailed;
+                        PackageStates[packageName] =
+                            allSucceeded ? CurrentState.DownLoadSucceeded : CurrentState.DownLoadFailed;
                         _ = new MainThreadTask(RefreshTagList, "Notice");
                         _ = new LateTask(() =>
                         {
@@ -219,5 +213,14 @@ public static class ResourcesPanel
             };
             return type;
         }
+    }
+
+    private enum CurrentState
+    {
+        None,
+        IsDownloading,
+        DownLoadSucceeded,
+        DownLoadFailed,
+        Complete
     }
 }

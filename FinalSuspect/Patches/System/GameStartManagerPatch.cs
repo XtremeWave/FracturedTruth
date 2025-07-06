@@ -75,13 +75,9 @@ public static class GameStartManagerPatch
             warningText.gameObject.SetActive(false);
 
             if (AmongUsClient.Instance.AmHost)
-            {
                 timerText = Object.Instantiate(__instance.PlayerCounter, __instance.StartButton.transform.parent);
-            }
             else
-            {
                 timerText = Object.Instantiate(__instance.PlayerCounter, __instance.StartButtonClient.transform.parent);
-            }
 
             timerText.fontSize = 6.2f;
             timerText.autoSizeTextContainer = true;
@@ -106,10 +102,7 @@ public static class GameStartManagerPatch
             var cancelButtonActiveRenderer = cancelButton.activeSprites.GetComponent<SpriteRenderer>();
             cancelButtonActiveRenderer.color = Color.red;
             var cancelButtonInactiveShine = cancelButton.inactiveSprites.transform.Find("Shine");
-            if (cancelButtonInactiveShine)
-            {
-                cancelButtonInactiveShine.gameObject.SetActive(false);
-            }
+            if (cancelButtonInactiveShine) cancelButtonInactiveShine.gameObject.SetActive(false);
 
             cancelButton.activeTextColor = cancelButton.inactiveTextColor = Color.white;
             GameStartTextlocalPosition = __instance.GameStartText.transform.localPosition;
@@ -219,15 +212,11 @@ public static class GameStartManagerPatch
             }
 
             if (AmongUsClient.Instance.AmHost)
-            {
                 __instance.GameStartText.transform.localPosition = new Vector3(
                     __instance.GameStartText.transform.localPosition.x, 2f,
                     __instance.GameStartText.transform.localPosition.z);
-            }
             else
-            {
                 __instance.GameStartText.transform.localPosition = GameStartTextlocalPosition;
-            }
 
             timerText.text = "";
             // Lobby timer
@@ -266,10 +255,7 @@ internal class ResetStartStatePatch
 {
     public static void Prefix(GameStartManager __instance)
     {
-        if (IsCountDown)
-        {
-            SoundManager.Instance.StopSound(__instance.gameStartSound);
-        }
+        if (IsCountDown) SoundManager.Instance.StopSound(__instance.gameStartSound);
     }
 }
 

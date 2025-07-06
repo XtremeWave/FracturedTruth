@@ -33,18 +33,9 @@ public class MersenneTwister : IRandom
     public const string REFERENCE_SOURCE_CODE =
         "https://github.com/vpmedia/template-unity/blob/master/Framework/Assets/Frameworks/URandom/MersenneTwister.cs";
 
-    public MersenneTwister() : this((int)DateTime.UtcNow.Ticks)
-    {
-    }
-
-    public MersenneTwister(int seed)
-    {
-        Init((uint)seed);
-    }
-
     /// <summary>
-    /// 数値の上限を設定
-    /// これより下の値の一部は参考元のソースより拝借
+    ///     数値の上限を設定
+    ///     これより下の値の一部は参考元のソースより拝借
     /// </summary>
     private const int N = 624;
 
@@ -54,6 +45,34 @@ public class MersenneTwister : IRandom
     private const uint LowerMask = 0x7fffffff;
     private const uint TemperingMaskB = 0x9d2c5680;
     private const uint TemperingMaskC = 0xefc60000;
+    private readonly uint[] _mag01 = [0x0, MatrixA];
+
+    private readonly uint[] _mt = new uint[N];
+    private short _mtItems;
+
+    public MersenneTwister() : this((int)DateTime.UtcNow.Ticks)
+    {
+    }
+
+    public MersenneTwister(int seed)
+    {
+        Init((uint)seed);
+    }
+
+    public int Next(int minValue, int maxValue)
+    {
+        if (minValue < 0) throw new ArgumentOutOfRangeException(nameof(minValue), "minValue must be bigger than 0.");
+        if (maxValue < 0) throw new ArgumentOutOfRangeException(nameof(maxValue), "maxValue must be bigger than 0.");
+        if (minValue > maxValue) throw new ArgumentException("maxValue must be bigger than minValue.");
+        if (minValue == maxValue) return minValue;
+
+        return (int)(minValue + Next() % (maxValue - minValue));
+    }
+
+    public int Next(int maxValue)
+    {
+        return Next(0, maxValue);
+    }
 
     private static uint ShiftU(uint y)
     {
@@ -74,10 +93,6 @@ public class MersenneTwister : IRandom
     {
         return y >> 18;
     }
-
-    private readonly uint[] _mt = new uint[N];
-    private short _mtItems;
-    private readonly uint[] _mag01 = [0x0, MatrixA];
 
     private void Init(uint seed)
     {
@@ -125,16 +140,4 @@ public class MersenneTwister : IRandom
 
         return y;
     }
-
-    public int Next(int minValue, int maxValue)
-    {
-        if (minValue < 0) throw new ArgumentOutOfRangeException(nameof(minValue), "minValue must be bigger than 0.");
-        if (maxValue < 0) throw new ArgumentOutOfRangeException(nameof(maxValue), "maxValue must be bigger than 0.");
-        if (minValue > maxValue) throw new ArgumentException("maxValue must be bigger than minValue.");
-        if (minValue == maxValue) return minValue;
-
-        return (int)(minValue + Next() % (maxValue - minValue));
-    }
-
-    public int Next(int maxValue) => Next(0, maxValue);
 }

@@ -6,9 +6,13 @@ namespace FinalSuspect.Patches.System;
 [HarmonyPatch(typeof(ChatBubble))]
 public static class ChatBubblePatch
 {
-    private static bool IsModdedMsg(string name) => name.EndsWith('\0');
+    private static bool IsModdedMsg(string name)
+    {
+        return name.EndsWith('\0');
+    }
 
-    [HarmonyPatch(nameof(ChatBubble.SetText)), HarmonyPrefix]
+    [HarmonyPatch(nameof(ChatBubble.SetText))]
+    [HarmonyPrefix]
     public static void SetText_Prefix(ChatBubble __instance, ref string chatText)
     {
         if (__instance.TextArea.color == Color.red) return;

@@ -14,10 +14,7 @@ internal static class Git
         {
             var fileName = Path.GetFileName(path);
 
-            if (fileName != "FinalSuspect.dll")
-            {
-                Environment.Exit(1);
-            }
+            if (fileName != "FinalSuspect.dll") Environment.Exit(1);
         }
     }
 }

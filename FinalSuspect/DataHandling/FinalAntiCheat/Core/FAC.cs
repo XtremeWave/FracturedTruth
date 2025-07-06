@@ -45,7 +45,7 @@ public static class FAC
             ErrorText.Instance.Clear();
     }
 
-    public static bool ReceiveRpc(PlayerControl pc, byte callId, MessageReader reader, out bool notify, 
+    public static bool ReceiveRpc(PlayerControl pc, byte callId, MessageReader reader, out bool notify,
         out string reason, out bool ban)
     {
         notify = true;
@@ -68,7 +68,8 @@ public static class FAC
 
             var sr = MessageReader.Get(reader);
 
-            foreach (var handler in _handlers.Where(handlers => handlers.TargetRpcs.Contains(callId)).SelectMany(handlers => handlers.Handlers))
+            foreach (var handler in _handlers.Where(handlers => handlers.TargetRpcs.Contains(callId))
+                         .SelectMany(handlers => handlers.Handlers))
             {
                 if (!Enum.IsDefined(typeof(RpcCalls), callId))
                 {
@@ -119,14 +120,13 @@ public static class FAC
         return false;
     }
 
-    public static void HandleCheat(PlayerControl pc, string text) =>
+    public static void HandleCheat(PlayerControl pc, string text)
+    {
         NotificationPopperPatch.NotificationPop(string.Format(text, pc.GetColoredName()));
+    }
 
     public static void Dispose(byte id)
     {
-        foreach (var handler in _handlers)
-        {
-            handler.Handlers.Do(x => x.Dispose(id));
-        }
+        foreach (var handler in _handlers) handler.Handlers.Do(x => x.Dispose(id));
     }
 }

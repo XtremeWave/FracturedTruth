@@ -9,7 +9,7 @@ public class StartMeetingHandler : IRpcHandler
     public List<byte> TargetRpcs =>
     [
         (byte)RpcCalls.ReportDeadBody,
-        (byte)RpcCalls.StartMeeting,
+        (byte)RpcCalls.StartMeeting
     ];
 
     public bool HandleLobby(PlayerControl sender, MessageReader reader,

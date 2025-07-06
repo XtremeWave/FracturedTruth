@@ -47,17 +47,10 @@ internal class MMOnlineManagerStartPatch
             textObj.DestroyTranslator();
             var message = "";
             if (VersionChecker.hasUpdate)
-            {
                 message = GetString("CanNotJoinPublicRoomNoLatest");
-            }
             else if (VersionChecker.isBroken)
-            {
                 message = GetString("ModBrokenMessage");
-            }
-            else if (!VersionChecker.IsSupported)
-            {
-                message = GetString("UnsupportedVersion");
-            }
+            else if (!VersionChecker.IsSupported) message = GetString("UnsupportedVersion");
 
             textObj.text = $"<size=2>{StringHelper.ColorString(Color.red, message)}</size>";
         }

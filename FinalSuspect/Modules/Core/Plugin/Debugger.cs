@@ -33,8 +33,16 @@ internal class XtremeLogger
     public static List<string> sendToGameList = [];
     public static bool isDetail = false;
     public static bool isAlsoInGame = false;
-    public static void Enable() => isEnable = true;
-    public static void Disable() => isEnable = false;
+
+    public static void Enable()
+    {
+        isEnable = true;
+    }
+
+    public static void Disable()
+    {
+        isEnable = false;
+    }
 
     public static void Enable(string tag, bool toGame = false)
     {
@@ -100,32 +108,46 @@ internal class XtremeLogger
     }
 
     public static void Test(object content = null, string tag = "======= Test =======", bool escapeCRLF = true,
-        [CallerLineNumber] int lineNumber = 0, [CallerFilePath] string fileName = "") =>
+        [CallerLineNumber] int lineNumber = 0, [CallerFilePath] string fileName = "")
+    {
         SendToFile((content ?? "Test Message").ToString(), LogLevel.Debug, tag, escapeCRLF, lineNumber, fileName);
+    }
 
     public static void Info(string text, string tag, bool escapeCRLF = true, [CallerLineNumber] int lineNumber = 0,
-        [CallerFilePath] string fileName = "") =>
+        [CallerFilePath] string fileName = "")
+    {
         SendToFile(text, LogLevel.Info, tag, escapeCRLF, lineNumber, fileName);
+    }
 
     public static void Warn(string text, string tag, bool escapeCRLF = true, [CallerLineNumber] int lineNumber = 0,
-        [CallerFilePath] string fileName = "") =>
+        [CallerFilePath] string fileName = "")
+    {
         SendToFile(text, LogLevel.Warning, tag, escapeCRLF, lineNumber, fileName);
+    }
 
     public static void Error(string text, string tag, bool escapeCRLF = true, [CallerLineNumber] int lineNumber = 0,
-        [CallerFilePath] string fileName = "") =>
+        [CallerFilePath] string fileName = "")
+    {
         SendToFile(text, LogLevel.Error, tag, escapeCRLF, lineNumber, fileName);
+    }
 
     public static void Fatal(string text, string tag, bool escapeCRLF = true, [CallerLineNumber] int lineNumber = 0,
-        [CallerFilePath] string fileName = "") =>
+        [CallerFilePath] string fileName = "")
+    {
         SendToFile(text, LogLevel.Fatal, tag, escapeCRLF, lineNumber, fileName);
+    }
 
     public static void Msg(string text, string tag, bool escapeCRLF = true, [CallerLineNumber] int lineNumber = 0,
-        [CallerFilePath] string fileName = "") =>
+        [CallerFilePath] string fileName = "")
+    {
         SendToFile(text, LogLevel.Message, tag, escapeCRLF, lineNumber, fileName);
+    }
 
     public static void Exception(Exception ex, string tag, [CallerLineNumber] int lineNumber = 0,
-        [CallerFilePath] string fileName = "") =>
+        [CallerFilePath] string fileName = "")
+    {
         SendToFile(ex.ToString(), LogLevel.Error, tag, false, lineNumber, fileName);
+    }
 
     public static void CurrentMethod([CallerLineNumber] int lineNumber = 0, [CallerFilePath] string fileName = "")
     {
@@ -136,5 +158,7 @@ internal class XtremeLogger
     }
 
     public static LogHandler.LogHandler Handler(string tag)
-        => new(tag);
+    {
+        return new LogHandler.LogHandler(tag);
+    }
 }

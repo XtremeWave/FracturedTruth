@@ -26,16 +26,10 @@ public class OnGameJoinedPatch
 
         Init_FAC();
 
-        _ = new LateTask(() =>
-        {
-            JoinedCompleted = true;
-        }, 1f, "SyncJoined");
+        _ = new LateTask(() => { JoinedCompleted = true; }, 1f, "SyncJoined");
 
-        if (AmongUsClient.Instance.AmHost)
-        {
-            GameStartManagerPatch.GameStartManagerUpdatePatch.exitTimer = -1;
-            //Main.NewLobby = true;
-        }
+        if (AmongUsClient.Instance.AmHost) GameStartManagerPatch.GameStartManagerUpdatePatch.exitTimer = -1;
+        //Main.NewLobby = true;
     }
 }
 
@@ -86,9 +80,11 @@ public class OnPlayerJoinedPatch
             {
                 if (!AmongUsClient.Instance.AmHost || AmongUsClient.Instance.allClients.Contains(client) ||
                     !client.Character.Data.IsIncomplete) return;
-                SendInGame(GetString("Warning.InvalidColor") + $" {client.PlayerName}(ClientID:{client.Id}/FriendCode:{client.FriendCode})");
+                SendInGame(GetString("Warning.InvalidColor") +
+                           $" {client.PlayerName}(ClientID:{client.Id}/FriendCode:{client.FriendCode})");
                 AmongUsClient.Instance.KickPlayer(client.Id, false);
-                Info($"Kicked {client.PlayerName}(ClientID:{client.Id}/FriendCode:{client.FriendCode}) due to it was unspawned",
+                Info(
+                    $"Kicked {client.PlayerName}(ClientID:{client.Id}/FriendCode:{client.FriendCode}) due to it was unspawned",
                     "OnPlayerJoinedPatchPostfix");
                 return;
             }
@@ -123,7 +119,9 @@ internal class OnPlayerLeftPatch
 
             data.Character?.SetDisconnected();
 
-            Info($"{data.PlayerName}(ClientID:{data.Id}/FriendCode:{data.FriendCode})断开连接(理由:{reason}，Ping:{AmongUsClient.Instance.Ping})", "Session");
+            Info(
+                $"{data.PlayerName}(ClientID:{data.Id}/FriendCode:{data.FriendCode})断开连接(理由:{reason}，Ping:{AmongUsClient.Instance.Ping})",
+                "Session");
             var id = data.ColorId;
             var color = Palette.PlayerColors[id];
             var name = StringHelper.ColorString(color, data.PlayerName);
@@ -132,20 +130,24 @@ internal class OnPlayerLeftPatch
             switch (reason)
             {
                 case DisconnectReasons.Hacking:
-                    NotificationPopperPatch.NotificationPop(string.Format(GetString("Notification.PlayerLeftByAU-Anticheat"), name));
+                    NotificationPopperPatch.NotificationPop(
+                        string.Format(GetString("Notification.PlayerLeftByAU-Anticheat"), name));
                     break;
                 case DisconnectReasons.Error:
-                    NotificationPopperPatch.NotificationPop(string.Format(GetString("Notification.PlayerLeftCuzError"), name));
+                    NotificationPopperPatch.NotificationPop(string.Format(GetString("Notification.PlayerLeftCuzError"),
+                        name));
                     break;
                 case DisconnectReasons.Kicked:
                 case DisconnectReasons.Banned:
                     break;
                 case DisconnectReasons.ClientTimeout:
-                    NotificationPopperPatch.NotificationPop(string.Format(GetString("Notification.PlayerLeftCuzTimeout"), name));
+                    NotificationPopperPatch.NotificationPop(
+                        string.Format(GetString("Notification.PlayerLeftCuzTimeout"), name));
                     break;
                 default:
                     if (!ClientsProcessed.Contains(data.Id))
-                        NotificationPopperPatch.NotificationPop(string.Format(GetString("Notification.PlayerLeft"), name));
+                        NotificationPopperPatch.NotificationPop(string.Format(GetString("Notification.PlayerLeft"),
+                            name));
                     break;
             }
 

@@ -14,8 +14,6 @@ namespace FinalSuspect.Patches.System;
 [HarmonyPatch]
 public class MainMenuManagerPatch
 {
-    public static MainMenuManager Instance { get; private set; }
-
     public static GameObject InviteButton;
 
     public static GameObject GithubButton;
@@ -24,16 +22,28 @@ public class MainMenuManagerPatch
     public static GameObject UpdateButton;
     public static GameObject PlayButton;
 
+    private static bool isOnline;
+    public static bool ShowedBak;
+    public static bool ShowingPanel;
+
+    public static readonly List<GameObject> MainMenuCustomButtons = [];
+    public static MainMenuManager Instance { get; private set; }
+
     [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.OpenGameModeMenu))]
     [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.OpenAccountMenu))]
     [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.OpenCredits))]
-    [HarmonyPrefix, HarmonyPriority(Priority.Last)]
-    public static void ShowRightPanel() => ShowingPanel = true;
+    [HarmonyPrefix]
+    [HarmonyPriority(Priority.Last)]
+    public static void ShowRightPanel()
+    {
+        ShowingPanel = true;
+    }
 
     [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
     [HarmonyPatch(typeof(OptionsMenuBehaviour), nameof(OptionsMenuBehaviour.Open))]
     [HarmonyPatch(typeof(AnnouncementPopUp), nameof(AnnouncementPopUp.Show))]
-    [HarmonyPrefix, HarmonyPriority(Priority.Last)]
+    [HarmonyPrefix]
+    [HarmonyPriority(Priority.Last)]
     public static void HideRightPanel()
     {
         try
@@ -54,25 +64,22 @@ public class MainMenuManagerPatch
         Instance.OpenGameModeMenu();
     }
 
-    private static bool isOnline;
-    public static bool ShowedBak;
-    public static bool ShowingPanel;
-
-    [HarmonyPatch(typeof(SignInStatusComponent), nameof(SignInStatusComponent.SetOnline)), HarmonyPostfix]
+    [HarmonyPatch(typeof(SignInStatusComponent), nameof(SignInStatusComponent.SetOnline))]
+    [HarmonyPostfix]
     public static void SetOnline_Postfix()
     {
         _ = new LateTask(() => { isOnline = true; }, 0.1f, "Set Online Status");
     }
 
-    public static readonly List<GameObject> MainMenuCustomButtons = [];
-
-    [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.LateUpdate)), HarmonyPostfix]
+    [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.LateUpdate))]
+    [HarmonyPostfix]
     public static void MainMenuManager_LateUpdate(MainMenuManager __instance)
     {
         CustomPopup.Update();
 
         if (!GameObject.Find("MainUI")) ShowingPanel = false;
-        VersionShowerStartPatch.CreditTextCredential.gameObject.SetActive(!ShowingPanel && MainMenuButtonHoverAnimation.Active);
+        VersionShowerStartPatch.CreditTextCredential.gameObject.SetActive(!ShowingPanel &&
+                                                                          MainMenuButtonHoverAnimation.Active);
 
         if (TitleLogoPatch.RightPanel)
         {
@@ -98,7 +105,8 @@ public class MainMenuManagerPatch
         if (pos2.y > 7f) ShowedBak = true;
     }
 
-    [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start)), HarmonyPostfix]
+    [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
+    [HarmonyPostfix]
     public static void Start_Postfix(MainMenuManager __instance)
     {
         DataManager.Player.Ban.BanPoints = 0;
@@ -140,14 +148,10 @@ public class MainMenuManagerPatch
                 UpdateButton.SetActive(false);
                 if (DebugModeManager.AmDebugger && Input.GetKey(KeyCode.LeftShift)) return;
                 if (VersionChecker.CanUpdate)
-                {
                     ModUpdater.StartUpdate();
-                }
                 else
-                {
                     CustomPopup.Show(GetString("UpdateRemind.BySelf_Title"), GetString("UpdateRemind.BySelf_Text"),
                         [(GetString(StringNames.Okay), null)]);
-                }
             }));
             UpdateButton.transform.transform.FindChild("FontPlacer").GetChild(0).gameObject.DestroyTranslator();
         }

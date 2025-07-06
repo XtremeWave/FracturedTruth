@@ -39,7 +39,7 @@ internal static class ExtendedPlayerControl
         return pc.GetRoleType() switch
         {
             RoleTypes.Impostor or RoleTypes.Shapeshifter or RoleTypes.Phantom or RoleTypes.ImpostorGhost => true,
-            _ => false,
+            _ => false
         };
     }
 
@@ -71,7 +71,10 @@ internal static class ExtendedPlayerControl
         return (isMeeting ? player?.Data?.PlayerName : player?.name) ?? nullname;
     }
 
-    public static bool IsLocalPlayer(this PlayerControl player) => PlayerControl.LocalPlayer == player;
+    public static bool IsLocalPlayer(this PlayerControl player)
+    {
+        return PlayerControl.LocalPlayer == player;
+    }
 
     public static bool IsHost(this PlayerControl player)
     {

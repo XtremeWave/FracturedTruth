@@ -1,5 +1,4 @@
 using System;
-using System.Text.RegularExpressions;
 using AmongUs.GameOptions;
 using FinalSuspect.Attributes;
 using FinalSuspect.DataHandling.FinalAntiCheat.Core;
@@ -11,6 +10,177 @@ namespace FinalSuspect.DataHandling;
 
 public class XtremePlayerData : IDisposable
 {
+    ///////////////FUNCTIONS\\\\\\\\\\\\\\\
+
+    public static XtremePlayerData GetXtremeDataById(byte id)
+    {
+        try
+        {
+            return AllPlayerData.FirstOrDefault(data => data.PlayerId == id);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    public static PlayerControl GetPlayerById(byte id)
+    {
+        return GetXtremeDataById(id).Player;
+    }
+
+    public static string GetPlayerNameById(byte id)
+    {
+        return GetXtremeDataById(id).Name;
+    }
+
+    public static RoleTypes GetRoleById(byte id)
+    {
+        var data = GetXtremeDataById(id);
+        var dead = data?.IsDead ?? false;
+        RoleTypes nullrole;
+
+        if (dead && !IsFreePlay)
+            nullrole = data.IsImpostor ? RoleTypes.ImpostorGhost : RoleTypes.CrewmateGhost;
+        else
+            nullrole = GetPlayerById(id).Data.Role.Role;
+
+        var role = (dead ? data.RoleAfterDeath : data?.RoleWhenAlive) ?? nullrole;
+        return role;
+    }
+
+    public void AdjustPlayerId()
+    {
+        PlayerId = Player.PlayerId;
+    }
+
+    public static int GetLongestNameByteCount()
+    {
+        return AllPlayerData.Select(data => data.Name.GetByteCount())
+            .OrderByDescending(byteCount => byteCount).FirstOrDefault();
+    }
+
+    public void SetName(string name)
+    {
+        Name = name;
+    }
+
+    public void SetDead()
+    {
+        IsDead = true;
+        Info($"Set Death For {Player.GetNameWithRole()}", "Data");
+    }
+
+    public void SetDisconnected()
+    {
+        if (IsLobby)
+        {
+            Dispose();
+            AllPlayerData.Remove(this);
+            return;
+        }
+
+        Info($"Set Disconnect For {Player.GetNameWithRole()}", "Data");
+        IsDisconnected = true;
+        SetDead();
+        SetDeathReason(VanillaDeathReason.Disconnect);
+    }
+
+    public void SetRole(RoleTypes role)
+    {
+        if (!RoleAssgined)
+        {
+            RoleWhenAlive = role;
+            SetAsImp(IsImpostor(role));
+        }
+        else
+        {
+            SetDead();
+            RoleAfterDeath = role;
+        }
+
+        RoleAssgined = !IsFreePlay;
+        Info("Set Role For Player: " + Name + " => " + role, "SetRole");
+    }
+
+    public void SetDeathReason(VanillaDeathReason deathReason, bool focus = false)
+    {
+        if ((IsDead && RealDeathReason == VanillaDeathReason.None) || focus)
+            RealDeathReason = deathReason;
+        Info($"Set Death Reason For {Player.GetNameWithRole()}; Death Reason: {deathReason}", "Data");
+    }
+
+    public void SetRealKiller(XtremePlayerData killer)
+    {
+        SetDead();
+        SetDeathReason(VanillaDeathReason.Kill);
+        killer.UpdateProcess();
+        RealKiller = killer;
+        Info($"Set Real Killer For {Player.GetNameWithRole()}, Killer: {killer.Player.GetNameWithRole()}", "Data");
+    }
+
+    public void SetTaskTotalCount(int count)
+    {
+        TotalTaskCount = count;
+    }
+
+    public void UpdateProcess()
+    {
+        ProcessInt++;
+    }
+
+    private void SetAsImp(bool isimp)
+    {
+        IsImpostor = isimp;
+    }
+
+    [GameModuleInitializer]
+    public static void InitializeAll()
+    {
+        DisposeAll();
+        AllPlayerData = [];
+        if (IsFreePlay)
+            foreach (var data in GameData.Instance.AllPlayers)
+                CreateDataFor(data.Object);
+        else
+            foreach (var pc in PlayerControl.AllPlayerControls)
+                CreateDataFor(pc);
+    }
+
+    public static void CreateDataFor(PlayerControl player, string playername = null)
+    {
+        try
+        {
+            var colorId = player.Data.DefaultOutfit.ColorId;
+            playername ??= player.GetRealName();
+            playername = playername.TrimEnd();
+            playername = playername.Replace(" ", "_");
+
+            var existingNames = new HashSet<string>(AllPlayerData.Select(data => data.Name));
+            var baseName = playername;
+            var suffix = 0;
+
+            while (existingNames.Contains(playername))
+            {
+                suffix++;
+                playername = $"{baseName}_{suffix}";
+
+                if (suffix <= 1000) continue;
+                playername = $"{baseName}_{Guid.NewGuid().ToString("N")[..4]}";
+                break;
+            }
+
+            AllPlayerData.Add(new XtremePlayerData(player, playername, colorId));
+            Info(
+                $"Creating XtremePlayerData For {player.GetClient().PlayerName ?? "Playername null"}({player.GetClient().FriendCode ?? "Friendcode null"})",
+                "Data");
+        }
+        catch
+        {
+            /* ignored */
+        }
+    }
+
     #region PLAYER_INFO
 
     public static List<XtremePlayerData> AllPlayerData;
@@ -59,164 +229,6 @@ public class XtremePlayerData : IDisposable
 
     #endregion
 
-    ///////////////FUNCTIONS\\\\\\\\\\\\\\\
-
-    public static XtremePlayerData GetXtremeDataById(byte id)
-    {
-        try
-        {
-            return AllPlayerData.FirstOrDefault(data => data.PlayerId == id);
-        }
-        catch
-        {
-            return null;
-        }
-    }
-
-    public static PlayerControl GetPlayerById(byte id) => GetXtremeDataById(id).Player;
-    public static string GetPlayerNameById(byte id) => GetXtremeDataById(id).Name;
-
-    public static RoleTypes GetRoleById(byte id)
-    {
-        var data = GetXtremeDataById(id);
-        var dead = data?.IsDead ?? false;
-        RoleTypes nullrole;
-
-        if (dead && !IsFreePlay)
-        {
-            nullrole = data.IsImpostor ? RoleTypes.ImpostorGhost : RoleTypes.CrewmateGhost;
-        }
-        else
-        {
-            nullrole = GetPlayerById(id).Data.Role.Role;
-        }
-
-        var role = (dead ? data.RoleAfterDeath : data?.RoleWhenAlive) ?? nullrole;
-        return role;
-    }
-
-    public void AdjustPlayerId()
-    {
-        PlayerId = Player.PlayerId;
-    }
-
-    public static int GetLongestNameByteCount() => AllPlayerData.Select(data => data.Name.GetByteCount())
-        .OrderByDescending(byteCount => byteCount).FirstOrDefault();
-
-    public void SetName(string name) => Name = name;
-
-    public void SetDead()
-    {
-        IsDead = true;
-        Info($"Set Death For {Player.GetNameWithRole()}", "Data");
-    }
-
-    public void SetDisconnected()
-    {
-        if (IsLobby)
-        {
-            Dispose();
-            AllPlayerData.Remove(this);
-            return;
-        }
-
-        Info($"Set Disconnect For {Player.GetNameWithRole()}", "Data");
-        IsDisconnected = true;
-        SetDead();
-        SetDeathReason(VanillaDeathReason.Disconnect);
-    }
-
-    public void SetRole(RoleTypes role)
-    {
-        if (!RoleAssgined)
-        {
-            RoleWhenAlive = role;
-            SetAsImp(IsImpostor(role));
-        }
-        else
-        {
-            SetDead();
-            RoleAfterDeath = role;
-        }
-
-        RoleAssgined = !IsFreePlay;
-        Info("Set Role For Player: " + Name + " => " + role, "SetRole");
-    }
-
-    public void SetDeathReason(VanillaDeathReason deathReason, bool focus = false)
-    {
-        if (IsDead && RealDeathReason == VanillaDeathReason.None || focus)
-            RealDeathReason = deathReason;
-        Info($"Set Death Reason For {Player.GetNameWithRole()}; Death Reason: {deathReason}", "Data");
-    }
-
-    public void SetRealKiller(XtremePlayerData killer)
-    {
-        SetDead();
-        SetDeathReason(VanillaDeathReason.Kill);
-        killer.UpdateProcess();
-        RealKiller = killer;
-        Info($"Set Real Killer For {Player.GetNameWithRole()}, Killer: {killer.Player.GetNameWithRole()}", "Data");
-    }
-
-    public void SetTaskTotalCount(int count) => TotalTaskCount = count;
-    public void UpdateProcess() => ProcessInt++;
-    private void SetAsImp(bool isimp) => IsImpostor = isimp;
-
-    [GameModuleInitializer]
-    public static void InitializeAll()
-    {
-        DisposeAll();
-        AllPlayerData = [];
-        if (IsFreePlay)
-        {
-            foreach (var data in GameData.Instance.AllPlayers)
-            {
-                CreateDataFor(data.Object);
-            }
-        }
-        else
-        {
-            foreach (var pc in PlayerControl.AllPlayerControls)
-            {
-                CreateDataFor(pc);
-            }
-        }
-    }
-
-    public static void CreateDataFor(PlayerControl player, string playername = null)
-    {
-        try
-        {
-            var colorId = player.Data.DefaultOutfit.ColorId;
-            playername ??= player.GetRealName();
-            playername = playername.TrimEnd();
-            playername = playername.Replace(" ", "_");
-
-            var existingNames = new HashSet<string>(AllPlayerData.Select(data => data.Name));
-            var baseName = playername; 
-            var suffix = 0;
-
-            while (existingNames.Contains(playername))
-            {
-                suffix++;
-                playername = $"{baseName}_{suffix}";
-
-                if (suffix <= 1000) continue;
-                playername = $"{baseName}_{Guid.NewGuid().ToString("N")[..4]}";
-                break;
-            }
-
-            AllPlayerData.Add(new XtremePlayerData(player, playername, colorId));
-            Info(
-                $"Creating XtremePlayerData For {player.GetClient().PlayerName ?? "Playername null"}({player.GetClient().FriendCode ?? "Friendcode null"})",
-                "Data");
-        }
-        catch
-        {
-            /* ignored */
-        }
-    }
 #pragma warning disable CA1816
     public void Dispose()
     {
@@ -289,7 +301,10 @@ public static class XtremePlayerDataExtensions
         }
     }
 
-    public static bool IsAlive(this PlayerControl pc) => pc?.GetXtremeData()?.IsDead == false || !IsInGame;
+    public static bool IsAlive(this PlayerControl pc)
+    {
+        return pc?.GetXtremeData()?.IsDead == false || !IsInGame;
+    }
 
     public static string GetDataName(this PlayerControl pc)
     {
@@ -316,7 +331,10 @@ public static class XtremePlayerDataExtensions
         }
     }
 
-    public static void SetDead(this PlayerControl pc) => pc.GetXtremeData().SetDead();
+    public static void SetDead(this PlayerControl pc)
+    {
+        pc.GetXtremeData().SetDead();
+    }
 
     public static void SetDisconnected(this PlayerControl pc)
     {
@@ -324,10 +342,15 @@ public static class XtremePlayerDataExtensions
         XtremePlayerData.AllPlayerData.Do(_data => _data.AdjustPlayerId());
     }
 
-    public static void SetRole(this PlayerControl pc, RoleTypes role) => pc.GetXtremeData().SetRole(role);
+    public static void SetRole(this PlayerControl pc, RoleTypes role)
+    {
+        pc.GetXtremeData().SetRole(role);
+    }
 
     public static void SetDeathReason(this PlayerControl pc, VanillaDeathReason deathReason, bool focus = false)
-        => pc.GetXtremeData().SetDeathReason(deathReason, focus);
+    {
+        pc.GetXtremeData().SetDeathReason(deathReason, focus);
+    }
 
     public static void SetRealKiller(this PlayerControl pc, PlayerControl killer)
     {
@@ -335,8 +358,13 @@ public static class XtremePlayerDataExtensions
         pc.GetXtremeData().SetRealKiller(killer.GetXtremeData());
     }
 
-    public static void SetTaskTotalCount(this PlayerControl pc, int TaskTotalCount) =>
+    public static void SetTaskTotalCount(this PlayerControl pc, int TaskTotalCount)
+    {
         pc.GetXtremeData().SetTaskTotalCount(TaskTotalCount);
+    }
 
-    public static void OnCompleteTask(this PlayerControl pc) => pc.GetXtremeData().UpdateProcess();
+    public static void OnCompleteTask(this PlayerControl pc)
+    {
+        pc.GetXtremeData().UpdateProcess();
+    }
 }

@@ -12,17 +12,6 @@ namespace FinalSuspect.Patches.System;
 
 public static class LoadPatch
 {
-    #region UI Components
-
-    private static TextMeshPro _loadText = null!;
-    private static TextMeshPro _processText = null!;
-    private static SpriteRenderer _teamLogo = null!;
-    private static SpriteRenderer _modLogo = null!;
-    private static SpriteRenderer _modLogoBlurred = null!;
-    private static SpriteRenderer _glow = null!;
-
-    #endregion
-
     private static bool _reloadLanguage;
     private static bool _skipLoadAnimation;
     private static bool _firstLaunch;
@@ -47,6 +36,19 @@ public static class LoadPatch
             instance.sceneChanger.BeginLoadingScene();
             instance.doneLoadingRefdata = true;
             LoadComplete = true;
+        }
+
+        private static IEnumerator LoadAmongUsTranslation()
+        {
+            yield return DestroyableSingleton<ReferenceDataManager>.Instance.Initialize();
+            try
+            {
+                DestroyableSingleton<TranslationController>.Instance.Initialize();
+            }
+            catch
+            {
+                /* Ignored */
+            }
         }
 
         #region Initialization Helpers
@@ -121,7 +123,7 @@ public static class LoadPatch
             var currentVersion = $"{Main.PluginVersion}|{Main.DisplayedVersion}|{Main.GitCommit}-{Main.GitBranch}";
             var bypassType = Main.LanguageUpdateBypass.Value;
 
-            _reloadLanguage = currentVersion != Main.LastStartVersion.Value 
+            _reloadLanguage = currentVersion != Main.LastStartVersion.Value
                               && bypassType == BypassType.Dont;
 
             switch (bypassType)
@@ -435,19 +437,6 @@ public static class LoadPatch
         }
 
         #endregion
-
-        private static IEnumerator LoadAmongUsTranslation()
-        {
-            yield return DestroyableSingleton<ReferenceDataManager>.Instance.Initialize();
-            try
-            {
-                DestroyableSingleton<TranslationController>.Instance.Initialize();
-            }
-            catch
-            {
-                /* Ignored */
-            }
-        }
     }
 
     #region Harmony Patches
@@ -463,6 +452,17 @@ public static class LoadPatch
             LoadComplete = true;
         }
     }
+
+    #endregion
+
+    #region UI Components
+
+    private static TextMeshPro _loadText = null!;
+    private static TextMeshPro _processText = null!;
+    private static SpriteRenderer _teamLogo = null!;
+    private static SpriteRenderer _modLogo = null!;
+    private static SpriteRenderer _modLogoBlurred = null!;
+    private static SpriteRenderer _glow = null!;
 
     #endregion
 }

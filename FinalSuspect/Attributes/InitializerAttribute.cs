@@ -10,16 +10,16 @@ public abstract class InitializerAttribute<T>(InitializePriority priority) : Att
     // ReSharper disable once StaticMemberInGenericType
     private static MethodInfo[] allInitializers;
 
-    private static LogHandler logger = Handler(nameof(InitializerAttribute<T>));
-
-    public InitializerAttribute() : this(InitializePriority.Normal)
-    {
-    }
+    private static readonly LogHandler logger = Handler(nameof(InitializerAttribute<T>));
 
     private readonly InitializePriority priority = priority;
 
     /// <summary>在初始化时调用的方法</summary>
     private MethodInfo targetMethod;
+
+    public InitializerAttribute() : this(InitializePriority.Normal)
+    {
+    }
 
     private static void FindInitializers()
     {
@@ -55,10 +55,7 @@ public abstract class InitializerAttribute<T>(InitializePriority priority) : Att
     public static void InitializeAll()
     {
         // 在首次初始化时查找初始化方法
-        if (allInitializers == null)
-        {
-            FindInitializers();
-        }
+        if (allInitializers == null) FindInitializers();
 
         if (allInitializers == null) return;
         foreach (var initializer in allInitializers)
@@ -84,5 +81,5 @@ public enum InitializePriority
     Low,
 
     /// <summary>最低优先级，最后执行</summary>
-    VeryLow,
+    VeryLow
 }

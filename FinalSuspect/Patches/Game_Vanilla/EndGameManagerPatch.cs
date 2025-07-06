@@ -3,7 +3,8 @@
 [HarmonyPatch]
 public class EndGameManagerPatch
 {
-    [HarmonyPatch(typeof(EndGameManager), nameof(EndGameManager.ShowButtons)), HarmonyPostfix]
+    [HarmonyPatch(typeof(EndGameManager), nameof(EndGameManager.ShowButtons))]
+    [HarmonyPostfix]
     public static void ShowButtons_Postfix(EndGameManager __instance)
     {
         if (!Main.AutoEndGame.Value) return;
@@ -14,7 +15,8 @@ public class EndGameManagerPatch
 [HarmonyPatch]
 public class ControllerNavMenuPatch
 {
-    [HarmonyPatch(typeof(ControllerNavMenu), nameof(ControllerNavMenu.Start)), HarmonyPostfix]
+    [HarmonyPatch(typeof(ControllerNavMenu), nameof(ControllerNavMenu.Start))]
+    [HarmonyPostfix]
     public static void Start_Postfix(ControllerNavMenu __instance)
     {
         if (!Main.AutoEndGame.Value) return;

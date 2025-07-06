@@ -27,7 +27,8 @@ public static class ServerAddManager
                 true));
             regionInfos.Add(CreateHttp("bj.8w.fan", "<color=#9900CC>新猫服</color><color=#ffff00>[北京]</color>", 443,
                 true));
-            regionInfos.Add(CreateHttp("player.fangkuai.fun", "<color=#00ffff>方块</color><color=#FF44FF>宿迁私服</color>", 443,
+            regionInfos.Add(CreateHttp("player.fangkuai.fun", "<color=#00ffff>方块</color><color=#FF44FF>宿迁私服</color>",
+                443,
                 true));
             regionInfos.Add(CreateHttp("auhk.fangkuai.fun", "<color=#00ffff>方块</color><color=#FFC0CB>香港私服</color>", 443,
                 true));
@@ -64,12 +65,11 @@ public static class ServerAddManager
             "Niko233(EU)" => "Niko[EU]",
             "Niko233(CN)" => "Niko[CN]",
             "XtremeWave(HK)" => "XW[HK]",
-            _ => serverName,
+            _ => serverName
         };
 
         if ((TranslationController.Instance?.currentLanguage?.languageID ?? SupportedLangs.SChinese) is
             SupportedLangs.SChinese or SupportedLangs.TChinese)
-        {
             name = name switch
             {
                 "Asia" => "亚服",
@@ -77,9 +77,8 @@ public static class ServerAddManager
                 "North America" => "北美服",
                 "NA" => "北美服",
                 "XW[HK]" => "XW[香港]",
-                _ => name,
+                _ => name
             };
-        }
 
         var color = GetServerColor(serverName);
         //Cloud.ServerName = name;
@@ -106,7 +105,7 @@ public static class ServerAddManager
             "Niko233(CN)" => new Color32(255, 224, 0, 255),
             "XtremeWave(HK)" => ColorHelper.TeamColor32,
 
-            _ => new Color32(255, 255, 255, 255),
+            _ => new Color32(255, 255, 255, 255)
         };
 
         return color;

@@ -9,6 +9,12 @@ namespace FinalSuspect.Templates;
 
 public class SimpleButton
 {
+    private static PassiveButton baseButton;
+    private readonly BoxCollider2D buttonCollider;
+
+    private float _fontSize;
+    private Vector2 _scale;
+
     /// <summary>创建新按钮</summary>
     /// <param name="parent">父对象</param>
     /// <param name="name">对象名称</param>
@@ -28,10 +34,7 @@ public class SimpleButton
         string label,
         bool isActive = true)
     {
-        if (!baseButton)
-        {
-            throw new InvalidOperationException("baseButtonが未設定");
-        }
+        if (!baseButton) throw new InvalidOperationException("baseButtonが未設定");
 
         Button = Object.Instantiate(baseButton, parent);
         Label = Button.transform.Find("FontPlacer/Text_TMP").GetComponent<TextMeshPro>();
@@ -59,8 +62,6 @@ public class SimpleButton
     public TextMeshPro Label { get; }
     private SpriteRenderer NormalSprite { get; }
     private SpriteRenderer HoverSprite { get; }
-    private readonly BoxCollider2D buttonCollider;
-    private Vector2 _scale;
 
     public Vector2 Scale
     {
@@ -68,22 +69,15 @@ public class SimpleButton
         set => _scale = NormalSprite.size = HoverSprite.size = buttonCollider.size = value;
     }
 
-    private float _fontSize;
-
     public float FontSize
     {
         get => _fontSize;
         set => _fontSize = Label.fontSize = Label.fontSizeMin = Label.fontSizeMax = value;
     }
 
-    private static PassiveButton baseButton;
-
     public static void SetBase(PassiveButton passiveButton)
     {
-        if (baseButton || !passiveButton)
-        {
-            return;
-        }
+        if (baseButton || !passiveButton) return;
 
         // 复制按钮
         baseButton = Object.Instantiate(passiveButton);
@@ -104,5 +98,8 @@ public class SimpleButton
         baseButton.OnClick = new Button.ButtonClickedEvent();
     }
 
-    public static bool IsNullOrDestroyed(SimpleButton button) => button == null || !button.Button;
+    public static bool IsNullOrDestroyed(SimpleButton button)
+    {
+        return button == null || !button.Button;
+    }
 }

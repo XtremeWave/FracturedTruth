@@ -19,10 +19,7 @@ public static class ChatControllerUpdatePatch
 
     public static void Postfix(ChatController __instance)
     {
-        if (OtherModHost || IsFreePlay || IsLocalGame)
-        {
-            __instance.timeSinceLastMessage = 3f;
-        }
+        if (OtherModHost || IsFreePlay || IsLocalGame) __instance.timeSinceLastMessage = 3f;
 
         if (!__instance.freeChatField.textArea.hasFocus) return;
         if ((Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)) && Input.GetKeyDown(KeyCode.C))
@@ -59,15 +56,9 @@ internal class ChatCommands
 
     public static bool Prefix(ChatController __instance)
     {
-        if (__instance.quickChatField.Visible)
-        {
-            return true;
-        }
+        if (__instance.quickChatField.Visible) return true;
 
-        if (string.IsNullOrWhiteSpace(__instance.freeChatField.textArea.text))
-        {
-            return false;
-        }
+        if (string.IsNullOrWhiteSpace(__instance.freeChatField.textArea.text)) return false;
 
         var text = __instance.freeChatField.textArea.text;
         if (SentHistory.Count == 0 || SentHistory[^1] != text) SentHistory.Add(text);

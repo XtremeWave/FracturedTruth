@@ -49,10 +49,7 @@ internal class RolesSettingsMenuPatch
         var header = GameObject.Find("HeaderButtons");
         var headerbuttons = new List<GameObject>();
 
-        for (var i = 4; i <= 10; i++)
-        {
-            headerbuttons.Add(header.transform.GetChild(i).gameObject);
-        }
+        for (var i = 4; i <= 10; i++) headerbuttons.Add(header.transform.GetChild(i).gameObject);
 
         var index = 0;
         foreach (var button in headerbuttons)
@@ -75,13 +72,9 @@ internal class RolesSettingsMenuPatch
 
         var text = AllButton.transform.FindChild("Text").gameObject.GetComponent<TextMeshPro>();
         if (text.color == Color.white || text.color == ColorHelper.ModColor32)
-        {
             text.color = ColorHelper.ModColor32;
-        }
         else
-        {
             text.color = new Color(0.45f, 0.45f, 0.65f);
-        }
     }
 
     private static void SetRoleAreaColors()
@@ -131,7 +124,6 @@ internal class GameOptionsMenuPatch
             var numindex = 0;
             var boxindex = 0;
             foreach (var banner in banners)
-            {
                 if (banner.name == "CategoryHeaderMasked(Clone)")
                 {
                     SetColorForCat(banner.gameObject, Normalbannercolors[headerindex]);
@@ -161,7 +153,6 @@ internal class GameOptionsMenuPatch
                     SetColorForSettingsOpt_Checkbox(banner.gameObject, color);
                     boxindex++;
                 }
-            }
         }
         else
         {
@@ -169,7 +160,6 @@ internal class GameOptionsMenuPatch
             var numindex = 0;
             var boxindex = 0;
             foreach (var banner in banners)
-            {
                 if (banner.name == "CategoryHeaderMasked(Clone)")
                 {
                     SetColorForCat(banner.gameObject, HnSbannercolors[headerindex]);
@@ -199,7 +189,6 @@ internal class GameOptionsMenuPatch
                     SetColorForSettingsOpt_Checkbox(banner.gameObject, color);
                     boxindex++;
                 }
-            }
         }
     }
 
@@ -241,20 +230,12 @@ internal class GameSettingMenuPatch
         {
             var Panel = GameObject.Find("LeftPanel");
 
-            if (!GamePresetButton)
-            {
-                GamePresetButton = Panel.transform.FindChild("GamePresetButton").gameObject;
-            }
+            if (!GamePresetButton) GamePresetButton = Panel.transform.FindChild("GamePresetButton").gameObject;
 
-            if (!GameSettingsButton)
-            {
-                GameSettingsButton = Panel.transform.FindChild("GameSettingsButton").gameObject;
-            }
+            if (!GameSettingsButton) GameSettingsButton = Panel.transform.FindChild("GameSettingsButton").gameObject;
 
             if (!RoleSettingsButton && IsNormalGame)
-            {
                 RoleSettingsButton = Panel.transform.FindChild("RoleSettingsButton").gameObject;
-            }
 
             SetColor(GamePresetButton, new Color32(205, 255, 253, 255));
             SetColor(GameSettingsButton, new Color32(206, 205, 253, 255));

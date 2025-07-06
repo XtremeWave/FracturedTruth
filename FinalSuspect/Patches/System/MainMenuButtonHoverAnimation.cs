@@ -6,7 +6,12 @@ namespace FinalSuspect.Patches.System;
 [HarmonyPatch]
 public class MainMenuButtonHoverAnimation
 {
-    [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start)), HarmonyPostfix]
+    private static Dictionary<GameObject, (Vector3, bool)> AllButtons = new();
+
+    public static bool Active = true;
+
+    [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
+    [HarmonyPostfix]
     [HarmonyPriority(Priority.Last)]
     private static void Start_Postfix(MainMenuManager __instance)
     {
@@ -15,17 +20,14 @@ public class MainMenuButtonHoverAnimation
         mainButtons.ForEachChild((Action<GameObject>)Init);
     }
 
-    private static Dictionary<GameObject, (Vector3, bool)> AllButtons = new();
-
     private static void SetButtonStatus(GameObject obj, bool active)
     {
         AllButtons.TryAdd(obj, (obj.transform.position, active));
         AllButtons[obj] = (AllButtons[obj].Item1, active);
     }
 
-    public static bool Active = true;
-
-    [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.LateUpdate)), HarmonyPostfix]
+    [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.LateUpdate))]
+    [HarmonyPostfix]
     private static void Update_Postfix(MainMenuManager __instance)
     {
         if (Input.GetKeyDown(KeyCode.Tab))

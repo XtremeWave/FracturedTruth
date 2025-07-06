@@ -9,7 +9,7 @@ public class SetColorHandler : IRpcHandler
     public List<byte> TargetRpcs =>
     [
         (byte)RpcCalls.CheckColor,
-        (byte)RpcCalls.SetColor,
+        (byte)RpcCalls.SetColor
     ];
 
     public bool HandleGame_All(PlayerControl sender, MessageReader reader,

@@ -8,12 +8,6 @@ namespace FinalSuspect.DataHandling.FinalAntiCheat.Core;
 
 public class PlayerCheatData : IDisposable
 {
-    public bool IsSuspectCheater { get; private set; }
-    public ClientData ClientData { get; private set; }
-    public string FriendCode => ClientData?.FriendCode ?? string.Empty;
-    public string Puid => ClientData?.GetHashedPuid() ?? string.Empty;
-    public bool InComingOverloaded { get; private set; }
-
     private readonly PlayerControl _player;
 
     private readonly Dictionary<byte, RpcRecord> _rpcRecords = new();
@@ -22,6 +16,20 @@ public class PlayerCheatData : IDisposable
     {
         _player = player;
         ClientData = _player.GetClient();
+    }
+
+    public bool IsSuspectCheater { get; private set; }
+    public ClientData ClientData { get; private set; }
+    public string FriendCode => ClientData?.FriendCode ?? string.Empty;
+    public string Puid => ClientData?.GetHashedPuid() ?? string.Empty;
+    public bool InComingOverloaded { get; private set; }
+
+    public void Dispose()
+    {
+        IsSuspectCheater = false;
+        ClientData = null;
+        InComingOverloaded = false;
+        _rpcRecords.Clear();
     }
 
     public void MarkAsCheater()
@@ -51,7 +59,7 @@ public class PlayerCheatData : IDisposable
     private void HandleSuspectCheater()
     {
         if (Main.DisableFAC.Value || !IsSuspectCheater ||
-            _lastHandleCheater != -1 && _lastHandleCheater + 1 >= GetTimeStamp()) return;
+            (_lastHandleCheater != -1 && _lastHandleCheater + 1 >= GetTimeStamp())) return;
         _lastHandleCheater = GetTimeStamp();
         if (!AmongUsClient.Instance.AmHost)
         {
@@ -61,13 +69,6 @@ public class PlayerCheatData : IDisposable
         }
 
         KickPlayer(_player.PlayerId, false, "Cheater");
-    }
-
-    private struct RpcRecord
-    {
-        public long LastReceivedTime;
-        public int Count;
-        public int MaxiCount;
     }
 
     public bool HandleIncomingRpc(byte rpcId)
@@ -133,11 +134,10 @@ public class PlayerCheatData : IDisposable
         }
     }
 
-    public void Dispose()
+    private struct RpcRecord
     {
-        IsSuspectCheater = false;
-        ClientData = null;
-        InComingOverloaded = false;
-        _rpcRecords.Clear();
+        public long LastReceivedTime;
+        public int Count;
+        public int MaxiCount;
     }
 }

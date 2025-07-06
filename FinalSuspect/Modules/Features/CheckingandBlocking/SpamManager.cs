@@ -27,14 +27,12 @@ public static class SpamManager
         {
             BanWords = ReturnAllNewLinesInFile(BANEDWORDS_FILE_PATH);
             foreach (var target in Targets)
+            foreach (var url in GetInfoFileUrlList())
             {
-                foreach (var url in GetInfoFileUrlList())
-                {
-                    var task = GetConfigs(url + "Assets/Configs/" + target, target);
-                    await task;
-                    if (!task.Result) continue;
-                    break;
-                }
+                var task = GetConfigs(url + "Assets/Configs/" + target, target);
+                await task;
+                if (!task.Result) continue;
+                break;
             }
         }
         catch (Exception ex)
@@ -147,17 +145,11 @@ public static class SpamManager
 
     private static List<string> GetTokens(JToken token)
     {
-        if (token is not { Type: JTokenType.Array })
-        {
-            return [];
-        }
+        if (token is not { Type: JTokenType.Array }) return [];
 
         var jarray = token.Cast<JArray>();
         var tokens = new List<string>();
-        for (var i = 0; i < jarray.Count; i++)
-        {
-            tokens.Add(jarray[i].ToString());
-        }
+        for (var i = 0; i < jarray.Count; i++) tokens.Add(jarray[i].ToString());
 
         return
         [
@@ -221,10 +213,7 @@ public static class SpamManager
 
             jsonWriter.WriteStartArray();
 
-            foreach (var word in allWords)
-            {
-                jsonWriter.WriteValue(word);
-            }
+            foreach (var word in allWords) jsonWriter.WriteValue(word);
 
             jsonWriter.WriteEndArray();
             sw.Flush();
