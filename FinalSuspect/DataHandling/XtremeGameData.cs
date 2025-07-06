@@ -42,7 +42,8 @@ public static partial class XtremeGameData
 
     public static class GameStates
     {
-        public static bool InGame { private get; set; }
+        private static bool InGame { get; set; }
+        private static bool InMeeting { get; set; }
 
         public static bool OtherModHost
         {
@@ -73,7 +74,7 @@ public static partial class XtremeGameData
         public static bool IsLocalGame => AmongUsClient.Instance.NetworkMode == NetworkModes.LocalGame;
         public static bool IsFreePlay => AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay;
         public static bool IsInTask => IsInGame && !MeetingHud.Instance;
-        public static bool IsMeeting => IsInGame && MeetingHud.Instance;
+        public static bool IsInMeeting => IsInGame && MeetingHud.Instance && InMeeting;
 
         public static bool IsCountDown => GameStartManager.InstanceExists &&
                                           GameStartManager.Instance.startState ==
@@ -100,6 +101,16 @@ public static partial class XtremeGameData
                        regionInfo.PingServer.EndsWith(Domain, StringComparison.Ordinal) &&
                        regionInfo.Servers.All(serverInfo => serverInfo.Ip.EndsWith(Domain, StringComparison.Ordinal));
             }
+        }
+
+        public static void UpdateGameState_IsInGame(bool inGame)
+        {
+            InGame = inGame;
+        }
+
+        public static void UpdateGameState_IsInMeeting(bool inMeeting)
+        {
+            InMeeting = inMeeting;
         }
 
         public static bool MapIsActive(MapNames name)

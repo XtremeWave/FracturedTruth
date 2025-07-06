@@ -13,7 +13,7 @@ internal class IntroCutscenePatch
     [HarmonyPrefix]
     public static void CoBegin_Prefix()
     {
-        InGame = true;
+        UpdateGameState_IsInGame(true);
         Info("Game Start", "IntroCutscene");
     }
 

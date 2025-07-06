@@ -20,7 +20,8 @@ public class OnGameJoinedPatch
         XtremeGameData.PlayerVersion.playerVersion = new Dictionary<byte, XtremeGameData.PlayerVersion>();
         SoundManager.Instance.ChangeAmbienceVolume(DataManager.Settings.Audio.AmbienceVolume);
         XtremePlayerData.InitializeAll();
-        InGame = false;
+        UpdateGameState_IsInGame(false);
+        UpdateGameState_IsInMeeting(false);
         ErrorText.Instance.Clear();
         ServerAddManager.SetServerName();
 

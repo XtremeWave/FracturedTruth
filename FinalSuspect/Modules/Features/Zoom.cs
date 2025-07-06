@@ -17,7 +17,7 @@ public static class Zoom
         {
             var canZoom = IsShip || IsLobby || IsFreePlay;
 
-            if (!canZoom || !CanSeeOthersRole() || IsMeeting || !IsCanMove || InGameRoleInfoMenu.Showing)
+            if (!canZoom || !CanSeeOthersRole() || IsInMeeting || !IsCanMove || InGameRoleInfoMenu.Showing)
             {
                 Flag.Run(() => { SetZoomSize(reset: true); }, "Zoom");
                 return;
@@ -52,7 +52,7 @@ public static class Zoom
             Camera.main.orthographicSize = 3.0f;
             HudManager.Instance.UICamera.orthographicSize = 3.0f;
             HudManager.Instance.Chat.transform.localScale = Vector3.one;
-            if (IsMeeting) MeetingHud.Instance.transform.localScale = Vector3.one;
+            if (IsInMeeting) MeetingHud.Instance.transform.localScale = Vector3.one;
         }
         else
         {

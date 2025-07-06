@@ -49,7 +49,7 @@ internal class PingTrackerUpdatePatch
         CreditTextCredential.text = sb.ToString();
         if (
             (GameSettingMenu.Instance?.gameObject.active ?? false)
-            || IsMeeting
+            || IsInMeeting
             || (FriendsListUI.Instance?.gameObject.active ?? false)
             || ((HudManagerPatch.showHideButton?.Button?.gameObject.active ?? false) && Main.ShowResults.Value))
             CreditTextCredential.text = "";
@@ -299,8 +299,8 @@ internal class TitleLogoPatch
         GameObject.Find("Divider")?.SetActive(false);
 
         if (!(RightPanel = GameObject.Find("RightPanel"))) return;
-        var rpap = RightPanel.GetComponent<AspectPosition>();
-        if (rpap) Object.Destroy(rpap);
+        var rightPanelAP = RightPanel.GetComponent<AspectPosition>();
+        if (rightPanelAP) Object.Destroy(rightPanelAP);
         RightPanel.transform.localPosition = RightPanelOp + new Vector3(10f, 0f, 0f);
         RightPanel.GetComponent<SpriteRenderer>().color = new Color(1f, 0.78f, 0.9f, 1f);
 

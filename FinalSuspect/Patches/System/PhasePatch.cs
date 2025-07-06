@@ -17,7 +17,7 @@ internal class AmongUsClientOnGameEndPatch
 {
     public static void Postfix()
     {
-        InGame = false;
+        UpdateGameState_IsInGame(false);
         Info("-----------游戏结束-----------", "Phase");
     }
 }
@@ -28,6 +28,7 @@ internal class MeetingHudStartPatch
 {
     public static void Prefix()
     {
+        _ = new LateTask(() => UpdateGameState_IsInMeeting(true), 1f, "UpdateGameState_IsInMeeting");
         Info("------------会议开始------------", "Phase");
     }
 }
@@ -37,6 +38,7 @@ internal class MeetingHudOnDestroyPatch
 {
     public static void Postfix()
     {
+        UpdateGameState_IsInMeeting(false);
         Info("------------会议结束------------", "Phase");
     }
 }

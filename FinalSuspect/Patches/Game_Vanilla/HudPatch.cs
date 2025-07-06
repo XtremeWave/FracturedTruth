@@ -268,7 +268,7 @@ public static class HudManagerPatch
         if (IsInGame)
             showHideButton.Button.gameObject.SetActive
             (PlayerControl.LocalPlayer.GetRoleType() is RoleTypes.CrewmateGhost or RoleTypes.ImpostorGhost &&
-             !IsMeeting);
+             !IsInMeeting);
         else
             showHideButton.Button.gameObject.SetActive(true);
 

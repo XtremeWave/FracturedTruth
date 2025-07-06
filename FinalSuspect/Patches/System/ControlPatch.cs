@@ -16,7 +16,7 @@ internal class ControllerManagerUpdatePatch
     public static void Postfix(ControllerManager __instance)
     {
         //职业介绍
-        if (IsInGame && (IsCanMove || IsMeeting))
+        if (IsInGame && (IsCanMove || IsInMeeting))
         {
             if (Input.GetKey(KeyCode.F1))
             {
@@ -108,7 +108,7 @@ internal class ControllerManagerUpdatePatch
         if (!DebugModeManager.IsDebugMode) return;
 
         //实名投票
-        if (GetKeysDown(KeyCode.Return, KeyCode.V, KeyCode.LeftShift) && IsMeeting && !IsOnlineGame)
+        if (GetKeysDown(KeyCode.Return, KeyCode.V, KeyCode.LeftShift) && IsInMeeting && !IsOnlineGame)
             MeetingHud.Instance.RpcClearVote(AmongUsClient.Instance.ClientId);
 
         //打开飞艇所有的门
