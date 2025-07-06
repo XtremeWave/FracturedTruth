@@ -31,7 +31,7 @@ public class ResourcesDownloader
 
         var retrytimes = 0;
         var remoteType = RemoteType.Github;
-    retry:
+        retry:
         if (IsChineseLanguageUser)
             remoteType = retrytimes switch
             {
@@ -97,7 +97,7 @@ public class ResourcesDownloader
 
         var retrytimes = 0;
         var remoteType = RemoteType.Github;
-    retry:
+        retry:
         if (IsChineseLanguageUser)
             remoteType = retrytimes switch
             {

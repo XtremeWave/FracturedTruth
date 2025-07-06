@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using AmongUs.Data;
@@ -66,7 +67,7 @@ public static class NameTagEditMenu
             ? DeepClone(tag) 
             : new NameTagManager.NameTag();
         
-        LoadComponent(GetComponent(CacheTag, ComponentType.DisplayName), ComponentType.DisplayName);
+        LoadComponent(GetComponent(CacheTag, ComponentType.DisplayName));
         SetButtonHighlight(ComponentType.DisplayName);
         CurrentComponent = ComponentType.DisplayName;
         UpdatePreview();
@@ -87,11 +88,11 @@ public static class NameTagEditMenu
         }
     }
 
-    private static void LoadComponent(Component com, ComponentType type, bool name = false)
+    private static void LoadComponent(Component com, bool name = false)
     {
         Text_Enter.GetComponent<TextBoxTMP>().enabled = !name;
-        Text_Enter.GetComponent<TextBoxTMP>().SetText(!name ? (com?.Text ?? "") : GetString("CanNotEdit"));
-        Size_Enter.GetComponent<TextBoxTMP>().SetText((com?.SizePercentage ?? 100).ToString());
+        Text_Enter.GetComponent<TextBoxTMP>().SetText(!name ? com?.Text ?? "" : GetString("CanNotEdit"));
+        Size_Enter.GetComponent<TextBoxTMP>().SetText((com?.SizePercentage ?? 100).ToString(CultureInfo.CurrentCulture));
         
         Color1_Enter.GetComponent<TextBoxTMP>().Clear();
         Color2_Enter.GetComponent<TextBoxTMP>().Clear();
@@ -279,7 +280,7 @@ public static class NameTagEditMenu
         button.GetComponent<PassiveButton>().OnClick.AddListener((Action)(() => 
         {
             SaveToCache(CurrentComponent);
-            LoadComponent(GetComponent(CacheTag, type), type, type == ComponentType.Name);
+            LoadComponent(GetComponent(CacheTag, type), type == ComponentType.Name);
             SetButtonHighlight(type);
             CurrentComponent = type;
         }));

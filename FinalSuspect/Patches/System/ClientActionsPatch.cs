@@ -212,13 +212,13 @@ public static class OptionsMenuBehaviourStartPatch
         item.ToggleButton.Background.color = ColorHelper.ClientOptionColor_CanNotUse;
     }*/
 
-    private static void SetOptionItemDisabled_Menu<T>(ClientOptionItem<T> item)
-    {
-        item.Rename();
-        item.ToggleButton.Text.text += $"\n|{GetString("Tip.OnlyAvailableInMainMenu")}|";
-        item.ToggleButton.GetComponent<PassiveButton>().enabled = false;
-        item.ToggleButton.Background.color = ColorHelper.ClientOptionColor_CanNotUse;
-    }
+    // private static void SetOptionItemDisabled_Menu<T>(ClientOptionItem<T> item)
+    // {
+    //     item.Rename();
+    //     item.ToggleButton.Text.text += $"\n|{GetString("Tip.OnlyAvailableInMainMenu")}|";
+    //     item.ToggleButton.GetComponent<PassiveButton>().enabled = false;
+    //     item.ToggleButton.Background.color = ColorHelper.ClientOptionColor_CanNotUse;
+    // }
 
     private static void SetFeatureItemDisabled_Menu(ClientFeatureItem item)
     {

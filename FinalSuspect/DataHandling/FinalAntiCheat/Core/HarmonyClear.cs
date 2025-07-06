@@ -1,4 +1,4 @@
-using System;
+/*using System;
 
 namespace FinalSuspect.DataHandling.FinalAntiCheat.Core;
 
@@ -65,4 +65,4 @@ public static class HarmonyCleaner
             // 忽略无默认构造函数的类型
         }
     }
-}
+}*/

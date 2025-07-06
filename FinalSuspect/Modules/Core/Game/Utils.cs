@@ -84,6 +84,7 @@ public static class Utils
         return GetString($"{text}{Info}");
     }
 
+    // ReSharper disable once RedundantAssignment
     public static void KickPlayer(int clientId, bool ban, string reason = "", KickLevel level = KickLevel.Notification)
     {
         if (OnPlayerLeftPatch.ClientsProcessed.Contains(clientId)) return;
@@ -96,6 +97,7 @@ public static class Utils
             ban = false;
 #endif
             OnPlayerLeftPatch.Add(clientId);
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             AmongUsClient.Instance.KickPlayer(clientId, ban);
             if (level != KickLevel.None)
                 NotificationPopperPatch.NotificationPop(string.Format(GetString($"{level}.{reason}"),

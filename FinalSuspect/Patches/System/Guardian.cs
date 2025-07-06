@@ -49,7 +49,7 @@ internal class HandleMessagePatch
 {
     private static readonly Dictionary<int, RpcCounter> playerRpcCounters = new();
 
-    private static bool Prefix(InnerNetServer.Player client, MessageReader reader, SendOption sendOption)
+    public static bool Prefix(InnerNetServer.Player client, MessageReader reader)
     {
         if (!playerRpcCounters.TryGetValue(client.Id, out var counter))
         {
@@ -60,7 +60,7 @@ internal class HandleMessagePatch
         if (counter.IncomingOverload) return false;
         counter.Update(reader.Tag);
 
-        if (counter.TotalRpcLastSecond <= 100 && counter.GetRpcCount(reader.Tag) <= 20) return true;
+        if (counter.TotalRpcLastSecond <= 100 && counter.GetRpcCount(reader.Tag) <= 40) return true;
 
         counter.IncomingOverload = true;
         var _player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => x.CheatData.ClientData.Id == client.Id)?.Player;

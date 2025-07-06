@@ -117,9 +117,9 @@ public static class NameTagManager
             ["Title"] = token => tag.Title = GetComponent(token),
             ["Prefix"] = token => tag.Prefix = GetComponent(token),
             ["Suffix"] = token => tag.Suffix = GetComponent(token),
-            ["Name"] = token => tag.Name = GetComponent(token, true),
-            ["DisplayName"] = token => tag.DisplayName = GetComponent(token, true),
-            ["LastTag"] = token => tag.LastTag = GetComponent(token, true)
+            ["Name"] = token => tag.Name = GetComponent(token),
+            ["DisplayName"] = token => tag.DisplayName = GetComponent(token),
+            ["LastTag"] = token => tag.LastTag = GetComponent(token)
         };
 
         foreach (var prop in obj.Properties().ToList())
@@ -131,7 +131,7 @@ public static class NameTagManager
         return tag;
     }
 
-    private static Component GetComponent(JToken token, bool force = false)
+    private static Component GetComponent(JToken token)
     {
         if (token == null) return null;
         return new Component

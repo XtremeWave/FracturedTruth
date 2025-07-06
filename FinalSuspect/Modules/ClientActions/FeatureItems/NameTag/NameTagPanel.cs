@@ -16,7 +16,7 @@ public static class NameTagPanel
 {
     public static SpriteRenderer CustomBackground { get; private set; }
     public static List<GameObject> Items { get; private set; } = new List<GameObject>();
-    private static int numItems = 0;
+    private static int numItems;
     private static ToggleButtonBehaviour ButtonTemplate;
     public static int CurrentPage { get; private set; } = 1;
     public static int ItemsPerPage => 8;

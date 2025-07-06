@@ -127,7 +127,7 @@ public static class NameTagNewWindow
         text.text = message;
         text.color = message.Contains("Incorrect") ? Color.red : Color.blue;
         
-        new LateTask(() => 
+        _ = new LateTask(() => 
         {
             text.text = GetString("Tip.PleaseEnterFriendCode");
             text.color = Color.white;
