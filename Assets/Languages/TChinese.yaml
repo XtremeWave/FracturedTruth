@@ -171,7 +171,7 @@ CustomAudioManagementHelp: "您可以在「音訊管理」中下載 XtremeWave �
 # , .flac, .aiff, .mp3, .aac, .ogg, .m4a
 CustomSoundHelp: "您可以在「音訊管理」中下載 XtremeWave 支援的音樂或添加自己的音樂，如果音樂本地資源路徑不存在則會顯示「【文件丟失】」"
 
-# 主界面音乐提醒
+# 主页音乐提醒
 MusicNotYet: "檢測到當前音樂文件不完整"
 AudioNYPro: "如果您希望提高您的遊戲體驗，請在「首頁-設定-更多功能-音訊管理」下載我們的音訊"
 

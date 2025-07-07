@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace FinalSuspect.Modules.SoundInterface;
+namespace FinalSuspect.Modules.ClientActions.FeatureItems.MyMusic;
 
 public class AudioLoader
 {

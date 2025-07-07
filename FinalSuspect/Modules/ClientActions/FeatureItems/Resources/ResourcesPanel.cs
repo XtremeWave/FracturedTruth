@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using FinalSuspect.Helpers;
+using FinalSuspect.Modules.ClientActions.FeatureItems.MyMusic;
 using FinalSuspect.Modules.Features;
 using FinalSuspect.Modules.Resources;
 using TMPro;
@@ -17,7 +18,7 @@ public static class ResourcesPanel
     private static int numItems;
 
     private static readonly Dictionary<string, CurrentState> PackageStates = new();
-    public static SpriteRenderer CustomBackground { get; private set; }
+    public static SpriteRenderer CustomBackground { get; set; }
     private static GameObject Slider { get; set; }
     private static Dictionary<string, GameObject> Items { get; set; }
 
@@ -119,7 +120,7 @@ public static class ResourcesPanel
             string buttonText;
             Color buttonColor;
             var enable = true;
-            var preview = $"{packageName}";
+            var preview = $"{GetString($"Package.{packageName}")}";
 
             if (fileList.All(name =>
                 {
@@ -134,7 +135,7 @@ public static class ResourcesPanel
             {
                 case CurrentState.IsDownloading:
                     buttonText = GetString("Tip.Downloading");
-                    buttonColor = Color.yellow;
+                    buttonColor = ColorHelper.DownloadYellow;
                     enable = false;
                     break;
                 case CurrentState.DownLoadSucceeded:
@@ -146,7 +147,7 @@ public static class ResourcesPanel
                     break;
                 case CurrentState.Complete:
                     buttonText = GetString("Tip.PackageExists");
-                    buttonColor = ColorHelper.ClientFeatureColor;
+                    buttonColor = ColorHelper.CompleteGreen;
                     enable = false;
                     break;
                 default:
@@ -182,6 +183,7 @@ public static class ResourcesPanel
                         {
                             PackageStates[packageName] = CurrentState.None;
                             RefreshTagList();
+                            MyMusicPanel.RefreshTagList();
                         }, 3F, "Refresh Tag List");
                     }
                 });

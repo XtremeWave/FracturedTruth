@@ -11,7 +11,7 @@ namespace FinalSuspect.Patches.System;
 public sealed class LobbyJoinBind
 {
     private static int GameId;
-    public static Color Color = ColorHelper.LoadCompleteGreen;
+    public static Color Color = ColorHelper.CompleteGreen;
     public static GameObject LobbyText;
     public static GameObject LeftShiftSprite;
     public static GameObject RightShiftSprite;

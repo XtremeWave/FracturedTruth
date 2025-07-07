@@ -1,4 +1,5 @@
-﻿using FinalSuspect.Modules.Features.CheckingandBlocking;
+﻿using FinalSuspect.Modules.ClientActions.FeatureItems.MyMusic;
+using FinalSuspect.Modules.Features.CheckingandBlocking;
 using UnityEngine;
 
 namespace FinalSuspect.Patches.System;
@@ -53,7 +54,7 @@ public class SwitchShipCostumeButtonPatch
             2 => Sounds.TaskUpdateSound,
             _ => Sounds.TaskComplete
         };
-        Modules.SoundInterface.SoundManager.PlaySound(PlayerControl.LocalPlayer.PlayerId, sounds);
+        AudioManager.PlaySound(PlayerControl.LocalPlayer.PlayerId, sounds);
         return false;
     }
 }

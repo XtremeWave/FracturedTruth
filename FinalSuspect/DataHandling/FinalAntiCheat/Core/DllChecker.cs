@@ -10,7 +10,7 @@ internal static class DllChecker
     internal static void Init()
     {
         // SM的文件名是写死的
-        string[] SuspiciousFiles = { "SickoMenu.dll", "version.dll" };
+        string[] SuspiciousFiles = ["SickoMenu.dll", "version.dll"];
         // 获取当前Dll启动目录
         var DirectoryPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         // 获取游戏根目录

@@ -165,7 +165,7 @@ CustomAudioManagementHelp: "Je kunt muziek downloaden die wordt ondersteund door
 # , .flac, .aiff, .mp3, .aac, .ogg, .m4a
 CustomSoundHelp: "Je kunt muziek downloaden die wordt ondersteund door XtremeWave of je eigen muziek toevoegen in 「Geluidbeheer」. Als het lokale muziekbestand ontbreekt, zal het weergeven '[Bestand ontbreekt]'."
 
-# 主界面音乐提醒 / Main Menu Music Reminder
+# 主页音乐提醒 / Main Menu Music Reminder
 MusicNotYet: "Het huidige muziekbestand wordt gedetecteerd als incompleet"
 AudioNYPro: "Voor een betere gaming ervaring, download onze muziek in 「Start-Instellingen-Meer Functies-Geluidbeheer」"
 

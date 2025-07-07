@@ -12,8 +12,8 @@ public static class NameTagPanel
 {
     private static int numItems;
     private static ToggleButtonBehaviour ButtonTemplate;
-    public static SpriteRenderer CustomBackground { get; private set; }
-    public static List<GameObject> Items { get; private set; } = new();
+    public static SpriteRenderer CustomBackground { get; set; }
+    public static List<GameObject> Items { get; private set; } = [];
     public static int CurrentPage { get; private set; } = 1;
     public static int ItemsPerPage => 8;
 
@@ -132,7 +132,7 @@ public static class NameTagPanel
         try
         {
             Items?.Do(Object.Destroy);
-            Items = new List<GameObject>();
+            Items = [];
             numItems = 0;
 
             var startIndex = (CurrentPage - 1) * ItemsPerPage;

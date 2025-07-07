@@ -6,10 +6,10 @@ using FinalSuspect.Modules.Features.CheckingandBlocking;
 using FinalSuspect.Modules.Resources;
 using UnityEngine;
 
-namespace FinalSuspect.Modules.SoundInterface;
+namespace FinalSuspect.Modules.ClientActions.FeatureItems.MyMusic;
 
 #nullable enable
-public static class SoundManager
+public static class AudioManager
 {
     public static List<string> CustomAudios = [];
 
@@ -80,22 +80,22 @@ public static class SoundManager
         switch (sound)
         {
             case Sounds.KillSound:
-                global::SoundManager.Instance.PlaySound(PlayerControl.LocalPlayer.KillSfx, false);
+                SoundManager.Instance.PlaySound(PlayerControl.LocalPlayer.KillSfx, false);
                 break;
             case Sounds.TaskComplete:
-                global::SoundManager.Instance.PlaySound(DestroyableSingleton<HudManager>.Instance.TaskCompleteSound,
+                SoundManager.Instance.PlaySound(DestroyableSingleton<HudManager>.Instance.TaskCompleteSound,
                     false);
                 break;
             case Sounds.TaskUpdateSound:
-                global::SoundManager.Instance.PlaySound(DestroyableSingleton<HudManager>.Instance.TaskUpdateSound,
+                SoundManager.Instance.PlaySound(DestroyableSingleton<HudManager>.Instance.TaskUpdateSound,
                     false);
                 break;
             case Sounds.ImpTransform:
-                global::SoundManager.Instance.PlaySound(
+                SoundManager.Instance.PlaySound(
                     DestroyableSingleton<HnSImpostorScreamSfx>.Instance.HnSOtherImpostorTransformSfx, false, 0.8f);
                 break;
             case Sounds.Yeehawfrom:
-                global::SoundManager.Instance.PlaySound(
+                SoundManager.Instance.PlaySound(
                     DestroyableSingleton<HnSImpostorScreamSfx>.Instance.HnSLocalYeehawSfx, false, 0.8f);
                 break;
         }
@@ -209,8 +209,8 @@ public class XtremeMusic
         }
         else
         {
-            SoundManager.CustomAudios.Remove(name);
-            SoundManager.CustomAudios.Add(name);
+            AudioManager.CustomAudios.Remove(name);
+            AudioManager.CustomAudios.Add(name);
             FileName = Name = name;
             Author = "";
         }
@@ -219,7 +219,7 @@ public class XtremeMusic
         CurrectAudio = music;
         Path = GetResourceFilesPath(FileType.Musics, FileName + ".wav");
         CurrectAudioStates = LastAudioStates =
-            SoundManager.ConvertExtension(ref Path) ? AudiosStates.Exist : AudiosStates.NotExist;
+            AudioManager.ConvertExtension(ref Path) ? AudiosStates.Exist : AudiosStates.NotExist;
 
         lock (finalMusicsLock)
         {

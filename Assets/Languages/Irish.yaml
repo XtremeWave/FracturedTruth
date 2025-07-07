@@ -165,7 +165,7 @@ CustomAudioManagementHelp: "Is féidir leat ceol a íoslódáil atá tacaíocht 
 # , .flac, .aiff, .mp3, .aac, .ogg, .m4a
 CustomSoundHelp: "Is féidir leat ceol a íoslódáil atá tacaíocht ag XtremeWave nó do cheol féin a chur leis sa 「Bainistíocht Fuaime」. Má tá an cosán acmhainní ceoil áitiúil in easnamh, taispeánfar é mar '[Comhad in easnamh]'."
 
-# 主界面音乐提醒 / Main Menu Music Reminder
+# 主页音乐提醒 / Main Menu Music Reminder
 MusicNotYet: "Braitear go bhfuil an comhad ceoil reatha neamhiomlán"
 AudioNYPro: "Chun taithí cluichíochta níos fearr a fháil, íoslódáil ár gceol sa 「Baile-Socruithe-Tuilleadh Gnéithe-Bainistíocht Fuaime」."
 

@@ -165,7 +165,7 @@ CustomAudioManagementHelp: "Você pode baixar músicas suportadas pelo XtremeWav
 # , .flac, .aiff, .mp3, .aac, .ogg, .m4a
 CustomSoundHelp: "Você pode baixar músicas suportadas pelo XtremeWave ou adicionar suas próprias músicas em 'Gerenciamento de Áudio'. Se o caminho do recurso de música local estiver ausente, ele exibirá '[Arquivo ausente]'."
 
-# 主界面音乐提醒 / Main Menu Music Reminder
+# 主页音乐提醒 / Main Menu Music Reminder
 MusicNotYet: "O arquivo de música atual foi detectado como incompleto"
 AudioNYPro: "Para uma experiência de jogo aprimorada, baixe nossas músicas em 'Home-Settings-More Features-Audio Management'"
 

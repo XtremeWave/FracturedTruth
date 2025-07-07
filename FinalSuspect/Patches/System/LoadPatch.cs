@@ -318,7 +318,7 @@ public static class LoadPatch
         {
             yield return new WaitForSeconds(1f);
 
-            Color green = ColorHelper.LoadCompleteGreen;
+            Color green = ColorHelper.CompleteGreen;
             _loadText.color = green.AlphaMultiplied(0.75f);
             _loadText.text = GetString("Tip.LoadingComplete");
 

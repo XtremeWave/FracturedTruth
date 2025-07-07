@@ -40,7 +40,19 @@ public abstract class MainMenuStyleManager
             "MiraStudio",
             false,
             [
+                new Color(0.9f, 0.551f, 0.9f, 0.8f),
+                new Color(0.9f, 0.951f, 0.5f, 0.8f),
                 new Color(0.8f, 0.251f, 0.1f, 0.8f),
+                new Color(0.526f, 0.731f, 1f, 0.8f)
+            ]),
+        new(
+            "XtremeWave",
+            false,
+            [
+                new Color(0.0235f, 0.6f, 1f, 0.8f),
+                new Color(0.526f, 0.731f, 1f, 0.8f),
+                new Color(0.7294f, 0.6353f, 1.0f, 0.8f),
+                new Color(0.9f, 0.551f, 0.9f, 0.8f),
             ])
     ];
 

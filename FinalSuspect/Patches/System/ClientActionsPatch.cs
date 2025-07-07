@@ -5,9 +5,9 @@ using FinalSuspect.Helpers;
 using FinalSuspect.Modules.ClientActions;
 using FinalSuspect.Modules.ClientActions.FeatureItems;
 using FinalSuspect.Modules.ClientActions.FeatureItems.MainMenuStyle;
+using FinalSuspect.Modules.ClientActions.FeatureItems.MyMusic;
 using FinalSuspect.Modules.ClientActions.FeatureItems.NameTag;
 using FinalSuspect.Modules.ClientActions.FeatureItems.Resources;
-using FinalSuspect.Modules.SoundInterface;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -37,11 +37,11 @@ public static class OptionsMenuBehaviourStartPatch
     private static ClientOptionItem<bool> GodMode;
     private static ClientOptionItem<bool> NoGameEnd;
 
-    //public static ClientFeatureItem SoundBtn;
-    //public static ClientFeatureItem AudioManagementBtn;
-    private static ClientFeatureItem ResourceBtn;
-    private static ClientFeatureItem NameTagBtn;
     private static ClientFeatureItem MainMenuStyleBtn;
+    private static ClientFeatureItem ResourceBtn;
+    public static ClientFeatureItem MyMusicBtn;
+    private static ClientFeatureItem NameTagBtn;
+
 
     private static bool reseted;
     public static bool recreate;
@@ -70,8 +70,11 @@ public static class OptionsMenuBehaviourStartPatch
             Object.Destroy(ClientFeatureItem.CustomBackground);
 
             Object.Destroy(ModUnloaderScreen.Popup);
-            //Object.Destroy(MyMusicPanel.CustomBackground);
-            //Object.Destroy(SoundManagementPanel.CustomBackground);
+            Object.Destroy(MainMenuStylePanel.CustomBackground);
+            Object.Destroy(ResourcesPanel.CustomBackground);
+            Object.Destroy(MyMusicPanel.CustomBackground);
+            Object.Destroy(NameTagPanel.CustomBackground);
+
             ClientActionItem.ModOptionsButton = null;
             ClientActionItem.CustomBackground = null;
 
@@ -79,8 +82,10 @@ public static class OptionsMenuBehaviourStartPatch
             ClientFeatureItem.CustomBackground = null;
 
             ModUnloaderScreen.Popup = null;
-            //MyMusicPanel.CustomBackground = null;
-            //SoundManagementPanel.CustomBackground = null;
+            MainMenuStylePanel.CustomBackground = null;
+            ResourcesPanel.CustomBackground = null;
+            MyMusicPanel.CustomBackground = null;
+            NameTagPanel.CustomBackground = null;
         }
 
         CreateOptionItem(ref UnlockFPS, "UnlockFPS", Main.UnlockFPS, __instance, UnlockFPSButtonToggle);
@@ -96,9 +101,9 @@ public static class OptionsMenuBehaviourStartPatch
         CreateOptionItem(ref DisableVanillaSound, "DisableVanillaSound", Main.DisableVanillaSound, __instance, () =>
         {
             if (Main.DisableVanillaSound.Value)
-                CustomSoundsManager.StopPlayVanilla();
+                AudioPlayer.StopPlayVanilla();
             else
-                CustomSoundsManager.StartPlayVanilla();
+                AudioPlayer.StartPlayVanilla();
         });
         CreateOptionItem(ref DisableFAC, "DisableFAC", Main.DisableFAC, __instance);
         CreateOptionItem(ref ShowPlayerInfo, "ShowPlayerInfo", Main.ShowPlayerInfo, __instance);
@@ -119,25 +124,23 @@ public static class OptionsMenuBehaviourStartPatch
         }, __instance);
         CreateFeatureItem(ref UnloadMod, "UnloadMod", ModUnloaderScreen.Show, __instance);
 
-        //CreateFeatureItem(ref SoundBtn, "SoundOption",
-        //() => { MyMusicPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
-        //CreateFeatureItem(ref AudioManagementBtn, "SoundManager",
-        //() => { SoundManagementPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
-        CreateFeatureItem(ref ResourceBtn, "ResourceManager",
-            () => { ResourcesPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
-        CreateFeatureItem(ref NameTagBtn, "NameTagManager",
-            () => { NameTagPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
+
         CreateFeatureItem(ref MainMenuStyleBtn, "MainMenuStyleManager",
             () => { MainMenuStylePanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
+        CreateFeatureItem(ref ResourceBtn, "ResourceManager",
+            () => { ResourcesPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
+        //CreateFeatureItem(ref MyMusicBtn, "SoundOption", 
+        //() => { MyMusicPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
+        CreateFeatureItem(ref NameTagBtn, "NameTagManager",
+            () => { NameTagPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
 
-        //SetFeatureItemTextAndColor(SoundBtn, "SoundOptions");
-        //SetFeatureItemTextAndColor(AudioManagementBtn, "AudioManagementOptions");
-        SetFeatureItemTextAndColor(ResourceBtn, "ResourceManager");
-        SetFeatureItemTextAndColor(NameTagBtn, "NameTagManager");
         SetFeatureItemTextAndColor(MainMenuStyleBtn, "MainMenuStyleManager");
+        SetFeatureItemTextAndColor(ResourceBtn, "ResourceManager");
+        SetFeatureItemTextAndColor(MyMusicBtn, "MyMusic");
+        SetFeatureItemTextAndColor(NameTagBtn, "NameTagManager");
+
         if (!IsNotJoined)
         {
-            //SetOptionItemDisabled_Menu(SwitchOutfitType);
             SetFeatureItemDisabled_Menu(ResourceBtn);
             SetFeatureItemDisabled_Menu(MainMenuStyleBtn);
         }
@@ -145,12 +148,13 @@ public static class OptionsMenuBehaviourStartPatch
         if (Directory.GetFiles(GetLogFolder(true).FullName + "/Final Suspect-logs").Length <= 0)
             SetFeatureItemDisabled(ClearAutoLogs);
 
-        Modules.SoundInterface.SoundManager.ReloadTag();
-        //MyMusicPanel.Init(__instance);
-        //SoundManagementPanel.Init(__instance);
-        ResourcesPanel.Init(__instance);
-        NameTagPanel.Init(__instance);
+        AudioManager.ReloadTag();
+
         MainMenuStylePanel.Init(__instance);
+        ResourcesPanel.Init(__instance);
+        MyMusicPanel.Init(__instance);
+        NameTagPanel.Init(__instance);
+
 
         if (!ModUnloaderScreen.Popup)
             ModUnloaderScreen.Init(__instance);

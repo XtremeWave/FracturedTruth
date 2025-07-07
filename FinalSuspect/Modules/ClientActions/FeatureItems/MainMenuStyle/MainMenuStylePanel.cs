@@ -17,7 +17,7 @@ public static class MainMenuStylePanel
     private static TextMeshPro _authorText;
     private static TextMeshPro _descriptionText;
     private static SpriteRenderer _previewImage;
-    public static SpriteRenderer CustomBackground { get; private set; }
+    public static SpriteRenderer CustomBackground { get; set; }
     public static List<GameObject> Items { get; private set; } = [];
     private static int CurrentPage { get; set; } = Main.CurrentBackgroundId.Value + 1;
     private static int TotalPageCount => BackGroundStyles.Count;
@@ -86,7 +86,16 @@ public static class MainMenuStylePanel
             style.CurrentState = CurrentState.Applied;
             Refresh(style);
             var sr = FinalSuspect_Background.GetComponent<SpriteRenderer>();
+
+
             sr.sprite = style.Sprite;
+            if (id == 3)
+            {
+                var rd = HashRandom.Next(0, 100);
+                if (rd < 5)
+                    sr.sprite = LoadSprite($"FinalSuspect-BG-MiraStudioNewYear.png", 179f);
+            }
+
             Starfield.SetActive(style.StarFieldActive);
             var starGen = Starfield.GetComponent<StarGen>();
             starGen.SetDirection(new Vector2(0, style.StarGenDire));
@@ -202,6 +211,8 @@ public static class MainMenuStylePanel
             "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
         tmp.alignment = TextAlignmentOptions.TopLeft;
         tmp.fontStyle = FontStyles.Italic;
+        tmp.fontSizeMin = tmp.fontSizeMax = tmp.fontSize = 1.25f;
+
         _descriptionText.GetComponent<RectTransform>().sizeDelta = new Vector2(4f, 2f);
     }
 
@@ -267,10 +278,10 @@ public static class MainMenuStylePanel
         {
             CurrentState.NotFound => _applyButton.Text.color = Palette.DisabledGrey,
             CurrentState.NotApply => _applyButton.Text.color = ColorHelper.ClientFeatureColor,
-            CurrentState.Applied => _applyButton.Text.color = ColorHelper.ClientFeatureColor_ClickType,
+            CurrentState.Applied => _applyButton.Text.color = ColorHelper.ModColor32,
             _ => _applyButton.Background.color
         };
-        _applyButton.enabled = style.CurrentState != CurrentState.NotFound;
+        _applyButton.enabled = style.CurrentState == CurrentState.NotApply;
         _applyButton.Text.text = GetString($"MainMenuStyle.{style.CurrentState}");
     }
 }

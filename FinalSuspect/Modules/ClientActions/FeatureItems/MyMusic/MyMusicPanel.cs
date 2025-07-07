@@ -1,17 +1,19 @@
-﻿/*using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using FinalSuspect.Helpers;
-using FinalSuspect.Modules.SoundInterface;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace FinalSuspect.Modules.Panels;
+namespace FinalSuspect.Modules.ClientActions.FeatureItems.MyMusic;
 
 [SuppressMessage("ReSharper", "PossibleLossOfFraction")]
 public static class MyMusicPanel
 {
+    private static int numItems;
+
+    public static int PlayMode;
     public static SpriteRenderer CustomBackground { get; set; }
     public static List<GameObject> Items { get; private set; }
     public static OptionsMenuBehaviour OptionsMenuBehaviourNow { get; private set; }
@@ -19,10 +21,6 @@ public static class MyMusicPanel
     public static int CurrentPage { get; private set; } = 1;
     public static int ItemsPerPage => 7;
     public static int TotalPageCount => (XtremeMusic.musics.Count + ItemsPerPage - 1) / ItemsPerPage;
-
-    private static int numItems;
-
-    public static int PlayMode;
 
     //public static ToggleButtonBehaviour ChangePlayMode { get; private set; }
     public static void Hide()
@@ -65,7 +63,7 @@ public static class MyMusicPanel
 
             var stopPassiveButton = stopButton.GetComponent<PassiveButton>();
             stopPassiveButton.OnClick = new Button.ButtonClickedEvent();
-            stopPassiveButton.OnClick.AddListener(new Action(CustomSoundsManager.StopPlayMod));
+            stopPassiveButton.OnClick.AddListener(new Action(AudioPlayer.StopPlayMod));
 
             AddPageNavigationButton(optionsMenuBehaviour);
 
@@ -75,7 +73,7 @@ public static class MyMusicPanel
             helpText.transform.localPosition = new Vector3(-1.25f, -2.15f, -15f);
             helpText.transform.localScale = new Vector3(1f, 1f, 1f);
             var helpTextTMP = helpText.GetComponent<TextMeshPro>();
-            helpTextTMP.text = GetString("CustomSoundHelp");
+            helpTextTMP.text = GetString("Tip.MyMusic");
             helpText.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(2.45f, 1f);
 
             //AddChangePlayModeButton(optionsMenuBehaviour);
@@ -133,7 +131,7 @@ public static class MyMusicPanel
         //    Object.Destroy(ChangePlayMode.gameObject);
         //    AddChangePlayModeButton(OptionsMenuBehaviourNow);
         //}));
-    }#1#
+    }*/
     public static void RefreshTagList()
     {
         Items?.Do(Object.Destroy);
@@ -172,7 +170,6 @@ public static class MyMusicPanel
             var ToggleButton = Object.Instantiate(mouseMoveToggle, CustomBackground.transform);
             ToggleButton.transform.localPosition = new Vector3(offsetX, offsetY, offsetZ);
             ToggleButton.name = "Btn-" + filename;
-            ToggleButton.Text.text = $"{name}{(author != string.Empty ? $" -{author}" : "")}";
             ToggleButton.Background.color = Color.white;
             numItems++;
 
@@ -214,15 +211,16 @@ public static class MyMusicPanel
                 case AudiosStates.DownLoadFailureNotice:
                 default:
                 {
-                        color = ColorHelper.ClientFeatureColor_CanNotUse;
-                        preview = GetString("MusPlay.NoFound");
-                        break;
+                    color = ColorHelper.ClientFeatureColor_CanNotUse;
+                    preview = GetString("MusPlay.NoFound");
+                    break;
                 }
             }
 
-            previewText.text = preview;
+            previewText.text = $"{name}{(author != string.Empty ? $" -{author}" : "")}";
             ToggleButton.Background.color = color;
             ToggleButton.GetComponent<PassiveButton>().enabled = enable;
+            ToggleButton.Text.text = preview;
 
             var passiveButton = ToggleButton.GetComponent<PassiveButton>();
             passiveButton.OnClick = new Button.ButtonClickedEvent();
@@ -231,7 +229,7 @@ public static class MyMusicPanel
             void OnClick()
             {
                 Info($"Try To Play {filename}:{path}", "MyMusicPanel");
-                CustomSoundsManager.Play(audio);
+                AudioPlayer.Play(audio);
             }
 
             Items.Add(ToggleButton.gameObject);
@@ -242,5 +240,4 @@ public static class MyMusicPanel
             numItems++;
         }
     }
-}*/
-
+}

@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace FinalSuspect.Modules.SoundInterface;
+namespace FinalSuspect.Modules.ClientActions.FeatureItems.MyMusic;
 
-public static class CustomSoundsManager
+public static class AudioPlayer
 {
     public static async void Play(XtremeMusic audio)
     {
@@ -25,10 +25,10 @@ public static class CustomSoundsManager
                 foreach (var file in XtremeMusic.musics.Where(file => file.FileName == audio.FileName))
                     file.CurrectAudioStates = AudiosStates.IsPlaying;
 
-                SoundManager.ReloadTag();
+                AudioManager.ReloadTag();
                 //MyMusicPanel.RefreshTagList();
                 //SoundManagementPanel.RefreshTagList();
-                global::SoundManager.Instance.CrossFadeSound(audio.FileName, audio.Clip, 1f);
+                SoundManager.Instance.CrossFadeSound(audio.FileName, audio.Clip, 1f);
                 Msg($"播放声音：{audio.Name}", "CustomSounds");
             }, "Playing Sfx");
         }
@@ -44,7 +44,7 @@ public static class CustomSoundsManager
         {
             x.Clip = null;
             x.CurrectAudioStates = x.LastAudioStates;
-            global::SoundManager.Instance.StopNamedSound(x.FileName);
+            SoundManager.Instance.StopNamedSound(x.FileName);
         });
         _ = new MainThreadTask(() =>
         {
@@ -59,8 +59,8 @@ public static class CustomSoundsManager
 
     public static void StopPlayVanilla()
     {
-        global::SoundManager.Instance.StopNamedSound("MapTheme");
-        global::SoundManager.Instance.StopNamedSound("MainBG");
+        SoundManager.Instance.StopNamedSound("MapTheme");
+        SoundManager.Instance.StopNamedSound("MainBG");
     }
 
     public static void StartPlayVanilla()
@@ -68,9 +68,9 @@ public static class CustomSoundsManager
         var isPlaying = XtremeMusic.musics.Any(x => x.CurrectAudioStates == AudiosStates.IsPlaying);
         if (isPlaying) return;
         if (IsLobby)
-            global::SoundManager.Instance.CrossFadeSound("MapTheme", LobbyBehaviour.Instance.MapTheme, 0.07f);
+            SoundManager.Instance.CrossFadeSound("MapTheme", LobbyBehaviour.Instance.MapTheme, 0.07f);
         else if (IsNotJoined)
-            global::SoundManager.Instance.CrossFadeSound("MainBG",
+            SoundManager.Instance.CrossFadeSound("MainBG",
                 DestroyableSingleton<JoinGameButton>.Instance.IntroMusic, 1f);
     }
 
@@ -141,16 +141,16 @@ public static class CustomSoundsManager
         }
         else
         {
-            AudioManagementPanel.Delete(audio);
+            Panel.Delete(audio);
         }
     }*/
 }
 
-[HarmonyPatch(typeof(global::SoundManager), nameof(global::SoundManager.PlaySoundImmediate))]
-[HarmonyPatch(typeof(global::SoundManager), nameof(global::SoundManager.PlaySound))]
-public class AudioManagementPlaySoundPatch
+[HarmonyPatch(typeof(SoundManager), nameof(SoundManager.PlaySoundImmediate))]
+[HarmonyPatch(typeof(SoundManager), nameof(SoundManager.PlaySound))]
+public class PlaySoundPatch
 {
-    public static bool Prefix(global::SoundManager __instance, [HarmonyArgument(0)] AudioClip clip,
+    public static bool Prefix(SoundManager __instance, [HarmonyArgument(0)] AudioClip clip,
         [HarmonyArgument(1)] bool loop)
     {
         var isPlaying = XtremeMusic.musics.Any(x => x.CurrectAudioStates == AudiosStates.IsPlaying);
@@ -159,9 +159,9 @@ public class AudioManagementPlaySoundPatch
     }
 }
 
-[HarmonyPatch(typeof(global::SoundManager), nameof(global::SoundManager.PlayDynamicSound))]
-[HarmonyPatch(typeof(global::SoundManager), nameof(global::SoundManager.PlayNamedSound))]
-public class AudioManagementPlayDynamicAndNamedSoundPatch
+[HarmonyPatch(typeof(SoundManager), nameof(SoundManager.PlayDynamicSound))]
+[HarmonyPatch(typeof(SoundManager), nameof(SoundManager.PlayNamedSound))]
+public class PlayDynamicAndNamedSoundPatch
 {
     public static bool Prefix([HarmonyArgument(0)] string name, [HarmonyArgument(1)] AudioClip clip,
         [HarmonyArgument(2)] bool loop)
@@ -173,8 +173,8 @@ public class AudioManagementPlayDynamicAndNamedSoundPatch
     }
 }
 
-[HarmonyPatch(typeof(global::SoundManager), nameof(global::SoundManager.CrossFadeSound))]
-public class AudioManagementCrossFadeSoundPatch
+[HarmonyPatch(typeof(SoundManager), nameof(SoundManager.CrossFadeSound))]
+public class CrossFadeSoundPatch
 {
     public static bool Prefix([HarmonyArgument(0)] string name)
     {
@@ -185,10 +185,10 @@ public class AudioManagementCrossFadeSoundPatch
     }
 }
 
-[HarmonyPatch(typeof(global::SoundManager), nameof(global::SoundManager.StopAllSound))]
-public class AudioManagementStopAllSoundPatch
+[HarmonyPatch(typeof(SoundManager), nameof(SoundManager.StopAllSound))]
+public class StopAllSoundPatch
 {
-    public static bool Prefix(global::SoundManager __instance)
+    public static bool Prefix(SoundManager __instance)
     {
         for (var i = __instance.soundPlayers.Count - 1; i >= 0; i--)
         {
