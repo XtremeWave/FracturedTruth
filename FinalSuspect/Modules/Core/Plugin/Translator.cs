@@ -12,7 +12,7 @@ namespace FinalSuspect.Modules.Core.Plugin;
 
 public static class Translator
 {
-    public static Dictionary<int, Dictionary<string, string>> TranslateMaps = new();
+    public static readonly Dictionary<int, Dictionary<string, string>> TranslateMaps = new();
 
     public static void TranslatorInit()
     {

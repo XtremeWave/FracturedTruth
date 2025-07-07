@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using FinalSuspect.Helpers;
 using TMPro;
 using UnityEngine;
 
-namespace FinalSuspect.Modules.ClientActions.FeatureItems.NameTag;
+namespace FinalSuspect.ClientActions.FeatureItems.NameTag;
 
 public static class NameTagNewWindow
 {
-    private static readonly Regex FriendCodeRegex = new(@"^[a-z]+#[0-9]{4}$", RegexOptions.Compiled);
+    private static readonly Regex FriendCodeRegex = new("^[a-z]+#[0-9]{4}$", RegexOptions.Compiled);
 
-    public static GameObject Window { get; private set; }
+    public static GameObject Window { get; set; }
     public static GameObject Info { get; private set; }
     public static GameObject EnterBox { get; private set; }
     public static GameObject ConfirmButton { get; private set; }

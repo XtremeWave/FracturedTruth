@@ -29,8 +29,8 @@ public class MapRealTimeLocationPatch
             var rend = Object.Instantiate(mapBehaviour.HerePoint, mapBehaviour.HerePoint.transform.parent, true);
             rend.gameObject.SetActive(false);
             data.Rend = rend;
-            data.Deadbodyrend = Object.Instantiate(rend, rend.transform.parent);
-            data.Deadbodyrend.flipY = true;
+            data.Rend_DeadBody = Object.Instantiate(rend, rend.transform.parent);
+            data.Rend_DeadBody.flipY = true;
         }
     }
 

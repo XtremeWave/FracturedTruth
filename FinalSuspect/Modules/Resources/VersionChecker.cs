@@ -2,9 +2,9 @@
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
+using FinalSuspect.ClientActions.FeatureItems.NameTag;
+using FinalSuspect.ClientActions.FeatureItems.Resources;
 using FinalSuspect.Helpers;
-using FinalSuspect.Modules.ClientActions.FeatureItems.NameTag;
-using FinalSuspect.Modules.ClientActions.FeatureItems.Resources;
 using FinalSuspect.Modules.Features;
 using FinalSuspect.Modules.Features.CheckingandBlocking;
 using FinalSuspect.Patches.System;

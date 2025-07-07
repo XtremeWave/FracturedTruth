@@ -1,5 +1,5 @@
+using FinalSuspect.ClientActions.FeatureItems.NameTag;
 using FinalSuspect.Helpers;
-using FinalSuspect.Modules.ClientActions.FeatureItems.NameTag;
 using FinalSuspect.Modules.Core.Game;
 using FinalSuspect.Modules.Features.CheckingandBlocking;
 using TMPro;
@@ -185,7 +185,7 @@ public static class XtremeLocalHandling
         if (player.GetXtremeData().IsDisconnected) color = Color.gray;
     }
 
-    public static string CheckAndAppendText(this string toptext, string extratext)
+    private static string CheckAndAppendText(this string toptext, string extratext)
     {
         if (toptext != "")
             toptext += "\n";
@@ -222,7 +222,7 @@ public static class XtremeLocalHandling
                 else
                 {
                     data.Player.SetPlayerMaterialColors(data.Rend);
-                    data.Player.SetPlayerMaterialColors(data.Deadbodyrend);
+                    data.Player.SetPlayerMaterialColors(data.Rend_DeadBody);
                     data.Rend.gameObject.SetActive(true);
                     UpdateMap();
                 }
@@ -231,15 +231,12 @@ public static class XtremeLocalHandling
         var roleType = PlayerControl.LocalPlayer.Data.Role.Role;
         var color = GetRoleColor(roleType);
         var mode = opts.Mode;
-        switch (mode)
+        color = mode switch
         {
-            case MapOptions.Modes.CountOverlay:
-                color = Palette.AcceptedGreen;
-                break;
-            case MapOptions.Modes.Sabotage:
-                color = Palette.DisabledGrey;
-                break;
-        }
+            MapOptions.Modes.CountOverlay => Palette.AcceptedGreen,
+            MapOptions.Modes.Sabotage => Palette.DisabledGrey,
+            _ => color
+        };
 
         map.ColorControl.SetColor(color);
     }
@@ -250,8 +247,9 @@ public static class XtremeLocalHandling
         foreach (var data in XtremePlayerData.AllPlayerData)
         {
             var player = data.Player;
-            data.Deadbodyrend?.gameObject.SetActive(CanSeeTargetRole(player, out _) &&
-                                                    player.GetXtremeData().RealDeathReason is VanillaDeathReason.Kill);
+            data.Rend_DeadBody?.gameObject.SetActive(
+                CanSeeTargetRole(player, out _) &&
+                player.GetXtremeData().RealDeathReason is VanillaDeathReason.Kill);
             if (data.IsDisconnected || !CanSeeTargetRole(player, out _) || player.IsLocalPlayer())
             {
                 data.Rend.gameObject.SetActive(false);
@@ -271,8 +269,8 @@ public static class XtremeLocalHandling
 
             if (data.IsDead)
                 data.Rend.color = Color.white.AlphaMultiplied(0.6f);
-            else if (data.Deadbodyrend)
-                data.Deadbodyrend.transform.localPosition = vector;
+            else if (data.Rend_DeadBody)
+                data.Rend_DeadBody.transform.localPosition = vector;
         }
     }
 

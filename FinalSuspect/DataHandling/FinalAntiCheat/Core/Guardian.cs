@@ -1,5 +1,8 @@
 using System;
+using AmongUs.InnerNet.GameDataMessages;
+using FinalSuspect.DataHandling.FinalAntiCheat.Core;
 using FinalSuspect.Modules.Core.Game;
+using FinalSuspect.Modules.Features.CheckingandBlocking;
 using Hazel;
 using InnerNet;
 
@@ -61,11 +64,18 @@ internal class HandleMessagePatch
         if (counter.IncomingOverload) return false;
         counter.Update(reader.Tag);
 
+        var _player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => x.CheatData.ClientData.Id == client.Id)
+            ?.Player;
+        if (reader.Tag == (byte)GameDataTypes.RpcFlag)
+        {
+            var sr = MessageReader.Get(reader);
+            RPCHandlerPatch.HandleCheatDetection(_player, sr.ReadByte(), reader);
+        }
+
+
         if (counter.TotalRpcLastSecond <= 100 && counter.GetRpcCount(reader.Tag) <= 40) return true;
 
         counter.IncomingOverload = true;
-        var _player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => x.CheatData.ClientData.Id == client.Id)
-            ?.Player;
         Warn($"Incoming Msg Overloaded: {_player?.GetDataName() ?? ""}", "FAC");
         _player?.MarkAsCheater();
         return false;
