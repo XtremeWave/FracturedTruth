@@ -376,7 +376,7 @@ public static class HudManagerPatch
                 UpdateResult(__instance);
                 SetChatBG(__instance);
                 SetAbilityButtonColor(__instance);
-                if (!ControllerManagerUpdatePatch.ShowSettingsPanel && IsInGame &&
+                if ((!ControllerManagerUpdatePatch.ShowSettingsPanel && IsInGame || IsFreePlay) &&
                     DestroyableSingleton<LobbyInfoPane>.Instance.gameObject.active)
                     DestroyableSingleton<LobbyInfoPane>.Instance.gameObject.SetActive(false);
             }

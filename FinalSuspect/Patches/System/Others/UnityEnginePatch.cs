@@ -9,7 +9,7 @@ public class UnityEnginePatch
     {
         try
         {
-            return obj.name is not "LobbyInfoPane" and not "GameStartManager";
+            return obj.name is not "LobbyInfoPane" and not "GameStartManager" || IsFreePlay || IsNotJoined;
         }
         catch
         {

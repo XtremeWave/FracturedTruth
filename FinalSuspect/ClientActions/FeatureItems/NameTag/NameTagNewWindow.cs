@@ -17,7 +17,15 @@ public static class NameTagNewWindow
 
     public static void Open()
     {
-        if (NameTagEditMenu.Menu?.activeSelf ?? false) return;
+        try
+        {
+            if (NameTagEditMenu.Menu?.activeSelf ?? false) return;
+        }
+        catch
+        {
+            /* ignored */
+        }
+
         if (Window == null) Init();
         Window?.SetActive(true);
         EnterBox?.GetComponent<TextBoxTMP>()?.Clear();

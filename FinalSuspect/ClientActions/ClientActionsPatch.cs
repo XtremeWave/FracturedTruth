@@ -136,7 +136,7 @@ public static class OptionsMenuBehaviourStartPatch
 
         SetFeatureItemTextAndColor(MainMenuStyleBtn, "MainMenuStyleManager");
         SetFeatureItemTextAndColor(ResourceBtn, "ResourceManager");
-        SetFeatureItemTextAndColor(MyMusicBtn, "MyMusic");
+        //SetFeatureItemTextAndColor(MyMusicBtn, "MyMusic");
         SetFeatureItemTextAndColor(NameTagBtn, "NameTagManager");
 
         if (!IsNotJoined)
@@ -152,7 +152,7 @@ public static class OptionsMenuBehaviourStartPatch
 
         MainMenuStylePanel.Init(__instance);
         ResourcesPanel.Init(__instance);
-        MyMusicPanel.Init(__instance);
+        //MyMusicPanel.Init(__instance);
         NameTagPanel.Init(__instance);
 
 
