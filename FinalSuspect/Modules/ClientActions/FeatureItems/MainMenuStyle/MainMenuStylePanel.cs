@@ -278,7 +278,7 @@ public static class MainMenuStylePanel
         {
             CurrentState.NotFound => _applyButton.Text.color = Palette.DisabledGrey,
             CurrentState.NotApply => _applyButton.Text.color = ColorHelper.ClientFeatureColor,
-            CurrentState.Applied => _applyButton.Text.color = ColorHelper.ModColor32,
+            CurrentState.Applied => _applyButton.Text.color = ColorHelper.ModColor,
             _ => _applyButton.Background.color
         };
         _applyButton.enabled = style.CurrentState == CurrentState.NotApply;

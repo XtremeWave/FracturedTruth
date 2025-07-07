@@ -68,11 +68,11 @@ internal class RolesSettingsMenuPatch
         AllButton.transform.FindChild("Highlight").gameObject.GetComponent<SpriteRenderer>().color =
             AllButton.transform.FindChild("Inactive").gameObject.GetComponent<SpriteRenderer>().color =
                 AllButton.transform.FindChild("Selected").gameObject.GetComponent<SpriteRenderer>().color =
-                    ColorHelper.ModColor32;
+                    ColorHelper.ModColor;
 
         var text = AllButton.transform.FindChild("Text").gameObject.GetComponent<TextMeshPro>();
-        if (text.color == Color.white || text.color == ColorHelper.ModColor32)
-            text.color = ColorHelper.ModColor32;
+        if (text.color == Color.white || text.color == ColorHelper.ModColor)
+            text.color = ColorHelper.ModColor;
         else
             text.color = new Color(0.45f, 0.45f, 0.65f);
     }

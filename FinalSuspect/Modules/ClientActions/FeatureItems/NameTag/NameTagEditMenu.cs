@@ -87,7 +87,7 @@ public static class NameTagEditMenu
         if (ComponentButtons.TryGetValue(componentType, out var activeButton))
         {
             var activeText = activeButton.transform.Find("Text_TMP").GetComponent<TextMeshPro>();
-            activeText.color = ColorHelper.ModColor32;
+            activeText.color = ColorHelper.ModColor;
         }
     }
 

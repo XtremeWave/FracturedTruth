@@ -103,7 +103,7 @@ public static class ServerAddManager
             "Niko233(AS)" => new Color32(255, 224, 0, 255),
             "Niko233(EU)" => new Color32(255, 224, 0, 255),
             "Niko233(CN)" => new Color32(255, 224, 0, 255),
-            "XtremeWave(HK)" => ColorHelper.TeamColor32,
+            "XtremeWave(HK)" => ColorHelper.TeamColor,
 
             _ => new Color32(255, 255, 255, 255)
         };

@@ -128,7 +128,7 @@ public sealed class LobbyJoinBind
                     }
 
                     LobbyText.GetComponent<TextMeshPro>().text =
-                        string.Format($"{GetString("LShift")}：<color={ColorHelper.ModColor}>{code}</color>");
+                        string.Format($"{GetString("LShift")}：<color={ColorHelper.ModColorHex}>{code}</color>");
                 }
             }
 
@@ -140,7 +140,7 @@ public sealed class LobbyJoinBind
                 RightShiftSprite.SetActive(true);
                 KeyBindBackground_Clone.SetActive(true);
                 LobbyText.GetComponent<TextMeshPro>().text +=
-                    string.Format($"\n{GetString("RShift")}：<color={ColorHelper.ModColor}>{code2Disp}</color>");
+                    string.Format($"\n{GetString("RShift")}：<color={ColorHelper.ModColorHex}>{code2Disp}</color>");
             }
         }
     }

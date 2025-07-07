@@ -11,7 +11,7 @@ internal class ButtonRolloverHandlerPatch
     public static void DoMouseOver_Prefix(ButtonRolloverHandler __instance)
     {
         if (__instance.OverColor == new Color(0, 1, 0, 1) || __instance.OverColor == Palette.AcceptedGreen)
-            __instance.OverColor = ColorHelper.ModColor32;
+            __instance.OverColor = ColorHelper.ModColor;
     }
 
     [HarmonyPatch(nameof(ButtonRolloverHandler.ChangeOutColor))]

@@ -191,7 +191,7 @@ public static class MyMusicPanel
             {
                 case AudiosStates.IsPlaying:
                     preview = GetString("Tip.Playing");
-                    color = ColorHelper.ModColor32;
+                    color = ColorHelper.ModColor;
                     break;
                 case AudiosStates.IsDownLoading:
                     color = ColorHelper.DownloadYellow;

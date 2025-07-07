@@ -81,7 +81,7 @@ internal class SetEverythingUpPatch
         HudManagerPatch.LastGameResult = lastgameresult;
         StringBuilder sb = new($"{GetString("Summary.Text")}{lastgameresult}");
         var gamecode = StringHelper.ColorString(
-            ColorHelper.ModColor32,
+            ColorHelper.ModColor,
             DataManager.Settings.Gameplay.StreamerMode
                 ? new string('*', HudManagerPatch.LastRoomCode.Length)
                 : HudManagerPatch.LastRoomCode);

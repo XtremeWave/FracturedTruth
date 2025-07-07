@@ -16,7 +16,7 @@ public static class ChatBubblePatch
     public static void SetText_Prefix(ChatBubble __instance, ref string chatText)
     {
         if (__instance.TextArea.color == Color.red) return;
-        var bgcolor = ColorHelper.HalfModColor32;
+        var bgcolor = ColorHelper.HalfModColor;
         var sr = __instance.Background;
         Color namecolor = ColorHelper.FaultColor;
         string name = null;
@@ -28,14 +28,14 @@ public static class ChatBubblePatch
         else if (modded)
         {
             bgcolor = Color.black;
-            namecolor = ColorHelper.TeamColor32;
+            namecolor = ColorHelper.TeamColor;
             chatText = StringHelper.ColorString(Color.white, chatText.TrimEnd('\0'));
             __instance.SetLeft();
         }
         else if (__instance.NameText.color == Color.green)
         {
             bgcolor = ColorHelper.HalfYellow;
-            namecolor = ColorHelper.TeamColor32;
+            namecolor = ColorHelper.TeamColor;
         }
         else
         {

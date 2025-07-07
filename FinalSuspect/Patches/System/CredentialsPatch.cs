@@ -92,7 +92,7 @@ public class VersionShowerStartPatch
         TMPTemplate.SetBase(__instance.text);
 
         Main.CredentialsText = $"\r\n<size=120%>" +
-                               $"<color={ColorHelper.TeamColor}>==</color> <color={ColorHelper.ModColor}>{Main.ModName}</color> <color={ColorHelper.TeamColor}>==</color>"
+                               $"<color={ColorHelper.TeamColorHex}>==</color> <color={ColorHelper.ModColorHex}>{Main.ModName}</color> <color={ColorHelper.TeamColorHex}>==</color>"
                                + "</size>";
         Main.CredentialsText += "\r\n <color=#fffcbe> By </color><color=#cdfffd>XtremeWave</color></size>";
         Main.CredentialsText += $"\r\n<color=#C8FF78>v{Main.DisplayedVersion}</color>";
@@ -106,7 +106,7 @@ public class VersionShowerStartPatch
         }
 #endif
 #if !RELEASE
-        Main.CredentialsText += $"\r\n<color={ColorHelper.ModColor}>{Main.GitBranch}</color> - {Main.GitCommit}";
+        Main.CredentialsText += $"\r\n<color={ColorHelper.ModColorHex}>{Main.GitBranch}</color> - {Main.GitCommit}";
 #endif
 
         ErrorText.Create(__instance.text);
@@ -118,10 +118,10 @@ public class VersionShowerStartPatch
         if ((OVersionShower = GameObject.Find("VersionShower")) && !CreditTextCredential)
         {
             var credentialsText = string.Format(GetString("MainMenuCredential"),
-                $"<color={ColorHelper.TeamColor}>XtremeWave</color>");
+                $"<color={ColorHelper.TeamColorHex}>XtremeWave</color>");
             credentialsText += "\n";
 #if DEBUG
-            var versionText = $"<color={ColorHelper.ModColor}>{Main.GitBranch}</color> - {Main.GitCommit}";
+            var versionText = $"<color={ColorHelper.ModColorHex}>{Main.GitBranch}</color> - {Main.GitCommit}";
 #elif RELEASE
             var versionText =
                 $"<color={ColorHelper.ModColor}>FS</color> - <color=#C8FF78>v{Main.DisplayedVersion}</color>";
@@ -139,7 +139,7 @@ public class VersionShowerStartPatch
             CreditTextCredential.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
 
             CreditTextCredential.enabled = GameObject.Find("FinalSuspect Background");
-            CreditTextCredential.SetOutlineColor(ColorHelper.ShadeColor(ColorHelper.ModColor32, 0.75f));
+            CreditTextCredential.SetOutlineColor(ColorHelper.ShadeColor(ColorHelper.ModColor, 0.75f));
             CreditTextCredential.SetOutlineThickness(0.20f);
             CreditTextCredential.fontStyle = FontStyles.Bold;
             var ap_credit = CreditTextCredential.gameObject.AddComponent<AspectPosition>();
@@ -187,7 +187,7 @@ public class VersionShowerStartPatch
         VisitText.name = "FinalSuspect VisitText";
         VisitText.alignment = TextAlignmentOptions.Left;
         VisitText.text = VersionChecker.isChecked
-            ? string.Format(GetString("FinalSuspectWelcomeText"), ColorHelper.ModColor)
+            ? string.Format(GetString("FinalSuspectWelcomeText"), ColorHelper.ModColorHex)
             : GetString("RetrieveVersionInfoFailed");
         VisitText.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
         VisitText.enabled = GameObject.Find("FinalSuspect Background");

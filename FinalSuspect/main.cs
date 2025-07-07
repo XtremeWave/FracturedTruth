@@ -153,7 +153,7 @@ public class Main : BasePlugin
 
         //Configs
         HideName = Config.Bind("Xtreme System", "Hide Game Code Name", "Final Suspect");
-        HideColor = Config.Bind("Xtreme System", "Hide Game Code Color", $"{ColorHelper.ModColor}");
+        HideColor = Config.Bind("Xtreme System", "Hide Game Code Color", $"{ColorHelper.ModColorHex}");
         EnableFinalSuspect = Config.Bind("Xtreme System", "Enable Final Suspect", true);
         ShowResults = Config.Bind("Xtreme System", "Show Results", true);
         LastStartVersion = Config.Bind("Xtreme System", "Last Start Version", "0.0.0");

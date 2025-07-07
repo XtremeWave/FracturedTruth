@@ -158,7 +158,7 @@ public static class HudManagerPatch
         }
         else
         {
-            color = ColorHelper.TeamColor32;
+            color = ColorHelper.TeamColor;
         }
 
         __instance.Chat.chatScreen.transform.FindChild("ChatScreenContainer").FindChild("Background").gameObject
@@ -226,7 +226,7 @@ public static class HudManagerPatch
         }
 
         var gamecode = StringHelper.ColorString(
-            ColorHelper.ModColor32,
+            ColorHelper.ModColor,
             DataManager.Settings.Gameplay.StreamerMode ? new string('*', LastRoomCode.Length) : LastRoomCode);
         sb.Append("\n" + LastServer + "  " + gamecode);
         if (IsInGame)
