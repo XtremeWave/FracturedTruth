@@ -1,6 +1,7 @@
 using System.Text;
+using FinalSuspect.ClientActions;
+using FinalSuspect.ClientActions.FeatureItems.MainMenuStyle;
 using FinalSuspect.Helpers;
-using FinalSuspect.Modules.ClientActions.FeatureItems.MainMenuStyle;
 using FinalSuspect.Modules.Resources;
 using FinalSuspect.Patches.Game_Vanilla;
 using FinalSuspect.Templates;

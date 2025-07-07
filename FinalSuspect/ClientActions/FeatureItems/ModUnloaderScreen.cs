@@ -1,4 +1,5 @@
 using System;
+using FinalSuspect.ClientActions.Core;
 using FinalSuspect.Patches.System;
 using InnerNet;
 using TMPro;
@@ -6,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace FinalSuspect.Modules.ClientActions.FeatureItems;
+namespace FinalSuspect.ClientActions.FeatureItems;
 
 public static class ModUnloaderScreen
 {

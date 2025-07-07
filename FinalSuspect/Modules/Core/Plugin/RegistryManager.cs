@@ -32,14 +32,14 @@ public static class RegistryManager
         Keys.SetValue("Last launched version", Main.version.ToString());
         Keys.SetValue("Path", Path.GetFullPath("./"));
 
-        List<string> FoldersNFileToDel = [@"./TOH_DATA"];
+        List<string> FoldersNFileToDel = ["./TOH_DATA"];
 
         Info("上次启动的FinalSuspect版本：" + LastVersion, "Registry Manager");
 
         if (LastVersion < new Version(1, 0, 0))
         {
             Warn("v1.0 New Version Operation Needed", "Registry Manager");
-            FoldersNFileToDel.Add(@"./BepInEx/config");
+            FoldersNFileToDel.Add("./BepInEx/config");
         }
 
         FoldersNFileToDel.DoIf(Directory.Exists, p =>

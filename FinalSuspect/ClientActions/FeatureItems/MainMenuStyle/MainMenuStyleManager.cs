@@ -2,7 +2,7 @@ using System.IO;
 using FinalSuspect.Modules.Resources;
 using UnityEngine;
 
-namespace FinalSuspect.Modules.ClientActions.FeatureItems.MainMenuStyle;
+namespace FinalSuspect.ClientActions.FeatureItems.MainMenuStyle;
 
 public abstract class MainMenuStyleManager
 {
@@ -34,7 +34,7 @@ public abstract class MainMenuStyleManager
                 new Color(0.8f, 0.251f, 0.1f, 0.8f),
                 new Color(1f, 1f, 0.286f, 0.8f),
                 new Color(0.7f, 0.7765f, 0.245f, 0.8f),
-                new Color(1f, 0.324f, 0.211f, 0.8f),
+                new Color(1f, 0.324f, 0.211f, 0.8f)
             ]),
         new(
             "MiraStudio",
@@ -52,15 +52,14 @@ public abstract class MainMenuStyleManager
                 new Color(0.0235f, 0.6f, 1f, 0.8f),
                 new Color(0.526f, 0.731f, 1f, 0.8f),
                 new Color(0.7294f, 0.6353f, 1.0f, 0.8f),
-                new Color(0.9f, 0.551f, 0.9f, 0.8f),
+                new Color(0.9f, 0.551f, 0.9f, 0.8f)
             ])
     ];
 
     public class BackGroundStyle(string BGName, bool starFieldActive, List<Color> mainUIColors, int starGenDire = -2)
     {
+        public readonly List<Color> MainUIColors = mainUIColors;
         private CurrentState _currentState = CurrentState.NotFound;
-
-        public List<Color> MainUIColors = mainUIColors;
         public bool Applied => CurrentState == CurrentState.Applied;
         public bool StarFieldActive { get; } = starFieldActive;
         public int StarGenDire { get; } = starGenDire;

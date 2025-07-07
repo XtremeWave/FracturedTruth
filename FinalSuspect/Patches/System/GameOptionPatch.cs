@@ -131,25 +131,19 @@ internal class GameOptionsMenuPatch
                 }
                 else if (banner.name.Contains("Num") || banner.name.Contains("Str"))
                 {
-                    Color color;
-                    if (numindex <= 3)
-                        color = Normalbannercolors[0];
-                    else if (numindex <= 5)
-                        color = Normalbannercolors[1];
-                    else if (numindex <= 9)
-                        color = Normalbannercolors[2];
-                    else
-                        color = Normalbannercolors[3];
+                    Color color = numindex switch
+                    {
+                        <= 3 => Normalbannercolors[0],
+                        <= 5 => Normalbannercolors[1],
+                        <= 9 => Normalbannercolors[2],
+                        _ => Normalbannercolors[3]
+                    };
                     SetColorForSettingsOpt_StringAndNumber(banner.gameObject, color);
                     numindex++;
                 }
                 else if (banner.name.Contains("Checkbox"))
                 {
-                    Color color;
-                    if (boxindex <= 1)
-                        color = Normalbannercolors[2];
-                    else
-                        color = Normalbannercolors[3];
+                    Color color = boxindex <= 1 ? Normalbannercolors[2] : Normalbannercolors[3];
                     SetColorForSettingsOpt_Checkbox(banner.gameObject, color);
                     boxindex++;
                 }
@@ -167,25 +161,19 @@ internal class GameOptionsMenuPatch
                 }
                 else if (banner.name.Contains("Num") || banner.name.Contains("Str") || banner.name.Contains("Play"))
                 {
-                    Color color;
-                    if (numindex <= 5)
-                        color = HnSbannercolors[0];
-                    else if (numindex <= 8)
-                        color = HnSbannercolors[1];
-                    else if (numindex <= 11)
-                        color = HnSbannercolors[2];
-                    else
-                        color = HnSbannercolors[3];
+                    Color color = numindex switch
+                    {
+                        <= 5 => HnSbannercolors[0],
+                        <= 8 => HnSbannercolors[1],
+                        <= 11 => HnSbannercolors[2],
+                        _ => HnSbannercolors[3]
+                    };
                     SetColorForSettingsOpt_StringAndNumber(banner.gameObject, color);
                     numindex++;
                 }
                 else if (banner.name.Contains("Checkbox"))
                 {
-                    Color color;
-                    if (boxindex <= 1)
-                        color = HnSbannercolors[0];
-                    else
-                        color = HnSbannercolors[2];
+                    Color color = boxindex <= 1 ? HnSbannercolors[0] : HnSbannercolors[2];
                     SetColorForSettingsOpt_Checkbox(banner.gameObject, color);
                     boxindex++;
                 }

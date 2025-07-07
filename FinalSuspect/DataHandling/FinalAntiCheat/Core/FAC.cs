@@ -8,7 +8,7 @@ namespace FinalSuspect.DataHandling.FinalAntiCheat.Core;
 
 public static class FAC
 {
-    public static int DeNum;
+    private static int DeNum;
     public static long _lastHandleCheater = -1;
     public static readonly List<RpcHandlers> _handlers = [];
 

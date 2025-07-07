@@ -80,7 +80,7 @@ internal class RPCHandlerPatch
         return player;
     }
 
-    private static void HandleCheatDetection(PlayerControl player, byte callId, MessageReader reader)
+    public static void HandleCheatDetection(PlayerControl player, byte callId, MessageReader reader)
     {
         if (XtremePlayerData.AllPlayerData.All(data => data.PlayerId != player.Data?.PlayerId)) return;
         if (!ReceiveRpc(player, callId, reader, out var notify, out var reason, out var ban)) return;
