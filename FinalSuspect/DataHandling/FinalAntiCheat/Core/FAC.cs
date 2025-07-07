@@ -18,8 +18,7 @@ public static class FAC
                      .Where(t => typeof(IRpcHandler).IsAssignableFrom(t) && !t.IsAbstract))
         {
             var handler = (IRpcHandler)Activator.CreateInstance(type);
-            Debug.Assert(handler != null, nameof(handler) + " != null");
-            var rpcTypes = handler.TargetRpcs;
+            var rpcTypes = handler?.TargetRpcs;
 
             var activehandler = new RpcHandlers(rpcTypes);
             activehandler.Handlers.Add(handler);

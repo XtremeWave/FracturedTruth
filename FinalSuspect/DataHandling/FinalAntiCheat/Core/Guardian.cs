@@ -64,16 +64,9 @@ internal class HandleMessagePatch
         if (counter.IncomingOverload) return false;
         counter.Update(reader.Tag);
 
+        if (counter.TotalRpcLastSecond <= 100 && counter.GetRpcCount(reader.Tag) <= 40) return true;
         var _player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => x.CheatData.ClientData.Id == client.Id)
             ?.Player;
-        if (reader.Tag == (byte)GameDataTypes.RpcFlag)
-        {
-            var sr = MessageReader.Get(reader);
-            RPCHandlerPatch.HandleCheatDetection(_player, sr.ReadByte(), reader);
-        }
-
-
-        if (counter.TotalRpcLastSecond <= 100 && counter.GetRpcCount(reader.Tag) <= 40) return true;
 
         counter.IncomingOverload = true;
         Warn($"Incoming Msg Overloaded: {_player?.GetDataName() ?? ""}", "FAC");

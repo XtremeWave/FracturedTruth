@@ -16,16 +16,17 @@ internal static class DllChecker
         // 获取游戏根目录
         var AmongUsPath = Environment.CurrentDirectory;
         // 针对基于BepInEx注入检测
-        foreach (var path in Directory.EnumerateFiles(DirectoryPath, "*.*"))
-        {
-            var fileName = Path.GetFileName(path);
-
-            if (fileName != "FinalSuspect.dll")
+        if (DirectoryPath != null)
+            foreach (var path in Directory.EnumerateFiles(DirectoryPath, "*.*"))
             {
-                Error($"检测到非法/模组文件: {fileName}！游戏将被强制终止。", "FAC");
-                Environment.Exit(1);
+                var fileName = Path.GetFileName(path);
+
+                if (fileName != "FinalSuspect.dll")
+                {
+                    Error($"检测到非法/模组文件: {fileName}！游戏将被强制终止。", "FAC");
+                    Environment.Exit(1);
+                }
             }
-        }
 
         // 针对基于version注入检测
         foreach (var fileName in SuspiciousFiles)

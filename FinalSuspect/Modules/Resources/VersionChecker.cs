@@ -193,7 +193,6 @@ public static class VersionChecker
     }
 
     [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
-    [HarmonyPriority(Priority.LowerThanNormal)]
     public class Start
     {
         public static void Postfix()
@@ -206,7 +205,6 @@ public static class VersionChecker
             }
 
             NameTagManager.ReloadTag(null);
-            ModUpdater.SetUpdateButtonStatus();
             firstStart = false;
         }
     }
