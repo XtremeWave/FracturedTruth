@@ -3,7 +3,7 @@ using BepInEx.Configuration;
 using FinalSuspect.Helpers;
 using UnityEngine;
 
-namespace FinalSuspect.ClientActions.Core;
+namespace FinalSuspect.Modules.ClientActions;
 
 public sealed class ClientOptionItem<T> : ClientActionItem
 {
@@ -62,7 +62,7 @@ public sealed class ClientOptionItem<T> : ClientActionItem
         return item;
     }
 
-    private void UpdateToggle()
+    public void UpdateToggle()
     {
         if (!ToggleButton) return;
 

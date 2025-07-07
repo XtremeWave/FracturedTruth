@@ -15,6 +15,7 @@ public static class LoadPatch
     private static bool _reloadLanguage;
     private static bool _skipLoadAnimation;
     private static bool _firstLaunch;
+    public static bool LoadComplete;
 
     [HarmonyPatch(typeof(SplashManager), nameof(SplashManager.Start))]
     public class Start
@@ -34,6 +35,7 @@ public static class LoadPatch
             yield return HandleCoreLoadingProcess();
             instance.sceneChanger.BeginLoadingScene();
             instance.doneLoadingRefdata = true;
+            LoadComplete = true;
         }
 
         private static IEnumerator LoadAmongUsTranslation()
@@ -451,6 +453,7 @@ public static class LoadPatch
             if (!_skipLoadAnimation) return;
             __instance.sceneChanger.AllowFinishLoadingScene();
             __instance.startedSceneLoad = true;
+            LoadComplete = true;
         }
     }
 

@@ -52,11 +52,11 @@ public static class MeetingHudPatch
         // ReSharper disable once UnusedMember.Local
         public static void Postfix([HarmonyArgument(1)] NetworkedPlayerInfo exiled, [HarmonyArgument(2)] bool tie)
         {
-            foreach (var data in XtremePlayerData.AllPlayerData.Where(data => data?.Rend_DeadBody))
+            foreach (var data in XtremePlayerData.AllPlayerData.Where(data => data?.Deadbodyrend))
             {
                 if (data == null) continue;
-                Object.Destroy(data.Rend_DeadBody);
-                data.Rend_DeadBody = null;
+                Object.Destroy(data.Deadbodyrend);
+                data.Deadbodyrend = null;
             }
 
             if (tie || !exiled) return;

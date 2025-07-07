@@ -6,4 +6,6 @@
 ///     通过 [GameModuleInitializer(InitializePriority.High)] 可以指定调用顺序
 /// </summary>
 public sealed class GameModuleInitializerAttribute(InitializePriority priority = InitializePriority.Normal)
-    : InitializerAttribute<GameModuleInitializerAttribute>(priority);
+    : InitializerAttribute<GameModuleInitializerAttribute>(priority)
+{
+}

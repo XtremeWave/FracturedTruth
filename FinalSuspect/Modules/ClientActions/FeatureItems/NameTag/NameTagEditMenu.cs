@@ -6,12 +6,12 @@ using Il2CppSystem.IO;
 using Newtonsoft.Json;
 using TMPro;
 using UnityEngine;
-using static FinalSuspect.ClientActions.FeatureItems.NameTag.NameTagManager;
-using Component = FinalSuspect.ClientActions.FeatureItems.NameTag.NameTagManager.Component;
+using static FinalSuspect.Modules.ClientActions.FeatureItems.NameTag.NameTagManager;
+using Component = FinalSuspect.Modules.ClientActions.FeatureItems.NameTag.NameTagManager.Component;
 using File = System.IO.File;
 using Path = System.IO.Path;
 
-namespace FinalSuspect.ClientActions.FeatureItems.NameTag;
+namespace FinalSuspect.Modules.ClientActions.FeatureItems.NameTag;
 
 public static class NameTagEditMenu
 {
@@ -38,16 +38,16 @@ public static class NameTagEditMenu
     private static ComponentType CurrentComponent;
 
     // UI 元素
-    public static GameObject Menu { get; set; }
+    public static GameObject Menu { get; private set; }
     private static Dictionary<ComponentType, GameObject> ComponentButtons { get; } = new();
-    private static GameObject Preview { get; set; }
-    private static GameObject Text_Enter { get; set; }
-    private static GameObject Size_Enter { get; set; }
-    private static GameObject Color1_Enter { get; set; }
-    private static GameObject Color2_Enter { get; set; }
-    private static GameObject Color3_Enter { get; set; }
+    public static GameObject Preview { get; private set; }
+    public static GameObject Text_Enter { get; private set; }
+    public static GameObject Size_Enter { get; private set; }
+    public static GameObject Color1_Enter { get; private set; }
+    public static GameObject Color2_Enter { get; private set; }
+    public static GameObject Color3_Enter { get; private set; }
 
-    private static void Hide()
+    public static void Hide()
     {
         Menu?.SetActive(false);
     }
@@ -78,15 +78,17 @@ public static class NameTagEditMenu
 
     private static void SetButtonHighlight(ComponentType componentType)
     {
-        foreach (var text in ComponentButtons.Values.Select(button =>
-                     button.transform.Find("Text_TMP").GetComponent<TextMeshPro>()))
+        foreach (var button in ComponentButtons.Values)
         {
+            var text = button.transform.Find("Text_TMP").GetComponent<TextMeshPro>();
             text.color = Palette.DisabledGrey;
         }
 
-        if (!ComponentButtons.TryGetValue(componentType, out var activeButton)) return;
-        var activeText = activeButton.transform.Find("Text_TMP").GetComponent<TextMeshPro>();
-        activeText.color = ColorHelper.ModColor;
+        if (ComponentButtons.TryGetValue(componentType, out var activeButton))
+        {
+            var activeText = activeButton.transform.Find("Text_TMP").GetComponent<TextMeshPro>();
+            activeText.color = ColorHelper.ModColor;
+        }
     }
 
     private static void LoadComponent(Component com, bool name = false)
@@ -134,22 +136,14 @@ public static class NameTagEditMenu
         var size = Size_Enter.GetComponent<TextBoxTMP>().text.Trim();
         if (size != "" && float.TryParse(size, out var sizef)) com.SizePercentage = sizef;
 
-        List<Color> colors = [];
+        List<Color> colors = new();
         AddColorIfValid(Color1_Enter, colors);
         AddColorIfValid(Color2_Enter, colors);
         AddColorIfValid(Color3_Enter, colors);
 
-        switch (colors.Count)
-        {
-            case > 1:
-                com.Gradient = new ColorGradient(colors.ToArray());
-                break;
-            case 1:
-                com.TextColor = colors[0];
-                break;
-        }
-
-        com.Spaced = false;
+        if (colors.Count > 1) com.Gradient = new ColorGradient(colors.ToArray());
+        else if (colors.Count == 1) com.TextColor = colors[0];
+        com.Spaced = default;
 
         switch (type)
         {
@@ -170,7 +164,7 @@ public static class NameTagEditMenu
             colors.Add(color);
     }
 
-    public static bool SaveToFile(string friendCode, NameTagManager.NameTag tag)
+    private static bool SaveToFile(string friendCode, NameTagManager.NameTag tag)
     {
         if (string.IsNullOrEmpty(friendCode)) return false;
 
@@ -205,7 +199,7 @@ public static class NameTagEditMenu
                 writer.WriteValue(com.SizePercentage.ToString());
             }
 
-            if (com.Gradient is { IsValid: true })
+            if (com.Gradient != null && com.Gradient.IsValid)
             {
                 var colors = string.Join(",",
                     com.Gradient.Colors.Select(c => "#" + ColorUtility.ToHtmlStringRGBA(c)[..6]));
@@ -360,26 +354,28 @@ public static class NameTagEditMenu
         if (deleteText != null) deleteText.color = Color.red;
 
         var deletePassive = deleteButton.GetComponent<PassiveButton>();
-        if (deletePassive == null) return;
-        deletePassive.OnClick.RemoveAllListeners();
-        deletePassive.OnClick.AddListener((Action)(() =>
+        if (deletePassive != null)
         {
-            if (string.IsNullOrEmpty(FriendCode)) return;
+            deletePassive.OnClick.RemoveAllListeners();
+            deletePassive.OnClick.AddListener((Action)(() =>
+            {
+                if (string.IsNullOrEmpty(FriendCode)) return;
 
-            var fileName = Path.Combine(TAGS_DIRECTORY_PATH, $"{FriendCode.Trim()}.json");
-            if (!File.Exists(fileName)) return;
-            try
-            {
-                File.Delete(fileName);
-                ReloadTag(FriendCode);
-                NameTagPanel.RefreshTagList();
-                Toggle(null, false);
-            }
-            catch (Exception ex)
-            {
-                Error($"Delete name tag failed: {ex}", "NameTagEditMenu");
-            }
-        }));
+                var fileName = Path.Combine(TAGS_DIRECTORY_PATH, $"{FriendCode.Trim()}.json");
+                if (File.Exists(fileName))
+                    try
+                    {
+                        File.Delete(fileName);
+                        ReloadTag(FriendCode);
+                        NameTagPanel.RefreshTagList();
+                        Toggle(null, false);
+                    }
+                    catch (Exception ex)
+                    {
+                        Error($"Delete name tag failed: {ex}", "NameTagEditMenu");
+                    }
+            }));
+        }
     }
 
     private static void CreatePreviewSection()

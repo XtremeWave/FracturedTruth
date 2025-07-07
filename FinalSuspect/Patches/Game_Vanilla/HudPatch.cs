@@ -92,7 +92,7 @@ public static class HudManagerPatch
     public static SimpleButton showHideButton;
     private static SpriteRenderer backgroundRenderer;
 
-    private static string LastResultText;
+    public static string LastResultText;
     public static string LastGameData;
     public static string LastGameResult;
     public static string LastRoomCode;

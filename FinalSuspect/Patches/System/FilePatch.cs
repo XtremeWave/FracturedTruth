@@ -2,7 +2,7 @@ using System.IO;
 
 namespace FinalSuspect.Patches.System;
 
-public static class FilePatch
+public class FilePatch
 {
     [HarmonyPatch(typeof(File), nameof(File.Delete))]
     public static bool Prefix([HarmonyArgument(0)] string path)

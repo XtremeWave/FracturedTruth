@@ -1,18 +1,17 @@
 using System;
 using System.IO;
 using BepInEx.Configuration;
-using FinalSuspect.ClientActions.Core;
-using FinalSuspect.ClientActions.FeatureItems;
-using FinalSuspect.ClientActions.FeatureItems.MainMenuStyle;
-using FinalSuspect.ClientActions.FeatureItems.MyMusic;
-using FinalSuspect.ClientActions.FeatureItems.NameTag;
-using FinalSuspect.ClientActions.FeatureItems.Resources;
 using FinalSuspect.Helpers;
-using FinalSuspect.Patches.System;
+using FinalSuspect.Modules.ClientActions;
+using FinalSuspect.Modules.ClientActions.FeatureItems;
+using FinalSuspect.Modules.ClientActions.FeatureItems.MainMenuStyle;
+using FinalSuspect.Modules.ClientActions.FeatureItems.MyMusic;
+using FinalSuspect.Modules.ClientActions.FeatureItems.NameTag;
+using FinalSuspect.Modules.ClientActions.FeatureItems.Resources;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace FinalSuspect.ClientActions;
+namespace FinalSuspect.Patches.System;
 
 [HarmonyPatch(typeof(OptionsMenuBehaviour), nameof(OptionsMenuBehaviour.Start))]
 public static class OptionsMenuBehaviourStartPatch
@@ -75,8 +74,6 @@ public static class OptionsMenuBehaviourStartPatch
             Object.Destroy(ResourcesPanel.CustomBackground);
             Object.Destroy(MyMusicPanel.CustomBackground);
             Object.Destroy(NameTagPanel.CustomBackground);
-            Object.Destroy(NameTagEditMenu.Menu);
-            Object.Destroy(NameTagNewWindow.Window);
 
             ClientActionItem.ModOptionsButton = null;
             ClientActionItem.CustomBackground = null;
@@ -89,8 +86,6 @@ public static class OptionsMenuBehaviourStartPatch
             ResourcesPanel.CustomBackground = null;
             MyMusicPanel.CustomBackground = null;
             NameTagPanel.CustomBackground = null;
-            NameTagEditMenu.Menu = null;
-            NameTagNewWindow.Window = null;
         }
 
         CreateOptionItem(ref UnlockFPS, "UnlockFPS", Main.UnlockFPS, __instance, UnlockFPSButtonToggle);
@@ -134,14 +129,14 @@ public static class OptionsMenuBehaviourStartPatch
             () => { MainMenuStylePanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
         CreateFeatureItem(ref ResourceBtn, "ResourceManager",
             () => { ResourcesPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
-        //CreateFeatureItem(ref MyMusicBtn, "MyMusic", 
+        //CreateFeatureItem(ref MyMusicBtn, "SoundOption", 
         //() => { MyMusicPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
         CreateFeatureItem(ref NameTagBtn, "NameTagManager",
             () => { NameTagPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
 
         SetFeatureItemTextAndColor(MainMenuStyleBtn, "MainMenuStyleManager");
         SetFeatureItemTextAndColor(ResourceBtn, "ResourceManager");
-        //SetFeatureItemTextAndColor(MyMusicBtn, "MyMusic");
+        SetFeatureItemTextAndColor(MyMusicBtn, "MyMusic");
         SetFeatureItemTextAndColor(NameTagBtn, "NameTagManager");
 
         if (!IsNotJoined)

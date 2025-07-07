@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace FinalSuspect.ClientActions.FeatureItems.MyMusic;
+namespace FinalSuspect.Modules.ClientActions.FeatureItems.MyMusic;
 
 public static class AudioPlayer
 {
@@ -150,7 +150,8 @@ public static class AudioPlayer
 [HarmonyPatch(typeof(SoundManager), nameof(SoundManager.PlaySound))]
 public class PlaySoundPatch
 {
-    public static bool Prefix([HarmonyArgument(1)] bool loop)
+    public static bool Prefix(SoundManager __instance, [HarmonyArgument(0)] AudioClip clip,
+        [HarmonyArgument(1)] bool loop)
     {
         var isPlaying = XtremeMusic.musics.Any(x => x.CurrectAudioStates == AudiosStates.IsPlaying);
         var disableVanilla = Main.DisableVanillaSound.Value;
@@ -162,7 +163,7 @@ public class PlaySoundPatch
 [HarmonyPatch(typeof(SoundManager), nameof(SoundManager.PlayNamedSound))]
 public class PlayDynamicAndNamedSoundPatch
 {
-    public static bool Prefix([HarmonyArgument(0)] string name,
+    public static bool Prefix([HarmonyArgument(0)] string name, [HarmonyArgument(1)] AudioClip clip,
         [HarmonyArgument(2)] bool loop)
     {
         var isPlaying = XtremeMusic.musics.Any(x => x.CurrectAudioStates == AudiosStates.IsPlaying);

@@ -2,7 +2,7 @@ namespace FinalSuspect.Modules.Random;
 
 public class NetRandomWrapper(System.Random instance) : IRandom
 {
-    public readonly System.Random wrapping = instance;
+    public System.Random wrapping = instance;
 
     public NetRandomWrapper() : this(new System.Random())
     {

@@ -24,7 +24,7 @@ public class MainMenuManagerPatch
 
     private static bool isOnline;
     public static bool ShowedBak;
-    private static bool ShowingPanel;
+    public static bool ShowingPanel;
 
     public static readonly List<GameObject> MainMenuCustomButtons = [];
     public static MainMenuManager Instance { get; private set; }

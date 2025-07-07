@@ -1,11 +1,11 @@
 using System;
-using FinalSuspect.Helpers;
+using FinalSuspect.Modules.ClientActions.FeatureItems.NameTag;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace FinalSuspect.ClientActions.FeatureItems.NameTag;
+namespace FinalSuspect.Helpers;
 
 public static class UiHelper
 {
@@ -51,9 +51,11 @@ public static class UiHelper
         button.transform.localScale = Vector3.one;
 
         var passiveButton = button.GetComponent<PassiveButton>();
-        if (passiveButton == null) return button;
-        passiveButton.OnClick.RemoveAllListeners();
-        passiveButton.OnClick.AddListener(new Action(() => onClick?.Invoke()));
+        if (passiveButton != null)
+        {
+            passiveButton.OnClick.RemoveAllListeners();
+            passiveButton.OnClick.AddListener(new Action(() => onClick?.Invoke()));
+        }
 
         return button;
     }
@@ -76,10 +78,12 @@ public static class UiHelper
         if (getString)
             text = "NameTag." + text;
         textComp.text = getString ? GetString(text) : text;
-        if (!EnumHelper.GetAllNames<NameTagEditMenu.ComponentType>().Contains(text.Replace("NameTag.", "")) ||
-            text.Replace("NameTag.", "") == "DisplayName") return button;
-        textComp.text += $"({GetString("Disable")})";
-        passiveButton.enabled = false;
+        if (EnumHelper.GetAllNames<NameTagEditMenu.ComponentType>().Contains(text.Replace("NameTag.", "")) &&
+            text.Replace("NameTag.", "") != "DisplayName")
+        {
+            textComp.text += $"({GetString("Disable")})";
+            passiveButton.enabled = false;
+        }
 
         return button;
     }
@@ -88,14 +92,16 @@ public static class UiHelper
         float fontSize)
     {
         var textObj = Object.Instantiate(template, parent);
-        textObj.name = $"Text_{text[..Mathf.Min(10, text.Length)]}";
+        textObj.name = $"Text_{text.Substring(0, Mathf.Min(10, text.Length))}";
 
         textObj.transform.localPosition = position;
 
         var textComp = textObj.GetComponent<TextMeshPro>();
-        if (textComp == null) return textObj;
-        textComp.text = text;
-        textComp.fontSize = fontSize;
+        if (textComp != null)
+        {
+            textComp.text = text;
+            textComp.fontSize = fontSize;
+        }
 
         return textObj;
     }

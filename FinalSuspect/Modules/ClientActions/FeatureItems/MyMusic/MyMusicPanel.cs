@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace FinalSuspect.ClientActions.FeatureItems.MyMusic;
+namespace FinalSuspect.Modules.ClientActions.FeatureItems.MyMusic;
 
 [SuppressMessage("ReSharper", "PossibleLossOfFraction")]
 public static class MyMusicPanel
@@ -15,12 +15,12 @@ public static class MyMusicPanel
 
     public static int PlayMode;
     public static SpriteRenderer CustomBackground { get; set; }
-    private static List<GameObject> Items { get; set; }
-    private static OptionsMenuBehaviour OptionsMenuBehaviourNow { get; set; }
+    public static List<GameObject> Items { get; private set; }
+    public static OptionsMenuBehaviour OptionsMenuBehaviourNow { get; private set; }
 
-    private static int CurrentPage { get; set; } = 1;
-    private static int ItemsPerPage => 7;
-    private static int TotalPageCount => (XtremeMusic.musics.Count + ItemsPerPage - 1) / ItemsPerPage;
+    public static int CurrentPage { get; private set; } = 1;
+    public static int ItemsPerPage => 7;
+    public static int TotalPageCount => (XtremeMusic.musics.Count + ItemsPerPage - 1) / ItemsPerPage;
 
     //public static ToggleButtonBehaviour ChangePlayMode { get; private set; }
     public static void Hide()

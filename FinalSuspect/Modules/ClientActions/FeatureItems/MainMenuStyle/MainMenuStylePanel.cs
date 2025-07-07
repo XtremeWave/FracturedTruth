@@ -4,11 +4,11 @@ using FinalSuspect.Patches.System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static FinalSuspect.ClientActions.FeatureItems.MainMenuStyle.MainMenuStyleManager;
+using static FinalSuspect.Modules.ClientActions.FeatureItems.MainMenuStyle.MainMenuStyleManager;
 using Object = UnityEngine.Object;
 using static FinalSuspect.Patches.System.TitleLogoPatch;
 
-namespace FinalSuspect.ClientActions.FeatureItems.MainMenuStyle;
+namespace FinalSuspect.Modules.ClientActions.FeatureItems.MainMenuStyle;
 
 public static class MainMenuStylePanel
 {
@@ -93,7 +93,7 @@ public static class MainMenuStylePanel
             {
                 var rd = HashRandom.Next(0, 100);
                 if (rd < 5)
-                    sr.sprite = LoadSprite("FinalSuspect-BG-MiraStudioNewYear.png", 179f);
+                    sr.sprite = LoadSprite($"FinalSuspect-BG-MiraStudioNewYear.png", 179f);
             }
 
             Starfield.SetActive(style.StarFieldActive);

@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using FinalSuspect.DataHandling.FinalAntiCheat.Interfaces;
 using FinalSuspect.Modules.Core.Game;
 using Hazel;

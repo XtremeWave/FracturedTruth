@@ -1,5 +1,5 @@
-﻿using FinalSuspect.ClientActions.FeatureItems.MainMenuStyle;
-using FinalSuspect.Helpers;
+﻿using FinalSuspect.Helpers;
+using FinalSuspect.Modules.ClientActions.FeatureItems.MainMenuStyle;
 using Il2CppSystem;
 using UnityEngine;
 

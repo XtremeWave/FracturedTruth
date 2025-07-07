@@ -74,10 +74,10 @@ public static class GameStartManagerPatch
             warningText.transform.localPosition = new Vector3(0f, 0f - __instance.transform.localPosition.y, -1f);
             warningText.gameObject.SetActive(false);
 
-            timerText = Object.Instantiate(__instance.PlayerCounter,
-                AmongUsClient.Instance.AmHost
-                    ? __instance.StartButton.transform.parent
-                    : __instance.StartButtonClient.transform.parent);
+            if (AmongUsClient.Instance.AmHost)
+                timerText = Object.Instantiate(__instance.PlayerCounter, __instance.StartButton.transform.parent);
+            else
+                timerText = Object.Instantiate(__instance.PlayerCounter, __instance.StartButtonClient.transform.parent);
 
             timerText.fontSize = 6.2f;
             timerText.autoSizeTextContainer = true;
@@ -107,14 +107,16 @@ public static class GameStartManagerPatch
             cancelButton.activeTextColor = cancelButton.inactiveTextColor = Color.white;
             GameStartTextlocalPosition = __instance.GameStartText.transform.localPosition;
             cancelButton.OnClick = new Button.ButtonClickedEvent();
-            cancelButton.OnClick.AddListener((Action)__instance.ResetStartState);
+            cancelButton.OnClick.AddListener((Action)(() => { __instance.ResetStartState(); }));
             cancelButton.gameObject.SetActive(false);
 
-            if (!AmongUsClient.Instance.AmHost || (!VersionChecker.isBroken &&
-                                                   (!VersionChecker.hasUpdate || !VersionChecker.forceUpdate) &&
-                                                   VersionChecker.IsSupported)) return;
-            __instance.HostPrivateButton.inactiveTextColor = Palette.DisabledClear;
-            __instance.HostPrivateButton.activeTextColor = Palette.DisabledClear;
+            if (AmongUsClient.Instance.AmHost && (VersionChecker.isBroken ||
+                                                  (VersionChecker.hasUpdate && VersionChecker.forceUpdate) ||
+                                                  !VersionChecker.IsSupported))
+            {
+                __instance.HostPrivateButton.inactiveTextColor = Palette.DisabledClear;
+                __instance.HostPrivateButton.activeTextColor = Palette.DisabledClear;
+            }
         }
     }
 
@@ -140,14 +142,20 @@ public static class GameStartManagerPatch
                 HideName.enabled = false;
             }
 
-            if (!Main.AutoStartGame.Value || !AmongUsClient.Instance.AmHost) return;
-            updateTimer++;
-            if (updateTimer < 50) return;
-            updateTimer = 0;
-            var maxPlayers = GameManager.Instance.LogicOptions.MaxPlayers;
-            if (GameData.Instance.PlayerCount < maxPlayers - 1 || IsCountDown) return;
-            GameStartManager.Instance.startState = GameStartManager.StartingStates.Countdown;
-            GameStartManager.Instance.countDownTimer = 10;
+            if (Main.AutoStartGame.Value && AmongUsClient.Instance.AmHost)
+            {
+                updateTimer++;
+                if (updateTimer >= 50)
+                {
+                    updateTimer = 0;
+                    var maxPlayers = GameManager.Instance.LogicOptions.MaxPlayers;
+                    if (GameData.Instance.PlayerCount >= maxPlayers - 1 && !IsCountDown)
+                    {
+                        GameStartManager.Instance.startState = GameStartManager.StartingStates.Countdown;
+                        GameStartManager.Instance.countDownTimer = 10;
+                    }
+                }
+            }
         }
 
         public static void Postfix(GameStartManager __instance)
