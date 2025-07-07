@@ -107,6 +107,7 @@ public class MainMenuManagerPatch
 
     [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
     [HarmonyPostfix]
+    [HarmonyPriority(Priority.First)]
     public static void Start_Postfix(MainMenuManager __instance)
     {
         DataManager.Player.Ban.BanPoints = 0;
