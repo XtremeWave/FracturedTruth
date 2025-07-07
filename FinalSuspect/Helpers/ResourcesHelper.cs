@@ -28,11 +28,7 @@ public static class ResourcesHelper
         "CI_Shapeshifter.png",
         "CI_Tracker.png",
         "Cursor.png",
-        "DleksBanner.png",
-        "DleksBanner-Wordart.png",
-        "DleksButton.png",
-        "FinalSuspect-BG-MiraHQ.jpg",
-        "FinalSuspect-BG-NewYear.png",
+        "FinalSuspect-BG-MiraHQ.png",
         "ModStamp.png",
         "RightPanelCloseButton.png"
     ];

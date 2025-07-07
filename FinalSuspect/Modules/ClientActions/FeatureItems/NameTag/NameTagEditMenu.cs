@@ -449,7 +449,7 @@ public static class NameTagEditMenu
             text,
             1f
         );
-        label.name = $"Label_{text.Substring(0, Mathf.Min(10, text.Length))}";
+        label.name = $"Label_{text[..Mathf.Min(10, text.Length)]}";
     }
 
     private static Component GetComponent(NameTagManager.NameTag tag, ComponentType type)

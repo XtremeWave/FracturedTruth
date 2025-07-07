@@ -1,4 +1,6 @@
-﻿using Il2CppSystem;
+﻿using FinalSuspect.Helpers;
+using FinalSuspect.Modules.ClientActions.FeatureItems.MainMenuStyle;
+using Il2CppSystem;
 using UnityEngine;
 
 namespace FinalSuspect.Patches.System;
@@ -44,10 +46,11 @@ public class MainMenuButtonHoverAnimation
 
         if (!GameObject.Find("MainUI")) return;
 
+        var style = MainMenuStyleManager.BackGroundStyles[Main.CurrentBackgroundId.Value];
         FormatButtonColor(__instance, __instance.newsButton,
             !ModNewsHistory.AnnouncementLoadComplete
-                ? new Color(0.9f, 0.9f, 1f)
-                : new Color(0.5216f, 0.7765f, 1f, 0.8f), new Color(0f, 0f, 0f, 0f), Color.white, Color.white);
+                ? ColorHelper.ConvertToLightGray(style.MainUIColors[1])
+                : style.MainUIColors[1], new Color(0f, 0f, 0f, 0f), Color.white, Color.white);
 
         __instance.newsButton.enabled = ModNewsHistory.AnnouncementLoadComplete;
         foreach (var (button, value) in AllButtons.Where(x => x.Key != null && x.Key.active))

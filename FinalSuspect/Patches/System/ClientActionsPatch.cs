@@ -4,6 +4,7 @@ using BepInEx.Configuration;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.ClientActions;
 using FinalSuspect.Modules.ClientActions.FeatureItems;
+using FinalSuspect.Modules.ClientActions.FeatureItems.MainMenuStyle;
 using FinalSuspect.Modules.ClientActions.FeatureItems.NameTag;
 using FinalSuspect.Modules.ClientActions.FeatureItems.Resources;
 using FinalSuspect.Modules.SoundInterface;
@@ -40,6 +41,8 @@ public static class OptionsMenuBehaviourStartPatch
     //public static ClientFeatureItem AudioManagementBtn;
     private static ClientFeatureItem ResourceBtn;
     private static ClientFeatureItem NameTagBtn;
+    private static ClientFeatureItem MainMenuStyleBtn;
+
     private static bool reseted;
     public static bool recreate;
     public static OptionsMenuBehaviour Instance { get; private set; }
@@ -124,15 +127,21 @@ public static class OptionsMenuBehaviourStartPatch
             () => { ResourcesPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
         CreateFeatureItem(ref NameTagBtn, "NameTagManager",
             () => { NameTagPanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
+        CreateFeatureItem(ref MainMenuStyleBtn, "MainMenuStyleManager",
+            () => { MainMenuStylePanel.CustomBackground?.gameObject.SetActive(true); }, __instance);
 
         //SetFeatureItemTextAndColor(SoundBtn, "SoundOptions");
         //SetFeatureItemTextAndColor(AudioManagementBtn, "AudioManagementOptions");
         SetFeatureItemTextAndColor(ResourceBtn, "ResourceManager");
         SetFeatureItemTextAndColor(NameTagBtn, "NameTagManager");
+        SetFeatureItemTextAndColor(MainMenuStyleBtn, "MainMenuStyleManager");
         if (!IsNotJoined)
+        {
             //SetOptionItemDisabled_Menu(SwitchOutfitType);
             SetFeatureItemDisabled_Menu(ResourceBtn);
-        //SetFeatureItemDisabled_Menu(AudioManagementBtn);
+            SetFeatureItemDisabled_Menu(MainMenuStyleBtn);
+        }
+
         if (Directory.GetFiles(GetLogFolder(true).FullName + "/Final Suspect-logs").Length <= 0)
             SetFeatureItemDisabled(ClearAutoLogs);
 
@@ -141,6 +150,7 @@ public static class OptionsMenuBehaviourStartPatch
         //SoundManagementPanel.Init(__instance);
         ResourcesPanel.Init(__instance);
         NameTagPanel.Init(__instance);
+        MainMenuStylePanel.Init(__instance);
 
         if (!ModUnloaderScreen.Popup)
             ModUnloaderScreen.Init(__instance);
@@ -270,6 +280,7 @@ public static class OptionsMenuBehaviourClosePatch
         ModUnloaderScreen.Hide();
         ResourcesPanel.Hide();
         NameTagPanel.Hide();
+        MainMenuStylePanel.Hide();
         //MyMusicPanel.Hide();
         //SoundManagementPanel.Hide();
     }

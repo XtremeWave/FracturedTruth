@@ -56,10 +56,10 @@ public class AudioLoader
 
     private static async Task<byte[]> ReadAllBytesAsync(string filePath)
     {
-        await using var sourceStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, true);
+        await using var sourceStream =
+            new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, true);
         var buffer = new byte[sourceStream.Length];
-        // ReSharper disable once MustUseReturnValue
-        await sourceStream.ReadAsync(buffer.AsMemory(0, (int)sourceStream.Length)).ConfigureAwait(false);
+        _ = await sourceStream.ReadAsync(buffer.AsMemory(0, (int)sourceStream.Length)).ConfigureAwait(false);
         return buffer;
     }
 

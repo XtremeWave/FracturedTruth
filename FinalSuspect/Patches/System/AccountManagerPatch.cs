@@ -29,18 +29,11 @@ public static class AwakeFriendCodeUIPatch
             BarSprit.SetActive(false);
         }
 
-        var newRequest = GameObject.Find("NewRequest");
-        if (newRequest)
-        {
-            newRequest.transform.localPosition -= new Vector3(0f, 0f, 10f);
-            newRequest.transform.localScale = new Vector3(0.8f, 1f, 1f);
-        }
-
         FriendsButton = GameObject.Find("FriendsButton");
         FriendsButton.transform.FindChild("Highlight").FindChild("NewRequestActive").FindChild("Background").gameObject
-            .GetComponent<SpriteRenderer>().color = Color.white.AlphaMultiplied(0.5f);
+            .GetComponent<SpriteRenderer>().color = Color.white.AlphaMultiplied(0.3f);
         FriendsButton.transform.FindChild("Inactive").FindChild("NewRequestInactive").FindChild("Background").gameObject
-            .GetComponent<SpriteRenderer>().color = Color.white.AlphaMultiplied(0.5f);
+            .GetComponent<SpriteRenderer>().color = Color.white.AlphaMultiplied(0.3f);
     }
 }
 

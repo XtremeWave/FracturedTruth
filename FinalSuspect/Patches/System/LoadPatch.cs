@@ -77,12 +77,16 @@ public static class LoadPatch
             _glow = CreateSpriteRenderer("Glow", "FinalSuspect-Logo.png", 1f, new Vector3(0, 0.3f, -5f));
         }
 
-        private static SpriteRenderer CreateSpriteRenderer(string name, string spriteName, float pixelsPerUnit,
-            Vector3 position)
+        public static SpriteRenderer CreateSpriteRenderer(string name, string spriteName, float pixelsPerUnit,
+            Vector3 position, Transform parent = null)
         {
             var renderer = ObjectHelper.CreateObject<SpriteRenderer>(name, null, position);
+            if (parent != null)
+                renderer.gameObject.transform.SetParent(parent);
+            renderer.gameObject.transform.localPosition = position;
             renderer.sprite = LoadSprite(spriteName, pixelsPerUnit);
             renderer.color = Color.clear;
+
             return renderer;
         }
 

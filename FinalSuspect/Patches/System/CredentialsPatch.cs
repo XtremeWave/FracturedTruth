@@ -1,5 +1,6 @@
 using System.Text;
 using FinalSuspect.Helpers;
+using FinalSuspect.Modules.ClientActions.FeatureItems.MainMenuStyle;
 using FinalSuspect.Modules.Resources;
 using FinalSuspect.Patches.Game_Vanilla;
 using FinalSuspect.Templates;
@@ -229,25 +230,26 @@ internal class TitleLogoPatch
         Color shade = new(0f, 0f, 0f, 0f);
         var standardActiveSprite = __instance.newsButton.activeSprites.GetComponent<SpriteRenderer>().sprite;
         var minorActiveSprite = __instance.quitButton.activeSprites.GetComponent<SpriteRenderer>().sprite;
+        var style = MainMenuStyleManager.BackGroundStyles[Main.CurrentBackgroundId.Value];
 
         var friendsButton = AwakeFriendCodeUIPatch.FriendsButton.GetComponent<PassiveButton>();
         Dictionary<List<PassiveButton>, (Sprite, Color, Color, Color, Color)> mainButtons = new()
         {
             {
                 [__instance.playButton, __instance.inventoryButton, __instance.shopButton],
-                (standardActiveSprite, new Color(0.5216f, 1f, 0.9490f, 0.8f), shade, Color.white, Color.white)
+                (standardActiveSprite, style.MainUIColors[0], shade, Color.white, Color.white)
             },
             {
                 [__instance.newsButton, __instance.myAccountButton, __instance.settingsButton],
-                (minorActiveSprite, new Color(0.5216f, 0.7765f, 1f, 0.8f), shade, Color.white, Color.white)
+                (minorActiveSprite, style.MainUIColors[1], shade, Color.white, Color.white)
             },
             {
                 [__instance.creditsButton, __instance.quitButton],
-                (minorActiveSprite, new Color(0.7294f, 0.6353f, 1.0f, 0.8f), shade, Color.white, Color.white)
+                (minorActiveSprite, style.MainUIColors[2], shade, Color.white, Color.white)
             },
             {
                 [friendsButton],
-                (minorActiveSprite, new Color(0.0235f, 0f, 0.8f, 0.8f), shade, Color.white, Color.white)
+                (minorActiveSprite, style.MainUIColors[3], shade, Color.white, Color.white)
             }
         };
 
@@ -282,12 +284,13 @@ internal class TitleLogoPatch
             }
         };
         var bgRenderer = FinalSuspect_Background.AddComponent<SpriteRenderer>();
-        bgRenderer.sprite = LoadSprite("FinalSuspect-BG-MiraHQ.jpg", 179f);
+        bgRenderer.sprite = style.Sprite;
 
         if (!(Ambience = GameObject.Find("Ambience"))) return;
         if (!(Starfield = Ambience.transform.FindChild("starfield").gameObject)) return;
+        Starfield.SetActive(style.StarFieldActive);
         var starGen = Starfield.GetComponent<StarGen>();
-        starGen.SetDirection(new Vector2(0, -2));
+        starGen.SetDirection(new Vector2(0, style.StarGenDire));
         Starfield.transform.SetParent(FinalSuspect_Background.transform);
         Object.Destroy(Ambience);
 

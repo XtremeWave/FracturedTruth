@@ -46,7 +46,7 @@ public static class BanManager
         }
         else
         {
-            Info($"{player.FriendCode},{player?.GetHashedPuid()},{player.PlayerName} 已经被加入封禁名单", "AddBanPlayer");
+            Info($"{player.FriendCode},{player.GetHashedPuid()},{player.PlayerName} 已经被加入封禁名单", "AddBanPlayer");
         }
     }
 

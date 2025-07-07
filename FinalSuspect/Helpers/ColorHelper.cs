@@ -66,4 +66,67 @@ public static class ColorHelper
         var B = (color.b + Weight) / (Darkness + 1);
         return new Color(R, G, B, color.a);
     }
+
+    private static void ColorToHSV(Color color, out float hue, out float saturation, out float value)
+    {
+        var max = Mathf.Max(color.r, Mathf.Max(color.g, color.b));
+        var min = Mathf.Min(color.r, Mathf.Min(color.g, color.b));
+        var delta = max - min;
+
+        hue = 0f;
+        saturation = 0f;
+        value = max;
+
+        if (delta != 0)
+        {
+            if (Mathf.Approximately(max, color.r))
+            {
+                hue = (color.g - color.b) / delta;
+            }
+            else if (Mathf.Approximately(max, color.g))
+            {
+                hue = 2 + (color.b - color.r) / delta;
+            }
+            else
+            {
+                hue = 4 + (color.r - color.g) / delta;
+            }
+
+            hue *= 60;
+            if (hue < 0) hue += 360;
+        }
+
+        if (max != 0)
+        {
+            saturation = delta / max;
+        }
+    }
+
+    // 将HSV转换为Color
+    private static Color HSVToColor(float hue, float saturation, float value)
+    {
+        var i = Mathf.FloorToInt(hue / 60) % 6;
+        var f = hue / 60 - Mathf.Floor(hue / 60);
+        var p = value * (1 - saturation);
+        var q = value * (1 - f * saturation);
+        var t = value * (1 - (1 - f) * saturation);
+
+        return i switch
+        {
+            0 => new Color(value, t, p),
+            1 => new Color(q, value, p),
+            2 => new Color(p, value, t),
+            3 => new Color(p, q, value),
+            4 => new Color(t, p, value),
+            _ => new Color(value, p, q)
+        };
+    }
+
+    public static Color ConvertToLightGray(Color color)
+    {
+        ColorToHSV(color, out var hue, out _, out _);
+
+        // 保留色相，将饱和度设置为0（变为灰色），并将亮度提高到一个较高的值（变为浅灰色）
+        return HSVToColor(hue, 0f, 0.9f); // 0.9f 是一个示例值，可以根据需要调整
+    }
 }

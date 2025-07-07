@@ -22,7 +22,7 @@ public static class NameTagPanel
 
     public static void Hide()
     {
-        CustomBackground?.gameObject?.SetActive(false);
+        CustomBackground?.gameObject.SetActive(false);
     }
 
     public static void Init(OptionsMenuBehaviour optionsMenuBehaviour)

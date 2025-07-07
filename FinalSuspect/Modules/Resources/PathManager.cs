@@ -46,7 +46,7 @@ public static class PathManager
 
     public static string GetPackageFile(string packageName, RemoteType remoteType, string file)
     {
-        return "https://" + GetRemoteBase(remoteType) + packageName + "/" + file;
+        return "https://" + GetRemoteBase(remoteType) + "Packages/" + packageName + "/" + file;
     }
 
     private static string GetRemoteUrl(FileType fileType, RemoteType remoteType)

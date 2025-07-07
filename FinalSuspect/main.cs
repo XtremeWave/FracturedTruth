@@ -134,6 +134,7 @@ public class Main : BasePlugin
     public static ConfigEntry<bool> EnableFinalSuspect { get; private set; }
     public static ConfigEntry<string> LastStartVersion { get; private set; }
     public static ConfigEntry<BypassType> LanguageUpdateBypass { get; private set; }
+    public static ConfigEntry<int> CurrentBackgroundId { get; private set; }
 
     public static IEnumerable<PlayerControl> AllPlayerControls =>
         PlayerControl.AllPlayerControls.ToArray().Where(p => p);
@@ -157,6 +158,7 @@ public class Main : BasePlugin
         ShowResults = Config.Bind("Xtreme System", "Show Results", true);
         LastStartVersion = Config.Bind("Xtreme System", "Last Start Version", "0.0.0");
         LanguageUpdateBypass = Config.Bind("Xtreme System", "Language Update Bypass", BypassType.Dont);
+        CurrentBackgroundId = Config.Bind("Xtreme System", "BG Id", 0);
 
         DebugKeyInput = Config.Bind("Authentication", "Debug Key", "");
 
