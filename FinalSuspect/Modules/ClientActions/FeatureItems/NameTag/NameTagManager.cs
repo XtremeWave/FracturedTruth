@@ -8,7 +8,7 @@ using Il2CppSystem.Linq;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 
-namespace FinalSuspect.ClientActions.FeatureItems.NameTag;
+namespace FinalSuspect.Modules.ClientActions.FeatureItems.NameTag;
 
 public static class NameTagManager
 {
@@ -69,18 +69,18 @@ public static class NameTagManager
 
         NameTags.Remove(friendCode);
         var path = Path.Combine(TAGS_DIRECTORY_PATH, $"{friendCode}.json");
-        if (!File.Exists(path)) return;
-        try
-        {
-            ReadTagsFromFile(path);
-        }
-        catch (Exception ex)
-        {
-            Error($"Load Tag From: {path} Failed\n{ex}", "NameTagManager", false);
-        }
+        if (File.Exists(path))
+            try
+            {
+                ReadTagsFromFile(path);
+            }
+            catch (Exception ex)
+            {
+                Error($"Load Tag From: {path} Failed\n{ex}", "NameTagManager", false);
+            }
     }
 
-    private static void Init()
+    public static void Init()
     {
         NameTags = new Dictionary<string, NameTag>();
 
@@ -102,19 +102,21 @@ public static class NameTagManager
         }
     }
 
-    private static void ReadTagsFromFile(string path)
+    public static void ReadTagsFromFile(string path)
     {
         var text = File.ReadAllText(path);
         var obj = JObject.Parse(text);
         var tag = GetTagFromJObject(obj);
         var friendCode = Path.GetFileNameWithoutExtension(path);
 
-        if (tag == null || string.IsNullOrEmpty(friendCode)) return;
-        NameTags[friendCode] = tag;
-        Info($"Name Tag Loaded: {friendCode}", "NameTagManager");
+        if (tag != null && !string.IsNullOrEmpty(friendCode))
+        {
+            NameTags[friendCode] = tag;
+            Info($"Name Tag Loaded: {friendCode}", "NameTagManager");
+        }
     }
 
-    private static NameTag GetTagFromJObject(JObject obj)
+    public static NameTag GetTagFromJObject(JObject obj)
     {
         var tag = new NameTag();
         var componentMap = new Dictionary<string, Action<JToken>>
@@ -190,16 +192,13 @@ public static class NameTagManager
         public (string title, string prefix, string suffix, string name, string displayName, string lastTag)
             Apply(string name, bool preview = false)
         {
-            if (Name != null && Name.Text != "")
-                name = Name.Generate(false);
+            if (Name != null && Name.Text != "") name = Name.Generate(false);
 
             if (name == "")
                 name = DataManager.player.Customization.Name;
             else if (name != "" && Name is { Text: "" })
-            {
                 Name.Text = name;
-                NameTagEditMenu.SaveToFile(AllNameTags.FirstOrDefault(x => x.Value == this).Key, this);
-            }
+
 
             if (!preview)
                 return (
@@ -261,13 +260,8 @@ public static class NameTagManager
 
         public string Apply(string input)
         {
-            switch (input.Length)
-            {
-                case 0:
-                    return input;
-                case 1:
-                    return StringHelper.ColorString(Colors[0], input);
-            }
+            if (input.Length == 0) return input;
+            if (input.Length == 1) return StringHelper.ColorString(Colors[0], input);
 
             var step = 1f / (input.Length - 1);
             var sb = new StringBuilder();
@@ -281,7 +275,7 @@ public static class NameTagManager
             return sb.ToString();
         }
 
-        private Color Evaluate(float percent)
+        public Color Evaluate(float percent)
         {
             percent = Mathf.Clamp01(percent);
             var indexLow = Mathf.FloorToInt(percent / Spacing);

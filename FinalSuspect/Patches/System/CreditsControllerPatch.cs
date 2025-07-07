@@ -52,8 +52,9 @@ public class CreditsControllerPatch
 
         void AddPersonToCredits(List<string> list)
         {
-            foreach (var cols in list.Select(line => line.Split(" - ").ToList()))
+            foreach (var line in list)
             {
+                var cols = line.Split(" - ").ToList();
                 if (cols.Count < 2) cols.Add(string.Empty);
                 credits.Add(new CreditsController.CreditStruct
                 {

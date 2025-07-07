@@ -3,10 +3,10 @@ using FinalSuspect.Helpers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static FinalSuspect.ClientActions.FeatureItems.NameTag.NameTagManager;
+using static FinalSuspect.Modules.ClientActions.FeatureItems.NameTag.NameTagManager;
 using Object = UnityEngine.Object;
 
-namespace FinalSuspect.ClientActions.FeatureItems.NameTag;
+namespace FinalSuspect.Modules.ClientActions.FeatureItems.NameTag;
 
 public static class NameTagPanel
 {

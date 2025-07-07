@@ -18,7 +18,7 @@ public static class Utils
 {
     private static readonly DateTime timeStampStartTime = new(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-    public static readonly Dictionary<string, Sprite> CachedSprites = new();
+    public static Dictionary<string, Sprite> CachedSprites = new();
 
     private static readonly Dictionary<byte, PlayerControl> cachedPlayers = new();
     public static long TimeStamp => (long)(DateTime.Now.ToUniversalTime() - timeStampStartTime).TotalSeconds;

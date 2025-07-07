@@ -6,7 +6,7 @@ public interface IRandom
 {
     // == static ==
     // IRandomを実装するクラスのリスト
-    public static readonly Dictionary<int, Type> randomTypes = new()
+    public static Dictionary<int, Type> randomTypes = new()
     {
         { 0, typeof(NetRandomWrapper) }, //Default
         { 1, typeof(NetRandomWrapper) },

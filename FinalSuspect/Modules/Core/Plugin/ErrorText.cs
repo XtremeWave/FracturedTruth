@@ -11,7 +11,7 @@ public class ErrorText : MonoBehaviour
 
     public bool CheatDetected;
     public bool SBDetected;
-    public readonly List<ErrorData> AllErrors = [];
+    public List<ErrorData> AllErrors = [];
 
     public void Update()
     {

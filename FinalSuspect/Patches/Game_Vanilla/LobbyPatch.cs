@@ -27,15 +27,17 @@ public static class HostInfoPanelUpdatePatch
 
     public static void Postfix(HostInfoPanel __instance)
     {
-        if (!AmongUsClient.Instance.AmHost) return;
-        if (!HostText)
-            HostText = __instance.content.transform.FindChild("Name").GetComponent<TextMeshPro>();
+        if (AmongUsClient.Instance.AmHost)
+        {
+            if (!HostText)
+                HostText = __instance.content.transform.FindChild("Name").GetComponent<TextMeshPro>();
 
-        var htmlStringRgb = ColorUtility.ToHtmlStringRGB(Palette.PlayerColors[__instance.player.ColorId]);
-        var hostName = Main.HostNickName;
-        var youLabel = DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.HostYouLabel);
+            var htmlStringRgb = ColorUtility.ToHtmlStringRGB(Palette.PlayerColors[__instance.player.ColorId]);
+            var hostName = Main.HostNickName;
+            var youLabel = DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.HostYouLabel);
 
-        HostText.text =
-            $"<color=#{htmlStringRgb}>{hostName}</color>  <size=90%><b><font=\"Barlow-BoldItalic SDF\" material=\"Barlow-BoldItalic SDF Outline\">{youLabel}";
+            HostText.text =
+                $"<color=#{htmlStringRgb}>{hostName}</color>  <size=90%><b><font=\"Barlow-BoldItalic SDF\" material=\"Barlow-BoldItalic SDF Outline\">{youLabel}";
+        }
     }
 }

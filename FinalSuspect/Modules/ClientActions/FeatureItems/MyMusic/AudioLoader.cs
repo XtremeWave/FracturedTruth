@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace FinalSuspect.ClientActions.FeatureItems.MyMusic;
+namespace FinalSuspect.Modules.ClientActions.FeatureItems.MyMusic;
 
-public static class AudioLoader
+public class AudioLoader
 {
     // 静态构造函数用于预热
     static AudioLoader()

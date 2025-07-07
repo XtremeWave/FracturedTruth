@@ -224,7 +224,7 @@ public class XtremePlayerData : IDisposable
     }
 
     public SpriteRenderer Rend { get; set; }
-    public SpriteRenderer Rend_DeadBody { get; set; }
+    public SpriteRenderer Deadbodyrend { get; set; }
     public Vector3? PreMeetingPosition { get; set; }
 
     #endregion
@@ -242,7 +242,7 @@ public class XtremePlayerData : IDisposable
         ProcessInt = TotalTaskCount = -1;
         RealDeathReason = VanillaDeathReason.None;
         RealKiller = null;
-        Rend_DeadBody = Rend = null;
+        Deadbodyrend = Rend = null;
         PreMeetingPosition = null;
     }
 

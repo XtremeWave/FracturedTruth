@@ -39,7 +39,7 @@ public static class ResourcesHelper
         "YamlDotNet.xml"
     ];
 
-    public static readonly List<string> RemoteModNewsList =
+    public static List<string> RemoteModNewsList =
     [
         "FeaturesIntroduction.v1.0.txt",
         "FS.v1.0_20250129.txt",

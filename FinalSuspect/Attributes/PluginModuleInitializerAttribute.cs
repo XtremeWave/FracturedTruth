@@ -6,4 +6,6 @@
 ///     可以使用 [PluginModuleInitializer(InitializePriority.High)] 来指定调用顺序
 /// </summary>
 public sealed class PluginModuleInitializerAttribute(InitializePriority priority = InitializePriority.Normal)
-    : InitializerAttribute<PluginModuleInitializerAttribute>(priority);
+    : InitializerAttribute<PluginModuleInitializerAttribute>(priority)
+{
+}
