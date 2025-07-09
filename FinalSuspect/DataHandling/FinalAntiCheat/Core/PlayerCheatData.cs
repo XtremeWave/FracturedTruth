@@ -19,6 +19,7 @@ public class PlayerCheatData : IDisposable
     }
 
     public bool IsSuspectCheater { get; private set; }
+    public bool IsHacker { get; private set; }
     public ClientData ClientData { get; private set; }
     public string FriendCode => ClientData?.FriendCode ?? string.Empty;
     public string Puid => ClientData?.GetHashedPuid() ?? string.Empty;
@@ -42,6 +43,16 @@ public class PlayerCheatData : IDisposable
             "FAC");
     }
 
+    public void MarkAsHacker()
+    {
+        if (IsHacker) return;
+        IsHacker = true;
+        Warn($"Overload Hacker: {_player.GetXtremeData().Name}," +
+             $"FriendCode: {FriendCode}," +
+             $"Puid: {Puid},",
+            "FAC");
+    }
+
     private void HandleLobbyPosition()
     {
         if (!IsLobby) return;
@@ -58,7 +69,7 @@ public class PlayerCheatData : IDisposable
 
     private void HandleSuspectCheater()
     {
-        if (Main.DisableFAC.Value || !IsSuspectCheater ||
+        if (!Main.EnableFAC.Value || !IsSuspectCheater ||
             (_lastHandleCheater != -1 && _lastHandleCheater + 1 >= GetTimeStamp())) return;
         _lastHandleCheater = GetTimeStamp();
         if (!AmongUsClient.Instance.AmHost)
@@ -69,6 +80,21 @@ public class PlayerCheatData : IDisposable
         }
 
         KickPlayer(_player.PlayerId, false, "Cheater");
+    }
+
+    private void HandleHacker()
+    {
+        if (!Main.EnableGuardian.Value || !IsHacker ||
+            (_lastHandleCheater != -1 && _lastHandleCheater + 1 >= GetTimeStamp())) return;
+        _lastHandleCheater = GetTimeStamp();
+        if (!AmongUsClient.Instance.AmHost)
+        {
+            NotificationPopperPatch.NotificationPop(string.Format(GetString("CheatDetected.Overload_NotHost"),
+                _player.GetColoredName()));
+            return;
+        }
+
+        KickPlayer(_player.PlayerId, false, "Overload");
     }
 
     public bool HandleIncomingRpc(byte rpcId)
@@ -127,6 +153,7 @@ public class PlayerCheatData : IDisposable
             HandleBan();
             HandleLobbyPosition();
             HandleSuspectCheater();
+            HandleHacker();
         }
         catch
         {

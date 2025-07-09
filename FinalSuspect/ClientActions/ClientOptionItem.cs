@@ -62,7 +62,7 @@ public sealed class ClientOptionItem<T> : ClientActionItem
         return item;
     }
 
-    public void UpdateToggle()
+    private void UpdateToggle()
     {
         if (!ToggleButton) return;
 

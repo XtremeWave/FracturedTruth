@@ -118,7 +118,8 @@ public class Main : BasePlugin
     public static ConfigEntry<bool> AutoStartGame { get; private set; }
     public static ConfigEntry<bool> AutoEndGame { get; private set; }
     public static ConfigEntry<bool> DisableVanillaSound { get; private set; }
-    public static ConfigEntry<bool> DisableFAC { get; private set; }
+    public static ConfigEntry<bool> EnableFAC { get; private set; }
+    public static ConfigEntry<bool> EnableGuardian { get; private set; }
     public static ConfigEntry<bool> ShowPlayerInfo { get; private set; }
     public static ConfigEntry<bool> UseModCursor { get; private set; }
     public static ConfigEntry<bool> FastLaunchMode { get; private set; }
@@ -171,7 +172,8 @@ public class Main : BasePlugin
         AutoStartGame = Config.Bind("Client Options", "Auto Start Game", false);
         AutoEndGame = Config.Bind("Client Options", "Auto End Game", false);
         DisableVanillaSound = Config.Bind("Client Options", "Disable Vanilla Sound", false);
-        DisableFAC = Config.Bind("Client Options", "Disable FAC", false);
+        EnableFAC = Config.Bind("Client Options", "Enable FAC", false);
+        EnableGuardian = Config.Bind("Client Options", "Enable Guardian", true);
         //PrunkMode = Config.Bind("Client Options", "Prunk Mode", false);
         ShowPlayerInfo = Config.Bind("Client Options", "Show Player Info", true);
         UseModCursor = Config.Bind("Client Options", "Use Mod Cursor", true);

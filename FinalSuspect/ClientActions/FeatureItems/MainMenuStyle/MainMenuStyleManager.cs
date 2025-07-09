@@ -53,7 +53,11 @@ public abstract class MainMenuStyleManager
                 new Color(0.526f, 0.731f, 1f, 0.8f),
                 new Color(0.7294f, 0.6353f, 1.0f, 0.8f),
                 new Color(0.9f, 0.551f, 0.9f, 0.8f),
-            ])
+            ]),
+        new(
+            "WhenLookingBackAtTheEnd",
+            false,
+            [])
     ];
 
     public class BackGroundStyle(string BGName, bool starFieldActive, List<Color> mainUIColors, int starGenDire = -2)
@@ -82,7 +86,7 @@ public abstract class MainMenuStyleManager
         public string Title => GetString($"MainMenuStyle.Title_{BGName}");
         public string Author => GetString($"MainMenuStyle.Author_{BGName}");
         public string Description => GetString($"MainMenuStyle.Description_{BGName}");
-        public Sprite PreviewSprite => LoadSprite($"FinalSuspect-BG-{BGName}.png", 450f);
+        public Sprite PreviewSprite => LoadSprite($"FinalSuspect-BG-{BGName}-Preview.png", 450f);
         public Sprite Sprite => LoadSprite($"FinalSuspect-BG-{BGName}.png", 179f);
     }
 }

@@ -186,12 +186,12 @@ public static class MainMenuStylePanel
             CustomBackground.transform
         );
         _authorText.name = "AuthorText";
-        _authorText.transform.localPosition = new Vector3(0.55f, 2.25f, -5f);
-        _authorText.transform.localScale = Vector3.one;
+        _authorText.transform.localPosition = new Vector3(0.75f, -1.25f, -5f);
+        _authorText.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
 
         var tmp = _authorText.GetComponent<TextMeshPro>();
         tmp.text = "Author";
-        tmp.alignment = TextAlignmentOptions.TopRight;
+        tmp.alignment = TextAlignmentOptions.BottomRight;
         tmp.fontStyle = FontStyles.Bold;
         _authorText.GetComponent<RectTransform>().sizeDelta = new Vector2(4f, 1f);
     }
@@ -220,7 +220,7 @@ public static class MainMenuStylePanel
     {
         _previewImage = LoadPatch.Start.CreateSpriteRenderer(
             "FinalSuspect-BG-Preview",
-            "FinalSuspect-BG-MiraHQ.jpg",
+            "FinalSuspect-BG-MiraHQ.png",
             450f,
             new Vector3(0, 1.1f, -5f),
             CustomBackground.transform
@@ -240,6 +240,7 @@ public static class MainMenuStylePanel
         prevButton.Background.size = new Vector2(0.4f, 0.4f);
         prevButton.transform.FindChild("ButtonHighlight").gameObject.GetComponent<SpriteRenderer>().size =
             new Vector2(0.55f, 0.55f);
+        prevButton.GetComponent<BoxCollider2D>().size = new Vector2(0.39f, 0.39f);
 
         var prevPassiveButton = prevButton.GetComponent<PassiveButton>();
         prevPassiveButton.OnClick = new Button.ButtonClickedEvent();
@@ -258,6 +259,7 @@ public static class MainMenuStylePanel
         nextButton.Background.size = new Vector2(0.4f, 0.4f);
         nextButton.transform.FindChild("ButtonHighlight").gameObject.GetComponent<SpriteRenderer>().size =
             new Vector2(0.55f, 0.55f);
+        nextButton.GetComponent<BoxCollider2D>().size = new Vector2(0.39f, 0.39f);
 
         var nextPassiveButton = nextButton.GetComponent<PassiveButton>();
         nextPassiveButton.OnClick = new Button.ButtonClickedEvent();
@@ -281,7 +283,7 @@ public static class MainMenuStylePanel
             CurrentState.Applied => _applyButton.Text.color = ColorHelper.ModColor,
             _ => _applyButton.Background.color
         };
-        _applyButton.enabled = style.CurrentState == CurrentState.NotApply;
+        _applyButton.GetComponent<PassiveButton>().enabled = style.CurrentState != CurrentState.NotFound;
         _applyButton.Text.text = GetString($"MainMenuStyle.{style.CurrentState}");
     }
 }

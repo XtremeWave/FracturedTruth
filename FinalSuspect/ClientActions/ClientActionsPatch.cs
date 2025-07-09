@@ -26,7 +26,8 @@ public static class OptionsMenuBehaviourStartPatch
     private static ClientOptionItem<bool> AutoEndGame;
 
     private static ClientOptionItem<bool> DisableVanillaSound;
-    private static ClientOptionItem<bool> DisableFAC;
+    private static ClientOptionItem<bool> EnableFAC;
+    private static ClientOptionItem<bool> EnableGuardian;
     private static ClientOptionItem<bool> ShowPlayerInfo;
     private static ClientOptionItem<bool> UseModCursor;
     private static ClientOptionItem<bool> FastLaunchMode;
@@ -95,6 +96,8 @@ public static class OptionsMenuBehaviourStartPatch
         CreateOptionItem(ref KickPlayerInBanList, "KickPlayerInBanList", Main.KickPlayerInBanList, __instance);
         CreateOptionItem(ref KickPlayerWithDenyName, "KickPlayerWithDenyName", Main.KickPlayerWithDenyName, __instance);
         CreateOptionItem(ref SpamDenyWord, "SpamDenyWord", Main.SpamDenyWord, __instance);
+        CreateOptionItem(ref EnableFAC, "EnableFAC", Main.EnableFAC, __instance);
+        CreateOptionItem(ref EnableGuardian, "EnableGuardian", Main.EnableGuardian, __instance);
         CreateOptionItem(ref AutoStartGame, "AutoStartGame", Main.AutoStartGame, __instance, AutoStartButtonToggle);
         CreateOptionItem(ref AutoEndGame, "AutoEndGame", Main.AutoEndGame, __instance);
         //CreateOptionItem<bool>(ref PrunkMode, "PrunkMode", Main.PrunkMode, __instance);
@@ -105,7 +108,6 @@ public static class OptionsMenuBehaviourStartPatch
             else
                 AudioPlayer.StartPlayVanilla();
         });
-        CreateOptionItem(ref DisableFAC, "DisableFAC", Main.DisableFAC, __instance);
         CreateOptionItem(ref ShowPlayerInfo, "ShowPlayerInfo", Main.ShowPlayerInfo, __instance);
         CreateOptionItem(ref UseModCursor, "UseModCursor", Main.UseModCursor, __instance, SetCursor);
         CreateOptionItem(ref FastLaunchMode, "FastLaunchMode", Main.FastLaunchMode, __instance);

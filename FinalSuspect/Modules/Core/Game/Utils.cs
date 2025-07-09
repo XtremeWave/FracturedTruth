@@ -545,6 +545,11 @@ public static class Utils
         pc.GetXtremeData().CheatData.MarkAsCheater();
     }
 
+    public static void MarkAsHacker(this PlayerControl pc)
+    {
+        pc.GetXtremeData().CheatData.MarkAsHacker();
+    }
+
     public static PlayerCheatData GetCheatDataById(byte id)
     {
         try

@@ -29,6 +29,12 @@ public static class ResourcesHelper
         "CI_Tracker.png",
         "Cursor.png",
         "FinalSuspect-BG-MiraHQ.png",
+        "FinalSuspect-BG-MiraHQ-Preview.png",
+        "FinalSuspect-BG-NewYear-Preview.png",
+        "FinalSuspect-BG-Security-Preview.png",
+        "FinalSuspect-BG-MiraStudio-Preview.png",
+        "FinalSuspect-BG-XtremeWave-Preview.png",
+        "FinalSuspect-BG-WhenLookingBackAtTheEnd-Preview.png",
         "ModStamp.png",
         "RightPanelCloseButton.png"
     ];

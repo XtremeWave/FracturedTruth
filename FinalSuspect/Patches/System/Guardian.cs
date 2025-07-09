@@ -12,7 +12,7 @@ public static class HandleGameDataPatch
 {
     public static bool Prefix(InnerNetClient __instance, [HarmonyArgument(0)] MessageReader parentReader)
     {
-        if (!IsLobby || IsNotJoined || !OnGameJoinedPatch.JoinedCompleted) return true;
+        if (!IsLobby || IsNotJoined || !OnGameJoinedPatch.JoinedCompleted || !Main.EnableGuardian.Value) return true;
 
         //Test(__instance.connection.EndPoint.Address.ToString());
         try
@@ -37,9 +37,11 @@ public static class HandleGameDataInnerPatch
 
     public static bool Prefix(InnerNetClient._HandleGameDataInner_d__165 __instance)
     {
+        if (!IsLobby || IsNotJoined || !OnGameJoinedPatch.JoinedCompleted || !Main.EnableGuardian.Value) return true;
         var reader = __instance.reader;
         if (reader.BytesRemaining < 1)
         {
+            Test("a");
             reader.Recycle();
             return false;
         }
@@ -51,6 +53,7 @@ public static class HandleGameDataInnerPatch
         ClientData clientData = null;
         try
         {
+            Test(tag.ToString());
             switch (tag)
             {
                 case GameDataTypes.DataFlag:
@@ -72,14 +75,6 @@ public static class HandleGameDataInnerPatch
                     clientData = innerNetClient.FindClientById(clientId);
                     break;
                 case GameDataTypes.SpawnFlag:
-                    var spawnId = reader.ReadPackedUInt32();
-                    if (spawnId < (ulong)innerNetClient.SpawnableObjects.Length)
-                    {
-                        var ownerId2 = reader.ReadPackedInt32();
-                        clientData = innerNetClient.FindClientById(ownerId2);
-                    }
-
-                    break;
                 case GameDataTypes.DespawnFlag:
                 case GameDataTypes.XboxDeclareXuid:
                     sr.Recycle();
@@ -95,8 +90,17 @@ public static class HandleGameDataInnerPatch
             /* ignored */
         }
 
-        if (clientData == null && targetObject == null || sr.BytesRemaining < 0)
+        if (clientData == null && targetObject == null)
         {
+            Test("b");
+            sr.Recycle();
+            reader.Recycle();
+            return false;
+        }
+
+        if (sr.BytesRemaining < 0)
+        {
+            Test("c");
             sr.Recycle();
             reader.Recycle();
             return false;
@@ -105,6 +109,7 @@ public static class HandleGameDataInnerPatch
         var ownerId = targetObject?.OwnerId;
         if (!XtremePlayerData.AllPlayerData.Any(x => x.Player.OwnerId == ownerId))
         {
+            Test("d");
             sr.Recycle();
             return true;
         }
@@ -113,6 +118,7 @@ public static class HandleGameDataInnerPatch
         clientData ??= client;
         if (clientData == null)
         {
+            Test("e");
             sr.Recycle();
             reader.Recycle();
             return false;
@@ -138,7 +144,7 @@ public static class HandleGameDataInnerPatch
         var _player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => x.CheatData.ClientData.Id == clientData.Id)
             ?.Player;
         Warn($"Incoming Msg Overloaded: {_player?.GetDataName() ?? ""}", "FAC");
-        _player?.MarkAsCheater();
+        _player?.MarkAsHacker();
         sr.Recycle();
         reader.Recycle();
         return false;
@@ -180,6 +186,8 @@ internal class HandleMessagePatch
 
     public static bool Prefix(InnerNetServer.Player client, MessageReader reader)
     {
+        if (!IsLobby || IsNotJoined || !OnGameJoinedPatch.JoinedCompleted || !Main.EnableGuardian.Value) return true;
+
         if (!playerMsgCounters.TryGetValue(client.Id, out var counter))
         {
             counter = new MsgCounter();
@@ -196,7 +204,7 @@ internal class HandleMessagePatch
         var _player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => x.CheatData.ClientData.Id == client.Id)
             ?.Player;
         Warn($"Incoming Msg Overloaded: {_player?.GetDataName() ?? ""}", "FAC");
-        _player?.MarkAsCheater();
+        _player?.MarkAsHacker();
         return false;
     }
 

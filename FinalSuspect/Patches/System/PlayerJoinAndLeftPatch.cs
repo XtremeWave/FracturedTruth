@@ -24,10 +24,10 @@ public class OnGameJoinedPatch
         UpdateGameState_IsInMeeting(false);
         ErrorText.Instance.Clear();
         ServerAddManager.SetServerName();
-
+        JoinedCompleted = false;
         Init_FAC();
 
-        _ = new LateTask(() => { JoinedCompleted = true; }, 1f, "SyncJoined");
+        _ = new LateTask(() => { JoinedCompleted = true; }, 4f, "SyncJoined");
 
         if (AmongUsClient.Instance.AmHost) GameStartManagerPatch.GameStartManagerUpdatePatch.exitTimer = -1;
         //Main.NewLobby = true;

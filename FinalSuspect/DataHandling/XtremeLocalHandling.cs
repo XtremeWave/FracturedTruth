@@ -48,7 +48,7 @@ public static class XtremeLocalHandling
         SpamManager.CheckSpam(ref name);
         var ap = NameTagManager.ApplyFor(player).displayName;
         name += ap.RemoveHtmlTags() == "" ? "" : $" ({ap})";
-        if (!player.GetCheatData().IsSuspectCheater || Main.DisableFAC.Value) return name;
+        if (!player.GetCheatData().IsSuspectCheater || !Main.EnableFAC.Value) return name;
         topcolor = ColorHelper.FaultColor;
         toptext = toptext.CheckAndAppendText(GetString("Id.Cheater"));
         return name;

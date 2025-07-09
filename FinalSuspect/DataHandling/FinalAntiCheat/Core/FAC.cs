@@ -54,7 +54,7 @@ public static class FAC
         reason = "Hacking";
         ban = false;
 
-        if (Main.DisableFAC.Value || !pc || reader == null || pc.AmOwner)
+        if (!Main.EnableFAC.Value || !pc || reader == null || pc.AmOwner)
             return false;
 
         try
@@ -65,6 +65,7 @@ public static class FAC
                     ? string.Format(GetString("CheatDetected.Overload"), pc.GetColoredName())
                     : string.Format(GetString("CheatDetected.Overload_NotHost"), pc.GetColoredName()));
                 ban = true;
+                notify = false;
                 return true;
             }
 

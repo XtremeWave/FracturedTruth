@@ -8,19 +8,8 @@ public class EndGameManagerPatch
     public static void ShowButtons_Postfix(EndGameManager __instance)
     {
         if (!Main.AutoEndGame.Value) return;
+        DestroyableSingleton<EndGameNavigation>.Instance.ContinueButton.gameObject.SetActive(false);
         _ = new LateTask(__instance.Navigation.NextGame, 2f, "Auto End Game");
-    }
-}
-
-[HarmonyPatch]
-public class ControllerNavMenuPatch
-{
-    [HarmonyPatch(typeof(ControllerNavMenu), nameof(ControllerNavMenu.Start))]
-    [HarmonyPostfix]
-    public static void Start_Postfix(ControllerNavMenu __instance)
-    {
-        if (!Main.AutoEndGame.Value || IsInGame) return;
-        __instance.gameObject.SetActive(false);
     }
 }
 
