@@ -53,7 +53,8 @@ public static partial class XtremeGameData
                 {
                     return Main.AllPlayerControls.ToArray().FirstOrDefault(x => x.IsHost()
                         && !PlayerControl.LocalPlayer.IsHost()
-                        && x.OtherModClient());
+                        && x.OtherModClient()
+                        && !IsFreePlay);
                 }
                 catch
                 {

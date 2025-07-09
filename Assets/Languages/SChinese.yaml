@@ -243,6 +243,7 @@ Warning.MismatchedVersion: "【{0}】\n安装了其它版本的 【{1}】"
 Warning.AutoExitAtMismatchedVersion: "您的 【{0}】 版本与房主不同\n您将在 {1} 秒内被踢出"
 Warning.CantKickDev: "很抱歉，您无法踢出开发者"
 Warning.RoomBroken: "很抱歉，该房间遭受炸房攻击，请到其他房间进行游戏"
+Warning.InvalidColor: "出现非法颜色玩家"
 
 ## 错误等级 / Error Levels
 ErrorLevel1: "可能同时产生多个bug"

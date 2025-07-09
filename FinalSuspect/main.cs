@@ -45,9 +45,9 @@ public class Main : BasePlugin
     /// <summary>
     ///     表示当前显示的版本类型。
     /// </summary>
-    private const VersionTypes DisplayedVersion_Type = VersionTypes.Alpha;
+    private const VersionTypes DisplayedVersion_Type = VersionTypes.Beta;
 
-    private const int DisplayedVersion_TestCreation = 3;
+    private const int DisplayedVersion_TestCreation = 1;
 
 
     // == 链接相关设定 / Link Config ==

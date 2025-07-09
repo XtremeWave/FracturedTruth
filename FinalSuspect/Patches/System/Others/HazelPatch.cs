@@ -9,6 +9,6 @@ internal class HazelPatch
 {
     public static bool Prefix(MessageReader __instance)
     {
-        return __instance.Length > 0;
+        return __instance.BytesRemaining >= 1;
     }
 }

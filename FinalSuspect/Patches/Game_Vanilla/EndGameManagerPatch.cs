@@ -19,12 +19,13 @@ public class ControllerNavMenuPatch
     [HarmonyPostfix]
     public static void Start_Postfix(ControllerNavMenu __instance)
     {
-        if (!Main.AutoEndGame.Value) return;
+        if (!Main.AutoEndGame.Value || IsInGame) return;
         __instance.gameObject.SetActive(false);
     }
 }
 
 [HarmonyPatch(typeof(LogicGameFlowNormal), nameof(LogicGameFlowNormal.CheckEndCriteria))]
+[HarmonyPatch(typeof(LogicGameFlowHnS), nameof(LogicGameFlowHnS.CheckEndCriteria))]
 internal class GameEndChecker
 {
     public static bool Prefix()

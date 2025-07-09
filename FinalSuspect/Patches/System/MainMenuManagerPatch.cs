@@ -109,7 +109,6 @@ public class MainMenuManagerPatch
     [HarmonyPostfix]
     public static void Start_Postfix(MainMenuManager __instance)
     {
-        DataManager.Player.Ban.BanPoints = 0;
         Instance = __instance;
 
         SimpleButton.SetBase(__instance.quitButton);

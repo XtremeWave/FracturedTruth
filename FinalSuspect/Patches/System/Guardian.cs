@@ -1,6 +1,8 @@
 using System;
+using AmongUs.InnerNet.GameDataMessages;
 using FinalSuspect.Modules.Core.Game;
 using Hazel;
+using Hazel.Udp;
 using InnerNet;
 
 namespace FinalSuspect.Patches.System;
@@ -12,12 +14,13 @@ public static class HandleGameDataPatch
     {
         if (!IsLobby || IsNotJoined || !OnGameJoinedPatch.JoinedCompleted) return true;
 
+        //Test(__instance.connection.EndPoint.Address.ToString());
         try
         {
-            if (parentReader.Length < 1) return false;
+            if (parentReader.BytesRemaining < 1) return false;
             var messageReader = MessageReader.Get(parentReader);
             var reader = messageReader.ReadMessageAsNewBuffer();
-            return reader.Length >= 1;
+            return reader.BytesRemaining >= 1;
         }
         catch
         {
@@ -30,17 +33,142 @@ public static class HandleGameDataPatch
     nameof(InnerNetClient._HandleGameDataInner_d__165.MoveNext))]
 public static class HandleGameDataInnerPatch
 {
+    private static readonly Dictionary<int, MsgCounter> playerMsgCounters = new();
+
     public static bool Prefix(InnerNetClient._HandleGameDataInner_d__165 __instance)
     {
-        if (!IsLobby || IsNotJoined || !OnGameJoinedPatch.JoinedCompleted) return true;
+        var reader = __instance.reader;
+        if (reader.BytesRemaining < 1)
+        {
+            reader.Recycle();
+            return false;
+        }
 
+        var innerNetClient = __instance.__4__this;
+        var tag = (GameDataTypes)reader.Tag;
+        var sr = MessageReader.Get(reader);
+        InnerNetObject targetObject = null;
+        ClientData clientData = null;
         try
         {
-            return __instance.reader.Length >= 1;
+            switch (tag)
+            {
+                case GameDataTypes.DataFlag:
+                case GameDataTypes.RpcFlag:
+                    var netId = sr.ReadPackedUInt32();
+                    lock (innerNetClient.allObjects)
+                    {
+                        innerNetClient.allObjects.AllObjectsFast.TryGetValue(netId, out targetObject);
+                    }
+
+                    if (tag == GameDataTypes.RpcFlag)
+                        sr.ReadByte();
+                    break;
+                case GameDataTypes.ReadyFlag:
+                    clientData = innerNetClient.FindClientById(sr.ReadPackedInt32());
+                    break;
+                case GameDataTypes.SceneChangeFlag:
+                    var clientId = sr.ReadPackedInt32();
+                    clientData = innerNetClient.FindClientById(clientId);
+                    break;
+                case GameDataTypes.SpawnFlag:
+                    var spawnId = reader.ReadPackedUInt32();
+                    if (spawnId < (ulong)innerNetClient.SpawnableObjects.Length)
+                    {
+                        var ownerId2 = reader.ReadPackedInt32();
+                        clientData = innerNetClient.FindClientById(ownerId2);
+                    }
+
+                    break;
+                case GameDataTypes.DespawnFlag:
+                case GameDataTypes.XboxDeclareXuid:
+                    sr.Recycle();
+                    return true;
+                default:
+                    sr.Recycle();
+                    reader.Recycle();
+                    return false;
+            }
         }
         catch
         {
-            return PlayerControl.LocalPlayer?.GetClient() == null;
+            /* ignored */
+        }
+
+        if (clientData == null && targetObject == null || sr.BytesRemaining < 0)
+        {
+            sr.Recycle();
+            reader.Recycle();
+            return false;
+        }
+
+        var ownerId = targetObject?.OwnerId;
+        if (!XtremePlayerData.AllPlayerData.Any(x => x.Player.OwnerId == ownerId))
+        {
+            sr.Recycle();
+            return true;
+        }
+
+        var client = innerNetClient.FindClientById(ownerId ?? -1232242121); // 瞎写八写保证为null
+        clientData ??= client;
+        if (clientData == null)
+        {
+            sr.Recycle();
+            reader.Recycle();
+            return false;
+        }
+
+        if (!playerMsgCounters.TryGetValue(clientData.Id, out var counter))
+        {
+            counter = new MsgCounter();
+            playerMsgCounters[clientData.Id] = counter;
+        }
+
+        if (counter.IncomingOverload) return false;
+
+        counter.Update(reader.Tag);
+
+        if (counter.TotalMsgLastSecond <= 100 && counter.GetRpcCount(reader.Tag) <= 40)
+        {
+            sr.Recycle();
+            return true;
+        }
+
+        counter.IncomingOverload = true;
+        var _player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => x.CheatData.ClientData.Id == clientData.Id)
+            ?.Player;
+        Warn($"Incoming Msg Overloaded: {_player?.GetDataName() ?? ""}", "FAC");
+        _player?.MarkAsCheater();
+        sr.Recycle();
+        reader.Recycle();
+        return false;
+    }
+
+    private class MsgCounter
+    {
+        private readonly Dictionary<byte, int> MsgTypeCounts = new();
+        public bool IncomingOverload;
+        private DateTime lastReset = DateTime.UtcNow;
+        public int TotalMsgLastSecond;
+
+        public void Update(byte rpcType)
+        {
+            if ((DateTime.UtcNow - lastReset).TotalSeconds >= 1)
+            {
+                TotalMsgLastSecond = 0;
+                MsgTypeCounts.Clear();
+                lastReset = DateTime.UtcNow;
+            }
+
+            TotalMsgLastSecond++;
+            if (!MsgTypeCounts.ContainsKey(rpcType))
+                Test($"New Counter:{rpcType}");
+            MsgTypeCounts[rpcType] = MsgTypeCounts.TryGetValue(rpcType, out var count) ? count + 1 : 1;
+        }
+
+        public int GetRpcCount(byte rpcType)
+        {
+            return MsgTypeCounts.GetValueOrDefault(rpcType, 0);
         }
     }
 }
@@ -48,20 +176,21 @@ public static class HandleGameDataInnerPatch
 [HarmonyPatch(typeof(InnerNetServer), nameof(InnerNetServer.HandleMessage))]
 internal class HandleMessagePatch
 {
-    private static readonly Dictionary<int, RpcCounter> playerRpcCounters = new();
+    private static readonly Dictionary<int, MsgCounter> playerMsgCounters = new();
 
     public static bool Prefix(InnerNetServer.Player client, MessageReader reader)
     {
-        if (!playerRpcCounters.TryGetValue(client.Id, out var counter))
+        if (!playerMsgCounters.TryGetValue(client.Id, out var counter))
         {
-            counter = new RpcCounter();
-            playerRpcCounters[client.Id] = counter;
+            counter = new MsgCounter();
+            playerMsgCounters[client.Id] = counter;
         }
 
         if (counter.IncomingOverload) return false;
+        //Test($"Server IP Address: {client.Connection.EndPoint.Address.ToString()}");
         counter.Update(reader.Tag);
 
-        if (counter.TotalRpcLastSecond <= 100 && counter.GetRpcCount(reader.Tag) <= 40) return true;
+        if (counter.TotalMsgLastSecond <= 100 && counter.GetRpcCount(reader.Tag) <= 40) return true;
 
         counter.IncomingOverload = true;
         var _player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => x.CheatData.ClientData.Id == client.Id)
@@ -71,29 +200,30 @@ internal class HandleMessagePatch
         return false;
     }
 
-    private class RpcCounter
+    private class MsgCounter
     {
-        private readonly Dictionary<byte, int> RpcTypeCounts = new();
+        private readonly Dictionary<byte, int> MsgTypeCounts = new();
         public bool IncomingOverload;
         private DateTime lastReset = DateTime.UtcNow;
-        public int TotalRpcLastSecond;
+        public int TotalMsgLastSecond;
 
         public void Update(byte rpcType)
         {
             if ((DateTime.UtcNow - lastReset).TotalSeconds >= 1)
             {
-                TotalRpcLastSecond = 0;
-                RpcTypeCounts.Clear();
+                TotalMsgLastSecond = 0;
+                MsgTypeCounts.Clear();
                 lastReset = DateTime.UtcNow;
             }
 
-            TotalRpcLastSecond++;
-            RpcTypeCounts[rpcType] = RpcTypeCounts.TryGetValue(rpcType, out var count) ? count + 1 : 1;
+            TotalMsgLastSecond++;
+
+            MsgTypeCounts[rpcType] = MsgTypeCounts.TryGetValue(rpcType, out var count) ? count + 1 : 1;
         }
 
         public int GetRpcCount(byte rpcType)
         {
-            return RpcTypeCounts.GetValueOrDefault(rpcType, 0);
+            return MsgTypeCounts.GetValueOrDefault(rpcType, 0);
         }
     }
 }

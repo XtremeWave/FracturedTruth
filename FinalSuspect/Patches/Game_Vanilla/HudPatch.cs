@@ -98,6 +98,8 @@ public static class HudManagerPatch
     public static string LastRoomCode;
     public static string LastServer;
 
+    private static bool Refresh;
+
     private static IEnumerator SwitchRoleIllustration(SpriteRenderer spriter)
     {
         while (true)
@@ -165,13 +167,25 @@ public static class HudManagerPatch
             .GetComponent<SpriteRenderer>().color = color;
     }
 
-    public static void SetAbilityButtonColor(HudManager __instance)
+    [GameModuleInitializer]
+    public static void InitForRefresh()
     {
-        if (!IsInGame) return;
+        Refresh = false;
+    }
+
+    private static void SetAbilityButtonColor(HudManager __instance)
+    {
+        if (!IsInGame)
+            return;
         var color = GetRoleColor(PlayerControl.LocalPlayer.GetRoleType());
         __instance.AbilityButton.buttonLabelText.SetOutlineColor(color);
         __instance.AbilityButton.cooldownTimerText.color = color;
         __instance.KillButton.cooldownTimerText.color = ColorHelper.ImpostorRedPale;
+        // 刷新按钮状态
+        if (!__instance.AbilityButton.gameObject.active || Refresh) return;
+        Refresh = true;
+        __instance.AbilityButton.gameObject.SetActive(false);
+        __instance.AbilityButton.gameObject.SetActive(true);
     }
 
     public static int GetLineCount(string text)
@@ -250,7 +264,8 @@ public static class HudManagerPatch
                 TextAlignmentOptions.TopLeft,
                 showInitially,
                 showHideButton.Button.transform);
-            roleSummary.transform.localPosition = new Vector3(1.7f, -0.4f, -1f);
+            roleSummary.transform.localPosition =
+                new Vector3(IsInGame ? 0f : 1.7f, -0.4f, -1f);
             roleSummary.transform.localScale = new Vector3(1.2f, 1.2f, 1f);
             roleSummary.fontStyle = FontStyles.Bold;
             roleSummary.SetOutlineColor(Color.black);
@@ -266,9 +281,11 @@ public static class HudManagerPatch
         showHideButton.Button.transform.localPosition =
             IsInGame ? new Vector3(0.2f, 2.685f, -14f) : new Vector3(-4.5f, 2.6f, -1f);
         if (IsInGame)
+        {
             showHideButton.Button.gameObject.SetActive
             (PlayerControl.LocalPlayer.GetRoleType() is RoleTypes.CrewmateGhost or RoleTypes.ImpostorGhost &&
              !IsInMeeting);
+        }
         else
             showHideButton.Button.gameObject.SetActive(true);
 
@@ -377,8 +394,10 @@ public static class HudManagerPatch
                 SetChatBG(__instance);
                 SetAbilityButtonColor(__instance);
                 if ((!ControllerManagerUpdatePatch.ShowSettingsPanel && IsInGame || IsFreePlay) &&
-                    DestroyableSingleton<LobbyInfoPane>.Instance.gameObject.active)
+                    DestroyableSingleton<LobbyInfoPane>.Instance.gameObject.activeSelf)
+                {
                     DestroyableSingleton<LobbyInfoPane>.Instance.gameObject.SetActive(false);
+                }
             }
             catch
             {
