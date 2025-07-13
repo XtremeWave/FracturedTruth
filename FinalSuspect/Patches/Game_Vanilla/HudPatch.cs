@@ -148,7 +148,7 @@ public static class HudManagerPatch
         backgroundRenderer = null;
     }
 
-    public static void SetChatBG(HudManager __instance)
+    private static void SetChatBG(HudManager __instance)
     {
         Color color;
         if (IsInGame)
@@ -188,7 +188,7 @@ public static class HudManagerPatch
         __instance.AbilityButton.gameObject.SetActive(true);
     }
 
-    public static int GetLineCount(string text)
+    private static int GetLineCount(string text)
     {
         if (string.IsNullOrEmpty(text))
             return 0;
@@ -202,7 +202,7 @@ public static class HudManagerPatch
         LastResultText = LastGameData = LastGameResult = LastRoomCode = LastServer = "";
     }
 
-    public static void UpdateResult(HudManager __instance)
+    private static void UpdateResult(HudManager __instance)
     {
         if (IsFreePlay || (!IsInGame && GetLineCount(LastResultText) < 6))
             return;
@@ -295,20 +295,16 @@ public static class HudManagerPatch
 
     private static void AdjustBackgroundSize()
     {
-        if (roleSummary && backgroundRenderer)
-        {
-            var textBounds = roleSummary.textBounds;
+        if (!roleSummary || !backgroundRenderer) return;
+        var textBounds = roleSummary.textBounds;
 
-            var backgroundSprite = backgroundRenderer.sprite;
-            if (backgroundSprite)
-            {
-                var scaleX = (textBounds.size.x + 0.4f) / backgroundSprite.bounds.size.x;
-                var scaleY = (textBounds.size.y + 0.5f) / backgroundSprite.bounds.size.y;
+        var backgroundSprite = backgroundRenderer.sprite;
+        if (!backgroundSprite) return;
+        var scaleX = (textBounds.size.x + 0.4f) / backgroundSprite.bounds.size.x;
+        var scaleY = (textBounds.size.y + 0.5f) / backgroundSprite.bounds.size.y;
 
-                backgroundRenderer.transform.localScale = new Vector3(scaleX, scaleY, 1f);
-                backgroundRenderer.transform.localPosition = new Vector3(textBounds.center.x, textBounds.center.y, 2f);
-            }
-        }
+        backgroundRenderer.transform.localScale = new Vector3(scaleX, scaleY, 1f);
+        backgroundRenderer.transform.localPosition = new Vector3(textBounds.center.x, textBounds.center.y, 2f);
     }
 
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]

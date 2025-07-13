@@ -14,7 +14,6 @@ public static class HandleGameDataPatch
     {
         if (!IsLobby || IsNotJoined || !OnGameJoinedPatch.JoinedCompleted || !Main.EnableGuardian.Value) return true;
 
-        //Test(__instance.connection.EndPoint.Address.ToString());
         try
         {
             if (parentReader.BytesRemaining < 1) return false;
@@ -41,7 +40,6 @@ public static class HandleGameDataInnerPatch
         var reader = __instance.reader;
         if (reader.BytesRemaining < 1)
         {
-            Test("a");
             reader.Recycle();
             return false;
         }
@@ -90,17 +88,8 @@ public static class HandleGameDataInnerPatch
             /* ignored */
         }
 
-        if (clientData == null && targetObject == null)
+        if (clientData == null && targetObject == null || sr.BytesRemaining < 0)
         {
-            Test("b");
-            sr.Recycle();
-            reader.Recycle();
-            return false;
-        }
-
-        if (sr.BytesRemaining < 0)
-        {
-            Test("c");
             sr.Recycle();
             reader.Recycle();
             return false;
@@ -109,7 +98,6 @@ public static class HandleGameDataInnerPatch
         var ownerId = targetObject?.OwnerId;
         if (!XtremePlayerData.AllPlayerData.Any(x => x.Player.OwnerId == ownerId))
         {
-            Test("d");
             sr.Recycle();
             return true;
         }
@@ -118,7 +106,6 @@ public static class HandleGameDataInnerPatch
         clientData ??= client;
         if (clientData == null)
         {
-            Test("e");
             sr.Recycle();
             reader.Recycle();
             return false;

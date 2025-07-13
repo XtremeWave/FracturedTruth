@@ -14,7 +14,6 @@ public class CreditsControllerPatch
             //Others
             $"<size=120%>{GetString("Id.Contributor")}</size>",
             "- LezaiYa",
-            "- Nonalus",
             "- KARPED1EM",
             "- Niko233",
             "- Amongus(水木年华)",

@@ -7,9 +7,8 @@ namespace FinalSuspect.Patches.Game_Vanilla;
 public static class MeetingHudPatch
 {
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.UpdateButtons))]
-    private class UpdatePatch
+    public class UpdatePatch
     {
-        // ReSharper disable once UnusedMember.Local
         public static void Postfix(MeetingHud __instance)
         {
             try
@@ -47,9 +46,8 @@ public static class MeetingHudPatch
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.VotingComplete))]
     [HarmonyPriority(Priority.First)]
-    private class VotingCompletePatch
+    public class VotingCompletePatch
     {
-        // ReSharper disable once UnusedMember.Local
         public static void Postfix([HarmonyArgument(1)] NetworkedPlayerInfo exiled, [HarmonyArgument(2)] bool tie)
         {
             foreach (var data in XtremePlayerData.AllPlayerData.Where(data => data?.Rend_DeadBody))

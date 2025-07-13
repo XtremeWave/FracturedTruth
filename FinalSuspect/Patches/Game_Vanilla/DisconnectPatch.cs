@@ -47,8 +47,8 @@ internal class ShowDisconnectPopupPatch
                             SetText(GetString("DCNotify.DCFromServer"));
                         break;
                     case DisconnectReasons.Custom:
-                        if (StringReason.Contains("Reliable packet")) SetText(GetString("DCNotify.DCFromServer"));
-                        else if (StringReason.Contains("remote has not responded to"))
+                        if (StringReason.Contains("Reliable packet") ||
+                            StringReason.Contains("remote has not responded to"))
                             SetText(GetString("DCNotify.DCFromServer"));
                         break;
                 }

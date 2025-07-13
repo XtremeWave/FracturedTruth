@@ -46,9 +46,8 @@ public class MapRealTimeLocationPatch
     public static void SetPreMeetingPositionAfter(MapBehaviour __instance,
         [HarmonyArgument(0)] Vector3 preMeetingPosition)
     {
-        foreach (var data in XtremePlayerData.AllPlayerData)
+        foreach (var data in XtremePlayerData.AllPlayerData.Where(data => !data.IsDisconnected))
         {
-            if (data.IsDisconnected) continue;
             data.PreMeetingPosition = data.Player.GetTruePosition();
         }
     }
@@ -57,9 +56,8 @@ public class MapRealTimeLocationPatch
     [HarmonyPostfix]
     public static void GenericShowAfter(MapBehaviour __instance)
     {
-        foreach (var data in XtremePlayerData.AllPlayerData)
+        foreach (var data in XtremePlayerData.AllPlayerData.Where(data => !data.IsDisconnected))
         {
-            if (data.IsDisconnected) continue;
             data.Rend.material.SetInt(PlayerMaterial.MaskLayer, 255);
         }
     }

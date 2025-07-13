@@ -13,7 +13,7 @@ internal class ControllerManagerUpdatePatch
     private static int resolutionIndex;
     public static bool ShowSettingsPanel = true;
 
-    public static void Postfix(ControllerManager __instance)
+    public static void Postfix()
     {
         //职业介绍
         if (IsInGame && (IsCanMove || IsInMeeting))
@@ -34,7 +34,8 @@ internal class ControllerManagerUpdatePatch
             InGameRoleInfoMenu.Hide();
         }
 
-        if (Input.GetKeyDown(KeyCode.F2) && IsInGame) ShowSettingsPanel = !ShowSettingsPanel;
+        if (Input.GetKeyDown(KeyCode.F2) && IsInGame)
+            ShowSettingsPanel = !ShowSettingsPanel;
 
         //更改分辨率
         if (Input.GetKeyDown(KeyCode.F11))

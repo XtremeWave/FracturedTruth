@@ -13,47 +13,41 @@ namespace FinalSuspect.Patches.System;
 [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.MakePublic))]
 internal class MakePublicPatch
 {
-    public static bool Prefix(GameStartManager __instance)
+    public static bool Prefix()
     {
-        if (VersionChecker.isBroken || (VersionChecker.hasUpdate && VersionChecker.forceUpdate) ||
-            !VersionChecker.IsSupported)
-        {
-            var message = "";
-            if (VersionChecker.isBroken) message = GetString("ModBrokenMessage");
-            if (VersionChecker.hasUpdate) message = GetString("CanNotJoinPublicRoomNoLatest");
-            Info(message, "MakePublicPatch");
-            SendInGame(message);
-            return false;
-        }
-
-        return true;
+        if (!VersionChecker.isBroken && (!VersionChecker.hasUpdate || !VersionChecker.forceUpdate) &&
+            VersionChecker.IsSupported) return true;
+        var message = "";
+        if (VersionChecker.isBroken) message = GetString("ModBrokenMessage");
+        if (VersionChecker.hasUpdate) message = GetString("CanNotJoinPublicRoomNoLatest");
+        Info(message, "MakePublicPatch");
+        SendInGame(message);
+        return false;
     }
 }
 
 [HarmonyPatch(typeof(MMOnlineManager), nameof(MMOnlineManager.Start))]
 internal class MMOnlineManagerStartPatch
 {
-    public static void Postfix(MMOnlineManager __instance)
+    public static void Postfix()
     {
         if (!(VersionChecker.hasUpdate || VersionChecker.isBroken || !VersionChecker.IsSupported)) return;
         var obj = GameObject.Find("FindGameButton");
-        if (obj)
-        {
-            obj.SetActive(false);
-            _ = obj.transform.parent.gameObject;
-            var textObj = Object.Instantiate(obj.transform.FindChild("Text_TMP").GetComponent<TextMeshPro>());
-            textObj.transform.position = new Vector3(0.5f, -0.4f, 0f);
-            textObj.name = "CanNotJoinPublic";
-            textObj.DestroyTranslator();
-            var message = "";
-            if (VersionChecker.hasUpdate)
-                message = GetString("CanNotJoinPublicRoomNoLatest");
-            else if (VersionChecker.isBroken)
-                message = GetString("ModBrokenMessage");
-            else if (!VersionChecker.IsSupported) message = GetString("UnsupportedVersion");
+        if (!obj) return;
+        obj.SetActive(false);
+        _ = obj.transform.parent.gameObject;
+        var textObj = Object.Instantiate(obj.transform.FindChild("Text_TMP").GetComponent<TextMeshPro>());
+        textObj.transform.position = new Vector3(0.5f, -0.4f, 0f);
+        textObj.name = "CanNotJoinPublic";
+        textObj.DestroyTranslator();
+        var message = "";
+        if (VersionChecker.hasUpdate)
+            message = GetString("CanNotJoinPublicRoomNoLatest");
+        else if (VersionChecker.isBroken)
+            message = GetString("ModBrokenMessage");
+        else if (!VersionChecker.IsSupported) message = GetString("UnsupportedVersion");
 
-            textObj.text = $"<size=2>{StringHelper.ColorString(Color.red, message)}</size>";
-        }
+        textObj.text = $"<size=2>{StringHelper.ColorString(Color.red, message)}</size>";
     }
 }
 
@@ -103,7 +97,7 @@ internal class InnerNetClientCanBanPatch
 [HarmonyPatch(typeof(InnerNetClient), nameof(InnerNetClient.KickPlayer))]
 internal class KickPlayerPatch
 {
-    public static bool Prefix(InnerNetClient __instance, int clientId, bool ban)
+    public static bool Prefix(int clientId, bool ban)
     {
         try
         {

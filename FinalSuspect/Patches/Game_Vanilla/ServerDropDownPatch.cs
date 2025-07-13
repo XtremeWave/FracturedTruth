@@ -26,7 +26,7 @@ public static class ServerDropDownPatch
         var regions = DestroyableSingleton<ServerManager>.Instance.AvailableRegions
             .OrderBy(ServerManager.DefaultRegions.Contains).ToList();
         var totalColumns = Mathf.Max(1, Mathf.CeilToInt(regions.Count / (float)maxPerColumn));
-        //int rowsInLastColumn = regions.Count % maxPerColumn;
+
         var maxRows = regions.Count > maxPerColumn ? maxPerColumn : regions.Count;
 
         foreach (var regionInfo in regions)

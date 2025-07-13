@@ -12,7 +12,7 @@ internal class AmongUsClientEndGamePatch
 {
     public static Dictionary<byte, string> SummaryText = new();
 
-    public static void Postfix(AmongUsClient __instance, [HarmonyArgument(0)] ref EndGameResult endGameResult)
+    public static void Postfix([HarmonyArgument(0)] ref EndGameResult endGameResult)
     {
         SummaryText = new Dictionary<byte, string>();
         foreach (var data in XtremePlayerData.AllPlayerData)
@@ -36,14 +36,11 @@ internal class SetEverythingUpPatch
     {
         var showInitially = Main.ShowResults.Value;
 
-        //#######################################
-        //          ==勝利陣営表示==
-        //#######################################
         var WinnerTextObject = Object.Instantiate(__instance.WinText.gameObject);
         WinnerTextObject.transform.position = new Vector3(__instance.WinText.transform.position.x,
             __instance.WinText.transform.position.y - 0.5f, __instance.WinText.transform.position.z);
         WinnerTextObject.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
-        var WinnerText = WinnerTextObject.GetComponent<TextMeshPro>(); // WinTextと同じ型のコンポーネントを取得
+        var WinnerText = WinnerTextObject.GetComponent<TextMeshPro>();
         WinnerText.fontSizeMin = 3f;
 
         var CustomWinnerColor = DidHumansWin ? "#8CFFFF" : "#FF1919";
@@ -55,7 +52,6 @@ internal class SetEverythingUpPatch
         __instance.WinText.gameObject.SetActive(!showInitially);
         WinnerTextObject.SetActive(!showInitially);
 
-        //ShowResult:
         showHideButton =
             new SimpleButton(
                 __instance.transform,

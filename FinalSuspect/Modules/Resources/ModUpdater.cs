@@ -84,7 +84,7 @@ public class ModUpdater
         }
     }
 
-    public static async Task<(bool, string)> DownloadDLL(string url)
+    private static async Task<(bool, string)> DownloadDLL(string url)
     {
         File.Delete(DownloadFileTempPath);
         File.Create(DownloadFileTempPath).Close();
@@ -119,16 +119,14 @@ public class ModUpdater
     private static void OnDownloadProgressChanged(long? totalFileSize, long totalBytesDownloaded,
         double? progressPercentage)
     {
-        if (progressPercentage != null)
-        {
-            var msg =
-                $"{GetString("Tip.Updating")}\n{totalFileSize / 1000}KB / {totalBytesDownloaded / 1000}KB  -  {(int)progressPercentage}%";
-            Info(msg, "DownloadDLL");
-            CustomPopup.UpdateTextLater(msg);
-        }
+        if (progressPercentage == null) return;
+        var msg =
+            $"{GetString("Tip.Updating")}\n{totalFileSize / 1000}KB / {totalBytesDownloaded / 1000}KB  -  {(int)progressPercentage}%";
+        Info(msg, "DownloadDLL");
+        CustomPopup.UpdateTextLater(msg);
     }
 
-    public static string GetMD5HashFromFile(string fileName)
+    private static string GetMD5HashFromFile(string fileName)
     {
         try
         {
