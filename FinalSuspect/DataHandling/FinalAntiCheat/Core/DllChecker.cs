@@ -46,9 +46,6 @@ public static class DisableOtherPlugins
 {
     public static bool Prefix([HarmonyArgument(0)] PluginInfo pluginInfo, [HarmonyArgument(1)] Assembly pluginAssembly)
     {
-        Test(pluginInfo.Metadata.GUID);
-        if (pluginInfo.Metadata.GUID == "com.sinai.unityexplorer")
-            return true;
-        return false;
+        return pluginInfo.Metadata.GUID == "com.sinai.unityexplorer";
     }
 }

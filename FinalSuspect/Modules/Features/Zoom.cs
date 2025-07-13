@@ -24,15 +24,23 @@ public static class Zoom
             }
 
             if (Camera.main?.orthographicSize > 3.0f) ResetButtons = true;
-            if (Input.mouseScrollDelta.y > 0)
-                if (Camera.main?.orthographicSize > 3.0f)
-                    SetZoomSize();
-
-            if (Input.mouseScrollDelta.y < 0)
-                if (IsDead || IsFreePlay ||
-                    DebugModeManager.AmDebugger || IsLobby || Main.GodMode.Value)
-                    if (Camera.main?.orthographicSize < 18.0f)
-                        SetZoomSize(true);
+            switch (Input.mouseScrollDelta.y)
+            {
+                case > 0:
+                {
+                    if (Camera.main?.orthographicSize > 3.0f)
+                        SetZoomSize();
+                    break;
+                }
+                case < 0:
+                {
+                    if (IsDead || IsFreePlay ||
+                        DebugModeManager.AmDebugger || IsLobby || Main.GodMode.Value)
+                        if (Camera.main?.orthographicSize < 18.0f)
+                            SetZoomSize(true);
+                    break;
+                }
+            }
 
             Flag.NewFlag("Zoom");
         }
@@ -42,7 +50,7 @@ public static class Zoom
         }
     }
 
-    public static void SetZoomSize(bool times = false, bool reset = false)
+    private static void SetZoomSize(bool times = false, bool reset = false)
     {
         if (!Camera.main) return;
         var size = 1.5f;
@@ -62,12 +70,10 @@ public static class Zoom
 
         DestroyableSingleton<HudManager>.Instance?.ShadowQuad?.gameObject.SetActive(
             (reset || Mathf.Approximately(Camera.main.orthographicSize, 3.0f)) && PlayerControl.LocalPlayer.IsAlive());
-        if (ResetButtons)
-        {
-            ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height, Screen.width, Screen.height,
-                Screen.fullScreen);
-            ResetButtons = false;
-        }
+        if (!ResetButtons) return;
+        ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height, Screen.width, Screen.height,
+            Screen.fullScreen);
+        ResetButtons = false;
     }
 
     [GameModuleInitializer]
@@ -90,12 +96,10 @@ public static class Flag
 
     public static void Run(Action action, string type, bool firstrun = false)
     {
-        if (OneTimeList.Contains(type) || (firstrun && !FirstRunList.Contains(type)))
-        {
-            if (!FirstRunList.Contains(type)) FirstRunList.Add(type);
-            OneTimeList.Remove(type);
-            action();
-        }
+        if (!OneTimeList.Contains(type) && (!firstrun || FirstRunList.Contains(type))) return;
+        if (!FirstRunList.Contains(type)) FirstRunList.Add(type);
+        OneTimeList.Remove(type);
+        action();
     }
 
     public static void NewFlag(string type)

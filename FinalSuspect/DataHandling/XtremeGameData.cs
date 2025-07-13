@@ -12,7 +12,8 @@ public static partial class XtremeGameData
         return OtherModClient(player.PlayerId) ||
                (player.Data.OwnerId == -2
                 && !IsFinalSuspect(player.PlayerId)
-                && !IsFreePlay);
+                && !IsFreePlay
+                && !IsLocalGame);
     }
 
     public static bool OtherModClient(byte id)
@@ -53,8 +54,7 @@ public static partial class XtremeGameData
                 {
                     return Main.AllPlayerControls.ToArray().FirstOrDefault(x => x.IsHost()
                         && !PlayerControl.LocalPlayer.IsHost()
-                        && x.OtherModClient()
-                        && !IsFreePlay);
+                        && x.OtherModClient());
                 }
                 catch
                 {

@@ -31,16 +31,18 @@ public static class OptionsMenuBehaviourStartPatch
     private static ClientOptionItem<bool> ShowPlayerInfo;
     private static ClientOptionItem<bool> UseModCursor;
     private static ClientOptionItem<bool> FastLaunchMode;
-    private static ClientFeatureItem ClearAutoLogs;
-    private static ClientFeatureItem DumpLog;
-    private static ClientFeatureItem UnloadMod;
     private static ClientOptionItem<bool> VersionCheat;
     private static ClientOptionItem<bool> GodMode;
     private static ClientOptionItem<bool> NoGameEnd;
 
+    private static ClientFeatureItem ClearAutoLogs;
+    private static ClientFeatureItem DumpLog;
+    private static ClientFeatureItem UnloadMod;
     private static ClientFeatureItem MainMenuStyleBtn;
+
     private static ClientFeatureItem ResourceBtn;
-    public static ClientFeatureItem MyMusicBtn;
+
+    //private static ClientFeatureItem MyMusicBtn;
     private static ClientFeatureItem NameTagBtn;
 
 
@@ -284,11 +286,10 @@ public static class OptionsMenuBehaviourClosePatch
         ClientActionItem.CustomBackground?.gameObject.SetActive(false);
         ClientFeatureItem.CustomBackground?.gameObject.SetActive(false);
         ModUnloaderScreen.Hide();
-        ResourcesPanel.Hide();
-        NameTagPanel.Hide();
         MainMenuStylePanel.Hide();
+        ResourcesPanel.Hide();
         //MyMusicPanel.Hide();
-        //SoundManagementPanel.Hide();
+        NameTagPanel.Hide();
     }
 }
 
