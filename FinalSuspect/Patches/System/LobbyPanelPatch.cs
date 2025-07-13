@@ -19,7 +19,7 @@ internal class LobbyInfoPaneUpdatePatch
         trans.FindChild("Client Buttons").gameObject.SetActive(true);
     }
 
-    public static void Postfix(LobbyInfoPane __instance)
+    public static void Postfix()
     {
         var AspectSize = GameObject.Find("AspectSize");
         AspectSize.transform.FindChild("Background").gameObject.GetComponent<SpriteRenderer>().color =
@@ -93,25 +93,27 @@ internal class LobbyViewSettingsPanePatch
                     var bannerindex = 0;
                     foreach (var banner in banners)
                     {
-                        if (banner.name == "CategoryHeaderMasked LongDivider(Clone)")
+                        switch (banner.name)
                         {
-                            SetColorForCat(banner.gameObject, Normalbannercolors[catindex]);
-                            catindex++;
-                        }
-
-                        if (banner.name == "ViewSettingsInfoPanel(Clone)")
-                        {
-                            Color color;
-                            if (bannerindex <= 3)
-                                color = Normalbannercolors[0];
-                            else if (bannerindex <= 5)
-                                color = Normalbannercolors[1];
-                            else if (bannerindex <= 11)
-                                color = Normalbannercolors[2];
-                            else
-                                color = Normalbannercolors[3];
-                            SetColorForSettingsBanner(banner.gameObject, color);
-                            bannerindex++;
+                            case "CategoryHeaderMasked LongDivider(Clone)":
+                                SetColorForCat(banner.gameObject, Normalbannercolors[catindex]);
+                                catindex++;
+                                break;
+                            case "ViewSettingsInfoPanel(Clone)":
+                            {
+                                Color color;
+                                if (bannerindex <= 3)
+                                    color = Normalbannercolors[0];
+                                else if (bannerindex <= 5)
+                                    color = Normalbannercolors[1];
+                                else if (bannerindex <= 11)
+                                    color = Normalbannercolors[2];
+                                else
+                                    color = Normalbannercolors[3];
+                                SetColorForSettingsBanner(banner.gameObject, color);
+                                bannerindex++;
+                                break;
+                            }
                         }
                     }
                 }
@@ -127,23 +129,25 @@ internal class LobbyViewSettingsPanePatch
                     var enableroleindex = new List<int>();
                     foreach (var banner in banners)
                     {
-                        if (banner.name == "CategoryHeaderMasked LongDivider(Clone)")
+                        switch (banner.name)
                         {
-                            SetColorForCat(banner.gameObject, rolecatcolors[catindex]);
-                            catindex++;
-                        }
+                            case "CategoryHeaderMasked LongDivider(Clone)":
+                                SetColorForCat(banner.gameObject, rolecatcolors[catindex]);
+                                catindex++;
+                                break;
+                            case "ViewSettingsInfoPanel_Role Variant(Clone)":
+                            {
+                                var roleColor = bannerindex <= 4
+                                    ? GetRoleColor(RoleTypes.Crewmate)
+                                    : GetRoleColor(RoleTypes.Impostor);
+                                SetColorForRolesBanner(banner.gameObject, rolecolors[bannerindex], roleColor);
+                                if (banner.gameObject.transform.FindChild("LabelBackground").gameObject
+                                        .GetComponent<SpriteRenderer>().color != new Color(0.3f, 0.3f, 0.3f, 1))
+                                    enableroleindex.Add(bannerindex);
 
-                        if (banner.name == "ViewSettingsInfoPanel_Role Variant(Clone)")
-                        {
-                            var roleColor = bannerindex <= 4
-                                ? GetRoleColor(RoleTypes.Crewmate)
-                                : GetRoleColor(RoleTypes.Impostor);
-                            SetColorForRolesBanner(banner.gameObject, rolecolors[bannerindex], roleColor);
-                            if (banner.gameObject.transform.FindChild("LabelBackground").gameObject
-                                    .GetComponent<SpriteRenderer>().color != new Color(0.3f, 0.3f, 0.3f, 1))
-                                enableroleindex.Add(bannerindex);
-
-                            bannerindex++;
+                                bannerindex++;
+                                break;
+                            }
                         }
                     }
 
@@ -169,25 +173,25 @@ internal class LobbyViewSettingsPanePatch
                 var bannerindex = 0;
                 foreach (var banner in banners)
                 {
-                    if (banner.name == "CategoryHeaderMasked LongDivider(Clone)")
+                    switch (banner.name)
                     {
-                        SetColorForCat(banner.gameObject, HnSbannercolors[catindex]);
-                        catindex++;
-                    }
-
-                    if (banner.name == "ViewSettingsInfoPanel(Clone)")
-                    {
-                        Color color;
-                        if (bannerindex <= 7)
-                            color = HnSbannercolors[0];
-                        else if (bannerindex <= 10)
-                            color = HnSbannercolors[1];
-                        else if (bannerindex <= 15)
-                            color = HnSbannercolors[2];
-                        else
-                            color = HnSbannercolors[3];
-                        SetColorForSettingsBanner(banner.gameObject, color);
-                        bannerindex++;
+                        case "CategoryHeaderMasked LongDivider(Clone)":
+                            SetColorForCat(banner.gameObject, HnSbannercolors[catindex]);
+                            catindex++;
+                            break;
+                        case "ViewSettingsInfoPanel(Clone)":
+                        {
+                            Color color = bannerindex switch
+                            {
+                                <= 7 => HnSbannercolors[0],
+                                <= 10 => HnSbannercolors[1],
+                                <= 15 => HnSbannercolors[2],
+                                _ => HnSbannercolors[3]
+                            };
+                            SetColorForSettingsBanner(banner.gameObject, color);
+                            bannerindex++;
+                            break;
+                        }
                     }
                 }
 
@@ -219,16 +223,15 @@ internal class LobbyViewSettingsPanePatch
         cat.FindChild("HeaderText").gameObject.GetComponent<TextMeshPro>().color = Color.white;
         cat.FindChild("Icon").gameObject.GetComponent<SpriteRenderer>().color = iconcolor;
         obj.ForEachChild((Action<GameObject>)SetColor);
+        return;
 
         void SetColor(GameObject _obj)
         {
-            if (_obj.name == "ViewSettingsInfoPanel(Clone)")
-            {
-                _obj.transform.FindChild("Value").FindChild("Sprite").gameObject.GetComponent<SpriteRenderer>().color =
-                    iconcolor;
-                _obj.transform.FindChild("LabelBackground").gameObject.GetComponent<SpriteRenderer>().color =
-                    bgcolor.ShadeColor(0.38f);
-            }
+            if (_obj.name != "ViewSettingsInfoPanel(Clone)") return;
+            _obj.transform.FindChild("Value").FindChild("Sprite").gameObject.GetComponent<SpriteRenderer>().color =
+                iconcolor;
+            _obj.transform.FindChild("LabelBackground").gameObject.GetComponent<SpriteRenderer>().color =
+                bgcolor.ShadeColor(0.38f);
         }
     }
 

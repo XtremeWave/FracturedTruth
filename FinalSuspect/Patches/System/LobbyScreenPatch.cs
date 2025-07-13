@@ -11,12 +11,12 @@ namespace FinalSuspect.Patches.System;
 public sealed class LobbyJoinBind
 {
     private static int GameId;
-    public static Color Color = ColorHelper.CompleteGreen;
-    public static GameObject LobbyText;
-    public static GameObject LeftShiftSprite;
-    public static GameObject RightShiftSprite;
-    public static GameObject KeyBindBackground;
-    public static GameObject KeyBindBackground_Clone;
+    private static Color Color = ColorHelper.CompleteGreen;
+    private static GameObject LobbyText;
+    private static GameObject LeftShiftSprite;
+    private static GameObject RightShiftSprite;
+    private static GameObject KeyBindBackground;
+    private static GameObject KeyBindBackground_Clone;
 
     [HarmonyPatch(typeof(InnerNetClient), nameof(InnerNetClient.JoinGame))]
     [HarmonyPostfix]
@@ -34,41 +34,39 @@ public sealed class LobbyJoinBind
         if (code2.Length != 6 || !Regex.IsMatch(code2, @"^[a-zA-Z]+$"))
             code2 = "";
 
-        if (!LobbyText)
-        {
-            LobbyText = new GameObject("lobbycode");
-            LobbyText.transform.SetParent(GameObject.Find("RightPanel").transform, false);
-            var comp = LobbyText.AddComponent<TextMeshPro>();
-            comp.fontSize = 2.5f;
-            comp.outlineWidth = -2f;
-            var lastY = code2 == "" ? -0.15f : 0.1f;
-            LobbyText.transform.localPosition = new Vector3(8.3f, lastY, 0);
-            LobbyText.SetActive(true);
-            //LeftShift Sprite
-            LeftShiftSprite = new GameObject("LeftShiftSprite");
-            LeftShiftSprite.transform.SetParent(GameObject.Find("RightPanel").transform, false);
-            var LSsp = LeftShiftSprite.AddComponent<SpriteRenderer>();
-            LSsp.sprite = LoadSprite("KeyLeftShift.png", 115f);
-            if (LobbyText != null) LeftShiftSprite.SetActive(true);
-            //RightSgift Sprite
-            RightShiftSprite = new GameObject("RightShiftSprite");
-            RightShiftSprite.transform.SetParent(GameObject.Find("RightPanel").transform, false);
-            var RSsp = RightShiftSprite.AddComponent<SpriteRenderer>();
-            RSsp.sprite = LoadSprite("KeyRightShift.png", 115f);
-            if (LobbyText != null) RightShiftSprite.SetActive(true);
-            //KeyBindBackGround Belong to Left Shift
-            KeyBindBackground = new GameObject("KeyBindBackground");
-            KeyBindBackground.transform.SetParent(GameObject.Find("RightPanel").transform, false);
-            var KeyBindSp = KeyBindBackground.AddComponent<SpriteRenderer>();
-            KeyBindSp.GetComponent<SpriteRenderer>().sprite = LoadSprite("KeyBackground.png", 100f);
-            if (LeftShiftSprite != null) KeyBindBackground.SetActive(true);
-            //KeyBindBackGround Belong to Right Shift
-            KeyBindBackground_Clone = new GameObject("KeyBindBackground_Clone");
-            KeyBindBackground_Clone.transform.SetParent(GameObject.Find("RightPanel").transform, false);
-            var KeyBindSp_Clone = KeyBindBackground_Clone.AddComponent<SpriteRenderer>();
-            KeyBindSp_Clone.GetComponent<SpriteRenderer>().sprite = LoadSprite("KeyBackground.png", 100f);
-            if (RightShiftSprite != null) KeyBindBackground_Clone.SetActive(true);
-        }
+        if (LobbyText) return;
+        LobbyText = new GameObject("lobbycode");
+        LobbyText.transform.SetParent(GameObject.Find("RightPanel").transform, false);
+        var comp = LobbyText.AddComponent<TextMeshPro>();
+        comp.fontSize = 2.5f;
+        comp.outlineWidth = -2f;
+        var lastY = code2 == "" ? -0.15f : 0.1f;
+        LobbyText.transform.localPosition = new Vector3(8.3f, lastY, 0);
+        LobbyText.SetActive(true);
+        //LeftShift Sprite
+        LeftShiftSprite = new GameObject("LeftShiftSprite");
+        LeftShiftSprite.transform.SetParent(GameObject.Find("RightPanel").transform, false);
+        var LSsp = LeftShiftSprite.AddComponent<SpriteRenderer>();
+        LSsp.sprite = LoadSprite("KeyLeftShift.png", 115f);
+        if (LobbyText != null) LeftShiftSprite.SetActive(true);
+        //RightShift Sprite
+        RightShiftSprite = new GameObject("RightShiftSprite");
+        RightShiftSprite.transform.SetParent(GameObject.Find("RightPanel").transform, false);
+        var RSsp = RightShiftSprite.AddComponent<SpriteRenderer>();
+        RSsp.sprite = LoadSprite("KeyRightShift.png", 115f);
+        if (LobbyText != null) RightShiftSprite.SetActive(true);
+        //KeyBindBackGround Belong to Left Shift
+        KeyBindBackground = new GameObject("KeyBindBackground");
+        KeyBindBackground.transform.SetParent(GameObject.Find("RightPanel").transform, false);
+        var KeyBindSp = KeyBindBackground.AddComponent<SpriteRenderer>();
+        KeyBindSp.GetComponent<SpriteRenderer>().sprite = LoadSprite("KeyBackground.png", 100f);
+        if (LeftShiftSprite != null) KeyBindBackground.SetActive(true);
+        //KeyBindBackGround Belong to Right Shift
+        KeyBindBackground_Clone = new GameObject("KeyBindBackground_Clone");
+        KeyBindBackground_Clone.transform.SetParent(GameObject.Find("RightPanel").transform, false);
+        var KeyBindSp_Clone = KeyBindBackground_Clone.AddComponent<SpriteRenderer>();
+        KeyBindSp_Clone.GetComponent<SpriteRenderer>().sprite = LoadSprite("KeyBackground.png", 100f);
+        if (RightShiftSprite != null) KeyBindBackground_Clone.SetActive(true);
     }
 
     [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.LateUpdate))]

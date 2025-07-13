@@ -48,7 +48,6 @@ internal class CoStartGamePatch
 {
     public static void Postfix()
     {
-        IntroCutsceneOnDestroyPatch.IntroDestroyed = false;
         GameModuleInitializerAttribute.InitializeAll();
         DestroyableSingleton<LobbyInfoPane>.Instance.gameObject.GetComponent<AspectPosition>().DistanceFromEdge +=
             Vector3.forward * -30;
@@ -79,11 +78,8 @@ internal class CoStartGameHPatch
 [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
 public static class IntroCutsceneOnDestroyPatch
 {
-    public static bool IntroDestroyed;
-
     public static void Postfix()
     {
-        IntroDestroyed = true;
         Info("OnDestroy", "IntroCutscene");
     }
 }

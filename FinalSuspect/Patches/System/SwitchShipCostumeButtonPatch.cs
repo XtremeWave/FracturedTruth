@@ -23,18 +23,16 @@ public class SwitchShipCostumeButtonPatch
             return;
         }
 
-        if (!SwitchShipCostumeButton)
-        {
-            var template = __instance.EmergencyButton.gameObject;
-            SwitchShipCostumeButton = Object.Instantiate(template, template.transform.parent);
-            SwitchShipCostumeButton.name = "Switch Ship Costume Button";
-            SwitchShipCostumeButton.transform.localScale = new Vector3(0.65f, 0.65f, 1f);
-            SwitchShipCostumeButton.transform.localPosition = new Vector3(-9.57f, -5.36f, -10f);
-            var console = SwitchShipCostumeButton.GetComponent<SystemConsole>();
-            console.Image.color = new Color32(80, 255, 255, byte.MaxValue);
-            console.usableDistance /= 2;
-            console.name = "Switch Ship Costume Console";
-        }
+        if (SwitchShipCostumeButton) return;
+        var template = __instance.EmergencyButton.gameObject;
+        SwitchShipCostumeButton = Object.Instantiate(template, template.transform.parent);
+        SwitchShipCostumeButton.name = "Switch Ship Costume Button";
+        SwitchShipCostumeButton.transform.localScale = new Vector3(0.65f, 0.65f, 1f);
+        SwitchShipCostumeButton.transform.localPosition = new Vector3(-9.57f, -5.36f, -10f);
+        var console = SwitchShipCostumeButton.GetComponent<SystemConsole>();
+        console.Image.color = new Color32(80, 255, 255, byte.MaxValue);
+        console.usableDistance /= 2;
+        console.name = "Switch Ship Costume Console";
     }
 
     [HarmonyPatch(typeof(SystemConsole), nameof(SystemConsole.Use))]

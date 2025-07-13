@@ -48,16 +48,12 @@ public class LoadingBarManagerPatch
         __instance.loadingBar.crewmate.gameObject.SetActive(false);
         try
         {
-            if (IsNotJoined)
-            {
-                on = false;
-                return;
-            }
+            if (!IsNotJoined) return;
+            on = false;
         }
         catch
         {
             on = false;
-            return;
         }
     }
 }
