@@ -1,5 +1,6 @@
 ﻿using System;
 using FinalSuspect.Attributes;
+using FinalSuspect.Modules.Core.Game;
 using UnityEngine;
 
 namespace FinalSuspect.Modules.Features;

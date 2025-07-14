@@ -540,16 +540,6 @@ public static class Utils
         button.inactiveTextColor = inActiveTextColor;
     }
 
-    public static void MarkAsCheater(this PlayerControl pc)
-    {
-        pc.GetXtremeData().CheatData.MarkAsCheater();
-    }
-
-    public static void MarkAsHacker(this PlayerControl pc)
-    {
-        pc.GetXtremeData().CheatData.MarkAsHacker();
-    }
-
     public static PlayerCheatData GetCheatDataById(byte id)
     {
         try
@@ -562,15 +552,34 @@ public static class Utils
         }
     }
 
+    public static long GetCurrentTimestamp()
+    {
+        return DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+    }
+
+    #region XtremeGameData
+
+    public static bool ModClient(byte id)
+    {
+        return GetPlayerVersion(id, out _);
+    }
+
+    public static bool OtherModClient(byte id)
+    {
+        return GetPlayerVersion(id, out var ver) && Main.ForkId != ver.forkId;
+    }
+
+    public static bool IsFinalSuspect(byte id)
+    {
+        return XtremeGameData.PlayerVersion.playerVersion.TryGetValue(id, out var ver) && Main.ForkId == ver.forkId;
+    }
+
     public static bool GetPlayerVersion(byte id, out XtremeGameData.PlayerVersion ver)
     {
         return XtremeGameData.PlayerVersion.playerVersion.TryGetValue(id, out ver) && ver != null;
     }
 
-    public static long GetCurrentTimestamp()
-    {
-        return DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-    }
+    #endregion
 }
 
 public enum KickLevel

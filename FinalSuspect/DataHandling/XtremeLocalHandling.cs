@@ -14,19 +14,7 @@ public static class XtremeLocalHandling
     private static readonly int OutlineColor = Shader.PropertyToID("_OutlineColor");
     private static readonly int AddColor = Shader.PropertyToID("_AddColor");
 
-    private static string CheckAndGetNameWithDetails(
-        this PlayerControl player,
-        out Color topcolor,
-        out Color bottomcolor,
-        out string toptext,
-        out string bottomtext,
-        bool topswap = false)
-    {
-        return CheckAndGetNameWithDetails(player.PlayerId, out topcolor, out bottomcolor, out toptext, out bottomtext,
-            topswap);
-    }
-
-    private static string CheckAndGetNameWithDetails(
+    public static string CheckAndGetNameWithDetails(
         byte id,
         out Color topcolor,
         out Color bottomcolor,
@@ -97,67 +85,6 @@ public static class XtremeLocalHandling
         bottomcolor = ColorHelper.DownloadYellow;
     }
 
-    private static string GetPlatform(this PlayerControl player)
-    {
-        try
-        {
-            var color = "";
-            var name = "";
-            string text;
-            switch (player.GetClient().PlatformData.Platform)
-            {
-                case Platforms.StandaloneEpicPC:
-                    color = "#905CDA";
-                    name = "Epic";
-                    break;
-                case Platforms.StandaloneSteamPC:
-                    color = "#4391CD";
-                    name = "Steam";
-                    break;
-                case Platforms.StandaloneMac:
-                    color = "#e3e3e3";
-                    name = "Mac.";
-                    break;
-                case Platforms.StandaloneWin10:
-                    color = "#0078d4";
-                    name = GetString("Platform.MicrosoftStore");
-                    break;
-                case Platforms.StandaloneItch:
-                    color = "#E35F5F";
-                    name = "Itch";
-                    break;
-                case Platforms.IPhone:
-                    color = "#e3e3e3";
-                    name = GetString("Platform.IPhone");
-                    break;
-                case Platforms.Android:
-                    color = "#1EA21A";
-                    name = GetString("Platform.Android");
-                    break;
-                case Platforms.Switch:
-                    name = "<color=#00B2FF>Nintendo</color><color=#ff0000>Switch</color>";
-                    break;
-                case Platforms.Xbox:
-                    color = "#07ff00";
-                    name = "Xbox";
-                    break;
-                case Platforms.Playstation:
-                    color = "#0014b4";
-                    name = "PlayStation";
-                    break;
-            }
-
-            if (color != "" && name != "")
-                text = $"<color={color}>{name}</color>";
-            else
-                text = name;
-            return text;
-        }
-        catch
-        {
-            return "";
-        }
-    }
 
     private static void GetGameText(this XtremePlayerData data, ref Color color, ref string roleText, bool topswap)
     {

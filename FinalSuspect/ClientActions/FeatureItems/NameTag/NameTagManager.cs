@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using AmongUs.Data;
 using FinalSuspect.Helpers;
+using FinalSuspect.Modules.Core.Game;
 using FinalSuspect.Modules.Resources;
 using Il2CppSystem.Linq;
 using Newtonsoft.Json.Linq;

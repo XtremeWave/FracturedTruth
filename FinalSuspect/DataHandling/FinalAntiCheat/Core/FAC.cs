@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using FinalSuspect.DataHandling.FinalAntiCheat.Interfaces;
+using FinalSuspect.Modules.Core.Game;
 using FinalSuspect.Patches.Game_Vanilla;
 using Hazel;
 

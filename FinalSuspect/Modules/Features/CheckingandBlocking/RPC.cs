@@ -153,12 +153,12 @@ internal class RPCHandlerPatch
     private static void HandleSendChatRpc(PlayerControl player, MessageReader reader)
     {
         var text = reader.ReadString();
-        Info($"{player.GetNameWithRole().RemoveHtmlTags()}:{text.RemoveHtmlTags()}", "ReceiveChat");
+        Info($"{player.GetNameWithRole()}:{text.RemoveHtmlTags()}", "ReceiveChat");
     }
 
     private static void HandleSendQuickChatRpc(PlayerControl player)
     {
-        Info($"{player.GetNameWithRole().RemoveHtmlTags()}:Some message from quick chat", "ReceiveChat");
+        Info($"{player.GetNameWithRole()}:Some message from quick chat", "ReceiveChat");
     }
 
     private static void HandleStartMeetingRpc(PlayerControl player, MessageReader reader)

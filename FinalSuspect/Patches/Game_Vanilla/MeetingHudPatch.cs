@@ -1,4 +1,5 @@
 using AmongUs.GameOptions;
+using FinalSuspect.Modules.Core.Game;
 using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Patches.Game_Vanilla;

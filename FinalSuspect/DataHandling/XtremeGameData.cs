@@ -7,40 +7,6 @@ namespace FinalSuspect.DataHandling;
 
 public static partial class XtremeGameData
 {
-    public static bool OtherModClient(this PlayerControl player)
-    {
-        return OtherModClient(player.PlayerId) ||
-               (player.Data.OwnerId == -2
-                && !IsFinalSuspect(player.PlayerId)
-                && !IsFreePlay
-                && !IsLocalGame);
-    }
-
-    public static bool OtherModClient(byte id)
-    {
-        return GetPlayerVersion(id, out var ver) && Main.ForkId != ver.forkId;
-    }
-
-    public static bool ModClient(this PlayerControl player)
-    {
-        return ModClient(player.PlayerId);
-    }
-
-    public static bool ModClient(byte id)
-    {
-        return GetPlayerVersion(id, out _);
-    }
-
-    public static bool IsFinalSuspect(this PlayerControl pc)
-    {
-        return IsFinalSuspect(pc.PlayerId);
-    }
-
-    public static bool IsFinalSuspect(byte id)
-    {
-        return PlayerVersion.playerVersion.TryGetValue(id, out var ver) && Main.ForkId == ver.forkId;
-    }
-
     public static class GameStates
     {
         private static bool InGame { get; set; }

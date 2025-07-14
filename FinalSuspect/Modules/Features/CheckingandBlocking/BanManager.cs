@@ -18,23 +18,6 @@ public static class BanManager
         RegexOptions.Compiled
     );
 
-    public static string GetHashedPuid(this PlayerControl player)
-    {
-        return player.GetClient().GetHashedPuid();
-    }
-
-    public static string GetHashedPuid(this ClientData player)
-    {
-        if (player == null) return null;
-        var puid = player.ProductUserId;
-        if (string.IsNullOrEmpty(puid)) return puid;
-
-        using var sha256 = SHA256.Create();
-        var sha256Hash = BitConverter.ToString(sha256.ComputeHash(Encoding.UTF8.GetBytes(puid))).Replace("-", "")
-            .ToLower();
-        return string.Concat(sha256Hash.AsSpan(0, 5), sha256Hash.AsSpan(sha256Hash.Length - 4));
-    }
-
     public static void AddBanPlayer(ClientData player)
     {
         if (!AmongUsClient.Instance.AmHost || player == null) return;
@@ -124,17 +107,7 @@ public static class BanManager
         else if (player.IsFACPlayer()) KickPlayer(player.Id, true, "BanedByFACList", KickLevel.CheatDetected);
     }
 
-    public static bool IsBannedPlayer(this PlayerControl player)
-    {
-        return player?.GetClient()?.IsBannedPlayer() ?? false;
-    }
-
-    public static bool IsBannedPlayer(this ClientData player)
-    {
-        return CheckBanStatus(player?.FriendCode, player?.GetHashedPuid());
-    }
-
-    private static bool CheckBanStatus(string friendCode, string hashedPuid)
+    public static bool CheckBanStatus(string friendCode, string hashedPuid)
     {
         try
         {
@@ -153,11 +126,6 @@ public static class BanManager
         }
 
         return false;
-    }
-
-    public static bool IsFACPlayer(this PlayerControl player)
-    {
-        return player?.GetClient()?.IsFACPlayer() ?? false;
     }
 
     public static bool IsFACPlayer(this ClientData player)

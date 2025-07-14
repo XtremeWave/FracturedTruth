@@ -20,7 +20,7 @@ internal static class DllChecker
         {
             var fileName = Path.GetFileName(path);
 
-            if (fileName != "FinalSuspect.dll")
+            if (fileName is not "FinalSuspect.dll" and not "PolarNight.dll")
             {
                 Error($"检测到非法/模组文件: {fileName}！游戏将被强制终止。", "FAC");
                 Environment.Exit(1);
@@ -46,6 +46,8 @@ public static class DisableOtherPlugins
 {
     public static bool Prefix([HarmonyArgument(0)] PluginInfo pluginInfo, [HarmonyArgument(1)] Assembly pluginAssembly)
     {
-        return pluginInfo.Metadata.GUID == "com.sinai.unityexplorer";
+        return pluginInfo.Metadata.GUID
+            is "com.sinai.unityexplorer"
+            or "cn.slok.polarnight";
     }
 }
