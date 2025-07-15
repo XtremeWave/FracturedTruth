@@ -1,6 +1,8 @@
 using AmongUs.Data;
+using FinalSuspect.DataHandling.XtremeGameData;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game;
+using FinalSuspect.Modules.Core.Game.PlayerControlExtension;
 using FinalSuspect.Modules.Features.CheckingandBlocking;
 using FinalSuspect.Patches.Game_Vanilla;
 using InnerNet;
@@ -15,9 +17,8 @@ public class OnGameJoinedPatch
     public static void Postfix(AmongUsClient __instance)
     {
         HudManagerPatch.Init();
-
         Info($"{__instance.GameId} 加入房间", "OnGameJoined");
-        XtremeGameData.PlayerVersion.playerVersion = new Dictionary<byte, XtremeGameData.PlayerVersion>();
+        XtremeGameData.PlayerVersion.playerVersion = new Dictionary<int, XtremeGameData.PlayerVersion>();
         SoundManager.Instance.ChangeAmbienceVolume(DataManager.Settings.Audio.AmbienceVolume);
         XtremePlayerData.InitializeAll();
         UpdateGameState_IsInGame(false);
@@ -26,7 +27,7 @@ public class OnGameJoinedPatch
         ServerAddManager.SetServerName();
         JoinedCompleted = false;
         Init_FAC();
-
+        _ = new LateTask(() => { _ = RPC.RpcVersionCheck(); }, 0.5f, "SyncJoined");
         _ = new LateTask(() => { JoinedCompleted = true; }, 4f, "SyncJoined");
 
         if (AmongUsClient.Instance.AmHost) GameStartManagerPatch.GameStartManagerUpdatePatch.exitTimer = -1;
@@ -154,7 +155,7 @@ internal class OnPlayerLeftPatch
 
             Dispose(data.Character?.PlayerId ?? 255);
 
-            XtremeGameData.PlayerVersion.playerVersion.Remove(data.Character?.PlayerId ?? 255);
+            XtremeGameData.PlayerVersion.playerVersion.Remove(data.Character?.GetClientId() ?? 0);
             ClientsProcessed.Remove(data.Id);
         }
         catch

@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using BepInEx;
 using BepInEx.Unity.IL2CPP;
+using UnityEngine;
 
 namespace FinalSuspect.DataHandling.FinalAntiCheat.Core;
 
@@ -16,27 +17,24 @@ internal static class DllChecker
         // 获取游戏根目录
         var AmongUsPath = Environment.CurrentDirectory;
         // 针对基于BepInEx注入检测
-        foreach (var path in Directory.EnumerateFiles(DirectoryPath, "*.*"))
-        {
-            var fileName = Path.GetFileName(path);
-
-            if (fileName is not "FinalSuspect.dll" and not "PolarNight.dll")
+        if (DirectoryPath != null)
+            foreach (var path in Directory.EnumerateFiles(DirectoryPath, "*.*"))
             {
+                var fileName = Path.GetFileName(path);
+
+                if (fileName is "FinalSuspect.dll" or "PolarNight.dll") continue;
                 Error($"检测到非法/模组文件: {fileName}！游戏将被强制终止。", "FAC");
-                Environment.Exit(1);
+                Application.Quit(1);
             }
-        }
 
         // 针对基于version注入检测
         foreach (var fileName in SuspiciousFiles)
         {
             var fullPath = Path.Combine(AmongUsPath, fileName);
 
-            if (File.Exists(fullPath))
-            {
-                Error($"检测到非法文件: {fileName}！游戏将被强制终止。", "FAC");
-                Environment.Exit(1);
-            }
+            if (!File.Exists(fullPath)) continue;
+            Error($"检测到非法文件: {fileName}！游戏将被强制终止。", "FAC");
+            Application.Quit(1);
         }
     }
 }

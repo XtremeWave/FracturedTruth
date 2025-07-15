@@ -3,13 +3,13 @@ using System.IO;
 using System.Text;
 using AmongUs.Data;
 using FinalSuspect.Helpers;
-using FinalSuspect.Modules.Core.Game;
+using FinalSuspect.Modules.Core.Game.PlayerControlExtension;
 using FinalSuspect.Modules.Resources;
 using Il2CppSystem.Linq;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 
-namespace FinalSuspect.Modules.ClientActions.FeatureItems.NameTag;
+namespace FinalSuspect.ClientActions.FeatureItems.NameTag;
 
 public static class NameTagManager
 {

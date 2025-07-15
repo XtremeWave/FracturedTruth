@@ -42,7 +42,6 @@ public class SimpleButton
         HoverSprite = Button.activeSprites.GetComponent<SpriteRenderer>();
         buttonCollider = Button.GetComponent<BoxCollider2D>();
 
-        // ラベルをセンタリング
         var container = Label.transform.parent;
         Object.Destroy(Label.GetComponent<AspectPosition>());
         container.SetLocalX(0f);

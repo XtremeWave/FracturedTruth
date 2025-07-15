@@ -11,6 +11,7 @@ using FinalSuspect.DataHandling.FinalAntiCheat.Core;
 using FinalSuspect.Helpers;
 using FinalSuspect.Internal;
 using FinalSuspect.Modules.Core.Game;
+using FinalSuspect.Modules.Core.Game.PlayerControlExtension;
 using FinalSuspect.Modules.Random;
 using Il2CppInterop.Runtime.Injection;
 using UnityEngine;
@@ -76,7 +77,7 @@ public class Main : BasePlugin
 
     public static string HostNickName = "";
     public static bool IsInitialRelease = DateTime.Now.Month == 8 && DateTime.Now.Day is 14;
-    public static bool IsAprilFools = DateTime.Now.Month == 4 && DateTime.Now.Day is 1;
+    public static readonly bool IsAprilFools = DateTime.Now.Month == 4 && DateTime.Now.Day is 1;
 
     public static Main Instance;
 

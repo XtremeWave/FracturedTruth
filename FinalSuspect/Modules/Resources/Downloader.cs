@@ -11,9 +11,6 @@ public class HttpClientDownloadWithProgress(string downloadUrl, string destinati
     public delegate void ProgressChangedHandler(long? totalFileSize, long totalBytesDownloaded,
         double? progressPercentage);
 
-    private readonly string _destinationFilePath = destinationFilePath;
-    private readonly string _downloadUrl = downloadUrl;
-
     private HttpClient _httpClient;
 
     public void Dispose()
@@ -27,7 +24,7 @@ public class HttpClientDownloadWithProgress(string downloadUrl, string destinati
     {
         _httpClient = new HttpClient { Timeout = TimeSpan.FromDays(1) };
 
-        using var response = await _httpClient.GetAsync(_downloadUrl, HttpCompletionOption.ResponseHeadersRead);
+        using var response = await _httpClient.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead);
         await DownloadFileFromHttpResponseMessage(response);
     }
 
@@ -37,7 +34,7 @@ public class HttpClientDownloadWithProgress(string downloadUrl, string destinati
 
         var totalBytes = response.Content.Headers.ContentLength;
 
-        using var contentStream = await response.Content.ReadAsStreamAsync();
+        await using var contentStream = await response.Content.ReadAsStreamAsync();
         await ProcessContentStream(totalBytes, contentStream);
     }
 
@@ -48,7 +45,8 @@ public class HttpClientDownloadWithProgress(string downloadUrl, string destinati
         var buffer = new byte[8192];
         var isMoreToRead = true;
 
-        using var fileStream = new FileStream(_destinationFilePath, FileMode.Create, FileAccess.Write, FileShare.None,
+        await using var fileStream = new FileStream(destinationFilePath, FileMode.Create, FileAccess.Write,
+            FileShare.None,
             8192, true);
         do
         {

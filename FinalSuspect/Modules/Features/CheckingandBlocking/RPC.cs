@@ -1,8 +1,10 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using FinalSuspect.DataHandling.XtremeGameData;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game;
+using FinalSuspect.Modules.Core.Game.PlayerControlExtension;
 using FinalSuspect.Patches.Game_Vanilla;
 using FinalSuspect.Patches.System;
 using Hazel;
@@ -62,7 +64,7 @@ internal class RPCHandlerPatch
         return true;
     }
 
-    public static PlayerControl GetPlayerFromInstance(InnerNetObject instance, MessageReader reader)
+    private static PlayerControl GetPlayerFromInstance(InnerNetObject instance, MessageReader reader)
     {
         var player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => instance.OwnerId == x.Player.OwnerId)?.Player;
         if (player) return player;
@@ -174,8 +176,8 @@ internal class RPCHandlerPatch
         var netId = __instance.NetId;
         var player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => x.NetId == netId)?.Player;
         if (!player) return;
-        if (XtremeGameData.PlayerVersion.playerVersion.ContainsKey(player.PlayerId)) return;
-
+        if (XtremeGameData.PlayerVersion.playerVersion.ContainsKey(player.GetClientId())) return;
+        Info($"Create Player version for {player.GetRealName()}", "Rpc Version Check");
         var rpcType = (RpcCalls)callId;
         switch (rpcType)
         {
@@ -186,13 +188,15 @@ internal class RPCHandlerPatch
                     var tag = reader.ReadString();
                     var forkId = reader.ReadString();
 
+                    var id = player.GetClientId();
                     _ = RPC.RpcVersionCheck();
-                    XtremeGameData.PlayerVersion.playerVersion[player.PlayerId] =
+
+                    XtremeGameData.PlayerVersion.playerVersion[id] =
                         new XtremeGameData.PlayerVersion(version, tag, forkId);
 
                     if (Main.VersionCheat.Value && AmongUsClient.Instance.AmHost)
-                        XtremeGameData.PlayerVersion.playerVersion[player.PlayerId] =
-                            XtremeGameData.PlayerVersion.playerVersion[0];
+                        XtremeGameData.PlayerVersion.playerVersion[id] =
+                            XtremeGameData.PlayerVersion.playerVersion[id];
 
                     // Kick Unmached Player Start
                     /*if (AmongUsClient.Instance.AmHost && tag != $"{Main.GitCommit}({Main.GitBranch})")
@@ -212,7 +216,7 @@ internal class RPCHandlerPatch
                 }
                 catch
                 {
-                    XtremeGameData.PlayerVersion.playerVersion[player.PlayerId] = null;
+                    XtremeGameData.PlayerVersion.playerVersion[player.GetClientId()] = null;
                 }
 
                 break;
@@ -238,10 +242,7 @@ internal static class RPC
                 await Task.Delay(500, ct);
             }
 
-            if (PlayerControl.LocalPlayer == null ||
-                AmongUsClient.Instance == null)
-                return;
-
+            if (PlayerControl.LocalPlayer == null || AmongUsClient.Instance == null) return;
             if (!Main.VersionCheat.Value)
             {
                 var writer = AmongUsClient.Instance.StartRpcImmediately(
@@ -255,9 +256,9 @@ internal static class RPC
             }
 
             if (XtremeGameData.PlayerVersion.playerVersion != null)
-                XtremeGameData.PlayerVersion.playerVersion[PlayerControl.LocalPlayer.PlayerId] =
+                XtremeGameData.PlayerVersion.playerVersion[PlayerControl.LocalPlayer.GetClientId()] =
                     new XtremeGameData.PlayerVersion(
-                        Main.PluginVersion,
+                        Version.Parse(Main.PluginVersion),
                         $"{Main.GitCommit}({Main.GitBranch})",
                         Main.ForkId
                     );

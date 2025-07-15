@@ -3,7 +3,7 @@ using BepInEx.Configuration;
 using FinalSuspect.Helpers;
 using UnityEngine;
 
-namespace FinalSuspect.Modules.ClientActions;
+namespace FinalSuspect.ClientActions;
 
 public sealed class ClientOptionItem<T> : ClientActionItem
 {
@@ -19,7 +19,7 @@ public sealed class ClientOptionItem<T> : ClientActionItem
         UpdateToggle();
     }
 
-    public ConfigEntry<T> Config { get; }
+    private ConfigEntry<T> Config { get; }
 
     /// <summary>
     ///     Modオプション画面にconfigのトグルを追加します
@@ -66,18 +66,20 @@ public sealed class ClientOptionItem<T> : ClientActionItem
     {
         if (!ToggleButton) return;
 
-        var color = ColorHelper.ClientOptionColor_Disable;
+        var color = ColorHelper.FinalSuspectClientOptionColor_Disable;
         switch (Config.Value)
         {
             case bool value:
-                color = value ? ColorHelper.ClientOptionColor : ColorHelper.ClientOptionColor_Disable;
+                color = value
+                    ? ColorHelper.FinalSuspectClientOptionColor
+                    : ColorHelper.FinalSuspectClientOptionColor_Disable;
                 break;
             case not null when typeof(T).IsEnum:
                 var allValues = (T[])Enum.GetValues(typeof(T));
                 if (allValues.Length == 0) break;
                 var currentIndex = Array.IndexOf(allValues, Config.Value);
 
-                var baseColor = ColorHelper.ClientOptionColor;
+                var baseColor = ColorHelper.FinalSuspectClientOptionColor;
                 var factor = allValues.Length > 1
                     ? currentIndex / (float)(allValues.Length - 1)
                     : 0f;
@@ -99,88 +101,3 @@ public sealed class ClientOptionItem<T> : ClientActionItem
         ToggleButton.Rollover?.ChangeOutColor(color);
     }
 }
-
-/*public sealed class ClientOptionItem_String : ClientActionItem
-{
-    public ConfigEntry<string> Config { get; private set; }
-    public string Name { get; private set; }
-
-    private ClientOptionItem_String(
-        string name,
-        string showingName,
-        ConfigEntry<string> config,
-        string[] selections,
-        OptionsMenuBehaviour optionsMenuBehaviour)
-        : base(
-            showingName,
-            optionsMenuBehaviour)
-    {
-        Name = name;
-        Config = config;
-        UpdateToggle(selections);
-    }
-
-    /// <summary>
-    /// Modオプション画面にconfigのトグルを追加します
-    /// </summary>
-    /// <param name="name">ボタンラベルの翻訳キーとボタンのオブジェクト名</param>
-    /// <param name="showingName"></param>
-    /// <param name="config">対応するconfig</param>
-    /// <param name="optionsMenuBehaviour">OptionsMenuBehaviourのインスタンス</param>
-    /// <param name="selections"></param>
-    /// <param name="additionalOnClickAction">クリック時に追加で発火するアクション．configが変更されたあとに呼ばれる</param>
-    /// <returns>作成したアイテム</returns>
-    public static ClientOptionItem_String Create(
-        string name,
-        string showingName,
-        ConfigEntry<string> config,
-        OptionsMenuBehaviour optionsMenuBehaviour,
-        string[] selections,
-        Action additionalOnClickAction = null)
-    {
-        var item = new ClientOptionItem_String(name, showingName, config, selections, optionsMenuBehaviour);
-        item.OnClickAction = () =>
-        {
-            var currentIndex = Array.IndexOf(selections, config.Value);
-
-            if (currentIndex == -1)
-            {
-                Error("wrong index", "ClientOptionItem_String");
-                return;
-            }
-
-            var nextIndex = (currentIndex + 1) % selections.Length;
-            showingName =
-                config.Value = selections[nextIndex];
-            item.UpdateToggle(selections);
-            item.UpdateName(showingName);
-            additionalOnClickAction?.Invoke();
-        };
-        return item;
-    }
-
-    public void UpdateToggle(string[] selections)
-    {
-        if (!ToggleButton) return;
-
-        var color = Config.Value == selections[0] ? Palette.Purple : Color.magenta;
-        if (Config.Value == "AprilFoolsMode.HorseMode")
-            color = Color.gray;
-        ToggleButton.Background.color = color;
-        ToggleButton.Rollover?.ChangeOutColor(color);
-    }
-
-    public void UpdateName(string name = "")
-    {
-
-        if (!ToggleButton) return;
-        if (name == "")
-        {
-            ToggleButton.Text.text = GetString(Config.Value);
-            return;
-        }
-        ToggleButton.Text.text = GetString(name);
-        if (Config.Value == "AprilFoolsMode.HorseMode")
-            ToggleButton.Text.text += $"({GetString("Broken")})";
-    }
-}*/

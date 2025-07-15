@@ -1,6 +1,7 @@
 using System.Text;
+using FinalSuspect.ClientActions;
+using FinalSuspect.ClientActions.FeatureItems.MainMenuStyle;
 using FinalSuspect.Helpers;
-using FinalSuspect.Modules.ClientActions.FeatureItems.MainMenuStyle;
 using FinalSuspect.Modules.Resources;
 using FinalSuspect.Patches.Game_Vanilla;
 using FinalSuspect.Templates;
@@ -91,12 +92,14 @@ public class VersionShowerStartPatch
     {
         TMPTemplate.SetBase(__instance.text);
 
-        Main.CredentialsText = $"\r\n<size=120%>" +
-                               $"<color={ColorHelper.TeamColorHex}>==</color> <color={ColorHelper.ModColorHex}>{Main.ModName}</color> <color={ColorHelper.TeamColorHex}>==</color>"
-                               + "</size>";
+        Main.CredentialsText =
+            $"\r\n<size=120%>" +
+            $"<color={ColorHelper.TeamColorHex}>==</color> " +
+            $"<color={ColorHelper.ModColorHex}>{Main.ModName}</color> " +
+            $"<color={ColorHelper.TeamColorHex}>==</color>"
+            + "</size>";
         Main.CredentialsText += "\r\n <color=#fffcbe> By </color><color=#cdfffd>XtremeWave</color></size>";
         Main.CredentialsText += $"\r\n<color=#C8FF78>v{Main.DisplayedVersion}</color>";
-
 
 #if !DEBUG
         var additionalCredentials = GetString("TextBelowVersionText");
@@ -108,6 +111,18 @@ public class VersionShowerStartPatch
 #if !RELEASE
         Main.CredentialsText += $"\r\n<color={ColorHelper.ModColorHex}>{Main.GitBranch}</color> - {Main.GitCommit}";
 #endif
+
+        if (Main.IsAprilFools)
+        {
+            Main.CredentialsText =
+                $"\r\n<size=120%>" +
+                $"<color=#fffcbe>==</color> " +
+                $"<color=#C791F5>Feline Susspekt</color> " +
+                $"<color=#fffcbe>==</color>"
+                + "</size>";
+            Main.CredentialsText += "\r\n <color=#cdffdd> By </color><color=#fffcbe>XtremeWives</color></size>";
+            Main.CredentialsText += "\r\n <color=#ff0000>4.1.4.1.4.1.4.1.4.1.4.1.Never Gonna Give You Up</color>";
+        }
 
         ErrorText.Create(__instance.text);
         if (Main.hasArgumentException && ErrorText.Instance)
@@ -130,7 +145,14 @@ public class VersionShowerStartPatch
                 $"<color={ColorHelper.ModColorHex}>{Main.GitBranch}</color> - {Main.GitCommit}\n" +
                 $"<color={ColorHelper.ModColorHex}>FS</color> - <color=#C8FF78>v{Main.DisplayedVersion}</color>";
 #endif
+
             credentialsText += versionText;
+
+            if (Main.IsAprilFools)
+            {
+                credentialsText =
+                    "<color=#fffcbe>XtremeWives © 1987</color>\n<color=#ff0000>4.1.4.1.4.1.4.1.4.1.4.1.Never Gonna Give You Up</color>";
+            }
 
             CreditTextCredential = Object.Instantiate(__instance.text);
             CreditTextCredential.name = "FinalSuspect CreditText";
@@ -139,7 +161,7 @@ public class VersionShowerStartPatch
             CreditTextCredential.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
 
             CreditTextCredential.enabled = GameObject.Find("FinalSuspect Background");
-            CreditTextCredential.SetOutlineColor(ColorHelper.ShadeColor(ColorHelper.ModColor, 0.75f));
+            CreditTextCredential.SetOutlineColor(ColorHelper.ShadeColor(ColorHelper.FinalSuspectColor, 0.75f));
             CreditTextCredential.SetOutlineThickness(0.20f);
             CreditTextCredential.fontStyle = FontStyles.Bold;
             var ap_credit = CreditTextCredential.gameObject.AddComponent<AspectPosition>();

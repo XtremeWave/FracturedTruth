@@ -28,7 +28,7 @@ public class Xorshift(uint seed) : IRandom
         return Next(0, maxValue);
     }
 
-    public uint Next()
+    private uint Next()
     {
         num ^= num << 13;
         num ^= num >> 17;

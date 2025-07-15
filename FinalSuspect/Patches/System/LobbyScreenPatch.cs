@@ -31,7 +31,7 @@ public sealed class LobbyJoinBind
     {
         var code2 = GUIUtility.systemCopyBuffer;
 
-        if (code2.Length != 6 || !Regex.IsMatch(code2, @"^[a-zA-Z]+$"))
+        if (code2.Length != 6 || !Regex.IsMatch(code2, "^[a-zA-Z]+$"))
             code2 = "";
 
         if (LobbyText) return;
@@ -75,7 +75,7 @@ public sealed class LobbyJoinBind
     {
         var code2 = GUIUtility.systemCopyBuffer;
 
-        if (code2.Length != 6 || !Regex.IsMatch(code2, @"^[a-zA-Z]+$"))
+        if (code2.Length != 6 || !Regex.IsMatch(code2, "^[a-zA-Z]+$"))
             code2 = "";
         var code2Disp = DataManager.Settings.Gameplay.StreamerMode ? new string('*', code2.Length) : code2.ToUpper();
         if (GameId != 0 && Input.GetKeyDown(KeyCode.LeftShift))

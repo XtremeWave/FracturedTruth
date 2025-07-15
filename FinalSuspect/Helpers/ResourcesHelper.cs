@@ -45,7 +45,7 @@ public static class ResourcesHelper
         "YamlDotNet.xml"
     ];
 
-    public static List<string> RemoteModNewsList =
+    public static readonly List<string> RemoteModNewsList =
     [
         "FeaturesIntroduction.v1.0.txt",
         "FS.v1.0_20250129.txt",
@@ -53,7 +53,7 @@ public static class ResourcesHelper
         "FS.v1.1_20250216.txt",
         "FS.v1.1_20250412.txt",
         "FS.v1.1_20250501.txt",
-        "FS.v1.1_20250510.txt"
+        "FS.v1.2_20250815.txt"
     ];
 
     #endregion

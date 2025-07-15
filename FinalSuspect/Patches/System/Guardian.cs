@@ -1,6 +1,7 @@
 using System;
 using AmongUs.InnerNet.GameDataMessages;
 using FinalSuspect.Modules.Core.Game;
+using FinalSuspect.Modules.Core.Game.PlayerControlExtension;
 using Hazel;
 using Hazel.Udp;
 using InnerNet;

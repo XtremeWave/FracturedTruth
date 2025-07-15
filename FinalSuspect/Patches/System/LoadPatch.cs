@@ -70,24 +70,13 @@ public static class LoadPatch
 
         private static void CreateLogoComponents()
         {
-            _teamLogo = CreateSpriteRenderer("Team_Logo", "TeamLogo.png", 120f, new Vector3(0, 0f, -5f));
-            _modLogo = CreateSpriteRenderer("Mod_Logo", "FinalSuspect-Logo.png", 150f, new Vector3(0, 0.3f, -5f));
-            _modLogoBlurred = CreateSpriteRenderer("Mod_Logo_Blurred", "FinalSuspect-Logo-Blurred.png", 150f,
+            _teamLogo = ObjectHelper.CreateSpriteRenderer("Team_Logo", "TeamLogo.png", 120f, new Vector3(0, 0f, -5f));
+            _modLogo = ObjectHelper.CreateSpriteRenderer("Mod_Logo", "FinalSuspect-Logo.png", 150f,
                 new Vector3(0, 0.3f, -5f));
-            _glow = CreateSpriteRenderer("Glow", "FinalSuspect-Logo.png", 1f, new Vector3(0, 0.3f, -5f));
-        }
-
-        public static SpriteRenderer CreateSpriteRenderer(string name, string spriteName, float pixelsPerUnit,
-            Vector3 position, Transform parent = null)
-        {
-            var renderer = ObjectHelper.CreateObject<SpriteRenderer>(name, null, position);
-            if (parent != null)
-                renderer.gameObject.transform.SetParent(parent);
-            renderer.gameObject.transform.localPosition = position;
-            renderer.sprite = LoadSprite(spriteName, pixelsPerUnit);
-            renderer.color = Color.clear;
-
-            return renderer;
+            _modLogoBlurred = ObjectHelper.CreateSpriteRenderer("Mod_Logo_Blurred", "FinalSuspect-Logo-Blurred.png",
+                150f,
+                new Vector3(0, 0.3f, -5f));
+            _glow = ObjectHelper.CreateSpriteRenderer("Glow", "FinalSuspect-Logo.png", 1f, new Vector3(0, 0.3f, -5f));
         }
 
         #endregion

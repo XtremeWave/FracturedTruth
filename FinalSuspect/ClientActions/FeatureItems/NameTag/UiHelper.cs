@@ -1,11 +1,11 @@
 using System;
-using FinalSuspect.Modules.ClientActions.FeatureItems.NameTag;
+using FinalSuspect.Helpers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace FinalSuspect.Helpers;
+namespace FinalSuspect.ClientActions.FeatureItems.NameTag;
 
 public static class UiHelper
 {

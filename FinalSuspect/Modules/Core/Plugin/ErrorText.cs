@@ -11,18 +11,16 @@ public class ErrorText : MonoBehaviour
 
     public bool CheatDetected;
     public bool SBDetected;
-    public List<ErrorData> AllErrors = [];
+    private readonly List<ErrorData> AllErrors = [];
 
     public void Update()
     {
         AllErrors.ForEach(err => err.IncreaseTimer());
         var ToRemove = AllErrors.Where(err => err.ErrorLevel <= 1 && 30f < err.Timer);
         var errorDatas = ToRemove.ToList();
-        if (errorDatas.Any())
-        {
-            AllErrors.RemoveAll(errorDatas.Contains);
-            UpdateText();
-        }
+        if (!errorDatas.Any()) return;
+        AllErrors.RemoveAll(errorDatas.Contains);
+        UpdateText();
     }
 
     public void LateUpdate()
@@ -57,7 +55,7 @@ public class ErrorText : MonoBehaviour
         //if (0 < error.ErrorLevel)
         //    Error($"エラー発生: {error}: {error.Message}", "ErrorText");
 
-        if (!AllErrors.Any(e => e.Code == code))
+        if (AllErrors.All(e => e.Code != code))
             //まだ出ていないエラー
             AllErrors.Add(error);
 
@@ -97,12 +95,12 @@ public class ErrorText : MonoBehaviour
         UpdateText();
     }
 
-    public class ErrorData
+    private class ErrorData
     {
         public readonly ErrorCode Code;
         public readonly int ErrorLevel;
-        public readonly int ErrorType1;
-        public readonly int ErrorType2;
+        private readonly int ErrorType1;
+        private readonly int ErrorType2;
 
         public ErrorData(ErrorCode code)
         {
@@ -151,20 +149,20 @@ public class ErrorText : MonoBehaviour
 public enum ErrorCode
 {
     //xxxyyyz: ERR-xxx-yyy-z
-    //  xxx: エラー大まかなの種類 (HUD関連, 追放処理関連など)
-    //  yyy: エラーの詳細な種類 (BoutyHunterの処理, SerialKillerの処理など)
-    //  z:   深刻度
-    //    0: 処置不要 (非表示)
-    //    1: 正常に動作しなければ廃村 (一定時間で非表示)
-    //    2: 廃村を推奨 (廃村で非表示)
-    //    3: ユーザー側では対処不能 (消さない)
-    // ==========
-    // 001 Main
-    Main_DictionaryError = 0010003, // 001-000-3 Main Dictionary Error
-    OptionIDDuplicate = 001_010_3, // 001-010-3 オプションIDが重複している(DEBUGビルド時のみ)
+    //  xxx: 错误大类
+    //  yyy: 错误细类
+    //  z:   严重等级
+    //    0: 无需处理 (不显示)
+    //    1: 运行异常需终止对局 (短暂显示)
+    //    2: 建议终止对局 (终止后隐藏)
+    //    3: 用户无法处理 (需持续显示)
+    // =============
+    // 001 主系统
+    Main_DictionaryError = 0010003, // 001-000-3 主字典错误
+    OptionIDDuplicate = 001_010_3, // 001-010-3 选项ID重复(仅调试版本生效)
 
-    // 002 サポート関連
-    UnsupportedVersion = 002_000_1, // 002-000-1 AmongUsのバージョンが古い
+    // 002 兼容支持
+    UnsupportedVersion = 002_000_1, // 002-000-1 AmongUs版本过旧
 
     // ==========
     // 000 Test

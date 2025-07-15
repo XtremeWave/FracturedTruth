@@ -13,11 +13,13 @@ public class EndGameManagerPatch
     }
 }
 
-[HarmonyPatch(typeof(LogicGameFlowNormal), nameof(LogicGameFlowNormal.CheckEndCriteria))]
-[HarmonyPatch(typeof(LogicGameFlowHnS), nameof(LogicGameFlowHnS.CheckEndCriteria))]
-internal class GameEndChecker
+[HarmonyPatch]
+public class GameEndChecker
 {
-    public static bool Prefix()
+    [HarmonyPatch(typeof(LogicGameFlowNormal), nameof(LogicGameFlowNormal.CheckEndCriteria))]
+    [HarmonyPatch(typeof(LogicGameFlowHnS), nameof(LogicGameFlowHnS.CheckEndCriteria))]
+    [HarmonyPrefix]
+    public static bool CheckEndCriteria()
     {
         return !(Main.NoGameEnd.Value && DebugModeManager.AmDebugger);
     }

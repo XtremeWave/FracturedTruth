@@ -15,6 +15,6 @@ public class SickoMenu : IRpcHandler
         ref bool notify, ref string reason, ref bool ban)
     {
         reason = "SickoMenu";
-        return !DebugModeManager.AmDebugger;
+        return true;
     }
 }

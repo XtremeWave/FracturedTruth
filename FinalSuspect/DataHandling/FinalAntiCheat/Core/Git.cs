@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using UnityEngine;
 
 [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
 internal static class Git
@@ -14,7 +15,7 @@ internal static class Git
         {
             var fileName = Path.GetFileName(path);
 
-            if (fileName is not "FinalSuspect.dll" and not "PolarNight.dll") Environment.Exit(1);
+            if (fileName is not "FinalSuspect.dll" and not "PolarNight.dll") Application.Quit(1);
         }
     }
 }

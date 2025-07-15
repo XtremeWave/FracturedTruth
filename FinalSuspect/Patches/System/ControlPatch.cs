@@ -84,6 +84,7 @@ internal class ControllerManagerUpdatePatch
         {
             Info("倒计时修改为0", "KeyCommand");
             GameStartManager.Instance.countDownTimer = 0;
+            SoundManager.Instance.StopSound(GameStartManager.Instance.gameStartSound);
         }
 
         //倒计时取消

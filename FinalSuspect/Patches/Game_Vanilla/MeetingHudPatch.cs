@@ -1,5 +1,7 @@
 using AmongUs.GameOptions;
+using FinalSuspect.DataHandling.XtremeGameData;
 using FinalSuspect.Modules.Core.Game;
+using FinalSuspect.Modules.Core.Game.PlayerControlExtension;
 using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Patches.Game_Vanilla;

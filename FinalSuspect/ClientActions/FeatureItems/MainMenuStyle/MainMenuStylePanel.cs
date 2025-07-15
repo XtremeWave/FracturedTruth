@@ -4,11 +4,11 @@ using FinalSuspect.Patches.System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static FinalSuspect.Modules.ClientActions.FeatureItems.MainMenuStyle.MainMenuStyleManager;
-using Object = UnityEngine.Object;
+using static FinalSuspect.ClientActions.FeatureItems.MainMenuStyle.MainMenuStyleManager;
 using static FinalSuspect.Patches.System.TitleLogoPatch;
+using Object = UnityEngine.Object;
 
-namespace FinalSuspect.Modules.ClientActions.FeatureItems.MainMenuStyle;
+namespace FinalSuspect.ClientActions.FeatureItems.MainMenuStyle;
 
 public static class MainMenuStylePanel
 {
@@ -218,7 +218,7 @@ public static class MainMenuStylePanel
 
     private static void CreatePreviewImage()
     {
-        _previewImage = LoadPatch.Start.CreateSpriteRenderer(
+        _previewImage = ObjectHelper.CreateSpriteRenderer(
             "FinalSuspect-BG-Preview",
             "FinalSuspect-BG-MiraHQ.png",
             450f,
@@ -279,8 +279,8 @@ public static class MainMenuStylePanel
         _applyButton.Background.color = style.CurrentState switch
         {
             CurrentState.NotFound => _applyButton.Text.color = Palette.DisabledGrey,
-            CurrentState.NotApply => _applyButton.Text.color = ColorHelper.ClientFeatureColor,
-            CurrentState.Applied => _applyButton.Text.color = ColorHelper.ModColor,
+            CurrentState.NotApply => _applyButton.Text.color = ColorHelper.FinalSuspectClientFeatureColor,
+            CurrentState.Applied => _applyButton.Text.color = ColorHelper.FinalSuspectColor,
             _ => _applyButton.Background.color
         };
         _applyButton.GetComponent<PassiveButton>().enabled = style.CurrentState != CurrentState.NotFound;

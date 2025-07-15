@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace FinalSuspect.Modules.ClientActions.FeatureItems.Resources;
+namespace FinalSuspect.ClientActions.FeatureItems.Resources;
 
 public static class ResourcesManager
 {

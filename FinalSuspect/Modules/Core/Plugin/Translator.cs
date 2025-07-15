@@ -12,7 +12,7 @@ namespace FinalSuspect.Modules.Core.Plugin;
 
 public static class Translator
 {
-    public static Dictionary<int, Dictionary<string, string>> TranslateMaps = new();
+    private static readonly Dictionary<int, Dictionary<string, string>> TranslateMaps = new();
 
     public static void TranslatorInit()
     {
@@ -71,12 +71,14 @@ public static class Translator
         CreateTemplateFile();
         var customLangDir = Path.Combine(".", LANGUAGE_FOLDER_NAME);
 
-        if (Directory.Exists(customLangDir))
+        if (!Directory.Exists(customLangDir)) return;
+        {
             foreach (var lang in Enum.GetValues(typeof(SupportedLangs)).Cast<SupportedLangs>())
             {
                 var customFile = Path.Combine(customLangDir, $"{lang}.dat");
                 if (File.Exists(customFile)) LoadCustomTranslation(customFile, lang);
             }
+        }
     }
     // ReSharper restore Unity.ExpensiveCode
 
@@ -90,13 +92,11 @@ public static class Translator
         var langId = TranslationController.Instance?.currentLanguage?.languageID ?? GetUserLangByRegion();
         if (console) langId = SupportedLangs.SChinese;
         var str = GetString(s, langId);
-        if (replacementDic != null)
-            foreach (var rd in replacementDic)
-                str = str.Replace(rd.Key, rd.Value);
-        return str;
+        if (replacementDic == null) return str;
+        return replacementDic.Aggregate(str, (current, rd) => current.Replace(rd.Key, rd.Value));
     }
 
-    public static string GetString(string str, SupportedLangs langId)
+    private static string GetString(string str, SupportedLangs langId)
     {
         var res = $"<STRMISS:{str}>";
 
@@ -174,27 +174,26 @@ public static class Translator
         }
     }
 
-    public static void LoadCustomTranslation(string filename, SupportedLangs lang)
+    private static void LoadCustomTranslation(string filename, SupportedLangs lang)
     {
-        var path = @$"./{LANGUAGE_FOLDER_NAME}/{filename}";
+        var path = $"./{LANGUAGE_FOLDER_NAME}/{filename}";
         if (File.Exists(path))
         {
             Info($"加载自定义翻译文件：{filename}", "LoadCustomTranslation");
             using StreamReader sr = new(path, Encoding.GetEncoding("UTF-8"));
-            string text;
-            while ((text = sr.ReadLine()) != null)
+            while (sr.ReadLine() is { } text)
             {
                 var tmp = text.Split(":");
-                if (tmp.Length > 1 && tmp[1] != "")
-                    try
-                    {
-                        TranslateMaps[(int)lang][tmp[0]] =
-                            tmp.Skip(1).Join(delimiter: ":").Replace("\\n", "\n").Replace("\\r", "\r");
-                    }
-                    catch (KeyNotFoundException)
-                    {
-                        Warn($"无效密钥：{tmp[0]}", "LoadCustomTranslation");
-                    }
+                if (tmp.Length <= 1 || tmp[1] == "") continue;
+                try
+                {
+                    TranslateMaps[(int)lang][tmp[0]] =
+                        tmp.Skip(1).Join(delimiter: ":").Replace("\\n", "\n").Replace("\\r", "\r");
+                }
+                catch (KeyNotFoundException)
+                {
+                    Warn($"无效密钥：{tmp[0]}", "LoadCustomTranslation");
+                }
             }
         }
         else
@@ -207,7 +206,7 @@ public static class Translator
     {
         var sb = new StringBuilder();
         foreach (var title in TranslateMaps) sb.Append($"{title.Key}:\n");
-        File.WriteAllText(@$"./{LANGUAGE_FOLDER_NAME}/template.dat", sb.ToString());
+        File.WriteAllText($"./{LANGUAGE_FOLDER_NAME}/template.dat", sb.ToString());
     }
 
     public static void ExportCustomTranslation()
@@ -222,6 +221,6 @@ public static class Translator
             sb.Append($"{kvp.Key}:{text}\n");
         }
 
-        File.WriteAllText(@$"./{LANGUAGE_FOLDER_NAME}/export_{lang}.dat", sb.ToString());
+        File.WriteAllText($"./{LANGUAGE_FOLDER_NAME}/export_{lang}.dat", sb.ToString());
     }
 }

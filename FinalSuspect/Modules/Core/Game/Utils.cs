@@ -4,7 +4,9 @@ using System.IO;
 using System.Text;
 using AmongUs.GameOptions;
 using FinalSuspect.DataHandling.FinalAntiCheat.Core;
+using FinalSuspect.DataHandling.XtremeGameData;
 using FinalSuspect.Helpers;
+using FinalSuspect.Modules.Core.Game.PlayerControlExtension;
 using FinalSuspect.Modules.Resources;
 using FinalSuspect.Patches.Game_Vanilla;
 using FinalSuspect.Patches.System;
@@ -18,7 +20,6 @@ public static class Utils
 {
     private static readonly DateTime timeStampStartTime = new(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-    public static Dictionary<string, Sprite> CachedSprites = new();
 
     private static readonly Dictionary<byte, PlayerControl> cachedPlayers = new();
     public static long TimeStamp => (long)(DateTime.Now.ToUniversalTime() - timeStampStartTime).TotalSeconds;
@@ -33,7 +34,7 @@ public static class Utils
         return (float)Screen.width / Screen.height / (16f / 9f);
     }
 
-    public static ClientData GetClientById(int id)
+    private static ClientData GetClientById(int id)
     {
         try
         {
@@ -44,50 +45,6 @@ public static class Utils
         {
             return null;
         }
-    }
-
-    public static string GetRoleName(RoleTypes role)
-    {
-        return GetRoleString(Enum.GetName(typeof(RoleTypes), role));
-    }
-
-    public static Color GetRoleColor(RoleTypes role)
-    {
-        Main.roleColors.TryGetValue(role, out var hexColor);
-        _ = ColorUtility.TryParseHtmlString(hexColor, out var c);
-        return c;
-    }
-
-    public static string GetRoleColorCode(RoleTypes role)
-    {
-        Main.roleColors.TryGetValue(role, out var hexColor);
-        return hexColor;
-    }
-
-    public static string GetRoleInfoForVanilla(this RoleTypes role, bool InfoLong = false)
-    {
-        if (role is RoleTypes.Crewmate or RoleTypes.Impostor)
-            InfoLong = false;
-
-        var text = role.ToString();
-        var Info = "Blurb" + (InfoLong ? "Long" : "");
-        if (IsNormalGame) return GetString($"{text}{Info}");
-
-        if (InfoLong)
-            switch (role)
-            {
-                case RoleTypes.Engineer:
-                    return $"{GetString(StringNames.RuleOneCrewmates)}" +
-                           $"\n{GetString(StringNames.RuleTwoCrewmates)}" +
-                           $"\n{GetString(StringNames.RuleThreeCrewmates)}";
-                case RoleTypes.Impostor:
-                    return $"{GetString(StringNames.RuleOneImpostor)}" +
-                           $"\n{GetString(StringNames.RuleTwoImpostor)}" +
-                           $"\n{GetString(StringNames.RuleThreeImpostor)}";
-            }
-
-        text = "HnS" + text;
-        return GetString($"{text}{Info}");
     }
 
     // ReSharper disable once RedundantAssignment
@@ -131,11 +88,77 @@ public static class Utils
 
     public static string PadRightV2(this object text, int num)
     {
-        var bc = 0;
         var t = text.ToString();
-        foreach (var c in t!) bc += Encoding.GetEncoding("UTF-8").GetByteCount(c.ToString()) == 1 ? 1 : 2;
+        var bc = t!.Sum(c => Encoding.GetEncoding("UTF-8").GetByteCount(c.ToString()) == 1 ? 1 : 2);
         return t.PadRight(Mathf.Max(num - (bc - t.Length), 0));
     }
+
+    /// <summary>
+    ///     乱数の簡易的なヒストグラムを取得する関数
+    ///     <params name="nums">生成した乱数を格納したint配列</params>
+    ///     <params name="scale">ヒストグラムの倍率 大量の乱数を扱う場合、この値を下げることをお勧めします。</params>
+    /// </summary>
+    public static bool AmDev()
+    {
+        return IsDev(EOSManager.Instance.FriendCode);
+    }
+
+    public static bool IsDev(string friendCode)
+    {
+        return friendCode
+            is "teamelder#5856" //Slok
+            or "cloakhazy#9133"; //LezaiYa
+    }
+
+    public static PlayerControl GetPlayerById(int playerId)
+    {
+        return GetPlayerById((byte)playerId);
+    }
+
+    public static PlayerControl GetPlayerById(byte playerId)
+    {
+        if (cachedPlayers.TryGetValue(playerId, out var cachedPlayer) && cachedPlayer) return cachedPlayer;
+
+        var player = Main.AllPlayerControls.FirstOrDefault(pc => pc.PlayerId == playerId);
+        cachedPlayers[playerId] = player;
+        return player;
+    }
+
+    public static void ExecuteWithTryCatch(this Action action, bool Log = false)
+    {
+        try
+        {
+            action();
+        }
+        catch (Exception ex)
+        {
+            if (Log) Error(ex.ToString(), "Execute With Try Catch");
+        }
+    }
+
+    public static void FormatButtonColor(MainMenuManager __instance, PassiveButton button, Color inActiveColor,
+        Color activeColor, Color inActiveTextColor, Color activeTextColor)
+    {
+        button.activeSprites.transform.FindChild("Shine")?.gameObject.SetActive(false);
+        button.inactiveSprites.transform.FindChild("Shine")?.gameObject.SetActive(false);
+        var activeRenderer = button.activeSprites.GetComponent<SpriteRenderer>();
+        var inActiveRenderer = button.inactiveSprites.GetComponent<SpriteRenderer>();
+        activeRenderer.sprite = __instance.quitButton.activeSprites.GetComponent<SpriteRenderer>().sprite;
+        inActiveRenderer.sprite = __instance.quitButton.activeSprites.GetComponent<SpriteRenderer>().sprite;
+        activeRenderer.color = activeColor.a == 0f
+            ? new Color(inActiveColor.r, inActiveColor.g, inActiveColor.b, 1f)
+            : activeColor;
+        inActiveRenderer.color = inActiveColor;
+        button.activeTextColor = activeTextColor;
+        button.inactiveTextColor = inActiveTextColor;
+    }
+
+    public static long GetCurrentTimestamp()
+    {
+        return DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+    }
+
+    #region Log Out Put
 
     public static DirectoryInfo GetLogFolder(bool auto = false)
     {
@@ -178,7 +201,7 @@ public static class Utils
         var t = DateTime.Now.ToString("yyyy-MM-dd_HH.mm.ss");
         var fileName = $"{f}FinalSuspect-v{Main.DisplayedVersion}-{t}.log";
         if (!Directory.Exists(f)) Directory.CreateDirectory(f);
-        FileInfo file = new(@$"{Environment.CurrentDirectory}/BepInEx/LogOutput.log");
+        FileInfo file = new($"{Environment.CurrentDirectory}/BepInEx/LogOutput.log");
         var logFile = file.CopyTo(fileName);
         return logFile.FullName;
     }
@@ -188,40 +211,21 @@ public static class Utils
         Process.Start("Explorer.exe", $"/select,{path}");
     }
 
-    public static string SummaryTexts(byte id)
+    private static void AddChatMessage(string text, string title = "")
     {
-        var thisdata = XtremePlayerData.GetXtremeDataById(id);
-
-        var builder = new StringBuilder();
-        var longestNameByteCount = XtremePlayerData.GetLongestNameByteCount();
-
-        var pos = Math.Min((float)longestNameByteCount / 2 + 1.5f, 11.5f);
-
-        var colorId = thisdata.ColorId;
-        builder.Append(StringHelper.ColorString(Palette.PlayerColors[colorId], thisdata.Name));
-        pos += 1.5f;
-        builder.AppendFormat("<pos={0}em>", pos).Append(GetProgressText(id)).Append("</pos>");
-        pos += 4.5f;
-
-        builder.AppendFormat("<pos={0}em>", pos).Append(GetVitalText(id, true)).Append("</pos>");
-        pos += DestroyableSingleton<TranslationController>.Instance.currentLanguage.languageID == SupportedLangs.English
-            ? 14f
-            : 10.5f;
-
-        builder.AppendFormat("<pos={0}em>", pos);
-
-        var oldrole = thisdata.RoleWhenAlive ?? RoleTypes.Crewmate;
-        var newrole = thisdata.RoleAfterDeath ??
-                      (thisdata.IsImpostor ? RoleTypes.ImpostorGhost : RoleTypes.CrewmateGhost);
-        builder.Append(StringHelper.ColorString(GetRoleColor(oldrole), GetRoleString($"{oldrole}")));
-
-        if (thisdata.IsDead && newrole != oldrole)
-            builder.Append($"=> {StringHelper.ColorString(GetRoleColor(newrole), GetRoleString($"{newrole}"))}");
-
-        builder.Append("</pos>");
-
-        return builder.ToString();
+        if (!AmongUsClient.Instance.AmHost) return;
+        var player = PlayerControl.LocalPlayer;
+        var name = player.Data.PlayerName;
+        player.SetName(title + '\0');
+        DestroyableSingleton<HudManager>.Instance?.Chat?.AddChat(player, text);
+        player.SetName(name);
     }
+
+    #endregion
+
+    #region Sprite
+
+    private static readonly Dictionary<string, Sprite> CachedSprites = new();
 
     public static Sprite LoadSprite(string file, float pixelsPerUnit = 1f)
     {
@@ -281,62 +285,9 @@ public static class Utils
         return null;
     }
 
-    /// <summary>
-    ///     乱数の簡易的なヒストグラムを取得する関数
-    ///     <params name="nums">生成した乱数を格納したint配列</params>
-    ///     <params name="scale">ヒストグラムの倍率 大量の乱数を扱う場合、この値を下げることをお勧めします。</params>
-    /// </summary>
-    public static bool TryCast<T>(this Il2CppObjectBase obj, out T casted)
-        where T : Il2CppObjectBase
-    {
-        casted = obj.TryCast<T>();
-        return casted != null;
-    }
+    #endregion
 
-    //private const string ActiveSettingsSize = "70%";
-    //private const string ActiveSettingsLineHeight = "55%";
-
-    public static bool AmDev()
-    {
-        return IsDev(EOSManager.Instance.FriendCode);
-    }
-
-    public static bool IsDev(this PlayerControl pc)
-    {
-        return IsDev(pc.FriendCode);
-    }
-
-    public static bool IsDev(string friendCode)
-    {
-        return friendCode
-            is "teamelder#5856" //Slok
-            or "cloakhazy#9133";
-        //LezaiYa
-    }
-
-    public static void AddChatMessage(string text, string title = "")
-    {
-        if (!AmongUsClient.Instance.AmHost) return;
-        var player = PlayerControl.LocalPlayer;
-        var name = player.Data.PlayerName;
-        player.SetName(title + '\0');
-        DestroyableSingleton<HudManager>.Instance?.Chat?.AddChat(player, text);
-        player.SetName(name);
-    }
-
-    public static PlayerControl GetPlayerById(int playerId)
-    {
-        return GetPlayerById((byte)playerId);
-    }
-
-    public static PlayerControl GetPlayerById(byte playerId)
-    {
-        if (cachedPlayers.TryGetValue(playerId, out var cachedPlayer) && cachedPlayer) return cachedPlayer;
-
-        var player = Main.AllPlayerControls.FirstOrDefault(pc => pc.PlayerId == playerId);
-        cachedPlayers[playerId] = player;
-        return player;
-    }
+    #region Game Play
 
     public static string GetProgressText(PlayerControl pc = null)
     {
@@ -351,7 +302,7 @@ public static class Utils
 
     private static string GetProgressText(byte playerId, bool comms = false)
     {
-        var data = XtremePlayerData.GetXtremeDataById(playerId);
+        var data = GetXtremeDataById(playerId);
         if (!IsNormalGame)
         {
             if (!data.IsImpostor) return "";
@@ -371,9 +322,9 @@ public static class Utils
         return StringHelper.ColorString(TextColor, $"({Completed}/{data.TotalTaskCount})");
     }
 
-    public static string GetVitalText(byte playerId, bool summary = false, bool docolor = true)
+    public static string GetVitalText(byte playerId, bool summary = false, bool doColor = true)
     {
-        var data = XtremePlayerData.GetXtremeDataById(playerId);
+        var data = GetXtremeDataById(playerId);
         if (!data.IsDead || data.RealDeathReason is VanillaDeathReason.None) return "";
 
         var deathReason = GetString("DeathReason." + data.RealDeathReason);
@@ -385,12 +336,12 @@ public static class Utils
                 break;
             case VanillaDeathReason.Kill:
                 color = Palette.ImpostorRed;
-                var killercolor = Palette.PlayerColors[data.RealKiller.ColorId];
+                var killerColor = Palette.PlayerColors[data.RealKiller.ColorId];
 
                 if (summary)
-                    deathReason += $"<=<size=80%>{StringHelper.ColorString(killercolor, data.RealKiller.Name)}</size>";
-                else if (docolor)
-                    deathReason = StringHelper.ColorString(killercolor, deathReason);
+                    deathReason += $"<=<size=80%>{StringHelper.ColorString(killerColor, data.RealKiller.Name)}</size>";
+                else if (doColor)
+                    deathReason = StringHelper.ColorString(killerColor, deathReason);
                 break;
             case VanillaDeathReason.Exile:
                 color = Palette.Purple;
@@ -464,7 +415,7 @@ public static class Utils
 
     public static RoleTypes GetRoleType(byte id)
     {
-        return XtremePlayerData.GetRoleById(id);
+        return GetRoleById(id);
     }
 
     public static bool IsImpostor(RoleTypes role)
@@ -511,40 +462,124 @@ public static class Utils
                IsFreePlay;
     }
 
-    public static void ExecuteWithTryCatch(this Action action, bool Log = false)
+    public static string GetRoleName(RoleTypes role)
+    {
+        return GetRoleString(Enum.GetName(typeof(RoleTypes), role));
+    }
+
+    public static Color GetRoleColor(RoleTypes role)
+    {
+        Main.roleColors.TryGetValue(role, out var hexColor);
+        _ = ColorUtility.TryParseHtmlString(hexColor, out var c);
+        return c;
+    }
+
+    public static string GetRoleColorCode(RoleTypes role)
+    {
+        Main.roleColors.TryGetValue(role, out var hexColor);
+        return hexColor;
+    }
+
+    public static string GetRoleInfoForVanilla(this RoleTypes role, bool InfoLong = false)
+    {
+        if (role is RoleTypes.Crewmate or RoleTypes.Impostor)
+            InfoLong = false;
+
+        var text = role.ToString();
+        var Info = "Blurb" + (InfoLong ? "Long" : "");
+        if (IsNormalGame) return GetString($"{text}{Info}");
+
+        if (InfoLong)
+            switch (role)
+            {
+                case RoleTypes.Engineer:
+                    return $"{GetString(StringNames.RuleOneCrewmates)}" +
+                           $"\n{GetString(StringNames.RuleTwoCrewmates)}" +
+                           $"\n{GetString(StringNames.RuleThreeCrewmates)}";
+                case RoleTypes.Impostor:
+                    return $"{GetString(StringNames.RuleOneImpostor)}" +
+                           $"\n{GetString(StringNames.RuleTwoImpostor)}" +
+                           $"\n{GetString(StringNames.RuleThreeImpostor)}";
+            }
+
+        text = "HnS" + text;
+        return GetString($"{text}{Info}");
+    }
+
+    public static string SummaryTexts(byte id)
+    {
+        var thisData = GetXtremeDataById(id);
+
+        var builder = new StringBuilder();
+        var longestNameByteCount = GetLongestNameByteCount();
+
+        var pos = Math.Min((float)longestNameByteCount / 2 + 1.5f, 11.5f);
+
+        var colorId = thisData.ColorId;
+        builder.Append(StringHelper.ColorString(Palette.PlayerColors[colorId], thisData.Name));
+        pos += 1.5f;
+        builder.Append($"<pos={pos}em>").Append(GetProgressText(id)).Append("</pos>");
+        pos += 4.5f;
+
+        builder.Append($"<pos={pos}em>").Append(GetVitalText(id, true)).Append("</pos>");
+        pos += DestroyableSingleton<TranslationController>.Instance.currentLanguage.languageID == SupportedLangs.English
+            ? 14f
+            : 10.5f;
+
+        builder.Append($"<pos={pos}em>");
+
+        var oldRole = thisData.RoleWhenAlive ?? RoleTypes.Crewmate;
+        var newRole = thisData.RoleAfterDeath ??
+                      (thisData.IsImpostor ? RoleTypes.ImpostorGhost : RoleTypes.CrewmateGhost);
+        builder.Append(StringHelper.ColorString(GetRoleColor(oldRole), GetRoleString($"{oldRole}")));
+
+        if (thisData.IsDead && newRole != oldRole)
+            builder.Append($"=> {StringHelper.ColorString(GetRoleColor(newRole), GetRoleString($"{newRole}"))}");
+
+        builder.Append("</pos>");
+
+        return builder.ToString();
+    }
+
+    private static int GetLongestNameByteCount()
+    {
+        return XtremePlayerData.AllPlayerData.Select(data => data.Name.GetByteCount())
+            .OrderByDescending(byteCount => byteCount).FirstOrDefault();
+    }
+
+    #endregion
+
+    #region XtremeGameData
+
+    public static bool ModClient(int id)
+    {
+        return GetPlayerVersion(id, out _);
+    }
+
+    public static bool OtherModClient(int id)
+    {
+        return GetPlayerVersion(id, out var ver) && Main.ForkId != ver.forkId;
+    }
+
+    public static bool IsFinalSuspect(int id)
+    {
+        return XtremeGameData.PlayerVersion.playerVersion.TryGetValue(id, out var ver) && Main.ForkId == ver.forkId;
+    }
+
+    public static bool GetPlayerVersion(int id, out XtremeGameData.PlayerVersion ver)
+    {
+        return XtremeGameData.PlayerVersion.playerVersion.TryGetValue(id, out ver) && ver != null;
+    }
+
+    #endregion
+
+    #region Xtreme Player Data
+
+    public static XtremePlayerData GetXtremeDataById(byte id)
     {
         try
         {
-            action();
-        }
-        catch (Exception ex)
-        {
-            if (Log) Error(ex.ToString(), "Execute With Try Catch");
-        }
-    }
-
-    public static void FormatButtonColor(MainMenuManager __instance, PassiveButton button, Color inActiveColor,
-        Color activeColor, Color inActiveTextColor, Color activeTextColor)
-    {
-        button.activeSprites.transform.FindChild("Shine")?.gameObject.SetActive(false);
-        button.inactiveSprites.transform.FindChild("Shine")?.gameObject.SetActive(false);
-        var activeRenderer = button.activeSprites.GetComponent<SpriteRenderer>();
-        var inActiveRenderer = button.inactiveSprites.GetComponent<SpriteRenderer>();
-        activeRenderer.sprite = __instance.quitButton.activeSprites.GetComponent<SpriteRenderer>().sprite;
-        inActiveRenderer.sprite = __instance.quitButton.activeSprites.GetComponent<SpriteRenderer>().sprite;
-        activeRenderer.color = activeColor.a == 0f
-            ? new Color(inActiveColor.r, inActiveColor.g, inActiveColor.b, 1f)
-            : activeColor;
-        inActiveRenderer.color = inActiveColor;
-        button.activeTextColor = activeTextColor;
-        button.inactiveTextColor = inActiveTextColor;
-    }
-
-    public static PlayerCheatData GetCheatDataById(byte id)
-    {
-        try
-        {
-            return XtremePlayerData.GetXtremeDataById(id)?.CheatData;
+            return XtremePlayerData.AllPlayerData.FirstOrDefault(data => data.PlayerId == id);
         }
         catch
         {
@@ -552,31 +587,34 @@ public static class Utils
         }
     }
 
-    public static long GetCurrentTimestamp()
+    public static string GetPlayerNameById(byte id)
     {
-        return DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+        return GetXtremeDataById(id).Name;
     }
 
-    #region XtremeGameData
-
-    public static bool ModClient(byte id)
+    public static RoleTypes GetRoleById(byte id)
     {
-        return GetPlayerVersion(id, out _);
+        var data = GetXtremeDataById(id);
+        var dead = data?.IsDead ?? false;
+        RoleTypes nullRole;
+        if (dead && !IsFreePlay)
+            nullRole = data.IsImpostor ? RoleTypes.ImpostorGhost : RoleTypes.CrewmateGhost;
+        else
+            nullRole = GetXtremeDataById(id).Player.Data.Role.Role;
+        var role = (dead ? data.RoleAfterDeath : data?.RoleWhenAlive) ?? nullRole;
+        return role;
     }
 
-    public static bool OtherModClient(byte id)
+    public static PlayerCheatData GetCheatDataById(byte id)
     {
-        return GetPlayerVersion(id, out var ver) && Main.ForkId != ver.forkId;
-    }
-
-    public static bool IsFinalSuspect(byte id)
-    {
-        return XtremeGameData.PlayerVersion.playerVersion.TryGetValue(id, out var ver) && Main.ForkId == ver.forkId;
-    }
-
-    public static bool GetPlayerVersion(byte id, out XtremeGameData.PlayerVersion ver)
-    {
-        return XtremeGameData.PlayerVersion.playerVersion.TryGetValue(id, out ver) && ver != null;
+        try
+        {
+            return GetXtremeDataById(id)?.CheatData;
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     #endregion

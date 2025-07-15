@@ -1,5 +1,6 @@
 using AmongUs.GameOptions;
 using FinalSuspect.Modules.Core.Game;
+using FinalSuspect.Modules.Core.Game.PlayerControlExtension;
 using TMPro;
 using UnityEngine;
 
@@ -78,7 +79,7 @@ internal class PlayerControlCompleteTaskPatch
         __instance.OnCompleteTask();
 
         GameData.Instance.RecomputeTaskCounts();
-        Info($"TotalTaskCounts = {GameData.Instance.CompletedTasks}/{GameData.Instance.TotalTasks}",
+        Info($"TotalTaskCounts: {GameData.Instance.CompletedTasks}/{GameData.Instance.TotalTasks}",
             "TaskState.Update");
     }
 }

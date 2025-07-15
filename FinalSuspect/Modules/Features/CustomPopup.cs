@@ -12,13 +12,13 @@ namespace FinalSuspect.Modules.Features;
 #nullable enable
 public static class CustomPopup
 {
-    public static GameObject? Fill;
-    public static GameObject? InfoScreen;
+    private static GameObject? Fill;
+    private static GameObject? InfoScreen;
 
-    public static TextMeshPro? TitleTMP;
+    private static TextMeshPro? TitleTMP;
     public static TextMeshPro? InfoTMP;
 
-    public static PassiveButton? ActionButtonPrefab;
+    private static PassiveButton? ActionButtonPrefab;
 
     public static GameObject? FillTemp;
     public static GameObject? InfoScreenTemp;
@@ -28,7 +28,7 @@ public static class CustomPopup
 
     public static PassiveButton? ActionButtonPrefabTemp;
 
-    public static List<PassiveButton>? ActionButtons;
+    private static List<PassiveButton>? ActionButtons;
 
     private static bool busy;
 
@@ -59,7 +59,7 @@ public static class CustomPopup
         ActionButtons = [];
 
         if (buttons != null)
-            foreach (var buttonInfo in buttons.Where(b => b.Item1.Trim() is not null and not ""))
+            foreach (var buttonInfo in buttons.Where(b => !b.Item1.Trim().IsNullOrWhiteSpace()))
             {
                 var (text, action) = buttonInfo;
                 var button = Object.Instantiate(ActionButtonPrefab, InfoScreen.transform);
@@ -120,11 +120,9 @@ public static class CustomPopup
             waitToShow = null;
         }
 
-        if (!string.IsNullOrEmpty(waitToUpdateText))
-        {
-            InfoTMP?.SetText(waitToUpdateText);
-            waitToUpdateText = string.Empty;
-        }
+        if (string.IsNullOrEmpty(waitToUpdateText)) return;
+        InfoTMP?.SetText(waitToUpdateText);
+        waitToUpdateText = string.Empty;
     }
 
     public static void Init()

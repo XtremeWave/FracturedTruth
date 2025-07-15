@@ -12,7 +12,7 @@ public static class ColorHelper
     public const string ModColorHex = "#cecdfd";
 
     public static readonly Color32 TeamColor = new(205, 255, 253, 255);
-    public static readonly Color32 ModColor = new(206, 205, 253, 255);
+    public static readonly Color32 FinalSuspectColor = new(206, 205, 253, 255);
     public static readonly Color32 HalfYellow = new(255, 255, 25, 160);
     public static readonly Color32 HalfModColor = new(206, 205, 253, 160);
     public static readonly Color32 FaultColor = new(229, 115, 115, 255);
@@ -22,12 +22,12 @@ public static class ColorHelper
     public static readonly Color32 DownloadYellow = new(252, 255, 152, 255);
     public static readonly Color32 CompleteGreen = new(185, 255, 181, 255);
 
-    public static readonly Color32 ClientOptionColor = new(150, 149, 227, 255);
-    public static readonly Color32 ClientOptionColor_Disable = new(61, 60, 97, 255);
-    public static readonly Color32 ClientOptionColor_CanNotUse = new(90, 89, 108, 255);
-    public static readonly Color32 ClientFeatureColor = new(191, 149, 227, 255);
-    public static readonly Color32 ClientFeatureColor_ClickType = new(219, 207, 227, 255);
-    public static readonly Color32 ClientFeatureColor_CanNotUse = new(102, 89, 97, 255);
+    public static readonly Color32 FinalSuspectClientOptionColor = new(150, 149, 227, 255);
+    public static readonly Color32 FinalSuspectClientOptionColor_Disable = new(61, 60, 97, 255);
+    public static readonly Color32 FinalSuspectClientOptionColor_CanNotUse = new(90, 89, 108, 255);
+    public static readonly Color32 FinalSuspectClientFeatureColor = new(191, 149, 227, 255);
+    public static readonly Color32 FinalSuspectClientFeatureColor_ClickType = new(219, 207, 227, 255);
+    public static readonly Color32 FinalSuspectClientFeatureColor_CanNotUse = new(102, 89, 97, 255);
 
     public static readonly Color32 ImpostorRedPale = new(255, 90, 90, 255);
 
@@ -67,15 +67,15 @@ public static class ColorHelper
         return new Color(R, G, B, color.a);
     }
 
-    private static void ColorToHSV(Color color, out float hue, out float saturation, out float value)
+    private static void ColorToHSV(Color color, out float hue /*, out float saturation, out float value*/)
     {
         var max = Mathf.Max(color.r, Mathf.Max(color.g, color.b));
         var min = Mathf.Min(color.r, Mathf.Min(color.g, color.b));
         var delta = max - min;
 
         hue = 0f;
-        saturation = 0f;
-        value = max;
+        //saturation = 0f;
+        //value = max;
 
         if (delta != 0)
         {
@@ -96,13 +96,12 @@ public static class ColorHelper
             if (hue < 0) hue += 360;
         }
 
-        if (max != 0)
-        {
-            saturation = delta / max;
-        }
+        //if (max != 0)
+        //{
+        //saturation = delta / max;
+        //}
     }
 
-    // 将HSV转换为Color
     private static Color HSVToColor(float hue, float saturation, float value)
     {
         var i = Mathf.FloorToInt(hue / 60) % 6;
@@ -124,9 +123,16 @@ public static class ColorHelper
 
     public static Color ConvertToLightGray(Color color)
     {
-        ColorToHSV(color, out var hue, out _, out _);
+        ColorToHSV(color, out var hue /*, out _, out _*/);
+        return HSVToColor(hue, 0f, 0.9f);
+    }
 
-        // 保留色相，将饱和度设置为0（变为灰色），并将亮度提高到一个较高的值（变为浅灰色）
-        return HSVToColor(hue, 0f, 0.9f); // 0.9f 是一个示例值，可以根据需要调整
+    public static Color GetColorByPercentage(float percentage)
+    {
+        return new Color(
+            r: Mathf.Clamp01(0.6f + percentage * 0.008f), // 0.6->1.0
+            g: Mathf.Clamp01(1.0f - percentage * 0.01f), // 1.0->0.0
+            b: Mathf.Clamp01(0.6f - percentage * 0.006f) // 0.6->0.0
+        );
     }
 }

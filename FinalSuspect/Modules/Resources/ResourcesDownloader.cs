@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FinalSuspect.Modules.Resources;
 
-public class ResourcesDownloader
+public static class ResourcesDownloader
 {
     public static async Task<bool> StartDownload(FileType fileType, string file)
     {
@@ -18,11 +18,13 @@ public class ResourcesDownloader
             case FileType.Musics:
             case FileType.ModNews:
             case FileType.Languages:
+            case FileType.SoundEffects:
                 filePath = GetResourceFilesPath(fileType, file);
                 break;
             case FileType.Depends:
                 filePath = GetLocalPath(LocalType.BepInEx) + file;
                 break;
+            case FileType.Unknown:
             default:
                 return false;
         }
@@ -84,11 +86,13 @@ public class ResourcesDownloader
             case FileType.Musics:
             case FileType.ModNews:
             case FileType.Languages:
+            case FileType.SoundEffects:
                 filePath = GetResourceFilesPath(fileType, file);
                 break;
             case FileType.Depends:
                 filePath = GetLocalPath(LocalType.BepInEx) + file;
                 break;
+            case FileType.Unknown:
             default:
                 return false;
         }
@@ -143,7 +147,7 @@ public class ResourcesDownloader
 
     private static bool IsValidUrl(string url)
     {
-        var pattern = @"^(https?|ftp)://[^\s/$.?#].[^\s]*$";
+        const string pattern = @"^(https?|ftp)://[^\s/$.?#].[^\s]*$";
         return Regex.IsMatch(url, pattern);
     }
 

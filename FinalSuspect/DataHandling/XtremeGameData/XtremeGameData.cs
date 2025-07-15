@@ -1,0 +1,28 @@
+﻿using FinalSuspect.Attributes;
+using UnityEngine;
+
+namespace FinalSuspect.DataHandling.XtremeGameData;
+
+public static partial class XtremeGameData
+{
+    public static string LastResultText;
+    public static string LastRoomCode;
+    public static string LastServer;
+    public static string LastGameData;
+    public static string LastGameResult;
+    public static Color LastLocalPlayerRoleColor;
+
+    [GameModuleInitializer]
+    public static void Init()
+    {
+        LastResultText = LastGameData = LastGameResult = LastRoomCode = LastServer = "";
+    }
+}
+
+public enum VanillaDeathReason
+{
+    None,
+    Exile,
+    Kill,
+    Disconnect
+}

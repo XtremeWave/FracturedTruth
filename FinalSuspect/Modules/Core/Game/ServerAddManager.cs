@@ -23,16 +23,10 @@ public static class ServerAddManager
         {
             regionInfos.Add(CreateHttp("au-cn.niko233.me", "Niko233(CN)", 443,
                 true));
-            regionInfos.Add(CreateHttp("nb.8w.fan", "<color=#00FF00>新猫服</color><color=#ffff00>[宁波]</color>", 443,
-                true));
-            regionInfos.Add(CreateHttp("bj.8w.fan", "<color=#9900CC>新猫服</color><color=#ffff00>[北京]</color>", 443,
-                true));
             regionInfos.Add(CreateHttp("player.fangkuai.fun", "<color=#00ffff>方块</color><color=#FF44FF>宿迁私服</color>",
                 443,
                 true));
             regionInfos.Add(CreateHttp("auhk.fangkuai.fun", "<color=#00ffff>方块</color><color=#FFC0CB>香港私服</color>", 443,
-                true));
-            regionInfos.Add(CreateHttp("server.xtreme.net.cn", "XtremeWave(HK)", 443,
                 true));
         }
 
@@ -95,15 +89,12 @@ public static class ServerAddManager
             "Modded Asia (MAS)" => new Color32(255, 132, 0, 255),
             "Modded NA (MNA)" => new Color32(255, 132, 0, 255),
             "Modded EU (MEU)" => new Color32(255, 132, 0, 255),
-            "<color=#00FF00>新猫服</color><color=#ffff00>[宁波]</color>" => new Color32(0, 255, 0, 255),
-            "<color=#9900CC>新猫服</color><color=#ffff00>[北京]</color>" => new Color32(153, 0, 204, 255),
             "<color=#00ffff>方块</color><color=#FF44FF>宿迁私服</color>" => new Color32(0, 255, 255, 255),
             "<color=#00ffff>方块</color><color=#FFC0CB>香港私服</color>" => new Color32(0, 255, 255, 255),
             "Niko233(NA)" => new Color32(255, 224, 0, 255),
             "Niko233(AS)" => new Color32(255, 224, 0, 255),
             "Niko233(EU)" => new Color32(255, 224, 0, 255),
             "Niko233(CN)" => new Color32(255, 224, 0, 255),
-            "XtremeWave(HK)" => ColorHelper.TeamColor,
 
             _ => new Color32(255, 255, 255, 255)
         };

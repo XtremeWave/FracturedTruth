@@ -2,8 +2,10 @@ using System;
 using AmongUs.GameOptions;
 using FinalSuspect.Attributes;
 using FinalSuspect.DataHandling.FinalAntiCheat.Core;
+using FinalSuspect.DataHandling.XtremeGameData;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game;
+using FinalSuspect.Modules.Core.Game.PlayerControlExtension;
 using UnityEngine;
 
 namespace FinalSuspect.DataHandling;
@@ -12,52 +14,9 @@ public class XtremePlayerData : IDisposable
 {
     ///////////////FUNCTIONS\\\\\\\\\\\\\\\
 
-    public static XtremePlayerData GetXtremeDataById(byte id)
-    {
-        try
-        {
-            return AllPlayerData.FirstOrDefault(data => data.PlayerId == id);
-        }
-        catch
-        {
-            return null;
-        }
-    }
-
-    public static PlayerControl GetPlayerById(byte id)
-    {
-        return GetXtremeDataById(id).Player;
-    }
-
-    public static string GetPlayerNameById(byte id)
-    {
-        return GetXtremeDataById(id).Name;
-    }
-
-    public static RoleTypes GetRoleById(byte id)
-    {
-        var data = GetXtremeDataById(id);
-        var dead = data?.IsDead ?? false;
-        RoleTypes nullrole;
-
-        if (dead && !IsFreePlay)
-            nullrole = data.IsImpostor ? RoleTypes.ImpostorGhost : RoleTypes.CrewmateGhost;
-        else
-            nullrole = GetPlayerById(id).Data.Role.Role;
-
-        var role = (dead ? data.RoleAfterDeath : data?.RoleWhenAlive) ?? nullrole;
-        return role;
-    }
-
     public void AdjustPlayerId()
     {
         PlayerId = Player.PlayerId;
-    }
-
-    public static int GetLongestNameByteCount()
-    {
-        return AllPlayerData.Select(data => data.Name.GetByteCount())
-            .OrderByDescending(byteCount => byteCount).FirstOrDefault();
     }
 
     public void SetName(string name)

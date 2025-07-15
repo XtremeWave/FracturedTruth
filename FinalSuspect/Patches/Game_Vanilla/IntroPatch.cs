@@ -1,15 +1,16 @@
 using System.Threading.Tasks;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game;
+using FinalSuspect.Modules.Core.Game.PlayerControlExtension;
 using TMPro;
 using UnityEngine;
 
 namespace FinalSuspect.Patches.Game_Vanilla;
 
-[HarmonyPatch]
+[HarmonyPatch(typeof(IntroCutscene))]
 internal class IntroCutscenePatch
 {
-    [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.CoBegin))]
+    [HarmonyPatch(nameof(IntroCutscene.CoBegin))]
     [HarmonyPrefix]
     public static void CoBegin_Prefix()
     {
@@ -38,39 +39,36 @@ internal class IntroCutscenePatch
         }, "Override Role Text");
     }
 
-    [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginImpostor))]
+    [HarmonyPatch(nameof(IntroCutscene.BeginImpostor))]
     [HarmonyPostfix]
     public static void BeginImpostor_Postfix(IntroCutscene __instance)
     {
         if (!Main.EnableFinalSuspect.Value) return;
 
         __instance.ImpostorText.gameObject.SetActive(true);
-        var onlyImp = GameManager.Instance.LogicOptions.GetAdjustedNumImpostors(GameData.Instance.PlayerCount) == 1;
 
-        var color = Palette.ImpostorRed;
-        var colorcode = onlyImp
-            ? ColorHelper.ColorToHex(Palette.DisabledGrey)
-            : ColorHelper.ColorToHex(Palette.ImpostorRed);
-        __instance.TeamTitle.text = onlyImp
-            ? GetString("Team.Imp_Only")
-            : GetString("Team.Imp");
+        var playerCount = GameData.Instance.PlayerCount;
+        var impostorCount = GameManager.Instance.LogicOptions.GetAdjustedNumImpostors(playerCount);
+        var onlyImp = impostorCount == 1;
 
-        __instance.TeamTitle.color = color;
-        __instance.ImpostorText.text = $"<color=#{colorcode}>";
-        __instance.ImpostorText.text += onlyImp
-            ? GetString("ImpostorNum.Imp_Only")
-            : $"{string.Format(GetString("ImpostorNum.Imp"), GameManager.Instance.LogicOptions.GetAdjustedNumImpostors(GameData.Instance.PlayerCount))}";
+        var impColor = Palette.ImpostorRed;
+        var impColorCode = ColorHelper.ColorToHex(onlyImp ? Palette.DisabledGrey : impColor);
+        var teamTitleText = GetString(onlyImp ? "Team.Imp_Only" : "Team.Imp");
+        var introText = GetString(onlyImp ? "IntroText.Imp_Only" : "IntroText.Imp");
 
-        __instance.ImpostorText.text += "\n" + (onlyImp
-            ? GetString("IntroText.Imp_Only")
-            : GetString("IntroText.Imp"));
+        __instance.TeamTitle.text = teamTitleText;
+        __instance.TeamTitle.color = impColor;
+
+        __instance.ImpostorText.text = onlyImp
+            ? $"<color=#{impColorCode}>{GetString("ImpostorNum.Imp_Only")}\n{introText}"
+            : $"<color=#{impColorCode}" +
+              $"{string.Format(GetString("ImpostorNum.Imp"), impostorCount)}\n{introText}";
 
         __instance.BackgroundBar.material.color = Palette.DisabledGrey;
-
-        StartFadeIntro(__instance, Palette.DisabledGrey, Palette.ImpostorRed);
+        StartFadeIntro(__instance, Palette.DisabledGrey, impColor);
     }
 
-    [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginCrewmate))]
+    [HarmonyPatch(nameof(IntroCutscene.BeginCrewmate))]
     [HarmonyPostfix]
     public static void BeginCrewmate_Postfix(IntroCutscene __instance)
     {

@@ -14,14 +14,15 @@ public static class ServerDropDownPatch
     internal static bool FillServerOptions_Prefix(ServerDropdown __instance)
     {
         if (SceneManager.GetActiveScene().name == "FindAGame") return true;
+        const int maxPerColumn = 6; // 每列最大按钮数
+        const float columnWidth = 4.15f; // 列宽度
+        const float buttonSpacing = 0.5f; // 按钮间距
+
 
         __instance.background.size = new Vector2(5, 1);
 
         var num = 0;
         var column = 0;
-        const int maxPerColumn = 6; // 每列最大按钮数
-        const float columnWidth = 4.15f; // 列宽度
-        const float buttonSpacing = 0.5f; // 按钮间距
 
         var regions = DestroyableSingleton<ServerManager>.Instance.AvailableRegions
             .OrderBy(ServerManager.DefaultRegions.Contains).ToList();

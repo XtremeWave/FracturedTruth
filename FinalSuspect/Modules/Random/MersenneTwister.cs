@@ -54,7 +54,7 @@ public class MersenneTwister : IRandom
     {
     }
 
-    public MersenneTwister(int seed)
+    private MersenneTwister(int seed)
     {
         Init((uint)seed);
     }
@@ -105,7 +105,7 @@ public class MersenneTwister : IRandom
         }
     }
 
-    public uint Next()
+    private uint Next()
     {
         uint y;
 

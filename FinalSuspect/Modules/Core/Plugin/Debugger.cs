@@ -26,11 +26,11 @@ internal class Webhook
     }
 }
 
-internal class XtremeLogger
+internal static class XtremeLogger
 {
-    public static bool isEnable;
-    public static List<string> disableList = [];
-    public static List<string> sendToGameList = [];
+    private static bool isEnable;
+    private static readonly List<string> disableList = [];
+    private static readonly List<string> sendToGameList = [];
     public static bool isDetail = false;
     public static bool isAlsoInGame = false;
 
@@ -100,6 +100,8 @@ internal class XtremeLogger
             case LogLevel.Debug:
                 logger.LogFatal(log_text);
                 break;
+            case LogLevel.None:
+            case LogLevel.All:
             default:
                 logger.LogWarning("Error:Invalid LogLevel");
                 logger.LogInfo(log_text);

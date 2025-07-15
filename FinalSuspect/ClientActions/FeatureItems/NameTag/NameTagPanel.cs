@@ -3,10 +3,10 @@ using FinalSuspect.Helpers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static FinalSuspect.Modules.ClientActions.FeatureItems.NameTag.NameTagManager;
+using static FinalSuspect.ClientActions.FeatureItems.NameTag.NameTagManager;
 using Object = UnityEngine.Object;
 
-namespace FinalSuspect.Modules.ClientActions.FeatureItems.NameTag;
+namespace FinalSuspect.ClientActions.FeatureItems.NameTag;
 
 public static class NameTagPanel
 {
@@ -165,7 +165,9 @@ public static class NameTagPanel
         button.name = "Btn-" + key;
         button.Text.text = key;
         button.Background.color =
-            IsNotJoined ? ColorHelper.ClientFeatureColor : ColorHelper.ClientFeatureColor_CanNotUse;
+            IsNotJoined
+                ? ColorHelper.FinalSuspectClientFeatureColor
+                : ColorHelper.FinalSuspectClientFeatureColor_CanNotUse;
 
         var passiveButton = button.GetComponent<PassiveButton>();
         passiveButton.OnClick = new Button.ButtonClickedEvent();

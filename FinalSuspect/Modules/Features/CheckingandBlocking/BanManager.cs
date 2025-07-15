@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game;
+using FinalSuspect.Modules.Core.Game.PlayerControlExtension;
 using InnerNet;
 
 namespace FinalSuspect.Modules.Features.CheckingandBlocking;
@@ -81,17 +82,13 @@ public static class BanManager
         {
             KickPlayer(player.Id, false, "KickedByAbnormalFriendCode");
             Info($"重复好友代码前缀的玩家 {player.PlayerName} 已被踢出", "Kick");
-            return;
         }
-
-        if (player.FriendCode == "")
+        else if (player.FriendCode == "")
         {
             KickPlayer(player.Id, false, "KickedByAbnormalFriendCode");
             Info($"没有好友代码的玩家 {player.PlayerName} 已被踢出。", "Kick");
-            return;
         }
-
-        if (!ValidFormatRegex.IsMatch(player.FriendCode) || newPrefixParts.Length < 1)
+        else if (!ValidFormatRegex.IsMatch(player.FriendCode) || newPrefixParts.Length < 1)
         {
             KickPlayer(player.Id, false, "KickedByAbnormalFriendCode");
             Info($"好友代码格式异常玩家 {player.PlayerName} 已被踢出。", "Kick");

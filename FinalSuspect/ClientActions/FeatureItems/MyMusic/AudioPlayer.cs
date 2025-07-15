@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace FinalSuspect.Modules.ClientActions.FeatureItems.MyMusic;
+namespace FinalSuspect.ClientActions.FeatureItems.MyMusic;
 
 public static class AudioPlayer
 {

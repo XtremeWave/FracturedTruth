@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using FinalSuspect.Modules.LogHandler;
 
 namespace FinalSuspect.Attributes;
@@ -7,8 +8,8 @@ namespace FinalSuspect.Attributes;
 public abstract class InitializerAttribute<T>(InitializePriority priority) : Attribute
 {
     /// <summary>所有初始化方法</summary>
-    // ReSharper disable once StaticMemberInGenericType
-    private static MethodInfo[] allInitializers;
+    [SuppressMessage("ReSharper", "StaticMemberInGenericType")]
+    private static MethodInfo[] allInitializers = [];
 
     private static readonly LogHandler logger = Handler(nameof(InitializerAttribute<T>));
 
@@ -17,7 +18,7 @@ public abstract class InitializerAttribute<T>(InitializePriority priority) : Att
     /// <summary>在初始化时调用的方法</summary>
     private MethodInfo targetMethod;
 
-    public InitializerAttribute() : this(InitializePriority.Normal)
+    protected InitializerAttribute() : this(InitializePriority.Normal)
     {
     }
 
@@ -36,12 +37,10 @@ public abstract class InitializerAttribute<T>(InitializePriority priority) : Att
             {
                 // 获取 InitializerAttribute
                 var attribute = method.GetCustomAttribute<InitializerAttribute<T>>();
-                if (attribute != null)
-                {
-                    // 如果获取到了，则注册
-                    attribute.targetMethod = method;
-                    initializers.Add(attribute);
-                }
+                if (attribute == null) continue;
+                // 如果获取到了，则注册
+                attribute.targetMethod = method;
+                initializers.Add(attribute);
             }
         }
 

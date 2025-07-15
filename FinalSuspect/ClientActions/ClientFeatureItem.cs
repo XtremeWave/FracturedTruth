@@ -4,13 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace FinalSuspect.Modules.ClientActions;
+namespace FinalSuspect.ClientActions;
 
 public class ClientFeatureItem
 {
     private static int numItems;
 
-    protected ClientFeatureItem(string name, OptionsMenuBehaviour optionsMenuBehaviour)
+    private ClientFeatureItem(string name, OptionsMenuBehaviour optionsMenuBehaviour)
     {
         try
         {
@@ -59,7 +59,7 @@ public class ClientFeatureItem
                     pos != null ? pos.Value - new Vector3(1.3f, 0f, 0f) : new Vector3(-1.3f, -2.4f, 1f);
                 ModOptionsButton.name = "FinalSuspectFeatures Options";
                 ModOptionsButton.Text.text = GetString("FinalSuspectFeatures");
-                ModOptionsButton.Background.color = ColorHelper.ClientFeatureColor;
+                ModOptionsButton.Background.color = ColorHelper.FinalSuspectClientFeatureColor;
                 var modOptionsPassiveButton = ModOptionsButton.GetComponent<PassiveButton>();
                 modOptionsPassiveButton.OnClick = new Button.ButtonClickedEvent();
                 modOptionsPassiveButton.OnClick.AddListener(new Action(() =>
@@ -82,7 +82,7 @@ public class ClientFeatureItem
                 -6f);
             ToggleButton.name = name;
             ToggleButton.Text.text = GetString("ClientFeature." + name);
-            ToggleButton.Background.color = ColorHelper.ClientFeatureColor_ClickType;
+            ToggleButton.Background.color = ColorHelper.FinalSuspectClientFeatureColor_ClickType;
             var passiveButton = ToggleButton.GetComponent<PassiveButton>();
             passiveButton.OnClick = new Button.ButtonClickedEvent();
             passiveButton.OnClick.AddListener((Action)OnClick);
@@ -117,7 +117,7 @@ public class ClientFeatureItem
         };
     }
 
-    public void OnClick()
+    private void OnClick()
     {
         try
         {

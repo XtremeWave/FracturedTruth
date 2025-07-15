@@ -1,17 +1,17 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using FinalSuspect.ClientActions.FeatureItems.MyMusic;
 using FinalSuspect.Helpers;
-using FinalSuspect.Modules.ClientActions.FeatureItems.MyMusic;
 using FinalSuspect.Modules.Features;
 using FinalSuspect.Modules.Resources;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static FinalSuspect.ClientActions.FeatureItems.Resources.ResourcesManager;
 using Object = UnityEngine.Object;
-using static FinalSuspect.Modules.ClientActions.FeatureItems.Resources.ResourcesManager;
 
-namespace FinalSuspect.Modules.ClientActions.FeatureItems.Resources;
+namespace FinalSuspect.ClientActions.FeatureItems.Resources;
 
 public static class ResourcesPanel
 {

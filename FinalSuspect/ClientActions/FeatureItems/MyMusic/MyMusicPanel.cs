@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace FinalSuspect.Modules.ClientActions.FeatureItems.MyMusic;
+namespace FinalSuspect.ClientActions.FeatureItems.MyMusic;
 
 [SuppressMessage("ReSharper", "PossibleLossOfFraction")]
 public static class MyMusicPanel
@@ -191,19 +191,19 @@ public static class MyMusicPanel
             {
                 case AudiosStates.IsPlaying:
                     preview = GetString("Tip.Playing");
-                    color = ColorHelper.ModColor;
+                    color = ColorHelper.FinalSuspectColor;
                     break;
                 case AudiosStates.IsDownLoading:
                     color = ColorHelper.DownloadYellow;
                     preview = GetString("Tip.Downloading");
                     break;
                 case AudiosStates.IsLoading:
-                    color = ColorHelper.ClientOptionColor;
+                    color = ColorHelper.FinalSuspectClientOptionColor;
                     preview = GetString("Tip.Parsing");
                     break;
                 case AudiosStates.DownLoadSucceedNotice:
                 case AudiosStates.Exist:
-                    color = audio.UnOfficial ? Color.green : ColorHelper.ClientFeatureColor;
+                    color = audio.UnOfficial ? Color.green : ColorHelper.FinalSuspectClientFeatureColor;
                     preview = GetString("MusPlay.CanPlay");
                     enable = true;
                     break;
@@ -211,7 +211,7 @@ public static class MyMusicPanel
                 case AudiosStates.DownLoadFailureNotice:
                 default:
                 {
-                    color = ColorHelper.ClientFeatureColor_CanNotUse;
+                    color = ColorHelper.FinalSuspectClientFeatureColor_CanNotUse;
                     preview = GetString("MusPlay.NoFound");
                     break;
                 }

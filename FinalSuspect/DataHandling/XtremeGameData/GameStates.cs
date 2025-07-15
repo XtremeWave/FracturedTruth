@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using AmongUs.GameOptions;
-using FinalSuspect.Modules.Core.Game;
+using FinalSuspect.Modules.Core.Game.PlayerControlExtension;
 using InnerNet;
 
-namespace FinalSuspect.DataHandling;
+namespace FinalSuspect.DataHandling.XtremeGameData;
 
-public static partial class XtremeGameData
+public partial class XtremeGameData
 {
     public static class GameStates
     {
@@ -85,12 +85,4 @@ public static partial class XtremeGameData
             return (MapNames)GameOptionsManager.Instance.CurrentGameOptions.MapId == name;
         }
     }
-}
-
-public enum VanillaDeathReason
-{
-    None,
-    Exile,
-    Kill,
-    Disconnect
 }

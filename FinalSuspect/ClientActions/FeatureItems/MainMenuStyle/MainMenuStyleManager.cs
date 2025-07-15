@@ -2,7 +2,7 @@ using System.IO;
 using FinalSuspect.Modules.Resources;
 using UnityEngine;
 
-namespace FinalSuspect.Modules.ClientActions.FeatureItems.MainMenuStyle;
+namespace FinalSuspect.ClientActions.FeatureItems.MainMenuStyle;
 
 public abstract class MainMenuStyleManager
 {

@@ -1,6 +1,8 @@
+using FinalSuspect.ClientActions.FeatureItems.NameTag;
+using FinalSuspect.DataHandling.XtremeGameData;
 using FinalSuspect.Helpers;
-using FinalSuspect.Modules.ClientActions.FeatureItems.NameTag;
 using FinalSuspect.Modules.Core.Game;
+using FinalSuspect.Modules.Core.Game.PlayerControlExtension;
 using FinalSuspect.Modules.Features.CheckingandBlocking;
 using TMPro;
 using UnityEngine;
@@ -22,7 +24,7 @@ public static class XtremeLocalHandling
         out string bottomtext,
         bool topswap = false)
     {
-        var data = XtremePlayerData.GetXtremeDataById(id);
+        var data = GetXtremeDataById(id);
         var player = data.Player;
         var name = IsInTask
             ? player.GetRealName()
@@ -36,7 +38,8 @@ public static class XtremeLocalHandling
         SpamManager.CheckSpam(ref name);
         var ap = NameTagManager.ApplyFor(player).displayName;
         name += ap.RemoveHtmlTags() == "" ? "" : $" ({ap})";
-        if (!player.GetCheatData().IsSuspectCheater || !Main.EnableFAC.Value) return name;
+        if (!player.GetCheatData().IsSuspectCheater && !player.GetCheatData().IsHacker ||
+            !Main.EnableFAC.Value) return name;
         topcolor = ColorHelper.FaultColor;
         toptext = toptext.CheckAndAppendText(GetString("Id.Cheater"));
         return name;
@@ -48,7 +51,7 @@ public static class XtremeLocalHandling
         if (!IsLobby) return;
         var player = data.Player;
         if (player.IsHost()) toptext = toptext.CheckAndAppendText(GetString("Id.Host"));
-        if (GetPlayerVersion(player.PlayerId, out var ver))
+        if (GetPlayerVersion(player.GetClientId(), out var ver))
         {
             if (Main.ForkId != ver.forkId)
             {
@@ -60,7 +63,7 @@ public static class XtremeLocalHandling
                 switch (Main.version.CompareTo(ver.version))
                 {
                     case 0 when ver.tag == $"{Main.GitCommit}({Main.GitBranch})":
-                        topcolor = ColorHelper.ModColor;
+                        topcolor = ColorHelper.FinalSuspectColor;
                         break;
                     case 0 when ver.tag != $"{Main.GitCommit}({Main.GitBranch})":
                         toptext = toptext.CheckAndAppendText($"<size=1.5>{ver.tag}</size>");
@@ -75,7 +78,7 @@ public static class XtremeLocalHandling
         }
         else
         {
-            if (player.IsLocalPlayer()) topcolor = ColorHelper.ModColor;
+            if (player.IsLocalPlayer()) topcolor = ColorHelper.FinalSuspectColor;
             else if (player.IsHost()) topcolor = ColorHelper.HostNameColor;
             else topcolor = ColorHelper.ClientlessColor;
         }
@@ -91,18 +94,15 @@ public static class XtremeLocalHandling
         if (!IsInGame) return;
         if (!Main.EnableFinalSuspect.Value) return;
 
-        var roleType = XtremePlayerData.GetRoleById(data.PlayerId);
+        var roleType = GetRoleById(data.PlayerId);
         var player = data.Player;
 
         if (CanSeeTargetRole(player, out var bothImp))
         {
             color = GetRoleColor(roleType);
-            if (!topswap)
-                roleText =
-                    $"<size=80%>{GetRoleString(roleType.ToString())}</size> {GetProgressText(player)} {GetVitalText(player.PlayerId, docolor: CanSeeOthersRole())}";
-            else
-                roleText =
-                    $"{GetVitalText(player.PlayerId, docolor: CanSeeOthersRole())} {GetProgressText(player)} <size=80%>{GetRoleString(roleType.ToString())}</size>";
+            roleText = !topswap
+                ? $"<size=80%>{GetRoleString(roleType.ToString())}</size> {GetProgressText(player)} {GetVitalText(player.PlayerId, doColor: CanSeeOthersRole())}"
+                : $"{GetVitalText(player.PlayerId, doColor: CanSeeOthersRole())} {GetProgressText(player)} <size=80%>{GetRoleString(roleType.ToString())}</size>";
         }
         else if (bothImp)
         {
@@ -112,7 +112,7 @@ public static class XtremeLocalHandling
         if (player.GetXtremeData().IsDisconnected) color = Color.gray;
     }
 
-    public static string CheckAndAppendText(this string toptext, string extratext)
+    private static string CheckAndAppendText(this string toptext, string extratext)
     {
         if (toptext != "")
             toptext += "\n";
@@ -129,8 +129,6 @@ public static class XtremeLocalHandling
         __instance.myRend.material.SetColor(OutlineColor, color);
         __instance.myRend.material.SetColor(AddColor, mainTarget ? color : Color.clear);
     }
-
-    #endregion
 
     public static void ShowMap(MapBehaviour map, MapOptions opts)
     {
@@ -241,6 +239,8 @@ public static class XtremeLocalHandling
             /* ignored */
         }
     }
+
+    #endregion
 
     #region FixedUpdate
 

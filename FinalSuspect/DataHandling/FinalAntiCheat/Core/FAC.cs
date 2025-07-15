@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using FinalSuspect.DataHandling.FinalAntiCheat.Interfaces;
 using FinalSuspect.Modules.Core.Game;
+using FinalSuspect.Modules.Core.Game.PlayerControlExtension;
 using FinalSuspect.Patches.Game_Vanilla;
 using Hazel;
 
@@ -9,7 +10,7 @@ namespace FinalSuspect.DataHandling.FinalAntiCheat.Core;
 
 public static class FAC
 {
-    public static int DeNum;
+    private static int DeNum;
     public static long _lastHandleCheater = -1;
     public static readonly List<RpcHandlers> _handlers = [];
 
@@ -19,15 +20,13 @@ public static class FAC
                      .Where(t => typeof(IRpcHandler).IsAssignableFrom(t) && !t.IsAbstract))
         {
             var handler = (IRpcHandler)Activator.CreateInstance(type);
-            if (handler != null)
-            {
-                var rpcTypes = handler.TargetRpcs;
+            if (handler == null) continue;
+            var rpcTypes = handler.TargetRpcs;
 
-                var activehandler = new RpcHandlers(rpcTypes);
-                activehandler.Handlers.Add(handler);
+            var activehandler = new RpcHandlers(rpcTypes);
+            activehandler.Handlers.Add(handler);
 
-                _handlers.Add(activehandler);
-            }
+            _handlers.Add(activehandler);
         }
     }
 

@@ -106,7 +106,7 @@ public static class GameStartManagerPatch
             cancelButton.activeTextColor = cancelButton.inactiveTextColor = Color.white;
             GameStartTextlocalPosition = __instance.GameStartText.transform.localPosition;
             cancelButton.OnClick = new Button.ButtonClickedEvent();
-            cancelButton.OnClick.AddListener((Action)(() => { __instance.ResetStartState(); }));
+            cancelButton.OnClick.AddListener((Action)(__instance.ResetStartState));
             cancelButton.gameObject.SetActive(false);
 
             if (!AmongUsClient.Instance.AmHost || (!VersionChecker.isBroken &&
@@ -247,14 +247,5 @@ internal class ResetStartStatePatch
     public static void Prefix(GameStartManager __instance)
     {
         if (IsCountDown) SoundManager.Instance.StopSound(__instance.gameStartSound);
-    }
-}
-
-[HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.FinallyBegin))]
-internal class FinallyBeginPatch
-{
-    public static void Prefix(GameStartManager __instance)
-    {
-        SoundManager.Instance.StopSound(__instance.gameStartSound);
     }
 }

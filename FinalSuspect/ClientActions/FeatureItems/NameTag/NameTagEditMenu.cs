@@ -6,12 +6,12 @@ using Il2CppSystem.IO;
 using Newtonsoft.Json;
 using TMPro;
 using UnityEngine;
-using static FinalSuspect.Modules.ClientActions.FeatureItems.NameTag.NameTagManager;
-using Component = FinalSuspect.Modules.ClientActions.FeatureItems.NameTag.NameTagManager.Component;
+using static FinalSuspect.ClientActions.FeatureItems.NameTag.NameTagManager;
+using Component = FinalSuspect.ClientActions.FeatureItems.NameTag.NameTagManager.Component;
 using File = System.IO.File;
 using Path = System.IO.Path;
 
-namespace FinalSuspect.Modules.ClientActions.FeatureItems.NameTag;
+namespace FinalSuspect.ClientActions.FeatureItems.NameTag;
 
 public static class NameTagEditMenu
 {
@@ -87,7 +87,7 @@ public static class NameTagEditMenu
         if (ComponentButtons.TryGetValue(componentType, out var activeButton))
         {
             var activeText = activeButton.transform.Find("Text_TMP").GetComponent<TextMeshPro>();
-            activeText.color = ColorHelper.ModColor;
+            activeText.color = ColorHelper.FinalSuspectColor;
         }
     }
 

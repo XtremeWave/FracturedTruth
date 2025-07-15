@@ -2,9 +2,9 @@
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
+using FinalSuspect.ClientActions.FeatureItems.NameTag;
+using FinalSuspect.ClientActions.FeatureItems.Resources;
 using FinalSuspect.Helpers;
-using FinalSuspect.Modules.ClientActions.FeatureItems.NameTag;
-using FinalSuspect.Modules.ClientActions.FeatureItems.Resources;
 using FinalSuspect.Modules.Features;
 using FinalSuspect.Modules.Features.CheckingandBlocking;
 using FinalSuspect.Patches.System;
@@ -21,17 +21,17 @@ public static class VersionChecker
     public static bool forceUpdate;
     public static bool isBroken;
     public static bool isChecked;
-    public static bool DebugUnused;
+    private static bool DebugUnused;
     public static string versionInfoRaw = "";
 
-    public static Version latestVersion;
+    private static Version latestVersion;
     public static string showVer = "";
-    public static Version DebugVer;
+    private static Version DebugVer;
     public static bool CanUpdate;
-    public static string verHead = "";
-    public static string verDate = "";
-    public static Version minimumVersion;
-    public static int creation;
+    private static string verHead = "";
+    private static string verDate = "";
+    private static Version minimumVersion;
+    private static int creation;
     public static string md5 = "";
 
     private static int retried;
@@ -70,7 +70,7 @@ public static class VersionChecker
         _ = new LateTask(() => _ = CheckForUpdate(), 0.3f, "Retry Check Update");
     }
 
-    public static async Task CheckForUpdate()
+    private static async Task CheckForUpdate()
     {
         isChecked = false;
         ModUpdater.DeleteOldFiles();

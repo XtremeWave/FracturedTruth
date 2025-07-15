@@ -2,6 +2,7 @@
 using FinalSuspect.Attributes;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game;
+using FinalSuspect.Modules.Core.Game.PlayerControlExtension;
 using TMPro;
 using UnityEngine;
 
@@ -9,26 +10,27 @@ namespace FinalSuspect.Modules.Features;
 
 public static class InGameRoleInfoMenu
 {
-    public const string FirstHeaderSize = "130%";
+    private const string FirstHeaderSize = "130%";
     public const string SecondHeaderSize = "100%";
-    public const string BodySize = "70%";
-    public const string BlankLineSize = "30%";
+    private const string BodySize = "70%";
+    private const string BlankLineSize = "30%";
 
-    public static GameObject Fill;
+    private static GameObject Fill;
 
-    public static GameObject Menu;
+    private static GameObject Menu;
 
-    public static GameObject RoleInfo;
-    public static GameObject RoleIllustration;
+    private static GameObject RoleInfo;
+    private static GameObject RoleIllustration;
     public static bool Showing => Fill && Fill.active && Menu && Menu.active;
-    public static SpriteRenderer FillSP => Fill.GetComponent<SpriteRenderer>();
-    public static SpriteRenderer RoleIllustrationSP => RoleIllustration.GetComponent<SpriteRenderer>();
+    private static SpriteRenderer FillRend => Fill.GetComponent<SpriteRenderer>();
+    private static SpriteRenderer RoleIllustrationRend => RoleIllustration.GetComponent<SpriteRenderer>();
 
-    public static TextMeshPro RoleInfoTMP => RoleInfo.GetComponent<TextMeshPro>();
+    private static TextMeshPro RoleInfoTMP => RoleInfo.GetComponent<TextMeshPro>();
 
     [GameModuleInitializer]
-    public static void Init()
+    private static void Init()
     {
+        Test(0);
         var DOBScreen = AccountManager.Instance.transform.FindChild("DOBEnterScreen");
 
         Fill = new GameObject("FinalSuspect Role Info Menu Fill") { layer = 5 };
@@ -36,7 +38,7 @@ public static class InGameRoleInfoMenu
         Fill.transform.localPosition = new Vector3(0f, 0f, -980f);
         Fill.transform.localScale = new Vector3(20f, 10f, 1f);
         Fill.AddComponent<SpriteRenderer>().sprite = DOBScreen.FindChild("Fill").GetComponent<SpriteRenderer>().sprite;
-        FillSP.color = new Color(0f, 0f, 0f, 0.75f);
+        FillRend.color = new Color(0f, 0f, 0f, 0.75f);
 
         Menu = Object.Instantiate(DOBScreen.FindChild("InfoPage").gameObject, HudManager.Instance.transform.parent);
         Menu.name = "FinalSuspect Role Info Menu Page";
@@ -79,7 +81,7 @@ public static class InGameRoleInfoMenu
         var HnSPrefix = "";
         if (!IsNormalGame && player.IsAlive())
             HnSPrefix = "HnS";
-        RoleIllustrationSP.sprite = LoadSprite($"CI_{HnSPrefix + role}.png", 320f);
+        RoleIllustrationRend.sprite = LoadSprite($"CI_{HnSPrefix + role}.png", 320f);
     }
 
     public static void Show()

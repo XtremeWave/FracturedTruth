@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace FinalSuspect.Modules.ClientActions;
+namespace FinalSuspect.ClientActions;
 
 public class ClientActionItem
 {
@@ -64,7 +64,7 @@ public class ClientActionItem
                     pos != null ? pos.Value + new Vector3(1.24f, 0f, 0f) : new Vector3(1.24f, -2.4f, 1f);
                 ModOptionsButton.name = "FinalSuspect Options";
                 ModOptionsButton.Text.text = GetString("FinalSuspectOptions");
-                ModOptionsButton.Background.color = ColorHelper.ClientOptionColor;
+                ModOptionsButton.Background.color = ColorHelper.FinalSuspectClientOptionColor;
                 var modOptionsPassiveButton = ModOptionsButton.GetComponent<PassiveButton>();
                 modOptionsPassiveButton.OnClick = new Button.ButtonClickedEvent();
                 modOptionsPassiveButton.OnClick.AddListener(new Action(() =>
@@ -123,7 +123,7 @@ public class ClientActionItem
         OnClickAction?.Invoke();
     }
 
-    public void Rename(string name = null)
+    protected void Rename(string name = null)
     {
         if (name != null)
             Name = name;

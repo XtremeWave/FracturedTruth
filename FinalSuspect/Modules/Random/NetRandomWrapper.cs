@@ -2,8 +2,6 @@ namespace FinalSuspect.Modules.Random;
 
 public class NetRandomWrapper(System.Random instance) : IRandom
 {
-    public System.Random wrapping = instance;
-
     public NetRandomWrapper() : this(new System.Random())
     {
     }
@@ -14,16 +12,16 @@ public class NetRandomWrapper(System.Random instance) : IRandom
 
     public int Next(int minValue, int maxValue)
     {
-        return wrapping.Next(minValue, maxValue);
+        return instance.Next(minValue, maxValue);
     }
 
     public int Next(int maxValue)
     {
-        return wrapping.Next(maxValue);
+        return instance.Next(maxValue);
     }
 
     public int Next()
     {
-        return wrapping.Next();
+        return instance.Next();
     }
 }

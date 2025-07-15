@@ -6,14 +6,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace FinalSuspect.Modules.ClientActions.FeatureItems;
+namespace FinalSuspect.ClientActions.FeatureItems;
 
 public static class ModUnloaderScreen
 {
     public static SpriteRenderer Popup { get; set; }
-    public static TextMeshPro WarnText { get; private set; }
-    public static ToggleButtonBehaviour CancelButton { get; private set; }
-    public static ToggleButtonBehaviour UnloadButton { get; private set; }
+    private static TextMeshPro WarnText { get; set; }
+    private static ToggleButtonBehaviour CancelButton { get; set; }
+    private static ToggleButtonBehaviour UnloadButton { get; set; }
 
     public static void Init(OptionsMenuBehaviour optionsMenuBehaviour)
     {

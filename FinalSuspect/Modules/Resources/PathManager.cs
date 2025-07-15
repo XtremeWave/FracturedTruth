@@ -29,13 +29,11 @@ public static class PathManager
 #if DEBUG
         "https://raw.githubusercontent.com/XtremeWave/FinalSuspect/FinalSus/",
         "https://raw.githubusercontent.com/XtremeWave/FinalSuspect_Dev/FS_Dev/",
-        "https://api.xtreme.net.cn/FinalSuspect/download/",
         "https://gitee.com/LezaiYa/FinalSuspectAssets/raw/main/",
         $"file:///{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop))}/",
 #else
         "https://raw.githubusercontent.com/XtremeWave/FinalSuspect/FinalSus/",
         "https://gitee.com/LezaiYa/FinalSuspectAssets/raw/main/",
-        "https://api.xtreme.net.cn/FinalSuspect/download/",
 #endif
     };
 
@@ -153,7 +151,7 @@ public static class PathManager
     {
         var list = URLs.ToList();
         if (!allowDesktop && DebugModeManager.AmDebugger)
-            list.RemoveAt(4);
+            list.RemoveAt(3);
         if (IsChineseUser) list.Reverse();
         return list;
     }

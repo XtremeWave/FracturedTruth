@@ -5,8 +5,10 @@ using AmongUs.Data;
 using AmongUs.GameOptions;
 using BepInEx.Unity.IL2CPP.Utils;
 using FinalSuspect.Attributes;
+using FinalSuspect.DataHandling.XtremeGameData;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game;
+using FinalSuspect.Modules.Core.Game.PlayerControlExtension;
 using FinalSuspect.Patches.System;
 using FinalSuspect.Templates;
 using InnerNet;
@@ -91,12 +93,6 @@ public static class HudManagerPatch
     private static TextMeshPro roleSummary;
     public static SimpleButton showHideButton;
     private static SpriteRenderer backgroundRenderer;
-
-    public static string LastResultText;
-    public static string LastGameData;
-    public static string LastGameResult;
-    public static string LastRoomCode;
-    public static string LastServer;
 
     private static bool Refresh;
 
@@ -196,15 +192,9 @@ public static class HudManagerPatch
         return lines.Length;
     }
 
-    [GameModuleInitializer]
-    public static void InitForLastResult()
-    {
-        LastResultText = LastGameData = LastGameResult = LastRoomCode = LastServer = "";
-    }
-
     private static void UpdateResult(HudManager __instance)
     {
-        if (IsFreePlay || (!IsInGame && GetLineCount(LastResultText) < 6))
+        if (IsFreePlay || (!IsInGame && GetLineCount(XtremeGameData.LastResultText) < 6))
             return;
         var showInitially = Main.ShowResults.Value;
 
@@ -230,35 +220,36 @@ public static class HudManagerPatch
                 FontSize = 2f
             };
 
-        StringBuilder sb = new($"{GetString("Summary.Text")}{LastGameResult}");
+        StringBuilder sb = new($"{GetString("Summary.Text")}{XtremeGameData.LastGameResult}");
         if (IsInGame)
         {
-            LastRoomCode = GameCode.IntToGameName(AmongUsClient.Instance.GameId);
-            LastServer = IsOnlineGame
+            XtremeGameData.LastRoomCode = GameCode.IntToGameName(AmongUsClient.Instance.GameId);
+            XtremeGameData.LastServer = IsOnlineGame
                 ? PingTrackerUpdatePatch.ServerName
                 : GetString("Local");
         }
 
         var gamecode = StringHelper.ColorString(
-            ColorHelper.ModColor,
-            DataManager.Settings.Gameplay.StreamerMode ? new string('*', LastRoomCode.Length) : LastRoomCode);
-        sb.Append("\n" + LastServer + "  " + gamecode);
+            ColorHelper.FinalSuspectColor,
+            DataManager.Settings.Gameplay.StreamerMode
+                ? new string('*', XtremeGameData.LastRoomCode.Length)
+                : XtremeGameData.LastRoomCode);
+        sb.Append("\n" + XtremeGameData.LastServer + "  " + gamecode);
         if (IsInGame)
         {
             StringBuilder sb2 = new();
             foreach (var data in XtremePlayerData.AllPlayerData)
                 sb2.Append("\n\u3000 ").Append(SummaryTexts(data.PlayerId));
 
-            LastGameData = sb2.ToString();
+            XtremeGameData.LastGameData = sb2.ToString();
         }
 
-        sb.Append(LastGameData);
-        LastResultText = sb.ToString();
+        sb.Append(XtremeGameData.LastGameData);
+        XtremeGameData.LastResultText = sb.ToString();
         if (!roleSummary)
         {
             roleSummary = TMPTemplate.Create(
-                "RoleSummaryText",
-                LastResultText,
+                "RoleSummaryText", XtremeGameData.LastResultText,
                 Color.white,
                 1.25f,
                 TextAlignmentOptions.TopLeft,
@@ -289,7 +280,7 @@ public static class HudManagerPatch
         else
             showHideButton.Button.gameObject.SetActive(true);
 
-        roleSummary.text = LastResultText;
+        roleSummary.text = XtremeGameData.LastResultText;
         AdjustBackgroundSize();
     }
 
