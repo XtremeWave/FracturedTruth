@@ -31,7 +31,7 @@ public class Main : BasePlugin
     // == 程序基本设定 / Program Config ==
     public const string ModName = "Final Suspect";
     public const string ForkId = "Final Suspect";
-    public const string PluginVersion = "1.1.100";
+    public const string PluginVersion = "1.1.102";
     public const string PluginGuid = "cn.xtremewave.finalsuspect";
     public const int PluginCreation = 0;
     public const string DebugKeyHash = "c0fd562955ba56af3ae20d7ec9e64c664f0facecef4b3e366e109306adeae29d";
@@ -49,7 +49,7 @@ public class Main : BasePlugin
     /// </summary>
     private const VersionTypes DisplayedVersion_Type = VersionTypes.Beta;
 
-    private const int DisplayedVersion_TestCreation = 1;
+    private const int DisplayedVersion_TestCreation = 3;
 
 
     // == 链接相关设定 / Link Config ==
