@@ -115,11 +115,11 @@ Tip.CannotUnloadDuringGame: "游戏中不能切换为原版"
 ## 资源管理
 Tip.ResourceManager: "您可以在「资源管理」中下载本模组的配套以及扩展资源\n以\"Pre-\"开头的文件为预下载资源包"
 ## 我的音乐
-Tip.MyMusic: "您可以在「资源管理」中下载本模组支持的音乐或在文件夹（AmongUs/Final Suspect_Data/Musics）中添加自己喜爱的音频文件，如果音乐本地资源路径不存在则会显示「文件丢失」"
+Tip.MyMusic: "您可以在「资源管理」中下载本模组支持的音乐或在文件夹（Among Us/Final Suspect_Data/Musics）中添加自己喜爱的音频文件，如果音乐本地资源路径不存在则会显示「文件丢失」"
 Tip.Incomplete_Music: "检测到当前音乐文件不完整"
 Tip.Incomplete_SoundEffect: "检测到当前音效文件不完整"
 Tip.Incomplete_Image: "检测到当前音乐文件不完整"
-Tip.Incomplete: "如果您希望提高您的游戏体验，请在「主页-设置-更多功能-资源管理」下载模组配套资源包"
+Tip.Incomplete: "如果您希望提高您的游戏体验，请在「主页-设置-客户端功能-资源管理」下载模组配套资源包"
 ## 名称标识管理
 Tip.TextContent: "文本内容"
 Tip.TextSizeDescription: "文本大小<size=60%>（默认100%）</size>"
@@ -291,6 +291,7 @@ DCNotify.Description: "您被踢出房间\n理由：{0}"
 
 # 任务栏相关 / Task Panel
 PressF1ShowRoleDescription: "按F1查看您的职业介绍"
+PressF2ToHidePane: "按下F2显示/隐藏信息版"
 FakeTask: "假任务："
 KillCount: "击杀"
 
@@ -342,6 +343,7 @@ Download: "下载"
 Disable: "禁用"
 Delete: "删除"
 Author: "作者"
+Close: "关闭"
 
 # 身份 / Identity
 Id.Host: "房主"

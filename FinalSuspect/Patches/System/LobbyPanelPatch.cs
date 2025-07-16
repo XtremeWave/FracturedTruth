@@ -17,6 +17,10 @@ internal class LobbyInfoPaneUpdatePatch
             .FindChild("GameSettingsButtons");
         trans.FindChild("Host Buttons").gameObject.SetActive(false);
         trans.FindChild("Client Buttons").gameObject.SetActive(true);
+        trans.FindChild("ButtonSettingsHeader").gameObject.GetComponent<TextMeshPro>().text +=
+            $" - {GetString("PressF2ToHidePane")}";
+        DestroyableSingleton<LobbyInfoPane>.Instance.gameObject.GetComponent<AspectPosition>().DistanceFromEdge +=
+            Vector3.forward * -30;
     }
 
     public static void Postfix()

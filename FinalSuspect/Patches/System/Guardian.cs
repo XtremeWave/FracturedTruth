@@ -1,5 +1,6 @@
 using System;
 using AmongUs.InnerNet.GameDataMessages;
+using FinalSuspect.DataHandling.XtremeGameData;
 using FinalSuspect.Modules.Core.Game;
 using FinalSuspect.Modules.Core.Game.PlayerControlExtension;
 using Hazel;
@@ -13,7 +14,7 @@ public static class HandleGameDataPatch
 {
     public static bool Prefix(InnerNetClient __instance, [HarmonyArgument(0)] MessageReader parentReader)
     {
-        if (!IsLobby || IsNotJoined || !OnGameJoinedPatch.JoinedCompleted || !Main.EnableGuardian.Value) return true;
+        if (!IsLobby || IsNotJoined || !XtremeGameData.JoinedCompleted || !Main.EnableGuardian.Value) return true;
 
         try
         {
@@ -37,7 +38,7 @@ public static class HandleGameDataInnerPatch
 
     public static bool Prefix(InnerNetClient._HandleGameDataInner_d__165 __instance)
     {
-        if (!IsLobby || IsNotJoined || !OnGameJoinedPatch.JoinedCompleted || !Main.EnableGuardian.Value) return true;
+        if (!IsLobby || IsNotJoined || !XtremeGameData.JoinedCompleted || !Main.EnableGuardian.Value) return true;
         var reader = __instance.reader;
         if (reader.BytesRemaining < 1)
         {
@@ -174,7 +175,7 @@ internal class HandleMessagePatch
 
     public static bool Prefix(InnerNetServer.Player client, MessageReader reader)
     {
-        if (!IsLobby || IsNotJoined || !OnGameJoinedPatch.JoinedCompleted || !Main.EnableGuardian.Value) return true;
+        if (!IsLobby || IsNotJoined || !XtremeGameData.JoinedCompleted || !Main.EnableGuardian.Value) return true;
 
         if (!playerMsgCounters.TryGetValue(client.Id, out var counter))
         {

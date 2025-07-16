@@ -11,6 +11,7 @@ public static partial class XtremeGameData
     public static string LastGameData;
     public static string LastGameResult;
     public static Color LastLocalPlayerRoleColor;
+    public static bool JoinedCompleted;
 
     [GameModuleInitializer]
     public static void Init()

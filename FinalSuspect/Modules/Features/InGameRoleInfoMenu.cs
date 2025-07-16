@@ -30,7 +30,6 @@ public static class InGameRoleInfoMenu
     [GameModuleInitializer]
     private static void Init()
     {
-        Test(0);
         var DOBScreen = AccountManager.Instance.transform.FindChild("DOBEnterScreen");
 
         Fill = new GameObject("FinalSuspect Role Info Menu Fill") { layer = 5 };
@@ -72,11 +71,11 @@ public static class InGameRoleInfoMenu
         builder.AppendFormat("<size={0}>\n", BlankLineSize);
         // 职业名
         var role = player.Data.Role.Role;
-        builder.AppendFormat("<size={0}>{1}", FirstHeaderSize, GetRoleName(role).Color(GetRoleColor(role)));
+        builder.Append($"<size={FirstHeaderSize}>{GetRoleName(role).Color(GetRoleColor(role))}");
         // 职业阵营 / 原版职业
         var roleTeam = player.IsImpostor() ? "Imp" : "Crew";
-        builder.AppendFormat("<size={0}> ({1})\n", BodySize, GetString($"RoleType.{roleTeam}"));
-        builder.AppendFormat("<size={0}>{1}\n", BodySize, player.GetRoleType().GetRoleInfoForVanilla(true) ?? "");
+        builder.Append($"<size={BodySize}> ({GetString($"RoleType.{roleTeam}")})\n");
+        builder.Append($"<size={BodySize}>{player.GetRoleType().GetRoleInfoForVanilla(true) ?? ""}\n");
         RoleInfoTMP.text = builder.ToString();
         var HnSPrefix = "";
         if (!IsNormalGame && player.IsAlive())

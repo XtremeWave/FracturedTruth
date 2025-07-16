@@ -169,14 +169,15 @@ public static class MainMenuStylePanel
             CustomBackground.transform
         );
         _titleText.name = "TitleText";
-        _titleText.transform.localPosition = new Vector3(-0.55f, 2.25f, -5f);
+        _titleText.transform.localPosition = new Vector3(-0.05f, 2.55f, -5f);
         _titleText.transform.localScale = Vector3.one;
 
         var tmp = _titleText.GetComponent<TextMeshPro>();
         tmp.text = "Title";
         tmp.alignment = TextAlignmentOptions.TopLeft;
         tmp.fontStyle = FontStyles.Bold;
-        _titleText.GetComponent<RectTransform>().sizeDelta = new Vector2(4f, 1f);
+        //tmp.autoSizeTextContainer = true;
+        _titleText.GetComponent<RectTransform>().sizeDelta = new Vector2(5f, 0.3f);
     }
 
     private static void CreateAuthorText(OptionsMenuBehaviour optionsMenuBehaviour)

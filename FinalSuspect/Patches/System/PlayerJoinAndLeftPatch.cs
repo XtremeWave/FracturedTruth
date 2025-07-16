@@ -12,8 +12,6 @@ namespace FinalSuspect.Patches.System;
 [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameJoined))]
 public class OnGameJoinedPatch
 {
-    public static bool JoinedCompleted;
-
     public static void Postfix(AmongUsClient __instance)
     {
         HudManagerPatch.Init();
@@ -25,10 +23,10 @@ public class OnGameJoinedPatch
         UpdateGameState_IsInMeeting(false);
         ErrorText.Instance.Clear();
         ServerAddManager.SetServerName();
-        JoinedCompleted = false;
+        XtremeGameData.JoinedCompleted = false;
         Init_FAC();
         _ = new LateTask(() => { _ = RPC.RpcVersionCheck(); }, 0.5f, "SyncJoined");
-        _ = new LateTask(() => { JoinedCompleted = true; }, 4f, "SyncJoined");
+        _ = new LateTask(() => { XtremeGameData.JoinedCompleted = true; }, 4f, "SyncJoined");
 
         if (AmongUsClient.Instance.AmHost) GameStartManagerPatch.GameStartManagerUpdatePatch.exitTimer = -1;
         //Main.NewLobby = true;

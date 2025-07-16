@@ -8,8 +8,8 @@ namespace FinalSuspect.Attributes;
 public abstract class InitializerAttribute<T>(InitializePriority priority) : Attribute
 {
     /// <summary>所有初始化方法</summary>
-    [SuppressMessage("ReSharper", "StaticMemberInGenericType")]
-    private static MethodInfo[] allInitializers = [];
+    // ReSharper disable once StaticMemberInGenericType
+    private static MethodInfo[] allInitializers;
 
     private static readonly LogHandler logger = Handler(nameof(InitializerAttribute<T>));
 

@@ -11,6 +11,9 @@ namespace FinalSuspect.Patches.System;
 public class TaskProgressTrackerPatch
 {
     private static string TitleText;
+    private static readonly int FullColor = Shader.PropertyToID("_FullColor");
+    private static float lastPercentage;
+
 
     [HarmonyPatch(typeof(ProgressTracker), nameof(ProgressTracker.Start))]
     [HarmonyPostfix]
@@ -23,11 +26,15 @@ public class TaskProgressTrackerPatch
     [HarmonyPostfix]
     public static void ProgressTracker_FixedUpdate(ProgressTracker __instance)
     {
-        __instance.TileParent.material.SetColor(399, Color.blue);
-        if (!IsInGame) return;
+        __instance.TileParent.material.SetColor(FullColor, ColorHelper.CompleteGreen);
+        if (!IsInGame)
+        {
+            lastPercentage = 0;
+            return;
+        }
+
         var instance = GameData.Instance;
         var percentage = instance.CompletedTasks / (float)instance.TotalTasks * 100f;
-        var lastPercentage = 0f;
         var data = PlayerControl.LocalPlayer.GetXtremeData();
         switch (GameManager.Instance.LogicOptions.GetTaskBarMode())
         {
@@ -45,7 +52,7 @@ public class TaskProgressTrackerPatch
         lastPercentage = percentage;
         End:
 
-        __instance.TileParent.material.SetColor(399,
+        __instance.TileParent.material.SetColor(FullColor,
             data.IsImpostor
                 ? ColorHelper.GetColorByPercentage(lastPercentage)
                 : PlayerControl.LocalPlayer.GetRoleColor());

@@ -204,7 +204,6 @@ public static class XtremeLocalHandling
     public static bool GetHauntFilterText(HauntMenuMinigame __instance)
     {
         if (!Main.EnableFinalSuspect.Value) return true;
-        if (!__instance.HauntTarget) return true;
         var role = __instance.HauntTarget.GetRoleType();
         var color = GetRoleColor(role);
         __instance.NameText.color = __instance.FilterText.color = color;
