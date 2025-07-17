@@ -30,11 +30,7 @@
     </PropertyGroup>
 
     <Target Name="InjectBuildTime" BeforeTargets="CoreCompile">
-        <WriteLinesToFile
-                File="$(IntermediateOutputPath)BuildTime.cs"
-                Lines="namespace FinalSuspect.Internal { public static class BuildTime { public const string Date = %22$(CompileDate)%22%3B } }"
-                Overwrite="true"
-                Encoding="UTF-8"/>
+        <WriteLinesToFile File="$(IntermediateOutputPath)BuildTime.cs" Lines="namespace FinalSuspect.Internal { public static class BuildTime { public const string Date = %22$(CompileDate)%22%3B } }" Overwrite="true" Encoding="UTF-8"/>
         <ItemGroup>
             <Compile Include="$(IntermediateOutputPath)BuildTime.cs"/>
         </ItemGroup>
@@ -47,11 +43,14 @@
     <ItemGroup>
         <!-- nuget.bepinex.dev -->
         <PackageReference Include="AmongUs.GameLibs.Steam" Version="2025.4.15" PrivateAssets="all"/>
-        <PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="2.1.0-rc.1" PrivateAssets="all" ExcludeAssets="runtime"/>
-        <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.735" Private="false" ExcludeAssets="runtime;native"/>
+        <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.738" Private="false" ExcludeAssets="runtime;native"/>
         <!-- nuget.org -->
         <PackageReference Include="Costura.Fody" Version="5.8.0-alpha0098" PrivateAssets="all"/>
         <PackageReference Include="GitInfo" Version="3.5.0"/>
+        <PackageReference Include="NextBepLoader.BepInEx.IL2CPP.MSBuild" Version="2.1.0-dev-6">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
         <PackageReference Include="YamlDotNet" Version="16.3.0"/>
     </ItemGroup>
 
@@ -88,13 +87,9 @@
             <BaseBepInExFiles Include="$(BaseBepInExDir)\**\*.*"/>
         </ItemGroup>
 
-        <Copy SourceFiles="@(BaseBepInExFiles)"
-              DestinationFolder="$(TargetModDir)\%(RecursiveDir)"
-              ContinueOnError="true"/>
+        <Copy SourceFiles="@(BaseBepInExFiles)" DestinationFolder="$(TargetModDir)\%(RecursiveDir)" ContinueOnError="true"/>
 
-        <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll"
-              DestinationFolder="$(TargetModDir)\BepInEx\plugins\"
-              ContinueOnError="true"/>
+        <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(TargetModDir)\BepInEx\plugins\" ContinueOnError="true"/>
     </Target>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">

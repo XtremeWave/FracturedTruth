@@ -36,11 +36,6 @@ public static class RegistryManager
 
         Info("上次启动的FinalSuspect版本：" + LastVersion, "Registry Manager");
 
-        if (LastVersion < new Version(1, 1, 0))
-        {
-            Warn("v1.1 New Version Operation Needed", "Registry Manager");
-            FoldersNFileToDel.Add("./BepInEx/config");
-        }
 #if RELEASE
         if (LastVersion < new Version(1, 2, 0))
         {

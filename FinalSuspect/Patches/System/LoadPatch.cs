@@ -241,7 +241,8 @@ public static class LoadPatch
 
             if (RemoteLanguageList.Count > 0)
                 yield return DownloadResources(RemoteLanguageList, FileType.Languages, null, true);
-            TranslatorInit();
+            if (!_skipLoadAnimation)
+                TranslatorInit();
         }
 
         private static IEnumerator HandlePostDownloadProcess(bool fastLaunchMode)

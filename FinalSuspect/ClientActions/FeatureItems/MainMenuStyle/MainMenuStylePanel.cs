@@ -93,7 +93,7 @@ public static class MainMenuStylePanel
             {
                 var rd = HashRandom.Next(0, 100);
                 if (rd < 5)
-                    sr.sprite = LoadSprite($"FinalSuspect-BG-MiraStudioNewYear.png", 179f);
+                    sr.sprite = LoadSprite("FinalSuspect-BG-MiraStudioNewYear.png", 179f);
             }
 
             Starfield.SetActive(style.StarFieldActive);
@@ -102,9 +102,14 @@ public static class MainMenuStylePanel
 
             var __instance = DestroyableSingleton<MainMenuManager>.Instance;
             Color shade = new(0f, 0f, 0f, 0f);
+            Test(0);
             var standardActiveSprite = __instance.newsButton.activeSprites.GetComponent<SpriteRenderer>().sprite;
+            Test(1);
             var minorActiveSprite = __instance.quitButton.activeSprites.GetComponent<SpriteRenderer>().sprite;
+            Test(2);
+            AwakeFriendCodeUIPatch.Prefix();
             var friendsButton = AwakeFriendCodeUIPatch.FriendsButton.GetComponent<PassiveButton>();
+            Test(3);
             Dictionary<List<PassiveButton>, (Sprite, Color, Color, Color, Color)> mainButtons = new()
             {
                 {
@@ -204,7 +209,7 @@ public static class MainMenuStylePanel
             CustomBackground.transform
         );
         _descriptionText.name = "DescriptionText";
-        _descriptionText.transform.localPosition = new Vector3(-0.15f, -1.2f, -5f);
+        _descriptionText.transform.localPosition = new Vector3(-0.05f, -0.2f, -5f);
         _descriptionText.transform.localScale = Vector3.one;
 
         var tmp = _descriptionText.GetComponent<TextMeshPro>();
@@ -214,7 +219,7 @@ public static class MainMenuStylePanel
         tmp.fontStyle = FontStyles.Italic;
         tmp.fontSizeMin = tmp.fontSizeMax = tmp.fontSize = 1.25f;
 
-        _descriptionText.GetComponent<RectTransform>().sizeDelta = new Vector2(4f, 2f);
+        _descriptionText.GetComponent<RectTransform>().sizeDelta = new Vector2(4.2f, 0.2f);
     }
 
     private static void CreatePreviewImage()

@@ -9,13 +9,14 @@ namespace FinalSuspect.Patches.System;
 public static class AwakeFriendCodeUIPatch
 {
     public static GameObject FriendsButton;
+    private static GameObject CustomBarSprit;
 
     public static void Prefix()
     {
         var BarSprit = GameObject.Find("BarSprite");
         if (BarSprit)
         {
-            GameObject CustomBarSprit = new();
+            CustomBarSprit = new("ModBarSprite");
             CustomBarSprit.transform.SetParent(BarSprit.transform.parent);
             CustomBarSprit.transform.localScale = BarSprit.transform.localScale;
             CustomBarSprit.transform.localPosition = BarSprit.transform.localPosition;
