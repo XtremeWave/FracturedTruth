@@ -14,14 +14,14 @@ Team.Imp_Only: "Impostor"
 Team.Crew: "Team-Crewmate"
 
 # 伪装者数量文字 / Impostor Text
-ImpostorNum.Imp:  "<color=#ff1919>There Are {0} Impostors In Our Team</color>"
-ImpostorNum.Imp_Only:  "<color=#ff1919>There Is Only 1 Impostor Among The Crowd</color>"
-ImpostorNum.Crew: "<color=#8cffff>There Are </color><color=#ff1919>{0} Impostors</color><color=#8cffff> Among Us</color>"
+ImpostorNum.Imp: "<color=#ff1919>There are {0} impostors in our team</color>"
+ImpostorNum.Imp_Only: "<color=#ff1919>There is only 1 impostor among the crowd</color>"
+ImpostorNum.Crew: "<color=#8cffff>There are </color><color=#ff1919>{0} impostors</color><color=#8cffff> among us</color>"
 
 # 阵营开场
-IntroText.Imp: "<color=#ff1919>Let Evil Envelop the World!</color>"
-IntroText.Imp_Only: "<color=#ff1919>Alone, Yet With Boundless Power!</color>"
-IntroText.Crewmate: "<color=#8cffff>Complete Your Tasks And Root Out the villains!</color>"
+IntroText.Imp: "<color=#ff1919>Let evils DOMINATE THE WORLD!</color>"
+IntroText.Imp_Only: "<color=#ff1919>Though alone, you have ENDLESS POWER!</color>"
+IntroText.Crewmate: "<color=#8cffff>Complete your tasks and find out the impostors!</color>"
 
 # 原版职业 / Vanilla
 Role.Crewmate: "Crewmate"
@@ -40,11 +40,11 @@ Role.ImpostorGhost: "Impostor Ghost"
 ## 因为原版职业在enum StringNames中已经有格式，所以按此格式呈现
 CrewmateGhostBlurb: "Complete tasks"
 ImpostorGhostBlurb: "Continue sabotaging"
-CrewmateGhostBlurbLong: "Complete tasks, don't drag the team down!\nUse 「Haunting」 to see Impostors, help Guardian Angels protect Crewmates!"
-ImpostorGhostBlurbLong: "Sabotage facilities, assist surviving teammates to victory!"
-HnSEngineerBlurb: "Complete tasks! Survive to the end!"
+CrewmateGhostBlurbLong: "Complete tasks, don't drag the team down!\nUse 「Haunting」 to see Impostors,and help Guardian Angels protect Crewmates!"
+ImpostorGhostBlurbLong: "Sabotage facilities, assist surviving impostors to win!"
+HnSEngineerBlurb: "Complete tasks and survive to the end!"
 HnSImpostorBlurb: "Slaughter them ALL!"
-HnSCrewmateGhostBlurb: "Cheer on your teammates"
+HnSCrewmateGhostBlurb: "Cheer up your teammates"
 HnSCrewmateGhostBlurbLong: "Dead? What are you looking at? Can you do tasks? Since not...\nGO! CHEER! FOR! YOUR! TEAMMATES!"
 
 # 死因 / Death Reason
@@ -57,11 +57,11 @@ FinalSuspectOptions: "Final Suspect Options"
 ClientOption.UnlockFPS: "Unlock FPS"
 ClientOption.SwitchOutfitType: "Switch Outfit Type"
 ClientOption.KickPlayerWithAbnormalFriendCode: "Kick players with abnormal Friend Codes"
-ClientOption.KickPlayerWithDenyName: "Kick players using prohibited nicknames"
+ClientOption.KickPlayerWithDenyName: "Kick players using banned nicknames"
 ClientOption.KickPlayerInBanList: "Kick banned players"
 ClientOption.SpamDenyWord: "Block banned words"
-ClientOption.AutoStartGame: "Auto-start game when full"
-ClientOption.AutoEndGame: "Auto-return to lobby after game ends"
+ClientOption.AutoStartGame: "Auto-start the game when full"
+ClientOption.AutoEndGame: "Auto-return to lobby when game ends"
 ClientOption.SwitchVanilla: "Switch to Vanilla"
 ClientOption.DisableVanillaSound: "Disable Vanilla game music"
 ClientOption.EnableFAC: "Enable Anti-Cheat"
@@ -76,7 +76,7 @@ ClientOption.EnableFinalSuspect: "Enable 「Final Suspect」"
 
 ## 客户端选项值 / Client Options Values
 ### 愚人节相关 / AprilFoolsMode
-Value.BeanMode: "Classic Bean Mode"
+Value.BeanMode: "Classic Mode"
 Value.HorseMode: "April Fools' Horse Mode"
 Value.LongMode: "April Fools' Long Mode"
 
@@ -103,17 +103,17 @@ Tip.PackageExists: "Installed"
 Tip.OnlyAvailableInMainMenu: "Only available on Main Menu"
 Tip.HideSummaryTextToShowWinText: "<color=#ffff00>Hide Last Summary to view victory text</color>"
 ## 启动加载
-Tip.LanguageFilesLoadingComplete: "Language files loading complete"
+Tip.LanguageFilesLoadingComplete: "Language files loading completes"
 Tip.CheckingForFiles: "Verifying resource file integrity..."
 Tip.DownloadingResources: "Downloading resource files..."
 Tip.Loading: "Loading"
 Tip.LoadingWithDot: "Loading..."
 Tip.LoadingComplete: "Loading complete!"
 ## 切换原版
-Tip.UnloadWarning: "<color=#ffff00><size=200%>Warning</size></color>\nTo return to the mod, you must restart the game\nAre you sure you want to switch to Vanilla?"
-Tip.CannotUnloadDuringGame: "Cannot switch to Vanilla during a game"
+Tip.UnloadWarning: "<color=#ffff00><size=200%>Warning!</size></color>\nYou must restart the game if you want to play modded version.\nAre you sure that you want to switch to Vanilla?"
+Tip.CannotUnloadDuringGame: "Cannot switch to Vanilla when a game starts."
 ## 资源管理
-Tip.ResourceManager: "You can download mod-compatible and extended resources in 「Resource Manager」\nFiles prefixed with \"Pre-\" are pre-download resource packages"
+Tip.ResourceManager: "You can download mod-compatible and additional resources in 「Resource Manager」\nFiles prefixed with \"Pre-\" are pre-download resource packages"
 ## 我的音乐
 Tip.MyMusic: "You can download mod-supported music in 「Resource Manager」 or add your favorite audio files in the folder (Among Us/Final Suspect_Data/Musics). If the local resource path for music does not exist, 「File Missing」 will be displayed"
 Tip.Incomplete_Music: "Incomplete music file detected"
@@ -127,27 +127,27 @@ Tip.TextColorDescription: "Text Color<size=60%> (Hex Color Code)\nLeave blank if
 Tip.PleaseEnterFriendCode: "Please enter the Friend Code to bind the new name tag to"
 Tip.FriendCodeAlreadyExist: "This Friend Code already has a name tag"
 Tip.FriendCodeIncorrect: "Please enter a valid Friend Code"
-Tip.CustomNameTagHelp: "You can add name tags for any player. Tags will be automatically assigned when the player bound to the Friend Code joins. Cannot edit tags after entering a lobby.\nNon-members can only add remarks (Membership features not yet developed)"
+Tip.CustomNameTagHelp: "You can add name tags for any player. Tags will be automatically assigned when the player bind to the Friend Code joins. But you cannot edit tags after entering a lobby.\nNon-VIPs can only add remarks (VIP functions have not developed yet)"
 ## 切换主页风格
 Tip.MainMenuStyleHelp: "You can download 「Main Menu Style Packs」 in 「Resource Manager」 to get main menu resources, and choose your favorite main menu style here"
 
 # 更新结果
 UpdateResult.Succeed_Title: "Update Succeeded"
-UpdateResult.Succeed_Text: "Will take effect after restarting the game :)"
+UpdateResult.Succeed_Text: "It will be activated after restarting the game :)"
 UpdateResult.Failed_Title: "Update Failed"
 UpdateResult.Failed_Reason_NotFound: "Reason: {0}\nThis source may be temporarily unavailable, please switch download source and retry"
 UpdateResult.Failed_Reason_FileMd5Incorrect: "Reason: File verification error\nThe file version from this source is not the latest, please switch download source and retry"
-UpdateResult.Failed_Reason_Ping: "Reason: Download update timed out or interrupted\nPlease change network and retry or update manually"
+UpdateResult.Failed_Reason_Ping: "Reason: Download update timed out or interrupted\nPlease check your network and retry or update manually"
 
 # 更新检查 / Update Checker
 UpdateCheck.Popup_Title: "Update Check"
 UpdateCheck.Failed_Retry: "Failed to check for updates :(\nRetry?"
-UpdateCheck.Failed_Exit: "Failed to check for updates :(\nPlease check your network connection and retry!"
+UpdateCheck.Failed_Exit: "Failed to check for updates :(\nPlease check your network and retry!"
 
 # 更新提醒 / Update Reminder
 UpdateRemind.updatePopup: "Update Now"
 UpdateRemind.updateNotice: "Update Reminder"
-UpdateRemind.BySelf_Title: "Update Prompt"
+UpdateRemind.BySelf_Title: "Update Hint"
 UpdateRemind.BySelf_Text: "This version does not support one-click update, please update manually"
 
 # 选择更新渠道 / Update Chose Source
@@ -158,7 +158,7 @@ UpdateSource.XtremeApi: "Api"
 
 # 无法加入公开游戏原因 / Unable to join public game reasons
 CanNotJoinPublicRoomNoLatest: "We have an important update, please update this mod\nOtherwise you cannot join public rooms"
-ModBrokenMessage: "Mod files corrupted, please restart the game or reinstall this mod"
+ModBrokenMessage: "Mod files crashed, please restart the game or reinstall this mod"
 UnsupportedVersion: "Your Among Us version is incompatible with FinalSuspect\nPlease update the game"
 
 # 名称标识
@@ -177,7 +177,7 @@ NameTag.NewNameTag: "New"
 # 主页风格
 MainMenuStyle.Title_MiraHQ: "<color=#cecdfd>Chasing Dawn<size=80%>(FS)</size></color>"
 MainMenuStyle.Author_MiraHQ: "KpCam"
-MainMenuStyle.Description_MiraHQ: "As time passes, winter in the Northern Hemisphere comes to an end, and spring revives everywhere.\nGazing at Mira's snowy scenery, are memories awakened within? Warm currents still flow in the heart.\nNo matter who the final suspicion falls upon, no matter whose hands fracture the truth,\nIn a refreshing new experience, brainstorm and leave behind new happy memories.\nPlaying games, having fun is the most important!!!<size=80%>\n\nNamed by: 一念旧情丶</size>"
+MainMenuStyle.Description_MiraHQ: "As time passes,northern winter ends, and spring revives.\nGazing at Mira's snowy scenery, are memories awakened? Warm streams flow in the heart.\nNo matter who is the final suspect, no matter whose hands fracture the truth,\nIn a refreshing new experience, brainstorm and leave behind new happy memories.\nPlaying games, having fun is the most important!!!<size=80%>\n\nNamed by: 一念旧情丶</size>"
 MainMenuStyle.Title_Security: "<color=#cdfffd>Red Heart, Fierce Love<size=80%> (TONEX)</size></color>"
 MainMenuStyle.Author_Security: "KpCam"
 MainMenuStyle.Description_Security: "We will not fall, not give up, not disappoint players, and never stop progressing.\nIf met with cold stares, we will prove it to everyone!\nWith passion, we set sail again<size=80%>\n\nNamed by: Slok</size>"
@@ -210,7 +210,7 @@ MusPlay.CanPlay: "Click to Play"
 MusPlay.NoFound: "File Missing"
 
 # 官方音乐 / Musics
-Mus.GongXiFaCai: "GongXiFaCai"
+Mus.GongXiFaCai: "恭喜发财(Happy Chinese New Year)"
 Mus.NeverGonnaGiveYouUp: "Never Gonna Give You Up"
 Mus.CountingStars: "Counting Stars"
 Mus.TidalSurge: "Tidal Surge"
@@ -233,7 +233,7 @@ Notification.PlayerKickByHost: "[{0}] was kicked by the host"
 Notification.PlayerBanByHost: "[{0}] was banned by the host"
 Notification.PlayerLeftCuzError: "[{0}] left the game due to an <color=#E57373>error</color>"
 Notification.PlayerLeftByAU-Anticheat: "[{0}] was kicked by Among Us Anti-Cheat (unrelated to <color=#cecdfd>FinalSuspect</color>)"
-Notification.KickBecauseDifferentVersionOrMod: "[{0}] was removed because they have a different version/mod installed"
+Notification.KickBecauseDifferentVersionOrMod: "[{0}] was kicked because they have a different version/mod installed"
 ## 模组
 Notification.KickedByDenyName: "[{0}] was kicked for having a nickname containing banned words"
 Notification.DumpfileSaved: "Log file successfully saved to desktop, filename: {0}"
@@ -246,8 +246,8 @@ Warning: "Warning"
 Warning.MismatchedVersion: "[{0}]\nhas a different version of [{1}] installed"
 Warning.AutoExitAtMismatchedVersion: "Your version of [{0}] is different from the host's\nYou will be kicked in {1} seconds"
 Warning.CantKickDev: "Sorry, you cannot kick developers"
-Warning.RoomBroken: "Sorry, this room has suffered a bombing attack, please play in another room"
-Warning.InvalidColor: "Player with illegal color detected"
+Warning.RoomBroken: "Sorry, this room has suffered a hacking attack, please play in another room"
+Warning.InvalidColor: "Player with invalid color detected"
 
 ## 错误等级 / Error Levels
 ErrorLevel1: "May cause multiple bugs simultaneously"
@@ -256,7 +256,7 @@ ErrorLevel3: "Unreleased version"
 
 # 反作弊 / FAC
 CheatDetected.HighLevel: "Warning: FAC is defending against bombing cheats"
-CheatDetected.LowLevel: "Warning: FAC detected possible cheater player"
+CheatDetected.LowLevel: "Warning: FAC detected possible cheater"
 CheatDetected.UseCheat: "{0} used cheat program [{1}]"
 CheatDetected.MayUseCheat: "{0} suspected of using mod [{1}] or cheat program"
 CheatDetected.InvalidRpc: "[{0}] was kicked for sending invalid data <color=#ffff00>(Invalid Rpc: {1})</color>"
@@ -283,14 +283,15 @@ DCNotify.Hacking: "You were kicked from the room by InnerSloth's anti-cheat syst
 DCNotify.Banned: "You were banned from this room"
 DCNotify.Kicked: "You were kicked from this room"
 DCNotify.DCFromServer: "Your connection to the server was interrupted\nThis may be due to unstable network\nor server instability/refusal of access"
-DCNotify.GameNotFound: "Specified room not found, may have disbanded\nor check if you selected a different server than the room"
-DCNotify.GameStarted: "This room is in-game, please wait for the game to end"
+DCNotify.GameNotFound: "Specified room not found, may have closed\nor check if you selected a different server than the room"
+DCNotify.GameStarted: "This game has already started, please wait for the game to end"
 DCNotify.GameFull: "This room is full, please try again later"
 DCNotify.IncorrectVersion: "Your Among Us version differs from the room"
 DCNotify.Description: "You were kicked from the room\nReason: {0}"
 
 # 任务栏相关 / Task Panel
 PressF1ShowRoleDescription: "Press F1 to view your role description"
+PressF2ToHidePane: "Press F2 to show/hide pane"
 FakeTask: "Fake Task:"
 KillCount: "Kills"
 
@@ -304,7 +305,7 @@ Summary.ImpsWin: "<color=#ff1919>Team-Impostor Win</color>"
 Outro.Crews_Win: "Crewmates Victory"
 Outro.Crews_WinBlurb: "The light of truth shines in hope!"
 Outro.Imps_Win: "Impostors Victory"
-Outro.Imps_WinBlurb: "Evil turned truth to ashes"
+Outro.Imps_WinBlurb: "Evil destroyed the truth to ashes"
 
 # 主页 / Main UI
 FinalSuspectWelcomeText: "Wishing you a pleasant <color={0}>gaming experience</color>!"
