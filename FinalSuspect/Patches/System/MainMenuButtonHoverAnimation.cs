@@ -41,7 +41,7 @@ public class MainMenuButtonHoverAnimation
             VersionShowerStartPatch.CreditTextCredential.gameObject.SetActive(Active);
             VersionShowerStartPatch.VisitText.gameObject.SetActive(Active);
             DestroyableSingleton<AccountTab>.Instance.gameObject.SetActive(Active);
-            TitleLogoPatch.ModStamp.SetActive(Active);
+            ModMainMenuManager.ModStamp.SetActive(Active);
         }
 
         if (!GameObject.Find("MainUI")) return;

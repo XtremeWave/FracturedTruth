@@ -2,32 +2,19 @@
 using BepInEx.Unity.IL2CPP.Utils;
 using Il2CppSystem;
 using UnityEngine;
+using static FinalSuspect.Modules.Core.Plugin.ModMainMenuManager;
 
 namespace FinalSuspect.Patches.System;
 
 [HarmonyPatch(typeof(AccountTab), nameof(AccountTab.Awake))]
 public static class AwakeFriendCodeUIPatch
 {
-    public static GameObject FriendsButton;
-    private static GameObject CustomBarSprit;
-
     public static void Prefix()
     {
         var BarSprit = GameObject.Find("BarSprite");
         if (BarSprit)
         {
-            CustomBarSprit = new("ModBarSprite");
-            CustomBarSprit.transform.SetParent(BarSprit.transform.parent);
-            CustomBarSprit.transform.localScale = BarSprit.transform.localScale;
-            CustomBarSprit.transform.localPosition = BarSprit.transform.localPosition;
-
-            void ResetParent(GameObject obj)
-            {
-                obj.transform.SetParent(CustomBarSprit.transform);
-            }
-
-            BarSprit.ForEachChild((Action<GameObject>)ResetParent);
-            BarSprit.SetActive(false);
+            BarSprit.GetComponent<SpriteRenderer>().color = Color.clear;
         }
 
         FriendsButton = GameObject.Find("FriendsButton");

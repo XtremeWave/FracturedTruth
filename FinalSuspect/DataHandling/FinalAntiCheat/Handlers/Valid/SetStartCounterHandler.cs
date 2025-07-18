@@ -16,4 +16,6 @@ public class SetStartCounterHandler : IRpcHandler
     {
         return true;
     }
+
+    public int MaxiReceivedNumPerSecond() => 20;
 }

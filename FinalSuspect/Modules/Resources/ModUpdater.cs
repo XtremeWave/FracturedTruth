@@ -18,10 +18,10 @@ public class ModUpdater
 
     public static void SetUpdateButtonStatus()
     {
-        MainMenuManagerPatch.UpdateButton.SetActive(VersionChecker.isChecked && VersionChecker.hasUpdate &&
-                                                    (VersionChecker.firstStart || VersionChecker.forceUpdate));
-        MainMenuManagerPatch.PlayButton.SetActive(!MainMenuManagerPatch.UpdateButton.activeSelf);
-        var buttonText = MainMenuManagerPatch.UpdateButton.transform.FindChild("FontPlacer").GetChild(0)
+        ModMainMenuManager.UpdateButton.SetActive(VersionChecker.isChecked && VersionChecker.hasUpdate &&
+                                                  (VersionChecker.firstStart || VersionChecker.forceUpdate));
+        ModMainMenuManager.PlayButton.SetActive(!ModMainMenuManager.UpdateButton.activeSelf);
+        var buttonText = ModMainMenuManager.UpdateButton.transform.FindChild("FontPlacer").GetChild(0)
             .GetComponent<TextMeshPro>();
         buttonText.text =
             $"{(VersionChecker.CanUpdate ? GetString("UpdateRemind.updatePopup") : GetString("UpdateRemind.updateNotice"))}\nv{VersionChecker.showVer ?? " ???"}";

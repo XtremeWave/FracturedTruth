@@ -47,8 +47,6 @@ public static class BanManager
                      where line != ""
                      select line)
             {
-                Test(line);
-                Test(player.PlayerName);
                 KickPlayer(player.Id, false, "KickedByDenyName");
                 return;
             }

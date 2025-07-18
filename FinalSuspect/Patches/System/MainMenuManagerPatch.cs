@@ -7,6 +7,7 @@ using FinalSuspect.Templates;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static FinalSuspect.Modules.Core.Plugin.ModMainMenuManager;
 using Object = UnityEngine.Object;
 
 namespace FinalSuspect.Patches.System;
@@ -14,20 +15,7 @@ namespace FinalSuspect.Patches.System;
 [HarmonyPatch]
 public class MainMenuManagerPatch
 {
-    public static GameObject InviteButton;
-
-    public static GameObject GithubButton;
-
     //public static GameObject WebsiteButton;
-    public static GameObject UpdateButton;
-    public static GameObject PlayButton;
-
-    private static bool isOnline;
-    public static bool ShowedBak;
-    private static bool ShowingPanel;
-
-    public static readonly List<GameObject> MainMenuCustomButtons = [];
-    public static MainMenuManager Instance { get; private set; }
 
     [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.OpenGameModeMenu))]
     [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.OpenAccountMenu))]
@@ -60,7 +48,7 @@ public class MainMenuManagerPatch
     public static void ShowRightPanelImmediately()
     {
         ShowingPanel = true;
-        TitleLogoPatch.RightPanel.transform.localPosition = TitleLogoPatch.RightPanelOp;
+        RightPanel.transform.localPosition = RightPanelOp;
         Instance.OpenGameModeMenu();
     }
 
@@ -81,19 +69,18 @@ public class MainMenuManagerPatch
         VersionShowerStartPatch.CreditTextCredential.gameObject.SetActive(!ShowingPanel &&
                                                                           MainMenuButtonHoverAnimation.Active);
 
-        if (TitleLogoPatch.RightPanel)
+        if (RightPanel)
         {
-            var pos1 = TitleLogoPatch.RightPanel.transform.localPosition;
+            var pos1 = RightPanel.transform.localPosition;
             var pos3 = new Vector3(
-                TitleLogoPatch.RightPanelOp.x * GetResolutionOffset(),
-                TitleLogoPatch.RightPanelOp.y, TitleLogoPatch.RightPanelOp.z);
-            var lerp1 = Vector3.Lerp(pos1,
-                ShowingPanel ? pos3 : TitleLogoPatch.RightPanelOp + new Vector3(10f, 0f, 0f),
+                RightPanelOp.x * GetResolutionOffset(),
+                RightPanelOp.y, RightPanelOp.z);
+            var lerp1 = Vector3.Lerp(pos1, ShowingPanel ? pos3 : RightPanelOp + new Vector3(10f, 0f, 0f),
                 Time.deltaTime * (ShowingPanel ? 3f : 2f));
             if (ShowingPanel
-                    ? TitleLogoPatch.RightPanel.transform.localPosition.x > pos3.x + 0.03f
-                    : TitleLogoPatch.RightPanel.transform.localPosition.x < TitleLogoPatch.RightPanelOp.x + 9f
-               ) TitleLogoPatch.RightPanel.transform.localPosition = lerp1;
+                    ? RightPanel.transform.localPosition.x > pos3.x + 0.03f
+                    : RightPanel.transform.localPosition.x < RightPanelOp.x + 9f
+               ) RightPanel.transform.localPosition = lerp1;
         }
 
         if (ShowedBak || !isOnline) return;

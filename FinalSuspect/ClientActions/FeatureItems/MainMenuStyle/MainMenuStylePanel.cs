@@ -85,7 +85,7 @@ public static class MainMenuStylePanel
             BackGroundStyles.Where(x => x.Applied).Do(x => x.CurrentState = CurrentState.NotApply);
             style.CurrentState = CurrentState.Applied;
             Refresh(style);
-            var sr = FinalSuspect_Background.GetComponent<SpriteRenderer>();
+            var sr = ModMainMenuManager.FinalSuspect_Background.GetComponent<SpriteRenderer>();
 
 
             sr.sprite = style.Sprite;
@@ -96,20 +96,16 @@ public static class MainMenuStylePanel
                     sr.sprite = LoadSprite("FinalSuspect-BG-MiraStudioNewYear.png", 179f);
             }
 
-            Starfield.SetActive(style.StarFieldActive);
-            var starGen = Starfield.GetComponent<StarGen>();
+            ModMainMenuManager.Starfield.SetActive(style.StarFieldActive);
+            var starGen = ModMainMenuManager.Starfield.GetComponent<StarGen>();
             starGen.SetDirection(new Vector2(0, style.StarGenDire));
 
             var __instance = DestroyableSingleton<MainMenuManager>.Instance;
             Color shade = new(0f, 0f, 0f, 0f);
-            Test(0);
             var standardActiveSprite = __instance.newsButton.activeSprites.GetComponent<SpriteRenderer>().sprite;
-            Test(1);
             var minorActiveSprite = __instance.quitButton.activeSprites.GetComponent<SpriteRenderer>().sprite;
-            Test(2);
             AwakeFriendCodeUIPatch.Prefix();
-            var friendsButton = AwakeFriendCodeUIPatch.FriendsButton.GetComponent<PassiveButton>();
-            Test(3);
+            var friendsButton = ModMainMenuManager.FriendsButton.GetComponent<PassiveButton>();
             Dictionary<List<PassiveButton>, (Sprite, Color, Color, Color, Color)> mainButtons = new()
             {
                 {
@@ -132,8 +128,8 @@ public static class MainMenuStylePanel
                     [
                         __instance.creditsButton,
                         __instance.quitButton,
-                        MainMenuManagerPatch.InviteButton.GetComponent<PassiveButton>(),
-                        MainMenuManagerPatch.GithubButton.GetComponent<PassiveButton>()
+                        ModMainMenuManager.InviteButton.GetComponent<PassiveButton>(),
+                        ModMainMenuManager.GithubButton.GetComponent<PassiveButton>()
                     ],
                     (minorActiveSprite, style.MainUIColors[2], shade, Color.white, Color.white)
                 },

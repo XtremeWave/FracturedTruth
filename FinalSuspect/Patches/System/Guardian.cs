@@ -53,7 +53,6 @@ public static class HandleGameDataInnerPatch
         ClientData clientData = null;
         try
         {
-            Test(tag.ToString());
             switch (tag)
             {
                 case GameDataTypes.DataFlag:
@@ -123,7 +122,7 @@ public static class HandleGameDataInnerPatch
 
         counter.Update(reader.Tag);
 
-        if (counter.TotalMsgLastSecond <= 100 && counter.GetRpcCount(reader.Tag) <= 40)
+        if (counter.TotalMsgLastSecond <= 100 && counter.GetRpcCount(reader.Tag) <= 60)
         {
             sr.Recycle();
             return true;
@@ -156,8 +155,6 @@ public static class HandleGameDataInnerPatch
             }
 
             TotalMsgLastSecond++;
-            if (!MsgTypeCounts.ContainsKey(rpcType))
-                Test($"New Counter:{rpcType}");
             MsgTypeCounts[rpcType] = MsgTypeCounts.TryGetValue(rpcType, out var count) ? count + 1 : 1;
         }
 
@@ -184,10 +181,9 @@ internal class HandleMessagePatch
         }
 
         if (counter.IncomingOverload) return false;
-        //Test($"Server IP Address: {client.Connection.EndPoint.Address.ToString()}");
         counter.Update(reader.Tag);
 
-        if (counter.TotalMsgLastSecond <= 100 && counter.GetRpcCount(reader.Tag) <= 40) return true;
+        if (counter.TotalMsgLastSecond <= 100 && counter.GetRpcCount(reader.Tag) <= 60) return true;
 
         counter.IncomingOverload = true;
         var _player = XtremePlayerData.AllPlayerData.FirstOrDefault(x => x.CheatData.ClientData.Id == client.Id)

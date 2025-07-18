@@ -10,6 +10,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using static FinalSuspect.Modules.Core.Plugin.ModMainMenuManager;
 using ColorHelper = FinalSuspect.Helpers.ColorHelper;
 using Object = UnityEngine.Object;
 
@@ -231,30 +232,16 @@ public class VersionShowerStartPatch
 [HarmonyPriority(Priority.First)]
 internal class TitleLogoPatch
 {
-    public static GameObject ModStamp;
-    public static GameObject FinalSuspect_Background;
-    public static GameObject Ambience;
-    public static GameObject Starfield;
-    public static GameObject LeftPanel;
-    public static GameObject RightPanel;
-    public static GameObject CloseRightButton;
-    public static GameObject Tint;
-    public static GameObject Sizer;
-    public static GameObject AULogo;
-    public static GameObject BottomButtonBounds;
-
-    public static Vector3 RightPanelOp = new(2.8f, -0.4f, -5.0f);
-
     public static void Postfix(MainMenuManager __instance)
     {
-        GameObject.Find("BackgroundTexture")?.SetActive(!MainMenuManagerPatch.ShowedBak);
+        GameObject.Find("BackgroundTexture")?.SetActive(!ShowedBak);
 
         Color shade = new(0f, 0f, 0f, 0f);
         var standardActiveSprite = __instance.newsButton.activeSprites.GetComponent<SpriteRenderer>().sprite;
         var minorActiveSprite = __instance.quitButton.activeSprites.GetComponent<SpriteRenderer>().sprite;
         var style = MainMenuStyleManager.BackGroundStyles[Main.CurrentBackgroundId.Value];
 
-        var friendsButton = AwakeFriendCodeUIPatch.FriendsButton.GetComponent<PassiveButton>();
+        var friendsButton = FriendsButton.GetComponent<PassiveButton>();
         Dictionary<List<PassiveButton>, (Sprite, Color, Color, Color, Color)> mainButtons = new()
         {
             {
@@ -436,17 +423,17 @@ internal class ResolutionManagerPatch
         {
             if (!GameObject.Find("MainUI")) return;
             var offset = GetResolutionOffset();
-            TitleLogoPatch.CloseRightButton.transform.localPosition = new Vector3(-4.78f * offset, 1.3f, 1.0f);
-            TitleLogoPatch.Tint.transform.localPosition =
-                new Vector3(-0.0824f * offset, 0.0513f, TitleLogoPatch.Tint.transform.localPosition.z);
-            TitleLogoPatch.Sizer.transform.localPosition = new Vector3(-4.0f * offset, 1.4f, -1.0f);
+            CloseRightButton.transform.localPosition = new Vector3(-4.78f * offset, 1.3f, 1.0f);
+            Tint.transform.localPosition =
+                new Vector3(-0.0824f * offset, 0.0513f, Tint.transform.localPosition.z);
+            Sizer.transform.localPosition = new Vector3(-4.0f * offset, 1.4f, -1.0f);
             var mainButtons = GameObject.Find("Main Buttons");
             mainButtons.transform.position = new Vector3(-3.4f * offset, mainButtons.transform.position.y,
                 mainButtons.transform.position.z);
             MainMenuButtonHoverAnimation.RefreshButtons(mainButtons);
 
             List<GameObject> nullObj = [];
-            foreach (var button in MainMenuManagerPatch.MainMenuCustomButtons)
+            foreach (var button in MainMenuCustomButtons)
             {
                 if (!button)
                 {
@@ -454,14 +441,14 @@ internal class ResolutionManagerPatch
                     continue;
                 }
 
-                var scale = MainMenuManagerPatch.Instance.quitButton.transform.localScale;
+                var scale = Instance.quitButton.transform.localScale;
                 button.transform.localScale =
                     new Vector3(scale.x * GetResolutionOffset(), button.transform.localScale.y);
             }
 
-            foreach (var obj in nullObj) MainMenuManagerPatch.MainMenuCustomButtons.Remove(obj);
+            foreach (var obj in nullObj) MainMenuCustomButtons.Remove(obj);
 
-            TitleLogoPatch.CloseRightButton.transform.localPosition =
+            CloseRightButton.transform.localPosition =
                 new Vector3(-4.78f * GetResolutionOffset(), 1.3f, 1f);
         }, 0.01f, "RefreshMenu");
     }

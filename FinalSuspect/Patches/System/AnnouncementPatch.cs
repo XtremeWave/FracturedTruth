@@ -10,6 +10,7 @@ using Assets.InnerNet;
 using FinalSuspect.Helpers;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using UnityEngine;
+using static FinalSuspect.Modules.Core.Plugin.ModMainMenuManager;
 
 namespace FinalSuspect.Patches.System;
 
@@ -63,7 +64,7 @@ public class ModNewsHistory
     [HarmonyPostfix]
     public static void AnnouncementPopupPostfix()
     {
-        if (!AnnouncementLoadComplete) MainMenuManagerPatch.Instance.announcementPopUp.Close();
+        if (!AnnouncementLoadComplete) ModMainMenuManager.Instance.announcementPopUp.Close();
     }
 
 
@@ -167,10 +168,10 @@ public class ModNewsHistory
         {
             AnnouncementLoadComplete = true;
             DataManager.Player.Announcements.AllAnnouncements.Clear();
-            if (!MainMenuManagerPatch.Instance) return;
+            if (!ModMainMenuManager.Instance) return;
             try
             {
-                MainMenuManagerPatch.Instance.announcementPopUp.Show();
+                ModMainMenuManager.Instance.announcementPopUp.Show();
                 Info("Loading mod announcements complete.", "SetModAnnouncements");
             }
             catch
