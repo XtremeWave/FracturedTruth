@@ -10,6 +10,7 @@ using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game;
 using FinalSuspect.Modules.Core.Game.PlayerControlExtension;
 using FinalSuspect.Patches.System;
+using FinalSuspect.Patches.System.MainMenuSystem;
 using FinalSuspect.Templates;
 using InnerNet;
 using TMPro;
@@ -231,7 +232,7 @@ public static class HudManagerPatch
         }
 
         var gamecode = StringHelper.ColorString(
-            ColorHelper.FinalSuspectColor,
+            ColorHelper.FSColor,
             DataManager.Settings.Gameplay.StreamerMode
                 ? new string('*', XtremeGameData.LastRoomCode.Length)
                 : XtremeGameData.LastRoomCode);

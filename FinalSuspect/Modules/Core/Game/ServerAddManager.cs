@@ -1,6 +1,7 @@
 ﻿using FinalSuspect.Attributes;
 using FinalSuspect.Helpers;
 using FinalSuspect.Patches.System;
+using FinalSuspect.Patches.System.MainMenuSystem;
 using UnityEngine;
 
 namespace FinalSuspect.Modules.Core.Game;

@@ -1,5 +1,6 @@
 ﻿using FinalSuspect.ClientActions.FeatureItems.MainMenuStyle;
 using FinalSuspect.Helpers;
+using FinalSuspect.Patches.System.MainMenuSystem;
 using Il2CppSystem;
 using UnityEngine;
 

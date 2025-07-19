@@ -1,4 +1,4 @@
-namespace FinalSuspect.Patches.Game_Vanilla;
+namespace FinalSuspect.Patches.System;
 
 [HarmonyPatch(typeof(DisconnectPopup), nameof(DisconnectPopup.DoShow))]
 internal class ShowDisconnectPopupPatch

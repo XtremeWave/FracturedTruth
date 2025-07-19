@@ -8,6 +8,7 @@ using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Features;
 using FinalSuspect.Modules.Features.CheckingandBlocking;
 using FinalSuspect.Patches.System;
+using FinalSuspect.Patches.System.MainMenuSystem;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 
@@ -124,7 +125,7 @@ public static class VersionChecker
 
             ModUpdater.SetUpdateButtonStatus();
             VersionShowerStartPatch.VisitText.text = isChecked
-                ? string.Format(GetString("FinalSuspectWelcomeText"), ColorHelper.ModColorHex)
+                ? string.Format(GetString("FinalSuspectWelcomeText"), ColorHelper.FSColorHex)
                 : GetString("RetrieveVersionInfoFailed");
         }, "Check For Update");
     }

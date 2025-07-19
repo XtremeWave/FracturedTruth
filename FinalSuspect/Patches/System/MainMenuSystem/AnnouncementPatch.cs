@@ -10,9 +10,8 @@ using Assets.InnerNet;
 using FinalSuspect.Helpers;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using UnityEngine;
-using static FinalSuspect.Modules.Core.Plugin.ModMainMenuManager;
 
-namespace FinalSuspect.Patches.System;
+namespace FinalSuspect.Patches.System.MainMenuSystem;
 
 // 参考：https://github.com/Yumenopai/TownOfHost_Y
 public class ModNews

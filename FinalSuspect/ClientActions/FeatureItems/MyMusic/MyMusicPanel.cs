@@ -191,19 +191,19 @@ public static class MyMusicPanel
             {
                 case AudiosStates.IsPlaying:
                     preview = GetString("Tip.Playing");
-                    color = ColorHelper.FinalSuspectColor;
+                    color = ColorHelper.FSColor;
                     break;
                 case AudiosStates.IsDownLoading:
                     color = ColorHelper.DownloadYellow;
                     preview = GetString("Tip.Downloading");
                     break;
                 case AudiosStates.IsLoading:
-                    color = ColorHelper.FinalSuspectClientOptionColor;
+                    color = ColorHelper.FSClientOptionColor;
                     preview = GetString("Tip.Parsing");
                     break;
                 case AudiosStates.DownLoadSucceedNotice:
                 case AudiosStates.Exist:
-                    color = audio.UnOfficial ? Color.green : ColorHelper.FinalSuspectClientFeatureColor;
+                    color = audio.UnOfficial ? Color.green : ColorHelper.FSClientFeatureColor;
                     preview = GetString("MusPlay.CanPlay");
                     enable = true;
                     break;
@@ -211,7 +211,7 @@ public static class MyMusicPanel
                 case AudiosStates.DownLoadFailureNotice:
                 default:
                 {
-                    color = ColorHelper.FinalSuspectClientFeatureColor_CanNotUse;
+                    color = ColorHelper.FSClientFeatureColor_CanNotUse;
                     preview = GetString("MusPlay.NoFound");
                     break;
                 }
