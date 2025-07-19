@@ -262,9 +262,6 @@ internal class TitleLogoPatch
             }
         };
 
-        // ReSharper disable once UnusedParameter.Local
-
-
         foreach (var kvp in mainButtons)
             kvp.Key.Do(button =>
             {

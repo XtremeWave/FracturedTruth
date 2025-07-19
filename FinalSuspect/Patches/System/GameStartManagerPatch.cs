@@ -38,6 +38,7 @@ public static class GameStartManagerPatch
     private static PassiveButton cancelButton;
     private static TextMeshPro warningText;
     private static TextMeshPro HideName;
+    public static GameStartManager Instance;
 
     [GameModuleInitializer]
     public static void Init()
@@ -56,6 +57,7 @@ public static class GameStartManagerPatch
     {
         public static void Postfix(GameStartManager __instance)
         {
+            Instance = __instance;
             __instance.MinPlayers = 1;
 
             __instance.GameRoomNameCode.text = GameCode.IntToGameName(AmongUsClient.Instance.GameId);
@@ -123,8 +125,9 @@ public static class GameStartManagerPatch
         private static int updateTimer;
         public static float exitTimer = -1f;
 
-        public static void Prefix(GameStartManager __instance)
+        public static bool Prefix(GameStartManager __instance)
         {
+            if (IsInGame) return false;
             // Lobby code
             if (DataManager.Settings.Gameplay.StreamerMode)
             {
@@ -139,14 +142,15 @@ public static class GameStartManagerPatch
                 HideName.enabled = false;
             }
 
-            if (!Main.AutoStartGame.Value || !AmongUsClient.Instance.AmHost) return;
+            if (!Main.AutoStartGame.Value || !AmongUsClient.Instance.AmHost) return true;
             updateTimer++;
-            if (updateTimer < 50) return;
+            if (updateTimer < 50) return true;
             updateTimer = 0;
             var maxPlayers = GameManager.Instance.LogicOptions.MaxPlayers;
-            if (GameData.Instance.PlayerCount < maxPlayers - 1 || IsCountDown) return;
+            if (GameData.Instance.PlayerCount < maxPlayers - 1 || IsCountDown) return true;
             GameStartManager.Instance.startState = GameStartManager.StartingStates.Countdown;
             GameStartManager.Instance.countDownTimer = 10;
+            return true;
         }
 
         public static void Postfix(GameStartManager __instance)

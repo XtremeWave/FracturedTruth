@@ -41,15 +41,19 @@ public static class BanManager
         {
             var existingNames = SpamManager.ReturnAllNewLinesInFile(DENY_NAME_LIST_PATH);
 
-            foreach (var line in from line in existingNames
-                     where !Main.AllPlayerControls.Any(p => p.IsDev() && line.Contains(p.FriendCode))
-                     where Regex.IsMatch(player.PlayerName, line)
-                     where line != ""
-                     select line)
-            {
-                KickPlayer(player.Id, false, "KickedByDenyName");
-                return;
-            }
+            var hasValidMatch = existingNames
+                .Where(name => !IsDevFriendCode(name))
+                .Any(IsNameMatch);
+
+            if (!hasValidMatch) return;
+            KickPlayer(player.Id, false, "KickedByDenyName");
+            return;
+
+            bool IsNameMatch(string pattern) =>
+                !string.IsNullOrEmpty(pattern) && player.PlayerName.ToLower().Contains(pattern.ToLower());
+
+            bool IsDevFriendCode(string name) =>
+                Main.AllPlayerControls.Any(p => p.IsDev() && name.Contains(p.FriendCode));
         }
         catch (Exception ex)
         {

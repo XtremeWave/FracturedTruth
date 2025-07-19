@@ -177,6 +177,7 @@ public static class HudManagerPatch
         __instance.AbilityButton.buttonLabelText.SetOutlineColor(color);
         __instance.AbilityButton.cooldownTimerText.color = color;
         __instance.KillButton.cooldownTimerText.color = ColorHelper.ImpostorRedPale;
+
         // 刷新按钮状态
         if (!__instance.AbilityButton.gameObject.active || Refresh) return;
         Refresh = true;
@@ -380,10 +381,18 @@ public static class HudManagerPatch
                 UpdateResult(__instance);
                 SetChatBG(__instance);
                 SetAbilityButtonColor(__instance);
-                if ((!ControllerManagerUpdatePatch.ShowSettingsPanel && IsInGame || IsFreePlay) &&
-                    DestroyableSingleton<LobbyInfoPane>.Instance.gameObject.activeSelf)
+
+                if (!IsFreePlay && IsInGame)
                 {
-                    DestroyableSingleton<LobbyInfoPane>.Instance.gameObject.SetActive(false);
+                    var notShowPane = DestroyableSingleton<HudManager>.Instance.Chat.IsOpenOrOpening ||
+                                      !ControllerManagerUpdatePatch.ShowSettingsPanel;
+
+                    if (GameStartManagerPatch.Instance.LobbyInfoPane.gameObject.activeSelf && notShowPane)
+                    {
+                        GameStartManagerPatch.Instance.LobbyInfoPane.DeactivatePane();
+                    }
+
+                    GameStartManagerPatch.Instance.LobbyInfoPane.gameObject.SetActive(!notShowPane);
                 }
             }
             catch
