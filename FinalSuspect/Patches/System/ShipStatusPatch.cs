@@ -1,5 +1,4 @@
 using System;
-using FinalSuspect.Helpers;
 using Il2CppSystem.Reflection.Internal;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -55,14 +54,6 @@ public class ShipStatusPatch
                 size = 10;
                 speed = 15;
                 snow.startColor = new Color(1f, 1f, 1f, 0.15f);
-            }
-            else if (Main.IsValentines)
-            {
-                snow.startColor = new Color(0.85f, 0.5f, 0.6f, 1f);
-            }
-            else if (Main.IsInitialRelease)
-            {
-                snow.startColor = ColorHelper.FSColor;
             }
 
             snow.startSpeed = speed;

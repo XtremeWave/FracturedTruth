@@ -1,4 +1,4 @@
-﻿namespace FinalSuspect.Patches.System;
+﻿namespace FinalSuspect.Patches.Game_Vanilla;
 
 [HarmonyPatch]
 public class EndGameManagerPatch

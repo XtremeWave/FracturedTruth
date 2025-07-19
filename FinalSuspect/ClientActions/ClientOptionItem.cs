@@ -66,20 +66,20 @@ public sealed class ClientOptionItem<T> : ClientActionItem
     {
         if (!ToggleButton) return;
 
-        var color = ColorHelper.FSClientOptionColor_Disable;
+        var color = ColorHelper.FinalSuspectClientOptionColor_Disable;
         switch (Config.Value)
         {
             case bool value:
                 color = value
-                    ? ColorHelper.FSClientOptionColor
-                    : ColorHelper.FSClientOptionColor_Disable;
+                    ? ColorHelper.FinalSuspectClientOptionColor
+                    : ColorHelper.FinalSuspectClientOptionColor_Disable;
                 break;
             case not null when typeof(T).IsEnum:
                 var allValues = (T[])Enum.GetValues(typeof(T));
                 if (allValues.Length == 0) break;
                 var currentIndex = Array.IndexOf(allValues, Config.Value);
 
-                var baseColor = ColorHelper.FSClientOptionColor;
+                var baseColor = ColorHelper.FinalSuspectClientOptionColor;
                 var factor = allValues.Length > 1
                     ? currentIndex / (float)(allValues.Length - 1)
                     : 0f;

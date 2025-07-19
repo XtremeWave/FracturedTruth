@@ -97,7 +97,7 @@ public static class LoadPatch
 
         private static void HandleFirstLaunchText()
         {
-            _loadText.text = $"Welcome to <color={ColorHelper.FSColorHex}>FinalSuspect</color>.";
+            _loadText.text = $"Welcome to <color={ColorHelper.ModColorHex}>FinalSuspect</color>.";
         }
 
         private static IEnumerator HandleCoreLoadingProcess()

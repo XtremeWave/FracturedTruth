@@ -1,12 +1,11 @@
 ﻿using System;
 using FinalSuspect.Helpers;
 using FinalSuspect.Patches.System;
-using FinalSuspect.Patches.System.MainMenuSystem;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static FinalSuspect.ClientActions.FeatureItems.MainMenuStyle.MainMenuStyleManager;
-using static FinalSuspect.Patches.System.MainMenuSystem.TitleLogoPatch;
+using static FinalSuspect.Patches.System.TitleLogoPatch;
 using Object = UnityEngine.Object;
 
 namespace FinalSuspect.ClientActions.FeatureItems.MainMenuStyle;
@@ -282,8 +281,8 @@ public static class MainMenuStylePanel
         _applyButton.Background.color = style.CurrentState switch
         {
             CurrentState.NotFound => _applyButton.Text.color = Palette.DisabledGrey,
-            CurrentState.NotApply => _applyButton.Text.color = ColorHelper.FSClientFeatureColor,
-            CurrentState.Applied => _applyButton.Text.color = ColorHelper.FSColor,
+            CurrentState.NotApply => _applyButton.Text.color = ColorHelper.FinalSuspectClientFeatureColor,
+            CurrentState.Applied => _applyButton.Text.color = ColorHelper.FinalSuspectColor,
             _ => _applyButton.Background.color
         };
         _applyButton.GetComponent<PassiveButton>().enabled = style.CurrentState != CurrentState.NotFound;

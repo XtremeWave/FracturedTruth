@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Object = Il2CppSystem.Object;
 
-namespace FinalSuspect.Patches.System;
+namespace FinalSuspect.Patches.Game_Vanilla;
 
 [HarmonyPatch]
 public static class ServerDropDownPatch

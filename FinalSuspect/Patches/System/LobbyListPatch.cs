@@ -89,7 +89,7 @@ public class SetupGameInfoPatch
         var platforms = $"<color={color}>{platform}</color>";
 
         tmp.text = $"<size=40%>{ShowHostName}</size>" +
-                   $"\n<size=18%><color={ColorHelper.FSColorHex}>{GameCode.IntToGameName(game.GameId)}</color>" +
+                   $"\n<size=18%><color={ColorHelper.ModColorHex}>{GameCode.IntToGameName(game.GameId)}</color>" +
                    $" <color=#ffff00>----</color>{platforms}<color=#ffff00>----</color></size>";
         tmp.fontStyle = FontStyles.Bold;
         tmp.alignment = TextAlignmentOptions.Left;

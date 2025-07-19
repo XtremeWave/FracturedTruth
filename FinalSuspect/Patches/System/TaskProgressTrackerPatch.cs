@@ -1,9 +1,11 @@
+using AmongUs.GameOptions;
 using FinalSuspect.Helpers;
 using FinalSuspect.Modules.Core.Game.PlayerControlExtension;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 
-namespace FinalSuspect.Patches.Game_Vanilla;
+namespace FinalSuspect.Patches.System;
 
 [HarmonyPatch]
 public class TaskProgressTrackerPatch

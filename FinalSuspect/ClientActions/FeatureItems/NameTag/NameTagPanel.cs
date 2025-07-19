@@ -166,8 +166,8 @@ public static class NameTagPanel
         button.Text.text = key;
         button.Background.color =
             IsNotJoined
-                ? ColorHelper.FSClientFeatureColor
-                : ColorHelper.FSClientFeatureColor_CanNotUse;
+                ? ColorHelper.FinalSuspectClientFeatureColor
+                : ColorHelper.FinalSuspectClientFeatureColor_CanNotUse;
 
         var passiveButton = button.GetComponent<PassiveButton>();
         passiveButton.OnClick = new Button.ButtonClickedEvent();

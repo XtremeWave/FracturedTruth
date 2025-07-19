@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace FinalSuspect.Patches.Game_Vanilla;
+namespace FinalSuspect.Patches.System;
 
 [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.Update))]
 public static class GameStartManagerUpdatePatch
@@ -68,7 +68,7 @@ public static class GameStartManagerPatch
             HideName.name = "HideName";
             HideName.color =
                 ColorUtility.TryParseHtmlString(Main.HideColor.Value, out var color) ? color :
-                ColorUtility.TryParseHtmlString(ColorHelper.FSColorHex, out var modColor) ? modColor : HideName.color;
+                ColorUtility.TryParseHtmlString(ColorHelper.ModColorHex, out var modColor) ? modColor : HideName.color;
             HideName.text = Main.HideName.Value;
 
             warningText = Object.Instantiate(__instance.GameStartText, __instance.transform);

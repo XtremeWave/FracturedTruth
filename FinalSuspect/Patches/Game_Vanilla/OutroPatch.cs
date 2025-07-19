@@ -80,7 +80,7 @@ internal class SetEverythingUpPatch
         XtremeGameData.LastGameResult = lastGameResult;
         StringBuilder sb = new($"{GetString("Summary.Text")}{lastGameResult}");
         var gameCode = StringHelper.ColorString(
-            ColorHelper.FSColor,
+            ColorHelper.FinalSuspectColor,
             DataManager.Settings.Gameplay.StreamerMode
                 ? new string('*', XtremeGameData.LastRoomCode.Length)
                 : XtremeGameData.LastRoomCode);

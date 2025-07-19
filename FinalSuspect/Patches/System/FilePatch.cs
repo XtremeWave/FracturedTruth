@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace FinalSuspect.Patches.System.Others;
+namespace FinalSuspect.Patches.System;
 
 public static class FilePatch
 {

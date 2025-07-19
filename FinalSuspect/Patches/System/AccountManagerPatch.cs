@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using BepInEx.Unity.IL2CPP.Utils;
+using Il2CppSystem;
 using UnityEngine;
 using static FinalSuspect.Modules.Core.Plugin.ModMainMenuManager;
 
-namespace FinalSuspect.Patches.System.MainMenuSystem;
+namespace FinalSuspect.Patches.System;
 
 [HarmonyPatch(typeof(AccountTab), nameof(AccountTab.Awake))]
 public static class AwakeFriendCodeUIPatch
