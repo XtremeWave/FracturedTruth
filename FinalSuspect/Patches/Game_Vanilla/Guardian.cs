@@ -1,13 +1,11 @@
 using System;
 using AmongUs.InnerNet.GameDataMessages;
 using FinalSuspect.DataHandling.XtremeGameData;
-using FinalSuspect.Modules.Core.Game;
 using FinalSuspect.Modules.Core.Game.PlayerControlExtension;
 using Hazel;
-using Hazel.Udp;
 using InnerNet;
 
-namespace FinalSuspect.Patches.System;
+namespace FinalSuspect.Patches.Game_Vanilla;
 
 [HarmonyPatch(typeof(InnerNetClient), nameof(InnerNetClient.HandleGameData))]
 public static class HandleGameDataPatch

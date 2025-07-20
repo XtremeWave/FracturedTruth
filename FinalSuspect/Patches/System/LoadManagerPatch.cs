@@ -44,7 +44,7 @@ public class LoadingBarManagerPatch
             ModLogo.GetComponent<CanvasRenderer>().transform.localScale = new Vector3(1.4f, 1.4f, 1);
         }
 
-        __instance.loadingBar.barFill.color = ColorHelper.FinalSuspectColor;
+        __instance.loadingBar.barFill.color = ColorHelper.FSColor;
         __instance.loadingBar.crewmate.gameObject.SetActive(false);
         try
         {

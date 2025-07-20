@@ -63,7 +63,7 @@ public static class XtremeLocalHandling
                 switch (Main.version.CompareTo(ver.version))
                 {
                     case 0 when ver.tag == $"{Main.GitCommit}({Main.GitBranch})":
-                        topcolor = ColorHelper.FinalSuspectColor;
+                        topcolor = ColorHelper.FSColor;
                         break;
                     case 0 when ver.tag != $"{Main.GitCommit}({Main.GitBranch})":
                         toptext = toptext.CheckAndAppendText($"<size=1.5>{ver.tag}</size>");
@@ -78,7 +78,7 @@ public static class XtremeLocalHandling
         }
         else
         {
-            if (player.IsLocalPlayer()) topcolor = ColorHelper.FinalSuspectColor;
+            if (player.IsLocalPlayer()) topcolor = ColorHelper.FSColor;
             else if (player.IsHost()) topcolor = ColorHelper.HostNameColor;
             else topcolor = ColorHelper.ClientlessColor;
         }

@@ -231,7 +231,7 @@ public static class HudManagerPatch
         }
 
         var gamecode = StringHelper.ColorString(
-            ColorHelper.FinalSuspectColor,
+            ColorHelper.FSColor,
             DataManager.Settings.Gameplay.StreamerMode
                 ? new string('*', XtremeGameData.LastRoomCode.Length)
                 : XtremeGameData.LastRoomCode);

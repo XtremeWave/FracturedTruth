@@ -9,7 +9,7 @@ public class CreditsControllerPatch
     {
         var devList = new List<string>
         {
-            $"<size=120%><color={ColorHelper.ModColorHex}>{Main.ModName}</color></size>",
+            $"<size=120%><color={ColorHelper.FSColorHex}>{Main.ModName}</color></size>",
             $"<color=#fffcbe>By</color> <color={ColorHelper.TeamColorHex}>XtremeWave</color>",
             //Others
             $"<size=120%>{GetString("Id.Contributor")}</size>",

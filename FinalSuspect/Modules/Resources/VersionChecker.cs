@@ -124,7 +124,7 @@ public static class VersionChecker
 
             ModUpdater.SetUpdateButtonStatus();
             VersionShowerStartPatch.VisitText.text = isChecked
-                ? string.Format(GetString("FinalSuspectWelcomeText"), ColorHelper.ModColorHex)
+                ? string.Format(GetString("FinalSuspectWelcomeText"), ColorHelper.FSColorHex)
                 : GetString("RetrieveVersionInfoFailed");
         }, "Check For Update");
     }

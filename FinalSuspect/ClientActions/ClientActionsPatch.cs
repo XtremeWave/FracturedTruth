@@ -207,7 +207,7 @@ public static class OptionsMenuBehaviourStartPatch
     {
         item.ToggleButton.Text.text = GetString("ClientFeature." + text);
         item.ToggleButton.GetComponent<PassiveButton>().enabled = true;
-        item.ToggleButton.Background.color = ColorHelper.FinalSuspectClientFeatureColor;
+        item.ToggleButton.Background.color = ColorHelper.FSClientFeatureColor;
     }
 
     /*private static void SetOptionItemDisabled(ClientOptionItem_Boolean item)
@@ -234,7 +234,7 @@ public static class OptionsMenuBehaviourStartPatch
     private static void SetFeatureItemDisabled(ClientFeatureItem item)
     {
         item.ToggleButton.GetComponent<PassiveButton>().enabled = false;
-        item.ToggleButton.Background.color = ColorHelper.FinalSuspectClientFeatureColor_CanNotUse;
+        item.ToggleButton.Background.color = ColorHelper.FSClientFeatureColor_CanNotUse;
     }
 
     /*private static void SetFeatureItemEnable(ClientFeatureItem item)

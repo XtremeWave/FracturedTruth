@@ -9,12 +9,12 @@ public static class ColorHelper
     private const float MarkerAlpha = 0.2f;
 
     public const string TeamColorHex = "#cdfffd";
-    public const string ModColorHex = "#cecdfd";
+    public const string FSColorHex = "#cecdfd";
 
     public static readonly Color32 TeamColor = new(205, 255, 253, 255);
-    public static readonly Color32 FinalSuspectColor = new(206, 205, 253, 255);
+    public static readonly Color32 FSColor = new(206, 205, 253, 255);
     public static readonly Color32 HalfYellow = new(255, 255, 25, 160);
-    public static readonly Color32 HalfModColor = new(206, 205, 253, 160);
+    public static readonly Color32 HalfFSColor = new(206, 205, 253, 160);
     public static readonly Color32 FaultColor = new(229, 115, 115, 255);
     public static readonly Color32 UnmatchedColor = new(191, 255, 185, 255);
     public static readonly Color32 HostNameColor = new(177, 255, 231, 255);
@@ -22,12 +22,12 @@ public static class ColorHelper
     public static readonly Color32 DownloadYellow = new(252, 255, 152, 255);
     public static readonly Color32 CompleteGreen = new(185, 255, 181, 255);
 
-    public static readonly Color32 FinalSuspectClientOptionColor = new(150, 149, 227, 255);
-    public static readonly Color32 FinalSuspectClientOptionColor_Disable = new(61, 60, 97, 255);
-    public static readonly Color32 FinalSuspectClientOptionColor_CanNotUse = new(90, 89, 108, 255);
-    public static readonly Color32 FinalSuspectClientFeatureColor = new(191, 149, 227, 255);
-    public static readonly Color32 FinalSuspectClientFeatureColor_ClickType = new(219, 207, 227, 255);
-    public static readonly Color32 FinalSuspectClientFeatureColor_CanNotUse = new(102, 89, 97, 255);
+    public static readonly Color32 FSClientOptionColor = new(150, 149, 227, 255);
+    public static readonly Color32 FSClientOptionColor_Disable = new(61, 60, 97, 255);
+    public static readonly Color32 FSClientOptionColor_CanNotUse = new(90, 89, 108, 255);
+    public static readonly Color32 FSClientFeatureColor = new(191, 149, 227, 255);
+    public static readonly Color32 FSClientFeatureColor_ClickType = new(219, 207, 227, 255);
+    public static readonly Color32 FSClientFeatureColor_CanNotUse = new(102, 89, 97, 255);
 
     public static readonly Color32 ImpostorRedPale = new(255, 90, 90, 255);
 

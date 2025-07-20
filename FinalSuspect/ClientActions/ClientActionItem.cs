@@ -64,7 +64,7 @@ public class ClientActionItem
                     pos != null ? pos.Value + new Vector3(1.24f, 0f, 0f) : new Vector3(1.24f, -2.4f, 1f);
                 ModOptionsButton.name = "FinalSuspect Options";
                 ModOptionsButton.Text.text = GetString("FinalSuspectOptions");
-                ModOptionsButton.Background.color = ColorHelper.FinalSuspectClientOptionColor;
+                ModOptionsButton.Background.color = ColorHelper.FSClientOptionColor;
                 var modOptionsPassiveButton = ModOptionsButton.GetComponent<PassiveButton>();
                 modOptionsPassiveButton.OnClick = new Button.ButtonClickedEvent();
                 modOptionsPassiveButton.OnClick.AddListener(new Action(() =>

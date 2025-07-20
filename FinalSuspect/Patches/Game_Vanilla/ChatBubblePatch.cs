@@ -1,7 +1,7 @@
 using FinalSuspect.Helpers;
 using UnityEngine;
 
-namespace FinalSuspect.Patches.System;
+namespace FinalSuspect.Patches.Game_Vanilla;
 
 [HarmonyPatch(typeof(ChatBubble))]
 public static class ChatBubblePatch
@@ -16,7 +16,7 @@ public static class ChatBubblePatch
     public static void SetText_Prefix(ChatBubble __instance, ref string chatText)
     {
         if (__instance.TextArea.color == Color.red) return;
-        var bgcolor = ColorHelper.HalfModColor;
+        var bgcolor = ColorHelper.HalfFSColor;
         var sr = __instance.Background;
         Color namecolor = ColorHelper.FaultColor;
         string name = null;

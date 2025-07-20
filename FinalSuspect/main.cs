@@ -49,7 +49,7 @@ public class Main : BasePlugin
     /// </summary>
     private const VersionTypes DisplayedVersion_Type = VersionTypes.RC;
 
-    private const int DisplayedVersion_TestCreation = 1;
+    private const int DisplayedVersion_TestCreation = 2;
 
 
     // == 链接相关设定 / Link Config ==
@@ -76,8 +76,9 @@ public class Main : BasePlugin
     public static List<int> clientIdList = [];
 
     public static string HostNickName = "";
-    public static bool IsInitialRelease = DateTime.Now.Month == 8 && DateTime.Now.Day is 14;
-    public static readonly bool IsAprilFools = DateTime.Now.Month == 4 && DateTime.Now.Day is 1;
+    public static readonly bool IsInitialRelease = DateTime.Now.Month == 8 && DateTime.Now.Day is 15;
+    public static readonly bool IsAprilFools = DateTime.Now is { Month: 4, Day: >= 1 and <= 10 };
+    public static readonly bool IsValentines = DateTime.Now.Month == 2 && DateTime.Now.Day is 14;
 
     public static Main Instance;
 
@@ -156,7 +157,7 @@ public class Main : BasePlugin
 
         //Configs
         HideName = Config.Bind("Xtreme System", "Hide Game Code Name", "Final Suspect");
-        HideColor = Config.Bind("Xtreme System", "Hide Game Code Color", $"{ColorHelper.ModColorHex}");
+        HideColor = Config.Bind("Xtreme System", "Hide Game Code Color", $"{ColorHelper.FSColorHex}");
         EnableFinalSuspect = Config.Bind("Xtreme System", "Enable Final Suspect", true);
         ShowResults = Config.Bind("Xtreme System", "Show Results", true);
         LastStartVersion = Config.Bind("Xtreme System", "Last Start Version", "0.0.0");

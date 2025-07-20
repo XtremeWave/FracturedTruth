@@ -281,8 +281,8 @@ public static class MainMenuStylePanel
         _applyButton.Background.color = style.CurrentState switch
         {
             CurrentState.NotFound => _applyButton.Text.color = Palette.DisabledGrey,
-            CurrentState.NotApply => _applyButton.Text.color = ColorHelper.FinalSuspectClientFeatureColor,
-            CurrentState.Applied => _applyButton.Text.color = ColorHelper.FinalSuspectColor,
+            CurrentState.NotApply => _applyButton.Text.color = ColorHelper.FSClientFeatureColor,
+            CurrentState.Applied => _applyButton.Text.color = ColorHelper.FSColor,
             _ => _applyButton.Background.color
         };
         _applyButton.GetComponent<PassiveButton>().enabled = style.CurrentState != CurrentState.NotFound;
