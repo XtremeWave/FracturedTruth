@@ -9,12 +9,12 @@
 Export/
 
 # 编译临时文件、发布配置文件、开发配置
-FinalSuspect/obj/
-FinalSuspect/Properties/PublishProfiles/
-FinalSuspect/FodyWeavers.xsd
+FracturedTruth/obj/
+FracturedTruth/Properties/PublishProfiles/
+FracturedTruth/FodyWeavers.xsd
 
 # 解决方案
-/FinalSuspect.sln
+/FracturedTruth.sln
 
 # 忽略所有 ZIP 文件
 *.zip

@@ -1,0 +1,84 @@
+using FracturedTruth.Attributes;
+using FracturedTruth.Modules.Core.Plugin;
+using UnityEngine;
+
+namespace FracturedTruth.Patches.System;
+
+[HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.Start))]
+internal class ShipStatusStartPatch
+{
+    public static void Postfix()
+    {
+        Info("-----------游戏开始-----------", "Phase");
+    }
+}
+
+[HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameEnd))]
+internal class AmongUsClientOnGameEndPatch
+{
+    public static void Postfix()
+    {
+        UpdateGameState_IsInGame(false);
+        Info("-----------游戏结束-----------", "Phase");
+    }
+}
+
+[HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Start))]
+[HarmonyPriority(Priority.First)]
+internal class MeetingHudStartPatch
+{
+    public static void Prefix()
+    {
+        _ = new LateTask(() => UpdateGameState_IsInMeeting(true), 1f, "UpdateGameState_IsInMeeting");
+        Info("------------会议开始------------", "Phase");
+    }
+}
+
+[HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.OnDestroy))]
+internal class MeetingHudOnDestroyPatch
+{
+    public static void Postfix()
+    {
+        UpdateGameState_IsInMeeting(false);
+        Info("------------会议结束------------", "Phase");
+    }
+}
+
+[HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.CoStartGame))]
+internal class CoStartGamePatch
+{
+    public static void Postfix()
+    {
+        GameModuleInitializerAttribute.InitializeAll();
+    }
+}
+
+/*[HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.CoStartGameHost))]
+internal class CoStartGameHPatch
+{
+    public static void Prefix()
+    {
+        foreach (var client in AmongUsClient.Instance.allClients)
+        {
+            client.IsReady = true;
+        }
+    }
+
+    public static void Postfix()
+    {
+        var clientData = GetPlayerById(1).GetXtremeData().CheatData.ClientData;
+
+        AmongUsClient.Instance.SendLateRejection(clientData.Id, DisconnectReasons.ClientTimeout);
+        clientData.IsReady = true;
+        AmongUsClient.Instance.OnPlayerLeft(clientData, DisconnectReasons.ClientTimeout);
+    }
+}*/
+
+[HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
+public static class IntroCutsceneOnDestroyPatch
+{
+    public static void Postfix()
+    {
+        Info("OnDestroy", "IntroCutscene");
+    }
+}

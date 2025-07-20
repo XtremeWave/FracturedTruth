@@ -1,0 +1,79 @@
+﻿using FracturedTruth.Helpers;
+
+namespace FracturedTruth.Patches.System;
+
+[HarmonyPatch(typeof(CreditsController))]
+public class CreditsControllerPatch
+{
+    private static List<CreditsController.CreditStruct> GetModCredits()
+    {
+        var devList = new List<string>
+        {
+            $"<size=120%><color={ColorHelper.FSColorHex}>{Main.ModName}</color></size>",
+            $"<color=#fffcbe>By</color> <color={ColorHelper.TeamColorHex}>XtremeWave</color>",
+            //Others
+            $"<size=120%>{GetString("Id.Contributor")}</size>",
+            "- LezaiYa",
+            "- KARPED1EM",
+            "- Niko233",
+            "- Amongus(水木年华)",
+            "- Yu(Night_瓜)",
+            "- 天寸梦初"
+        };
+
+        var credits = new List<CreditsController.CreditStruct>();
+
+        AddPersonToCredits(devList);
+        AddSpcaeToCredits();
+
+        //AddTitleToCredits(GetString("Translator"));
+        //AddSpcaeToCredits();
+
+        //AddTitleToCredits(GetString("Acknowledgement"));
+        //AddPersonToCredits(acList);
+        //AddSpcaeToCredits();
+
+        return credits;
+
+        void AddSpcaeToCredits()
+        {
+            AddTitleToCredits(string.Empty);
+        }
+
+        void AddTitleToCredits(string title)
+        {
+            credits.Add(new CreditsController.CreditStruct
+            {
+                format = "title",
+                columns = new[] { title }
+            });
+        }
+
+        void AddPersonToCredits(List<string> list)
+        {
+            foreach (var cols in list.Select(line => line.Split(" - ").ToList()))
+            {
+                if (cols.Count < 2) cols.Add(string.Empty);
+                credits.Add(new CreditsController.CreditStruct
+                {
+                    format = "person",
+                    columns = cols.ToArray()
+                });
+            }
+        }
+    }
+
+    [HarmonyPatch(nameof(CreditsController.AddCredit))]
+    [HarmonyPrefix]
+    public static void AddCreditPrefix(CreditsController __instance,
+        [HarmonyArgument(0)] CreditsController.CreditStruct originalCredit)
+    {
+        if (originalCredit.columns[0] != "logoImage") return;
+
+        foreach (var credit in GetModCredits())
+        {
+            __instance.AddCredit(credit);
+            __instance.AddFormat(credit.format);
+        }
+    }
+}
