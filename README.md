@@ -1,43 +1,29 @@
 <div align="center">
-
-![FS-XW](Assets/LogoWithTeam.png)
-
-**Final Suspect: The Ultimate Among Us Mod for the Original Experience.**
-
-<img src="https://badgen.net/github/license/XtremeWave/FinalSuspect" alt="Licences">
-<img src="https://badgen.net/github/tag/XtremeWave/FinalSuspect" alt="LatestTag">
-<img src="https://badgen.net/github/stars/XtremeWave/FinalSuspect/" alt="Stars">
+	
+![FT-XW](Assets/LogoWithTeam.png)
 
 [English] | [简体中文](README_zh.md)
 
+The turbulent clock strikes,
+
+In the medieval city that lingers in forgotten demise.
+
+Shattered truths are being stitched together;
+
+Supernatural phenomena permeate the air.
+
+The long night is about to descend...
+
+Heavy fog envelops, endless blood moon.
+
+FracturedTruth, stay tuned.
 </div>
 
-> [!important]
-> Due to academic commitments of the developer of this mod, your issue may not receive a prompt response.\
-> We appreciate your understanding.
+</div>
 
-> [!NOTE]
+> [!note]
 > This mod is not affiliated with Among Us or Innersloth LLC, and the content contained therein is not endorsed or otherwise sponsored by Innersloth LLC.\
 > Portions of the materials contained herein are property of Innersloth LLC. \
 > © Innersloth LLC.
 
-## About
-
-FinalSuspect is an original optimization plugin designed for Among Us.\
-The plugin introduces 20+ optimizations to the original game, enhancing the overall experience.\
-For detailed documentation on how to use this plugin (installation, updates, etc.), please refer to the [website's documentation](https://www.xtreme.net.cn/docs/FS/en-us/Guide/Installation).
-
-## Contributors
-
-<div align="center">
-  <a href="https://github.com/XtremeWave/FinalSuspect/graphs/contributors">
-    <img src="https://contrib.rocks/image?repo=XtremeWave/FinalSuspect" alt="Contributors List">
-  </a>
 </div>
-
----
-
-Want to contribute to FinalSuspect? Check out the [CONTRIBUTING](CONTRIBUTING.md).
-
-## Star History
-![Star History Chart](https://api.star-history.com/svg?repos=XtremeWave/FinalSuspect&type=Date)
