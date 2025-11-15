@@ -26,4 +26,12 @@ FracturedTruth, stay tuned.
 > Portions of the materials contained herein are property of Innersloth LLC. \
 > © Innersloth LLC.
 
+> [!TIP]
+> This mod is developed based on [Clash Of Gods](https://github.com/CognifyDev/ClashOfGods/).  
+After the first release of [Clash Of Gods](https://github.com/CognifyDev/ClashOfGods/), Fractured Truth will undergo development during this period.
+
+>[!IMPORTANT]
+>If you wish to accelerate the development progress of Fractured Truth,  
+>Please join [CoginifyDev](https://github.com/CognifyDev) or [XtremeWave](https://github.com/XtremeWave) to contribute to the development. We guarantee that this mod will offer you an unprecedented gaming experience
+
 </div>
