@@ -27,4 +27,12 @@
 > 此处包含的部分材料是Innersloth LLC的财产。\
 > © Innersloth LLC.
 
+>  [!TIP]
+> 本模组基于[Clash Of Gods](https://github.com/CognifyDev/ClashOfGods/)进行开发。\
+> 在[Clash Of Gods](https://github.com/CognifyDev/ClashOfGods/)发布第一个发行版之后，Fractured Truth 在其期间会陆续进行开发工作
+
+> [!IMPORTANT]
+> 如果您想加快 Fractured Truth 开发的进程 \
+> 请加入[CoginifyDev](https://github.com/CognifyDev)或[XtremeWave](https://github.com/XtremeWave)投入开发，我们保证本模组会拥有您前所未有的游戏体验！
+
 </div>
